@@ -8,16 +8,14 @@
 #include "Bullet/include/btBulletDynamicsCommon.h"
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
-#define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
+#define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
 
 class DebugDrawer;
 struct PhysBody3D;
-struct PhysVehicle3D;
-struct VehicleInfo;
 
 enum SENSOR {
 	NONE,
-	WIN, 
+	WIN,
 	CHECKPOINT1,
 	CHECKPOINT2,
 	CHECKPOINT3,
