@@ -1,8 +1,9 @@
 #ifndef __PhysBody3D_H__
 #define __PhysBody3D_H__
 
-#include "p2List.h"
 #include "ModulePhysics3D.h"
+
+#include <list>
 
 class btRigidBody;
 class Module;
@@ -22,7 +23,7 @@ public:
 	void RotateBody(btQuaternion rotationQuaternion);
 
 public:
-	p2List<Module*> collision_listeners;
+	std::list<Module*> collision_listeners;
 	btRigidBody* body = nullptr;
 	SENSOR sensorType = NONE;
 };
