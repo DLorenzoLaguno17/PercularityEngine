@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "gl3w.h"
 
 Application::Application()
 {
@@ -43,6 +44,7 @@ bool Application::Init()
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = modules.begin();
+	gl3wInit();
 
 	while(item != modules.end() && ret == true)
 	{

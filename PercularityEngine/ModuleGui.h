@@ -62,6 +62,7 @@ public:
 
 private:
 	SDL_GLContext gl_context; 
+	ImGuiIO& io = ImGui::GetIO();
 };
 
 #endif // __ModuleGui_H__
