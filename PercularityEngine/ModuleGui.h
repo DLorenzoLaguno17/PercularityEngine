@@ -11,7 +11,8 @@
 struct SDL_Texture;
 struct _TTF_Font;
 struct SDL_Rect;
-struct SDL_Color;
+struct SDL_Color; 
+struct ImDrawData;
 
 enum UIELEMENT_TYPES
 {
@@ -42,19 +43,18 @@ public:
 	// Called before all Updates
 	bool PreUpdate();
 
+	// Called every frame
+	bool Update();
+
 	// Called after all Updates
 	bool PostUpdate();
 
 	// Called before quitting
 	bool CleanUp();
 
-public:
+	void RenderFunction(ImDrawData* draw_data);
 
-	// Colors
-	SDL_Color beige;
-	SDL_Color brown;
-	SDL_Color grey;
-	SDL_Color white;
+public:
 
 private:
 };
