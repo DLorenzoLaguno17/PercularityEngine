@@ -3,6 +3,7 @@
 #include "ModuleGui.h"
 #include "ModuleAudio.h"
 #include "ModuleWindow.h"
+#include "imgui.h"
 
 ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -18,10 +19,10 @@ bool ModuleGui::Awake()
 	LOG("Loading GUI atlas");
 	bool ret = true;	
 
-	/*beige = {};
-	brown = {};
-	grey = {};
-	white = {};*/
+	beige = { 245, 245, 220, 255 };
+	brown = { 73, 31, 10, 255 };
+	grey = { 134, 136, 138, 255 };
+	white = { 255, 255, 255, 255 };
 
 	return ret;
 }
@@ -29,6 +30,8 @@ bool ModuleGui::Awake()
 // Called before the first frame
 bool ModuleGui::Start()
 {
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
 
 	return true;
 }
