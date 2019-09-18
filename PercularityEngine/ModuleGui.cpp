@@ -3,9 +3,8 @@
 #include "ModuleGui.h"
 #include "ModuleAudio.h"
 #include "ModuleWindow.h"
-#include "imgui.h"
 
-#include "SDL\include\SDL_opengl.h"
+#include "imgui_impl_sdl.h"
 
 ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -27,143 +26,91 @@ bool ModuleGui::Awake()
 // Called before the first frame
 bool ModuleGui::Start()
 {
+	// Setting context
+	gl_context = SDL_GL_CreateContext(App->window->window);
+	SDL_GL_MakeCurrent(App->window->window, gl_context);
+
+	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, gl_context);
 	ImGui::StyleColorsDark();
-	ImGuiIO& io = ImGui::GetIO();
-	
-	int width, height;
-	unsigned char* pixels = NULL;
-	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
-	// At this point you've got the texture data and you need to upload that your your graphic system:
-	// After we have created the texture, store its pointer/identifier (_in whichever format your engine uses_) in 'io.Fonts->TexID'.
-	// This will be passed back to your via the renderer. Basically ImTextureID == void*. Read FAQ below for details about ImTextureID.
-	/*MyTexture* texture = MyEngine::CreateTextureFromMemoryPixels(pixels, width, height, TEXTURE_TYPE_RGBA32)
-		io.Fonts->TexID = (void*)texture;*/
-
-	std::string File = "misc/fonts/Roboto-Medium.ttf";
+	// Load Fonts
+	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+	// - Read 'misc/fonts/README.txt' for more instructions and details.
+	// - Remember that in C/C++ if you want to include a backslash \ in a string literal 
+	//io.Fonts->AddFontDefault();
+	//io.Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf");
 
 	return true;
 }
 
 // Update all guis
-bool ModuleGui::PreUpdate()
+update_status ModuleGui::PreUpdate(float dt)
 {
 	
-	return true;
+	return  UPDATE_CONTINUE;
 }
 
 // Called every frame
-bool ModuleGui::Update()
+update_status ModuleGui::Update(float dt)
 {
-
-	ImGuiIO& io = ImGui::GetIO();
-	io.DisplaySize = ImVec2(SCREEN_WIDTH, SCREEN_HEIGHT);
-	
-	ImGui::NewFrame(); 
-	ImGui::ShowDemoWindow();
-
-	/*ImGui::BeginMainMenuBar();
-	{
-		if (ImGui::BeginMenu("File")) {
-			ImGui::MenuItem("New Scene");
-			ImGui::MenuItem("Open Scene");
-			ImGui::Separator();
-			ImGui::MenuItem("Save");
-			ImGui::MenuItem("Save As...");
-			ImGui::Separator();
-			ImGui::MenuItem("New Project");
-			ImGui::MenuItem("Open Project");
-			ImGui::MenuItem("Save Project");
-			ImGui::Separator();
-			ImGui::MenuItem("Exit");
-
-			ImGui::EndMenu();
-		}
-	}
-	ImGui::EndMainMenuBar();*/
-
-	
-	io.DeltaTime = 1.0f / 60.0f;										 // set the time elapsed since the previous frame (in seconds)
-	io.DisplaySize.x = 1920.0f;											 // set the current display width
-	io.DisplaySize.y = 1280.0f;											 // set the current display height here
-	io.MousePos = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY()};   // set the mouse position
-	//io.MouseDown[0] = my_mouse_buttons[0];								 // set the mouse button states
-	//io.MouseDown[1] = my_mouse_buttons[1];
-	
+	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
-	// Most of your application code here
 
-	ImGui::Text("Hello, world!");
-	
-	//MyGameUpdate(); // may use any Dear ImGui functions, e.g. ImGui::Begin("My window"); ImGui::Text("Hello, world!"); ImGui::End();
-	//MyGameRender(); // may use any Dear ImGui functions as well!
-	
-	// Render dear imgui, swap buffers
-	ImGui::EndFrame();
+	static float f = 0.0f;
+	static int counter = 0;
+
+	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+	ImGui::Checkbox("Another Window", &show_another_window);
+
+	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		counter++;
+	ImGui::SameLine();
+	ImGui::Text("counter = %d", counter);
+
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::End();	
+
+	// Rendering
 	ImGui::Render();
-	
-	ImDrawData* draw_data = ImGui::GetDrawData();
-	RenderFunction(draw_data);
-	//SwapBuffers();
+	/*glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+	glClear(GL_COLOR_BUFFER_BIT);
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());*/
+	SDL_GL_SwapWindow(App->window->window);	
 
-	return true;
+	return  UPDATE_CONTINUE;
 }
 
 // Called after all Updates
-bool ModuleGui::PostUpdate()
+update_status ModuleGui::PostUpdate(float dt)
 {
 
-	return true;
+	return  UPDATE_CONTINUE;
 }
 
 // Called before quitting
 bool ModuleGui::CleanUp()
 {
-	LOG("Freeing Gui");	
+	LOG("Freeing Gui");
+	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+	SDL_GL_DeleteContext(gl_context);
 
 	return true;
-}
-
-void ModuleGui::RenderFunction(ImDrawData* draw_data)
-{
-	// TODO: Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
-	// TODO: Setup viewport covering draw_data->DisplayPos to draw_data->DisplayPos + draw_data->DisplaySize
-	// TODO: Setup orthographic projection matrix cover draw_data->DisplayPos to draw_data->DisplayPos + draw_data->DisplaySize
-	// TODO: Setup shader: vertex { float2 pos, float2 uv, u32 color }, fragment shader sample color from 1 texture, multiply by vertex color.
-	for (int n = 0; n < draw_data->CmdListsCount; n++)
-	{
-		const ImDrawList* cmd_list = draw_data->CmdLists[n];
-		const ImDrawVert* vtx_buffer = cmd_list->VtxBuffer.Data;  // vertex buffer generated by Dear ImGui
-		const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;   // index buffer generated by Dear ImGui
-		for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-		{
-			const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-			if (pcmd->UserCallback)
-			{
-				pcmd->UserCallback(cmd_list, pcmd);
-			}
-			else
-			{
-				// The texture for the draw call is specified by pcmd->TextureId.
-				// The vast majority of draw calls will use the Dear ImGui texture atlas, which value you have set yourself during initialization.
-				//MyEngineBindTexture((MyTexture*)pcmd->TextureId);
-				// We are using scissoring to clip some objects. All low-level graphics API should supports it.
-				// - If your engine doesn't support scissoring yet, you may ignore this at first. You will get some small glitches
-				//   (some elements visible outside their bounds) but you can fix that once everything else works!
-				// - Clipping coordinates are provided in imgui coordinates space (from draw_data->DisplayPos to draw_data->DisplayPos + draw_data->DisplaySize)
-				//   In a single viewport application, draw_data->DisplayPos will always be (0,0) and draw_data->DisplaySize will always be == io.DisplaySize.
-				//   However, in the interest of supporting multi-viewport applications in the future (see 'viewport' branch on github),
-				//   always subtract draw_data->DisplayPos from clipping bounds to convert them to your viewport space.
-				// - Note that pcmd->ClipRect contains Min+Max bounds. Some graphics API may use Min+Max, other may use Min+Size (size being Max-Min)
-				//ImVec2 pos = draw_data->DisplayPos;
-				//MyEngineScissor((int)(pcmd->ClipRect.x - pos.x), (int)(pcmd->ClipRect.y - pos.y), (int)(pcmd->ClipRect.z - pos.x), (int)(pcmd->ClipRect.w - pos.y));
-				// Render 'pcmd->ElemCount/3' indexed triangles.
-				// By default the indices ImDrawIdx are 16-bits, you can change them to 32-bits in imconfig.h if your engine doesn't support 16-bits indices.
-				//MyEngineDrawIndexedTriangles(pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, idx_buffer, vtx_buffer);
-			}
-			idx_buffer += pcmd->ElemCount;
-		}
-	}
 }

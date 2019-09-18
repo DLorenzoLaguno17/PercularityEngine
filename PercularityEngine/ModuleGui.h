@@ -4,7 +4,10 @@
 #include "Module.h"
 #include <list>
 #include <string>
+#include "imgui.h"
+
 #include "SDL/include/SDL_rect.h"
+#include "SDL/include/SDL_video.h"
 
 #define CURSOR_WIDTH 2
 
@@ -12,7 +15,6 @@ struct SDL_Texture;
 struct _TTF_Font;
 struct SDL_Rect;
 struct SDL_Color; 
-struct ImDrawData;
 
 enum UIELEMENT_TYPES
 {
@@ -41,22 +43,25 @@ public:
 	bool Start();
 
 	// Called before all Updates
-	bool PreUpdate();
+	update_status PreUpdate(float dt);
 
 	// Called every frame
-	bool Update();
+	update_status Update(float dt);
 
 	// Called after all Updates
-	bool PostUpdate();
+	update_status PostUpdate(float dt);
 
 	// Called before quitting
 	bool CleanUp();
 
-	void RenderFunction(ImDrawData* draw_data);
-
 public:
 
+	bool show_demo_window = true;
+	bool show_another_window = false;
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
 private:
+	SDL_GLContext gl_context; 
 };
 
 #endif // __ModuleGui_H__

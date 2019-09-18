@@ -16,14 +16,14 @@
     <Filter Include="Sources\Helpers">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Modules\Game">
-      <UniqueIdentifier>{83f46af7-e02f-40c0-9e56-41d76082527b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Tools\ImGui">
       <UniqueIdentifier>{a79f1b6f-351d-450a-ad65-d554c6372406}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Core">
       <UniqueIdentifier>{dd9f5abf-361f-442e-9652-a2d9b116a338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\ImGui\SDL_OpenGL3">
+      <UniqueIdentifier>{89de8cfe-9e09-4b1a-b363-3b116c8302b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,9 +66,6 @@
     <ClInclude Include="PhysBody3D.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleSceneIntro.h">
-      <Filter>Sources\Modules\Game</Filter>
-    </ClInclude>
     <ClInclude Include="imconfig.h">
       <Filter>Sources\Tools\ImGui</Filter>
     </ClInclude>
@@ -95,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="ModuleGui.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_sdl.h">
+      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +137,6 @@
     <ClCompile Include="PhysBody3D.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleSceneIntro.cpp">
-      <Filter>Sources\Modules\Game</Filter>
-    </ClCompile>
     <ClCompile Include="imgui.cpp">
       <Filter>Sources\Tools\ImGui</Filter>
     </ClCompile>
@@ -160,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="ModuleGui.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_sdl.cpp">
+      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
