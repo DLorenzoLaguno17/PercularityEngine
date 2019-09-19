@@ -4,7 +4,6 @@
 #include "ModuleWindow.h"
 
 #include <stdio.h>
-#include <gl/GL.h>
 
 #include "SDL/include/SDL.h"
 #include "imgui_impl_sdl.h"
@@ -23,7 +22,7 @@ ModuleGui::~ModuleGui()
 bool ModuleGui::Awake()
 {
 	LOG("Loading GUI atlas");
-	bool ret = true;
+	bool ret = true;	
 
 	return ret;
 }
@@ -65,8 +64,8 @@ bool ModuleGui::Start()
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-	ImGui::StyleColorsDark();
-
+	ImGui::StyleColorsDark(); 
+	
 	//const char* glsl_version = "#version 130";
 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, gl_context);
@@ -78,7 +77,7 @@ bool ModuleGui::Start()
 	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
 	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
 	// - Read 'misc/fonts/README.txt' for more instructions and details.
-	// - Remember that in C/C++ if you want to include a backslash \ in a string literal
+	// - Remember that in C/C++ if you want to include a backslash \ in a string literal 
 	//io.Fonts->AddFontDefault();
 	//io.Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 14);
 
@@ -88,7 +87,7 @@ bool ModuleGui::Start()
 // Update all guis
 update_status ModuleGui::PreUpdate(float dt)
 {
-
+	
 	return  UPDATE_CONTINUE;
 }
 
@@ -133,7 +132,7 @@ update_status ModuleGui::Update(float dt)
 	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	//SDL_GL_SwapWindow(App->window->window);
+	//SDL_GL_SwapWindow(App->window->window);	
 
 	return  UPDATE_CONTINUE;
 }
