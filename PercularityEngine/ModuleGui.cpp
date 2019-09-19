@@ -105,8 +105,29 @@ update_status ModuleGui::Update(float dt)
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 	{
 		static float f = 0.0f;
-		static int counter = 0;
-		ImGui::Begin("Welcome to Percularity Engine!");         // Create a window called "Hello, world!" and append into it.
+		ImGui::Begin("Welcome to Percularity Engine!");         // Create a window called
+		// Main body of the Demo window starts here.
+
+		/*if (!ImGui::Begin("Dear ImGui Demo", NULL, 0))
+		{
+			// Early out if the window is collapsed, as an optimization.
+			ImGui::End();
+			return UPDATE_CONTINUE;
+		}*/
+
+		/*if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("Menu"))
+			{
+				//ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}*/
+
+		if (ImGui::Button("Close"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+			return UPDATE_STOP;
+		ImGui::SameLine();
+		ImGui::Text("Click to close the engine");
 
 		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
@@ -114,13 +135,8 @@ update_status ModuleGui::Update(float dt)
 		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 		ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
 
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
-
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
+		
 		ImGui::End();
 	}
 
