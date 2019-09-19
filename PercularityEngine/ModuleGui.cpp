@@ -1,10 +1,10 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleGui.h"
-#include "ModuleAudio.h"
 #include "ModuleWindow.h"
 
 #include <stdio.h>
+#include <gl/GL.h>
 
 #include "SDL/include/SDL.h"
 #include "imgui_impl_sdl.h"
@@ -98,9 +98,9 @@ update_status ModuleGui::Update(float dt)
 
 	// Rendering
 	ImGui::Render();
-	//glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-	//glClear(GL_COLOR_BUFFER_BIT);
+	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(App->window->window);	
 
