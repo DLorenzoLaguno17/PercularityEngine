@@ -7,9 +7,6 @@
     <Filter Include="Sources\Modules">
       <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Containers">
-      <UniqueIdentifier>{afc36133-f401-499a-aa33-0da1e500fb52}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Tools">
       <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
     </Filter>
@@ -24,6 +21,9 @@
     </Filter>
     <Filter Include="Sources\Tools\ImGui\SDL_OpenGL3">
       <UniqueIdentifier>{89de8cfe-9e09-4b1a-b363-3b116c8302b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\RandomPCG">
+      <UniqueIdentifier>{141c005f-dabe-4d99-8e83-56d367926a70}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -41,12 +41,6 @@
     </ClInclude>
     <ClInclude Include="ModuleWindow.h">
       <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="glmath.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Sources\Helpers</Filter>
@@ -93,6 +87,21 @@
     <ClInclude Include="glcorearb.h">
       <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="glmath.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg_extras.hpp">
+      <Filter>Sources\Tools\RandomPCG</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg_random.hpp">
+      <Filter>Sources\Tools\RandomPCG</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg_uint128.hpp">
+      <Filter>Sources\Tools\RandomPCG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -112,12 +121,6 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="glmath.cpp">
-      <Filter>Sources\Containers</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Sources\Helpers</Filter>
@@ -151,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="gl3w.c">
       <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Sources\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="glmath.cpp">
+      <Filter>Sources\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
