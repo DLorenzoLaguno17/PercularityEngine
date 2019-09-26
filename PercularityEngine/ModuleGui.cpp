@@ -3,8 +3,6 @@
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
 
-#include <stdio.h>
-
 #include "SDL/include/SDL.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
@@ -98,26 +96,43 @@ update_status ModuleGui::PreUpdate(float dt)
 // Called every frame
 update_status ModuleGui::Update(float dt)
 {
+	// Menu bar
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			ImGui::MenuItem("Open...");
+			ImGui::MenuItem("Open"); 
+			ImGui::MenuItem("New");
+			ImGui::MenuItem("Save", " Ctrl+S");
+			ImGui::MenuItem("Save as...", " Ctrl+Shift+S");
+			if (ImGui::MenuItem("Exit", "ESC"))
+				return UPDATE_STOP;
+
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Help"))
+		if (ImGui::BeginMenu("Edit"))
 		{
 			ImGui::MenuItem("Test...");
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Close"))
+		if (ImGui::BeginMenu("Windows"))
 		{
-			return UPDATE_STOP;
+			ImGui::Checkbox("Demo Window", &show_demo_window);
+			ImGui::Checkbox("Settings", &show_settings);	
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Help"))
+		{
+			if(ImGui::MenuItem("Go to our GitHub"))
+				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine", NULL, NULL, SW_SHOWNORMAL);
+		
+			ImGui::MenuItem("Percularity", "v1.0", false, false);
+			ImGui::EndMenu();
+		}
+		
 		ImGui::EndMainMenuBar();
 	}
 
@@ -125,24 +140,16 @@ update_status ModuleGui::Update(float dt)
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-	{
+	if (show_settings){
 		static float f = 0.0f;
-		ImGui::Begin("Welcome to Percularity, fucking negro!");         // Create a window called
-		// Main body of the Demo window starts here.
-
-		/*if (!ImGui::Begin("Dear ImGui Demo", NULL, 0))
-		{
-			// Early out if the window is collapsed, as an optimization.
-			ImGui::End();
-			return UPDATE_CONTINUE;
-		}*/
+		ImGui::Begin("Settings");         // Creates the settings window		
 		
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-	
+		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)		
 		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-
 		ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
+
+		if (ImGui::Checkbox("Fullscreen", &fullscreen))
+			App->window->SetFullscreen(&fullscreen);
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		

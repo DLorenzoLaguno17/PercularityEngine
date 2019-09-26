@@ -2,6 +2,7 @@
 #define __ModuleGui_H__
 
 #include "Module.h"
+#include "Globals.h"
 #include <list>
 #include <string>
 #include "imgui.h"
@@ -58,7 +59,8 @@ public:
 
 	//our state
 	bool show_demo_window = true;
-	bool show_another_window = false;
+	bool show_settings = false;
+	bool fullscreen = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 private:
