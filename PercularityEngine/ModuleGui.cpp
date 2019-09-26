@@ -77,7 +77,8 @@ bool ModuleGui::Start()
 	// - Read 'misc/fonts/README.txt' for more instructions and details.
 	// - Remember that in C/C++ if you want to include a backslash \ in a string literal 
 	io->Fonts->AddFontDefault();
-	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 14);
+	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 13);
+	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 14);
 
 	return true;
 }
