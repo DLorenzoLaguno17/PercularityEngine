@@ -14,7 +14,6 @@
 
 #endif
 
-
 enum main_states
 {
 	MAIN_CREATION,

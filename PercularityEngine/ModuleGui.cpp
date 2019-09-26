@@ -87,17 +87,39 @@ bool ModuleGui::Start()
 // Update all guis
 update_status ModuleGui::PreUpdate(float dt)
 {
-	
+	// Start the Dear ImGui frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame(App->window->window);
+	ImGui::NewFrame();
+
 	return  UPDATE_CONTINUE;
 }
 
 // Called every frame
 update_status ModuleGui::Update(float dt)
 {
-	// Start the Dear ImGui frame
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(App->window->window);
-	ImGui::NewFrame();
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			ImGui::MenuItem("Open...");
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			ImGui::MenuItem("Test...");
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Close"))
+		{
+			return UPDATE_STOP;
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window)
@@ -114,21 +136,7 @@ update_status ModuleGui::Update(float dt)
 			ImGui::End();
 			return UPDATE_CONTINUE;
 		}*/
-
-		/*if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("Menu"))
-			{
-				//ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}*/
-
-		if (ImGui::Button("Close"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			return UPDATE_STOP;
-		ImGui::SameLine();
-		ImGui::Text("Click to close the engine");
-
+		
 		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
 	

@@ -22,6 +22,9 @@
     <Filter Include="Sources\Tools\ImGui\SDL_OpenGL3">
       <UniqueIdentifier>{89de8cfe-9e09-4b1a-b363-3b116c8302b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\RandomPCG">
+      <UniqueIdentifier>{141c005f-dabe-4d99-8e83-56d367926a70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -89,6 +92,15 @@
     </ClInclude>
     <ClInclude Include="glmath.h">
       <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg_extras.hpp">
+      <Filter>Sources\Tools\RandomPCG</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg_random.hpp">
+      <Filter>Sources\Tools\RandomPCG</Filter>
+    </ClInclude>
+    <ClInclude Include="pcg_uint128.hpp">
+      <Filter>Sources\Tools\RandomPCG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
