@@ -25,6 +25,9 @@
     <Filter Include="Sources\Tools\RandomPCG">
       <UniqueIdentifier>{141c005f-dabe-4d99-8e83-56d367926a70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Modules\Scene">
+      <UniqueIdentifier>{631625a9-6f73-4037-8647-f094121aa15a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -102,6 +105,9 @@
     <ClInclude Include="pcg_uint128.hpp">
       <Filter>Sources\Tools\RandomPCG</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleScene.h">
+      <Filter>Sources\Modules\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="glmath.cpp">
       <Filter>Sources\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Sources\Modules\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
