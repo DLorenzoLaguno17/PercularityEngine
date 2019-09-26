@@ -29,7 +29,7 @@ bool ModuleWindow::Init()
 		//Create window
 		int width = SCREEN_WIDTH * SCREEN_SIZE;
 		int height = SCREEN_HEIGHT * SCREEN_SIZE;
-		flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -93,7 +93,7 @@ void ModuleWindow::SetTitle(const char* title)
 	SDL_SetWindowTitle(window, title);
 }
 
-void ModuleWindow::SetFullscreen(bool state) {
-	if (state) flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
-	else flags |= SDL_WINDOW_FULLSCREEN;
+void ModuleWindow::SetFullscreen(bool goingFullscreen) {
+	if (goingFullscreen) SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	else SDL_SetWindowFullscreen(window, SDL_WINDOW_MINIMIZED);
 }

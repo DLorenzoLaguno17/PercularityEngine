@@ -90,9 +90,6 @@
     <ClInclude Include="Color.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="glmath.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="pcg_extras.hpp">
       <Filter>Sources\Tools\RandomPCG</Filter>
     </ClInclude>
@@ -101,6 +98,9 @@
     </ClInclude>
     <ClInclude Include="pcg_uint128.hpp">
       <Filter>Sources\Tools\RandomPCG</Filter>
+    </ClInclude>
+    <ClInclude Include="glmath.h">
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +159,7 @@
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="glmath.cpp">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

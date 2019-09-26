@@ -149,7 +149,18 @@ update_status ModuleGui::Update(float dt)
 		ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
 
 		if (ImGui::Checkbox("Fullscreen", &fullscreen))
-			App->window->SetFullscreen(&fullscreen);
+			App->window->SetFullscreen(fullscreen);
+		ImGui::SameLine();
+		/*if (ImGui::Checkbox("Resizable", &fullscreen))
+			//App->window->SetFullscreen(fullscreen);
+		if (ImGui::Checkbox("Borderless", &fullscreen))
+			//App->window->SetFullscreen(fullscreen);
+		ImGui::SameLine();
+		if (ImGui::Checkbox("Full desktop", &fullscreen))
+			//App->window->SetFullscreen(fullscreen);*/
+
+
+		if (ImGui::Checkbox("V. Sync", &vsync))
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		
