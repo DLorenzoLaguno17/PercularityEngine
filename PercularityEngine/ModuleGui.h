@@ -56,18 +56,22 @@ public:
 	bool CleanUp();
 
 public:
-
 	//our state
 	bool show_demo_window = true;
-	bool show_settings = false;
+	bool show_settings = true;
+
 	bool fullscreen = false;
-	bool vsync = false;
+	bool resizable = false;
+	bool borderless = false;
+	bool fulldesktop = false;
+	bool vsync = true;
+
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 private:
-
 	SDL_GLContext gl_context; 
 	ImGuiIO* io = nullptr;
+	uint cnt = 0;
 };
 
 #endif // __ModuleGui_H__

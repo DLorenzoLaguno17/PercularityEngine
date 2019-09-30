@@ -6,6 +6,7 @@
 #include "SDL/include/SDL.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include <vector>
 #include "gl3w.h"
 
 ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -103,9 +104,12 @@ update_status ModuleGui::Update(float dt)
 		if (ImGui::BeginMenu("File"))
 		{
 			ImGui::MenuItem("Open"); 
-			ImGui::MenuItem("New");
+			ImGui::MenuItem("Open recent", "Ctrl+0");
+			ImGui::MenuItem("New"); 
+			ImGui::Separator();
 			ImGui::MenuItem("Save", " Ctrl+S");
 			ImGui::MenuItem("Save as...", " Ctrl+Shift+S");
+			ImGui::Separator();
 			if (ImGui::MenuItem("Exit", "ESC"))
 				return UPDATE_STOP;
 
@@ -123,17 +127,53 @@ update_status ModuleGui::Update(float dt)
 			ImGui::Checkbox("Demo Window", &show_demo_window);
 			ImGui::Checkbox("Settings", &show_settings);	
 			ImGui::EndMenu();
-		}
+		}		
 
-		if (ImGui::BeginMenu("Help"))
+		if (ImGui::BeginMenu("About"))
 		{
-			if(ImGui::MenuItem("Go to our GitHub"))
+			ImGui::Text("Percularity v0.1");
+			ImGui::Text("3D engine developed for student purposes");
+			ImGui::Text("By Joan Marin & Daniel Lorenzo"); 
+			if (ImGui::MenuItem("Go to our GitHub"))
 				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine", NULL, NULL, SW_SHOWNORMAL);
-		
-			ImGui::MenuItem("Percularity", "v1.0", false, false);
+			ImGui::NewLine();
+
+			ImGui::Separator();
+			ImGui::Text("3rd party libraries used:");
+			ImGui::BulletText("SDL 2.0.6");
+			ImGui::BulletText("Dear ImGui");
+			ImGui::BulletText("MathGeoLib");
+			ImGui::BulletText("Open GL");
+			ImGui::NewLine();
+
+			ImGui::Separator();
+			ImGui::Text("License");
+			ImGui::NewLine();
+			ImGui::Text("MIT License");
+			ImGui::NewLine();
+			ImGui::Text("Copyright(c) 2019 Joan Marin & Dani Lorenzo");
+			ImGui::NewLine();
+			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
+			ImGui::Text("of this software and associated documentation files (the ""Software""), to deal");
+			ImGui::Text("in the Software without restriction, including without limitation the rights");
+			ImGui::Text("to use, copy, modify, merge, publish, distribute, sublicense, and/or sell");
+			ImGui::Text("copies of the Software, and to permit persons to whom the Software is");
+			ImGui::Text("furnished to do so, subject to the following conditions:");
+			ImGui::NewLine();
+			ImGui::Text("The above copyright notice and this permission notice shall be included in all");
+			ImGui::Text("copies or substantial portions of the Software.");
+			ImGui::NewLine();
+			ImGui::Text("THE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
+			ImGui::Text("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
+			ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
+			ImGui::Text("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
+			ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
+			ImGui::Text("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
+			ImGui::Text("SOFTWARE.");
+
 			ImGui::EndMenu();
 		}
-		
+
 		ImGui::EndMainMenuBar();
 	}
 
@@ -149,22 +189,36 @@ update_status ModuleGui::Update(float dt)
 		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 		ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
 
+		ImGui::NewLine();
 		if (ImGui::Checkbox("Fullscreen", &fullscreen))
 			App->window->SetFullscreen(fullscreen);
 		ImGui::SameLine();
-		/*if (ImGui::Checkbox("Resizable", &fullscreen))
-			//App->window->SetFullscreen(fullscreen);
-		if (ImGui::Checkbox("Borderless", &fullscreen))
-			//App->window->SetFullscreen(fullscreen);
+		if (ImGui::Checkbox("Resizable", &resizable))
+			App->window->SetResizable(resizable);
+		if (ImGui::Checkbox("Borderless", &borderless))
+			App->window->SetBorderless(borderless);
 		ImGui::SameLine();
-		if (ImGui::Checkbox("Full desktop", &fullscreen))
-			//App->window->SetFullscreen(fullscreen);*/
+		if (ImGui::Checkbox("Full desktop", &fulldesktop))
+			App->window->SetFulldesktop(fulldesktop);
 
+		ImGui::NewLine();
+		ImGui::ShowFontSelector("Select font");
 
-		if (ImGui::Checkbox("V. Sync", &vsync))
+		ImGui::Separator();
+		if (ImGui::Checkbox("V. Sync", &vsync)) {}
+		ImGui::NewLine();
+		static float arr[] = { 23.6f, 78.1f, 34.0f, 42.5f, 76.92f, 90.1f, 21.2f };
 
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		
+		/*char title1[25];
+		float fps[100];
+		fps[cnt] = io->Framerate;
+		sprintf_s(title1, 25, "Framerate %.1f", fps[cnt-1]);
+		ImGui::PlotHistogram("##framerate", arr, cnt, 0, title1, 0.0f, 100.0f, ImVec2(310, 100));
+		char title2[25];
+		sprintf_s(title2, 25, "Milliseconds %.3f", 1000.0f / io->Framerate);
+		ImGui::PlotHistogram("##milliseconds", arr, 20, 0, title2, 0.0f, 40.0f, ImVec2(310, 100));
+		cnt++;*/
+
 		ImGui::End();
 	}
 
