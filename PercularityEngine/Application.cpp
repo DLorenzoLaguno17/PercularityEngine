@@ -1,4 +1,5 @@
 #include "Application.h"
+#include <fstream>
 #include "gl3w.h"
 
 Application::Application()
@@ -23,6 +24,9 @@ Application::Application()
 
 	// Renderer last!
 	AddModule(renderer3D);
+
+	//Configuration adress
+	settingsAdress = "Configuration/.editorconfig.json";
 }
 
 Application::~Application()
@@ -125,4 +129,41 @@ bool Application::CleanUp()
 void Application::AddModule(Module* mod)
 {
 	modules.push_back(mod);
+}
+
+void Application::Load()
+{
+	json config;
+
+	//Open the settings file so we can browse it
+	std::ifstream fileOperator;
+	fileOperator.open(settingsAdress);
+
+	//Load configuration for all the modules
+	std::list<Module*>::iterator it = modules.begin();
+	
+	config = json::parse(fileOperator);
+
+	//close the file
+	fileOperator.close();
+
+	while (it != modules.end())
+	{
+		(*it)->Load(config);
+		it++;
+	}
+}
+
+void Application::Save()
+{
+	json config;
+
+	//Save configuration for all the modules
+	std::list<Module*>::iterator it = modules.begin();
+
+	while (it != modules.end())
+	{
+		(*it)->Save(config);
+		it++;
+	}
 }
