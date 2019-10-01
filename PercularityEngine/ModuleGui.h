@@ -5,7 +5,7 @@
 #include "Globals.h"
 #include <list>
 #include <string>
-#include "imgui.h"
+#include "SettingsWindow.h"
 
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL_video.h"
@@ -59,18 +59,11 @@ public:
 	//our state
 	bool show_demo_window = true;
 	bool show_settings = true;
-
-	bool fullscreen = false;
-	bool resizable = false;
-	bool borderless = false;
-	bool fulldesktop = false;
-	bool vsync = true;
-
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	ImGuiIO* io = nullptr;
 
 private:
 	SDL_GLContext gl_context; 
-	ImGuiIO* io = nullptr;
+	SettingsWindow settings;
 };
 
 #endif // __ModuleGui_H__

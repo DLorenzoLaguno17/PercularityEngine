@@ -2,11 +2,12 @@
 #include "ModuleInput.h"
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
+#include "SettingsWindow.h"
 
 #include "SDL/include/SDL.h"
+
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
-#include <vector>
 #include "gl3w.h"
 
 ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -179,79 +180,19 @@ update_status ModuleGui::Update(float dt)
 		ImGui::EndMainMenuBar();
 	}
 
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+	// 1. Show the big demo window 
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
-	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+
+	// Show settings window
 	if (show_settings){
-		static float f = 0.0f;
-		ImGui::Begin("Settings");         // Creates the settings window		
-		
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)		
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
-
-		ImGui::NewLine();
-		if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
-			App->window->SetFullscreen(fullscreen);
-			resizable = false;
-			borderless = false;
-			fulldesktop = false;
-		}
-		ImGui::SameLine();
-		if (ImGui::Checkbox("Resizable", &resizable)) {
-			App->window->SetResizable(resizable);
-			fullscreen = false;
-			borderless = false;
-			fulldesktop = false;
-		}
-		if (ImGui::Checkbox("Borderless", &borderless)) {
-			App->window->SetBorderless(borderless);
-			resizable = false;
-			fullscreen = false;
-			fulldesktop = false;
-		}
-		ImGui::SameLine();
-		if (ImGui::Checkbox("Full desktop", &fulldesktop)) {
-			App->window->SetFulldesktop(fulldesktop);
-			resizable = false;
-			borderless = false;
-			fullscreen = false;
-		}
-
-		ImGui::NewLine();
-		ImGui::ShowFontSelector("Select font");
-		ImGui::ShowStyleSelector("Select style");
-
-		ImGui::Separator();
-		if (ImGui::Checkbox("V. Sync", &vsync)) {}
-		ImGui::NewLine();
-
-		char title[25];
-		static std::vector<float> fps;
-		static std::vector<float> ms;
-
-		fps.push_back(io->Framerate);
-		if (fps.size() > 100) {
-			fps.erase(fps.begin());
-		}
-		sprintf_s(title, 25, "Framerate %.1f", fps[fps.size()-1]);
-		ImGui::PlotHistogram("##framerate", &fps[0], fps.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-		
-		ms.push_back(1000 / io->Framerate);
-		if (ms.size() > 100) {
-			ms.erase(ms.begin());
-		}
-		sprintf_s(title, 25, "Milliseconds %.3f", ms[ms.size()-1]);
-		ImGui::PlotHistogram("##milliseconds", &ms[0], ms.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));		
-
-		ImGui::End();
+		settings.Update(dt, App);
 	}
 
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
-	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	//SDL_GL_SwapWindow(App->window->window);	

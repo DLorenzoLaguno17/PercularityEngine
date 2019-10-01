@@ -7,17 +7,20 @@
     <Filter Include="Sources\Modules">
       <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools">
-      <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Helpers">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\ImGui">
-      <UniqueIdentifier>{a79f1b6f-351d-450a-ad65-d554c6372406}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Core">
       <UniqueIdentifier>{dd9f5abf-361f-442e-9652-a2d9b116a338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\UI Elements">
+      <UniqueIdentifier>{8fe45418-142c-4502-b478-ae217b0762b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools">
+      <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\ImGui">
+      <UniqueIdentifier>{a79f1b6f-351d-450a-ad65-d554c6372406}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Tools\ImGui\SDL_OpenGL3">
       <UniqueIdentifier>{89de8cfe-9e09-4b1a-b363-3b116c8302b2}</UniqueIdentifier>
@@ -102,6 +105,9 @@
     <ClInclude Include="glmath.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="SettingsWindow.h">
+      <Filter>Sources\Modules\UI Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="glmath.cpp">
       <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsWindow.cpp">
+      <Filter>Sources\Modules\UI Elements</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

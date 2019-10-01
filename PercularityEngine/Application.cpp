@@ -126,3 +126,7 @@ void Application::AddModule(Module* mod)
 {
 	modules.push_back(mod);
 }
+
+void Application::DisbleVsync(bool mustDisable) {
+	//if (mustDisable) SDL_Vsyn
+}
