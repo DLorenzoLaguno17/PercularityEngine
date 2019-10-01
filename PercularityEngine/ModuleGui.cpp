@@ -77,10 +77,12 @@ bool ModuleGui::Start()
 	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
 	// - Read 'misc/fonts/README.txt' for more instructions and details.
 	// - Remember that in C/C++ if you want to include a backslash \ in a string literal 
+
 	io->Fonts->AddFontDefault();
 	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 13);
 	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 14);
 
+	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 	return true;
 }
 
@@ -224,10 +226,10 @@ update_status ModuleGui::Update(float dt)
 		ImGui::Separator();
 		if (ImGui::Checkbox("V. Sync", &vsync)) {}
 		ImGui::NewLine();
-		static float arr[] = { 23.6f, 78.1f, 34.0f, 42.5f, 76.92f, 90.1f, 21.2f };
 
 		char title[25];
 		static std::vector<float> fps;
+		static std::vector<float> ms;
 
 		fps.push_back(io->Framerate);
 		if (fps.size() > 100) {
@@ -236,8 +238,12 @@ update_status ModuleGui::Update(float dt)
 		sprintf_s(title, 25, "Framerate %.1f", fps[fps.size()-1]);
 		ImGui::PlotHistogram("##framerate", &fps[0], fps.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 		
-		sprintf_s(title, 25, "Milliseconds %.3f", 1000.0f / io->Framerate);
-		ImGui::PlotHistogram("##milliseconds", arr, 20, 0, title, 0.0f, 40.0f, ImVec2(310, 100));		
+		ms.push_back(1000 / io->Framerate);
+		if (ms.size() > 100) {
+			ms.erase(ms.begin());
+		}
+		sprintf_s(title, 25, "Milliseconds %.3f", ms[ms.size()-1]);
+		ImGui::PlotHistogram("##milliseconds", &ms[0], ms.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));		
 
 		ImGui::End();
 	}
