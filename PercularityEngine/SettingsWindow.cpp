@@ -1,17 +1,49 @@
 #include "SettingsWindow.h"
-#include "ModuleGui.h"
-#include "SDL/include/SDL_opengl.h"
 #include "Application.h"
+
+#include "SDL/include/SDL_opengl.h"
 
 // Show settings window
 void SettingsWindow::Update(float dt, Application* App) {
 	
-	static float f = 0.0f;
 	ImGui::Begin("Settings");
 
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+	// General settings
+	ImGui::Text("GENERAL");
+	ImGui::NewLine();
 	ImGui::ColorEdit3("Background color", (float*)&clear_color);
 
+
+	ImGui::NewLine();
+	if (ImGui::Checkbox("Depth test", &depthTest)) {
+		if (depthTest) glEnable(GL_DEPTH_TEST);
+		else
+			glDisable(GL_DEPTH_TEST);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Cull face", &cullFace)) {
+		if (cullFace) glEnable(GL_CULL_FACE);
+		else
+			glDisable(GL_CULL_FACE);
+	}
+	if (ImGui::Checkbox("Lighting", &lighting)) {
+		if (lighting) glEnable(GL_LIGHTING);
+		else glDisable(GL_LIGHTING);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Color material", &colorMaterial)) {
+		if (colorMaterial) glEnable(GL_COLOR_MATERIAL);
+		else glDisable(GL_COLOR_MATERIAL);
+	}
+
+	ImGui::NewLine();
+	ImGui::ShowFontSelector("Select font");
+	ImGui::ShowStyleSelector("Select style");
+	ImGui::NewLine();
+	ImGui::Separator();
+
+	// Window settings
+	ImGui::Text("WINDOW");
 	ImGui::NewLine();
 	if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
 		App->window->SetFullscreen(fullscreen);
@@ -40,35 +72,22 @@ void SettingsWindow::Update(float dt, Application* App) {
 		fullscreen = false;
 	}
 
+	static int w = SCREEN_WIDTH;
+	static int h = SCREEN_HEIGHT;
+	static float b = 1.0f;
 	ImGui::NewLine();
-	ImGui::ShowFontSelector("Select font");
-	ImGui::ShowStyleSelector("Select style");
+	ImGui::SliderInt("Width", &w, SCREEN_WIDTH, 1920);
+	ImGui::SliderInt("Height", &h, SCREEN_HEIGHT, 1080);
+	ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f);
+	SDL_SetWindowBrightness(App->window->window, b);
+	SDL_SetWindowSize(App->window->window, w, h);
 
 	ImGui::NewLine();
 	ImGui::Separator();
-	if (ImGui::Checkbox("Depth test", &depthTest)) {
-		if (depthTest) glEnable(GL_DEPTH_TEST);
-		else
-			glDisable(GL_DEPTH_TEST);
-	}
-	ImGui::SameLine();
-	if (ImGui::Checkbox("Cull face", &cullFace)) {
-		if (cullFace) glEnable(GL_CULL_FACE);
-		else
-			glDisable(GL_CULL_FACE);
-	}
-	if (ImGui::Checkbox("Lighting", &lighting)) {
-		if (lighting) glEnable(GL_LIGHTING);
-		else glDisable(GL_LIGHTING);
-	}
-	ImGui::SameLine();
-	if (ImGui::Checkbox("Color material", &colorMaterial)) {
-		if (colorMaterial) glEnable(GL_COLOR_MATERIAL);
-		else glDisable(GL_COLOR_MATERIAL);
-	}
 
+	// Performance settings
+	ImGui::Text("PERFORMANCE");
 	ImGui::NewLine();
-	ImGui::Separator();
 	ImGui::Checkbox("V. Sync", &vsync);
 	ImGui::NewLine();
 
