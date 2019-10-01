@@ -99,13 +99,13 @@ void ModuleWindow::SetFullscreen(bool goingFullscreen) {
 }
 
 void ModuleWindow::SetResizable(bool goingResizable) {
-	if (goingResizable) SDL_SetWindowFullscreen(window, SDL_WINDOW_RESIZABLE);
-	else SDL_SetWindowFullscreen(window, SDL_WINDOW_MINIMIZED);
+	if (goingResizable) SDL_SetWindowResizable(window, SDL_TRUE);
+	else SDL_SetWindowResizable(window, SDL_FALSE);
 }
 
 void ModuleWindow::SetBorderless(bool goingBorderless) {
-	if (goingBorderless) SDL_SetWindowFullscreen(window, SDL_WINDOW_BORDERLESS);
-	else SDL_SetWindowFullscreen(window, SDL_WINDOW_MINIMIZED);
+	if (goingBorderless) SDL_SetWindowBordered(window, SDL_FALSE);
+	else SDL_SetWindowBordered(window, SDL_TRUE);
 }
 
 void ModuleWindow::SetFulldesktop(bool goingFulldesktop) {

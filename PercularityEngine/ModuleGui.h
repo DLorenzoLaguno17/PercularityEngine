@@ -71,7 +71,6 @@ public:
 private:
 	SDL_GLContext gl_context; 
 	ImGuiIO* io = nullptr;
-	uint cnt = 0;
 };
 
 #endif // __ModuleGui_H__

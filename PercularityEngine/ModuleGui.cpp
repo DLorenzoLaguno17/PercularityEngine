@@ -141,9 +141,9 @@ update_status ModuleGui::Update(float dt)
 			ImGui::Separator();
 			ImGui::Text("3rd party libraries used:");
 			ImGui::BulletText("SDL 2.0.6");
-			ImGui::BulletText("Dear ImGui");
-			ImGui::BulletText("MathGeoLib");
-			ImGui::BulletText("Open GL");
+			ImGui::BulletText("Dear ImGui 1.73");
+			ImGui::BulletText("MathGeoLib 1.5");
+			ImGui::BulletText("Open GL 4.5");
 			ImGui::NewLine();
 
 			ImGui::Separator();
@@ -154,7 +154,7 @@ update_status ModuleGui::Update(float dt)
 			ImGui::Text("Copyright(c) 2019 Joan Marin & Dani Lorenzo");
 			ImGui::NewLine();
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
-			ImGui::Text("of this software and associated documentation files (the ""Software""), to deal");
+			ImGui::Text("of this software and associated documentation files (the 'Software'), to deal");
 			ImGui::Text("in the Software without restriction, including without limitation the rights");
 			ImGui::Text("to use, copy, modify, merge, publish, distribute, sublicense, and/or sell");
 			ImGui::Text("copies of the Software, and to permit persons to whom the Software is");
@@ -163,7 +163,7 @@ update_status ModuleGui::Update(float dt)
 			ImGui::Text("The above copyright notice and this permission notice shall be included in all");
 			ImGui::Text("copies or substantial portions of the Software.");
 			ImGui::NewLine();
-			ImGui::Text("THE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
+			ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
 			ImGui::Text("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
 			ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
 			ImGui::Text("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
@@ -190,34 +190,54 @@ update_status ModuleGui::Update(float dt)
 		ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
 
 		ImGui::NewLine();
-		if (ImGui::Checkbox("Fullscreen", &fullscreen))
+		if (ImGui::Checkbox("Fullscreen", &fullscreen)) {
 			App->window->SetFullscreen(fullscreen);
+			resizable = false;
+			borderless = false;
+			fulldesktop = false;
+		}
 		ImGui::SameLine();
-		if (ImGui::Checkbox("Resizable", &resizable))
+		if (ImGui::Checkbox("Resizable", &resizable)) {
 			App->window->SetResizable(resizable);
-		if (ImGui::Checkbox("Borderless", &borderless))
+			fullscreen = false;
+			borderless = false;
+			fulldesktop = false;
+		}
+		if (ImGui::Checkbox("Borderless", &borderless)) {
 			App->window->SetBorderless(borderless);
+			resizable = false;
+			fullscreen = false;
+			fulldesktop = false;
+		}
 		ImGui::SameLine();
-		if (ImGui::Checkbox("Full desktop", &fulldesktop))
+		if (ImGui::Checkbox("Full desktop", &fulldesktop)) {
 			App->window->SetFulldesktop(fulldesktop);
+			resizable = false;
+			borderless = false;
+			fullscreen = false;
+		}
 
 		ImGui::NewLine();
 		ImGui::ShowFontSelector("Select font");
+		ImGui::ShowStyleSelector("Select style");
 
 		ImGui::Separator();
 		if (ImGui::Checkbox("V. Sync", &vsync)) {}
 		ImGui::NewLine();
 		static float arr[] = { 23.6f, 78.1f, 34.0f, 42.5f, 76.92f, 90.1f, 21.2f };
 
-		/*char title1[25];
-		float fps[100];
-		fps[cnt] = io->Framerate;
-		sprintf_s(title1, 25, "Framerate %.1f", fps[cnt-1]);
-		ImGui::PlotHistogram("##framerate", arr, cnt, 0, title1, 0.0f, 100.0f, ImVec2(310, 100));
-		char title2[25];
-		sprintf_s(title2, 25, "Milliseconds %.3f", 1000.0f / io->Framerate);
-		ImGui::PlotHistogram("##milliseconds", arr, 20, 0, title2, 0.0f, 40.0f, ImVec2(310, 100));
-		cnt++;*/
+		char title[25];
+		static std::vector<float> fps;
+
+		fps.push_back(io->Framerate);
+		if (fps.size() > 100) {
+			fps.erase(fps.begin());
+		}
+		sprintf_s(title, 25, "Framerate %.1f", fps[fps.size()-1]);
+		ImGui::PlotHistogram("##framerate", &fps[0], fps.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+		
+		sprintf_s(title, 25, "Milliseconds %.3f", 1000.0f / io->Framerate);
+		ImGui::PlotHistogram("##milliseconds", arr, 20, 0, title, 0.0f, 40.0f, ImVec2(310, 100));		
 
 		ImGui::End();
 	}
