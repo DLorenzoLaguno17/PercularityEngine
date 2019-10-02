@@ -1,6 +1,7 @@
 #include "Application.h"
 #include <fstream>
 #include "gl3w.h"
+#include <iomanip>
 
 Application::Application()
 {
@@ -63,6 +64,9 @@ bool Application::Init()
 	} 
 	
 	ms_timer.Start();
+
+	LoadSettings();
+
 	return ret;
 }
 
@@ -117,6 +121,7 @@ bool Application::CleanUp()
 	bool ret = true;
 	std::list<Module*>::iterator item = modules.begin();
 
+	SaveSettings();
 
 	while(item != modules.end() && ret == true)
 	{
@@ -131,21 +136,31 @@ void Application::AddModule(Module* mod)
 	modules.push_back(mod);
 }
 
-void Application::Load()
+void Application::LoadSettings()
 {
 	json config;
 
-	//Open the settings file so we can browse it
-	std::ifstream fileOperator;
-	fileOperator.open(settingsAdress);
+	//If the adress of the settings file is null, create  an exception
+	assert(settingsAdress != nullptr);
+
+	//Create a stream and open the file
+	std::ifstream stream;
+	stream.open(settingsAdress);
 
 	//Load configuration for all the modules
 	std::list<Module*>::iterator it = modules.begin();
 	
-	config = json::parse(fileOperator);
+	config = json::parse(stream);
 
 	//close the file
-	fileOperator.close();
+	stream.close();
+
+	std::string name = config["Application"]["Name"];
+	engineName = name;
+
+	std::string version = config["Application"]["Version"];
+	engineVersion= version;
+
 
 	while (it != modules.end())
 	{
@@ -154,9 +169,12 @@ void Application::Load()
 	}
 }
 
-void Application::Save()
+void Application::SaveSettings()
 {
+	//Create auxiliar file
 	json config;
+	config["Application"]["Name"]=engineName;
+	config["Application"]["Version"] = engineVersion;
 
 	//Save configuration for all the modules
 	std::list<Module*>::iterator it = modules.begin();
@@ -166,4 +184,10 @@ void Application::Save()
 		(*it)->Save(config);
 		it++;
 	}
+
+	//Create the stream and open the file
+	std::ofstream stream;
+	stream.open(settingsAdress);
+	stream << std::setw(4)<<config << std::endl;
+	stream.close();
 }

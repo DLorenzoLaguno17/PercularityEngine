@@ -1,19 +1,6 @@
 {
-  "Application": {
-    "Title": "Percularity"
-  },
-  "GUI": {
-    "Settings": true
-  },
-  "Renderer3D": {
-    "VSync": true
-  },
-  "Window": {
-    "borderless": false,
-    "fullscreen": false,
-    "fullscreenDesktop": false,
-    "height": 720,
-    "resizable": true,
-    "width": 1024
-  }
+    "Application": {
+        "Name": "Percularity",
+        "Version": "0.2"
+    }
 }

@@ -33,6 +33,10 @@ private:
 	//Save & load
 	const char* settingsAdress;
 	json		settingsFile;
+	
+	//Aditional data
+	std::string engineName;
+	std::string engineVersion;
 
 public:
 
@@ -50,6 +54,6 @@ private:
 	void FinishUpdate();
 
 	//Save & load
-	void Load();
-	void Save();
+	void LoadSettings();
+	void SaveSettings();
 };
