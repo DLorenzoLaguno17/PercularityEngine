@@ -84,9 +84,6 @@
     <ClInclude Include="imgui_impl_opengl3.h">
       <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
-    <ClInclude Include="gl3w.h">
-      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
-    </ClInclude>
     <ClInclude Include="glcorearb.h">
       <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
@@ -156,9 +153,6 @@
       <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_opengl3.cpp">
-      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
-    </ClCompile>
-    <ClCompile Include="gl3w.c">
       <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">

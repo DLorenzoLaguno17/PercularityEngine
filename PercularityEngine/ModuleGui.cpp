@@ -4,11 +4,11 @@
 #include "ModuleWindow.h"
 #include "SettingsWindow.h"
 
-#include "SDL/include/SDL.h"
+#include "GLEW/include/glew.h"
+#include "SDL/include/SDL_opengl.h"
 
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
-#include "gl3w.h"
 
 ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -52,8 +52,8 @@ bool ModuleGui::Start()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-	bool err = gl3wInit() != 0;
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+	bool err = glewInit() != 0;
 #endif
 	if (err)
 	{
@@ -205,7 +205,6 @@ update_status ModuleGui::Update(float dt)
 	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	//SDL_GL_SwapWindow(App->window->window);	
 
 	return  UPDATE_CONTINUE;
 }
