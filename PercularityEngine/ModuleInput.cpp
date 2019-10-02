@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 
 #define MAX_KEYS 300
+#define MAX_INPUTS 20
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -44,20 +45,37 @@ update_status ModuleInput::PreUpdate(float dt)
 	{
 		if(keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			input_list.push_back((SDL_Scancode)i);
+			if (input_list.size() > MAX_INPUTS) input_list.pop_front();
+
+			if (keyboard[i] == KEY_IDLE) {
 				keyboard[i] = KEY_DOWN;
-			else
+
+				input_state_list.push_back(KEY_DOWN);
+				if (input_state_list.size() > MAX_INPUTS) input_state_list.pop_front();
+			}
+			else {
 				keyboard[i] = KEY_REPEAT;
+				input_state_list.push_back(KEY_REPEAT);
+				if (input_state_list.size() > MAX_INPUTS) input_state_list.pop_front();
+			}			
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			input_list.push_back((SDL_Scancode)i);
+			if (input_list.size() > MAX_INPUTS) input_list.pop_front();
+
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN) {
 				keyboard[i] = KEY_UP;
+
+				input_state_list.push_back(KEY_UP);
+				if (input_state_list.size() > MAX_INPUTS) input_state_list.pop_front();
+			}
 			else
 				keyboard[i] = KEY_IDLE;
-		}
+		}		
 	}
-
+	
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
 	mouse_x /= SCREEN_SIZE;

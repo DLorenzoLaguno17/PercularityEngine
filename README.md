@@ -4,11 +4,11 @@ Percularity is a game engine that has been created in the Video Games degree in 
 Go to our web page: 
 
 ## Libraries used
-*SDL v2.0.6
-*[STL v(needs version)](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
-*[Dear ImGui v1.72b](https://github.com/ocornut/imgui)
-*MathGeoLib v1.5
-*OpenGL v4.5
+* SDL v2.0.6
+* [STL v(needs version)](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
+* [Dear ImGui v1.72b](https://github.com/ocornut/imgui)
+* MathGeoLib v1.5
+* OpenGL v4.5
 
 ## Controls
 
