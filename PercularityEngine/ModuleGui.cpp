@@ -40,15 +40,17 @@ bool ModuleGui::Start()
 
 	//TEST
 	io = &ImGui::GetIO(); (void)io;
-	//TEST
 
 	//TEST
 	// GL 3.0 + GLSL 130
 	const char* glsl_version = "#version 130";
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 	bool err = gl3wInit() != 0;
@@ -57,6 +59,14 @@ bool ModuleGui::Start()
 	{
 		fprintf(stderr, "Failed to initialize OpenGL loader!\n");
 		return 1;
+	}
+	else {
+		//LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Sould be 2.0
+
+		LOG("Vendor %s", glGetString(GL_VENDOR));
+		LOG("Renderer: %s", glGetString(GL_RENDERER));
+		LOG("OpenGL version supported: %s", glGetString(GL_VERSION));
+		LOG("GLSL version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	}
 
 	//TEST
