@@ -10,6 +10,8 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
+#include "Brofiler/Lib/Brofiler.h"
+
 ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -100,31 +102,51 @@ bool ModuleGui::Start()
 // Update all guis
 update_status ModuleGui::PreUpdate(float dt)
 {
+	BROFILER_CATEGORY("GuiPreUpdate", Profiler::Color::Orange)
+
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	return  UPDATE_CONTINUE;
+	return UPDATE_CONTINUE;
 }
 
-// Called every frame
-update_status ModuleGui::Update(float dt)
+// Called after all Updates
+update_status ModuleGui::PostUpdate(float dt)
 {
+	BROFILER_CATEGORY("GuiPostUpdate", Profiler::Color::Yellow)
+	return UPDATE_CONTINUE;
+}
+
+// Called before quitting
+bool ModuleGui::CleanUp()
+{
+	LOG("Freeing Gui");
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+	SDL_GL_DeleteContext(gl_context);
+
+	return true;
+}
+
+void ModuleGui::DrawImGui(float dt) {
+
 	// Menu bar
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			ImGui::MenuItem("Open"); 
+			ImGui::MenuItem("Open");
 			ImGui::MenuItem("Open recent", "Ctrl+0");
-			ImGui::MenuItem("New"); 
+			ImGui::MenuItem("New");
 			ImGui::Separator();
 			ImGui::MenuItem("Save", " Ctrl+S");
 			ImGui::MenuItem("Save as...", " Ctrl+Shift+S");
 			ImGui::Separator();
 			if (ImGui::MenuItem("Exit", "ESC"))
-				return UPDATE_STOP;
+				App->renderer3D->status = UPDATE_STOP;
 
 			ImGui::EndMenu();
 		}
@@ -133,12 +155,12 @@ update_status ModuleGui::Update(float dt)
 		{
 			ImGui::MenuItem("Undo", "Ctrl+Z");
 			ImGui::MenuItem("Redo", "Ctrl+Y");
-			
-			ImGui::Separator();			
+
+			ImGui::Separator();
 			ImGui::MenuItem("Cut", "Ctrl+X");
 			ImGui::MenuItem("Copy", "Ctrl+C");
 			ImGui::MenuItem("Paste", "Ctrl+V");
-			
+
 			ImGui::Separator();
 			ImGui::MenuItem("Duplicate", "Ctrl+D");
 			ImGui::MenuItem("Delete", "Supr");
@@ -149,15 +171,15 @@ update_status ModuleGui::Update(float dt)
 		if (ImGui::BeginMenu("Windows"))
 		{
 			ImGui::Checkbox("Demo Window", &show_demo_window);
-			ImGui::Checkbox("Settings", &show_settings);	
+			ImGui::Checkbox("Settings", &show_settings);
 			ImGui::EndMenu();
-		}		
+		}
 
 		if (ImGui::BeginMenu("About"))
 		{
 			ImGui::Text("Percularity v0.1");
 			ImGui::Text("3D engine developed for student purposes");
-			ImGui::Text("By Joan Marin & Daniel Lorenzo"); 
+			ImGui::Text("By Joan Marin & Daniel Lorenzo");
 			if (ImGui::Button("Go to our GitHub"))
 				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine", NULL, NULL, SW_SHOWNORMAL);
 			ImGui::NewLine();
@@ -165,12 +187,13 @@ update_status ModuleGui::Update(float dt)
 			ImGui::Separator();
 			ImGui::Text("3rd party libraries used:");
 			ImGui::BulletText("SDL 2.0.6");
-			ImGui::BulletText("Dear ImGui 1.73");
+			ImGui::BulletText("STL");
+			ImGui::BulletText("Dear ImGui 1.72b");
 			ImGui::BulletText("MathGeoLib 1.5");
 			ImGui::BulletText("Open GL 4.5");
 			ImGui::NewLine();
 
-			ImGui::Separator();			
+			ImGui::Separator();
 			ImGui::Text("MIT License");
 			ImGui::NewLine();
 			ImGui::Text("Copyright(c) 2019 Joan Marin & Dani Lorenzo");
@@ -204,7 +227,7 @@ update_status ModuleGui::Update(float dt)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
 	// Show settings window
-	if (show_settings){
+	if (show_settings) {
 		settings.Update(dt, App);
 	}
 
@@ -212,25 +235,4 @@ update_status ModuleGui::Update(float dt)
 	ImGui::Render();
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-	return  UPDATE_CONTINUE;
-}
-
-// Called after all Updates
-update_status ModuleGui::PostUpdate(float dt)
-{
-
-	return  UPDATE_CONTINUE;
-}
-
-// Called before quitting
-bool ModuleGui::CleanUp()
-{
-	LOG("Freeing Gui");
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
-	SDL_GL_DeleteContext(gl_context);
-
-	return true;
 }

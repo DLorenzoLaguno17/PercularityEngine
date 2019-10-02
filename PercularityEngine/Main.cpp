@@ -9,6 +9,9 @@
 #pragma comment( lib, "GLEW/lib86/glew32.lib" )
 #pragma comment( lib, "GLEW/lib86/glew32s.lib" )
 
+#include "Brofiler/Lib/Brofiler.h"
+#pragma comment ( lib, "Brofiler/Lib/ProfilerCore32.lib" )
+
 #ifdef _DEBUG
 #pragma comment( lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib" )
 
@@ -63,6 +66,8 @@ int main(int argc, char ** argv)
 
 		case MAIN_UPDATE:
 		{
+			BROFILER_FRAME("MainUpdate");
+
 			int update_return = App->Update();
 
 			if (update_return == UPDATE_ERROR)

@@ -124,8 +124,10 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	App->gui->DrawImGui(dt);
 	SDL_GL_SwapWindow(App->window->window);
-	return UPDATE_CONTINUE;
+
+	return status;
 }
 
 // Called before quitting
