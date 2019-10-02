@@ -131,7 +131,18 @@ update_status ModuleGui::Update(float dt)
 
 		if (ImGui::BeginMenu("Edit"))
 		{
-			ImGui::MenuItem("Test...");
+			ImGui::MenuItem("Undo", "Ctrl+Z");
+			ImGui::MenuItem("Redo", "Ctrl+Y");
+			
+			ImGui::Separator();			
+			ImGui::MenuItem("Cut", "Ctrl+X");
+			ImGui::MenuItem("Copy", "Ctrl+C");
+			ImGui::MenuItem("Paste", "Ctrl+V");
+			
+			ImGui::Separator();
+			ImGui::MenuItem("Duplicate", "Ctrl+D");
+			ImGui::MenuItem("Delete", "Supr");
+
 			ImGui::EndMenu();
 		}
 
@@ -147,7 +158,7 @@ update_status ModuleGui::Update(float dt)
 			ImGui::Text("Percularity v0.1");
 			ImGui::Text("3D engine developed for student purposes");
 			ImGui::Text("By Joan Marin & Daniel Lorenzo"); 
-			if (ImGui::MenuItem("Go to our GitHub"))
+			if (ImGui::Button("Go to our GitHub"))
 				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine", NULL, NULL, SW_SHOWNORMAL);
 			ImGui::NewLine();
 
@@ -159,9 +170,7 @@ update_status ModuleGui::Update(float dt)
 			ImGui::BulletText("Open GL 4.5");
 			ImGui::NewLine();
 
-			ImGui::Separator();
-			ImGui::Text("License");
-			ImGui::NewLine();
+			ImGui::Separator();			
 			ImGui::Text("MIT License");
 			ImGui::NewLine();
 			ImGui::Text("Copyright(c) 2019 Joan Marin & Dani Lorenzo");
@@ -202,7 +211,6 @@ update_status ModuleGui::Update(float dt)
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
-	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

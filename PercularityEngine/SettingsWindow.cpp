@@ -11,10 +11,6 @@ void SettingsWindow::Update(float dt, Application* App) {
 	// General settings
 	ImGui::Text("GENERAL");
 	ImGui::NewLine();
-	ImGui::ColorEdit3("Background color", (float*)&clear_color);
-
-
-	ImGui::NewLine();
 	if (ImGui::Checkbox("Depth test", &depthTest)) {
 		if (depthTest) glEnable(GL_DEPTH_TEST);
 		else
@@ -34,6 +30,10 @@ void SettingsWindow::Update(float dt, Application* App) {
 	if (ImGui::Checkbox("Color material", &colorMaterial)) {
 		if (colorMaterial) glEnable(GL_COLOR_MATERIAL);
 		else glDisable(GL_COLOR_MATERIAL);
+	}
+	if (ImGui::Checkbox("Texture 2D", &texture2D)) {
+		if (texture2D) glEnable(GL_TEXTURE_2D);
+		else glDisable(GL_TEXTURE_2D);
 	}
 
 	ImGui::NewLine();
