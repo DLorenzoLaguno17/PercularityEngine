@@ -59,15 +59,15 @@ public:
 public:
 	bool show_demo_window = true;
 	bool show_settings = true;
-	bool show_console = false;
+	bool show_console = true;
 
 	std::vector<std::string> log_list;
 
 	ImGuiIO* io = nullptr;
 
 private:
-	SDL_GLContext gl_context; 
 	SettingsWindow settings;
+	bool p_open = true;
 };
 
 #endif // __ModuleGui_H__
