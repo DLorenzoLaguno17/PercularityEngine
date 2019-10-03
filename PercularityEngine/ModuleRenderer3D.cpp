@@ -5,8 +5,13 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include <stdio.h>
+#include <iostream>
+
+
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -97,8 +102,11 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_TEXTURE_2D);
 	}
 
+
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+
 
 	return ret;
 }
@@ -124,6 +132,29 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	glLineWidth(50.0f);
+
+	glBegin(GL_LINES);
+	
+		
+	//try to draw a plane
+	for (float i = 0.0f; i < 500; ++i)
+	{
+		glVertex3f(i, 0 ,0.0f);
+		glVertex3f(i, 0, 50.0f);
+	}
+
+	for (float i = 0.0f; i < 500; ++i)
+	{
+		glVertex3f(0, 0.0f,  i);
+		glVertex3f(50.f, 0.0f, i);
+	}
+	
+
+	glEnd();
+
+	glLineWidth(600.0f);
+
 	App->gui->DrawImGui(dt);
 	SDL_GL_SwapWindow(App->window->window);
 
