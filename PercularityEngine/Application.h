@@ -9,7 +9,11 @@
 #include "ModuleCamera3D.h"
 #include "ModuleGui.h"
 
+#include "Json Parser/nlohmann/json.hpp"
+
 #include <list>
+
+using json = nlohmann::json;
 
 class Application
 {
@@ -25,6 +29,14 @@ private:
 	Timer	ms_timer;
 	float	dt;
 	std::list<Module*> modules;
+
+	//Save & load
+	const char* settingsAdress;
+	json		settingsFile;
+	
+	//Aditional data
+	std::string engineName;
+	std::string engineVersion;
 
 public:
 
@@ -42,6 +54,10 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+
+	//Save & load
+	void LoadSettings();
+	void SaveSettings();
 };
 
 extern Application* App;

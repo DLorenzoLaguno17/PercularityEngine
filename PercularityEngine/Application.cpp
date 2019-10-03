@@ -1,4 +1,7 @@
 #include "Application.h"
+#include <fstream>
+//#include "gl3w.h"
+#include <iomanip>
 #include "GLEW/include/glew.h"
 
 Application::Application()
@@ -23,6 +26,9 @@ Application::Application()
 
 	// Renderer last!
 	AddModule(renderer3D);
+
+	//Configuration adress
+	settingsAdress = "Configuration/.editorconfig.json";
 }
 
 Application::~Application()
@@ -59,6 +65,9 @@ bool Application::Init()
 	} 
 	
 	ms_timer.Start();
+
+	LoadSettings();
+
 	return ret;
 }
 
@@ -113,6 +122,7 @@ bool Application::CleanUp()
 	bool ret = true;
 	std::list<Module*>::iterator item = modules.begin();
 
+	SaveSettings();
 
 	while(item != modules.end() && ret == true)
 	{
@@ -125,6 +135,62 @@ bool Application::CleanUp()
 void Application::AddModule(Module* mod)
 {
 	modules.push_back(mod);
+}
+
+void Application::LoadSettings()
+{
+	json config;
+
+	//If the adress of the settings file is null, create  an exception
+	assert(settingsAdress != nullptr);
+
+	//Create a stream and open the file
+	std::ifstream stream;
+	stream.open(settingsAdress);
+
+	//Load configuration for all the modules
+	std::list<Module*>::iterator it = modules.begin();
+	
+	config = json::parse(stream);
+
+	//close the file
+	stream.close();
+
+	std::string name = config["Application"]["Name"];
+	engineName = name;
+
+	std::string version = config["Application"]["Version"];
+	engineVersion= version;
+
+
+	while (it != modules.end())
+	{
+		(*it)->Load(config);
+		it++;
+	}
+}
+
+void Application::SaveSettings()
+{
+	//Create auxiliar file
+	json config;
+	config["Application"]["Name"] = engineName;
+	config["Application"]["Version"] = engineVersion;
+
+	//Save configuration for all the modules
+	std::list<Module*>::iterator it = modules.begin();
+
+	while (it != modules.end())
+	{
+		(*it)->Save(config);
+		it++;
+	}
+
+	//Create the stream and open the file
+	std::ofstream stream;
+	stream.open(settingsAdress);
+	stream << std::setw(4) << config << std::endl;
+	stream.close();
 }
 
 void Application::DisbleVsync(bool mustDisable) {

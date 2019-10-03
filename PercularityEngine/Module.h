@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Globals.h"
+#include "Json Parser/nlohmann/json.hpp"
 
 class Application;
 struct PhysBody3D;
@@ -51,4 +52,12 @@ public:
 
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
+
+	virtual void Load(const nlohmann::json &config)
+	{}
+
+	virtual void Save(nlohmann::json &config)
+	{}
+
+
 };

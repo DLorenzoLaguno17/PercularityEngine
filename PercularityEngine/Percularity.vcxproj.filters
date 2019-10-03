@@ -7,26 +7,32 @@
     <Filter Include="Sources\Modules">
       <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools">
+      <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sources\Helpers">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Core">
       <UniqueIdentifier>{dd9f5abf-361f-442e-9652-a2d9b116a338}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Modules\UI Elements">
-      <UniqueIdentifier>{8fe45418-142c-4502-b478-ae217b0762b0}</UniqueIdentifier>
+    <Filter Include="Sources\Modules\Scene">
+      <UniqueIdentifier>{631625a9-6f73-4037-8647-f094121aa15a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools">
-      <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
+    <Filter Include="Sources\3rd party">
+      <UniqueIdentifier>{75f6a04e-518d-4e40-8409-357505d9db8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\ImGui">
+    <Filter Include="Sources\3rd party\ImGui">
       <UniqueIdentifier>{a79f1b6f-351d-450a-ad65-d554c6372406}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\ImGui\SDL_OpenGL3">
+    <Filter Include="Sources\3rd party\ImGui\SDL_OpenGL3">
       <UniqueIdentifier>{89de8cfe-9e09-4b1a-b363-3b116c8302b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\RandomPCG">
+    <Filter Include="Sources\3rd party\RandomPCG">
       <UniqueIdentifier>{141c005f-dabe-4d99-8e83-56d367926a70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\3rd party\Json">
+      <UniqueIdentifier>{0d6a8808-8cac-47a6-b804-394f40f90aef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,22 +58,22 @@
       <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui_internal.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imstb_rectpack.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imstb_textedit.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imstb_truetype.h">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Sources\Core</Filter>
@@ -79,32 +85,36 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_sdl.h">
-      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
     <ClInclude Include="imgui_impl_opengl3.h">
-      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
     <ClInclude Include="glcorearb.h">
-      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="glmath.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
     <ClInclude Include="pcg_extras.hpp">
-      <Filter>Sources\Tools\RandomPCG</Filter>
+      <Filter>Sources\3rd party\RandomPCG</Filter>
     </ClInclude>
     <ClInclude Include="pcg_random.hpp">
-      <Filter>Sources\Tools\RandomPCG</Filter>
+      <Filter>Sources\3rd party\RandomPCG</Filter>
     </ClInclude>
     <ClInclude Include="pcg_uint128.hpp">
-      <Filter>Sources\Tools\RandomPCG</Filter>
+      <Filter>Sources\3rd party\RandomPCG</Filter>
     </ClInclude>
-    <ClInclude Include="glmath.h">
-      <Filter>Sources\Tools</Filter>
+    <ClInclude Include="ModuleScene.h">
+      <Filter>Sources\Modules\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsWindow.h">
-      <Filter>Sources\Modules\UI Elements</Filter>
+    <ClInclude Include="Json Parser\nlohmann\json.hpp">
+      <Filter>Sources\3rd party\Json</Filter>
     </ClInclude>
+    <ClInclude Include="SettingsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -129,16 +139,16 @@
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="imgui.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui_demo.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui_draw.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
-      <Filter>Sources\Tools\ImGui</Filter>
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Sources\Core</Filter>
@@ -150,19 +160,20 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_sdl.cpp">
-      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_opengl3.cpp">
-      <Filter>Sources\Tools\ImGui\SDL_OpenGL3</Filter>
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="glmath.cpp">
-      <Filter>Sources\Tools</Filter>
+      <Filter>Sources\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="SettingsWindow.cpp">
-      <Filter>Sources\Modules\UI Elements</Filter>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Sources\Modules\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="SettingsWindow.cpp" />
   </ItemGroup>
 </Project>

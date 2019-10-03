@@ -45,7 +45,7 @@ bool ModuleGui::Start()
 	//TEST
 	io = &ImGui::GetIO(); (void)io;
 
-	//TEST
+
 	// GL 3.0 + GLSL 130
 	const char* glsl_version = "#version 130";
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
