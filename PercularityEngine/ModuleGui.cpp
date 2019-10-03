@@ -2,7 +2,6 @@
 #include "ModuleInput.h"
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
-#include "SettingsWindow.h"
 
 #include "GLEW/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -45,16 +44,17 @@ bool ModuleGui::Start()
 	//TEST
 	io = &ImGui::GetIO(); (void)io;
 
-
 	// GL 3.0 + GLSL 130
 	const char* glsl_version = "#version 130";
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);	
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+	// Create window with graphics context
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);	
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
 	bool err = glewInit() != 0;
@@ -77,7 +77,8 @@ bool ModuleGui::Start()
 
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
+	
+	//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; //Enable docking
 	ImGui::StyleColorsDark(); 
 	
 	//const char* glsl_version = "#version 130";

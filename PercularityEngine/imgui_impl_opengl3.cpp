@@ -59,7 +59,6 @@
 //  ES 3.0    300       "#version 300 es"   = WebGL 2.0
 //----------------------------------------
 
-
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
 #endif
@@ -99,11 +98,11 @@
 //  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).
 //  You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-#include "gl3w.h"    // Needs to be initialized with gl3wInit() in user's code
+#include <GL/gl3w.h>    // Needs to be initialized with gl3wInit() in user's code
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
 #include "GLEW/include/glew.h"    // Needs to be initialized with glewInit() in user's code
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-#include <glad.h>  // Needs to be initialized with gladLoadGL() in user's code
+#include <glad/glad.h>  // Needs to be initialized with gladLoadGL() in user's code
 #else
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif

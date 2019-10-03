@@ -2,11 +2,11 @@
 #define __ModuleGui_H__
 
 #include "Module.h"
-#include "Globals.h"
-#include <list>
 #include <string>
 #include <vector>
 #include "SettingsWindow.h"
+
+#include "imgui.h"
 
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL_video.h"

@@ -167,10 +167,10 @@ static bool ImGui_ImplSDL2_Init(SDL_Window* window)
     g_MouseCursors[ImGuiMouseCursor_Hand] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 
 #ifdef _WIN32
-   SDL_SysWMinfo wmInfo;
-   SDL_VERSION(&wmInfo.version);
-   SDL_GetWindowWMInfo(window, &wmInfo);
-   io.ImeWindowHandle = wmInfo.info.win.window;
+    SDL_SysWMinfo wmInfo;
+    SDL_VERSION(&wmInfo.version);
+    SDL_GetWindowWMInfo(window, &wmInfo);
+    io.ImeWindowHandle = wmInfo.info.win.window;
 #else
     (void)window;
 #endif
