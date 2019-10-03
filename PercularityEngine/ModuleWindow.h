@@ -19,7 +19,10 @@ public:
 	bool CleanUp();
 
 	void SetTitle(const char* title);
-	void SetFullscreen(bool state);
+	void SetFullscreen(bool goingFullscreen);
+	void SetBorderless(bool goingBorderless);
+	void SetResizable(bool goingResizable);
+	void SetFulldesktop(bool goingFulldesktop);
 
 public:
 	//The window we'll be rendering to
@@ -28,8 +31,6 @@ public:
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
 
-private:
-	Uint32 flags;
-};
+};				 
 
 #endif // __ModuleWindow_H__

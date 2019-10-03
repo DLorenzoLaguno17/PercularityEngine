@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 
+#include "Brofiler/Lib/Brofiler.h"
+
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	CalculateViewMatrix();
@@ -39,6 +41,7 @@ update_status ModuleCamera3D::Update(float dt)
 {
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
+	BROFILER_CATEGORY("CameraUpdate", Profiler::Color::LightSeaGreen)
 
 	vec3 newPos(0,0,0);
 	float speed = 3.0f * dt;

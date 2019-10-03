@@ -5,7 +5,7 @@
 #include "Globals.h"
 #include <list>
 #include <string>
-#include "imgui.h"
+#include "SettingsWindow.h"
 
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL_video.h"
@@ -46,27 +46,23 @@ public:
 	// Called before all Updates
 	update_status PreUpdate(float dt);
 
-	// Called every frame
-	update_status Update(float dt);
-
 	// Called after all Updates
 	update_status PostUpdate(float dt);
 
 	// Called before quitting
 	bool CleanUp();
 
-public:
+	void DrawImGui(float dt);
 
+public:
 	//our state
 	bool show_demo_window = true;
-	bool show_settings = false;
-	bool fullscreen = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	bool show_settings = true;
+	ImGuiIO* io = nullptr;
 
 private:
-
 	SDL_GLContext gl_context; 
-	ImGuiIO* io = nullptr;
+	SettingsWindow settings;
 };
 
 #endif // __ModuleGui_H__

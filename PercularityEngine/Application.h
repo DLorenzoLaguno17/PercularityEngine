@@ -47,6 +47,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	void DisbleVsync(bool mustDisable);
+
 private:
 
 	void AddModule(Module* mod);

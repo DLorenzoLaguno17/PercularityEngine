@@ -2,6 +2,7 @@
 #include <fstream>
 #include "gl3w.h"
 #include <iomanip>
+#include "GLEW/include/glew.h"
 
 Application::Application()
 {
@@ -45,7 +46,7 @@ bool Application::Init()
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = modules.begin();
-	gl3wInit();
+	glewInit();
 
 	while(item != modules.end() && ret == true)
 	{
@@ -173,7 +174,7 @@ void Application::SaveSettings()
 {
 	//Create auxiliar file
 	json config;
-	config["Application"]["Name"]=engineName;
+	config["Application"]["Name"] = engineName;
 	config["Application"]["Version"] = engineVersion;
 
 	//Save configuration for all the modules
@@ -188,6 +189,10 @@ void Application::SaveSettings()
 	//Create the stream and open the file
 	std::ofstream stream;
 	stream.open(settingsAdress);
-	stream << std::setw(4)<<config << std::endl;
+	stream << std::setw(4) << config << std::endl;
 	stream.close();
+}
+
+void Application::DisbleVsync(bool mustDisable) {
+	//if (mustDisable) SDL_Vsyn
 }
