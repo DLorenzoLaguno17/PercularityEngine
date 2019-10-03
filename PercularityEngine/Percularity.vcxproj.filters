@@ -90,9 +90,6 @@
     <ClInclude Include="imgui_impl_opengl3.h">
       <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
-    <ClInclude Include="gl3w.h">
-      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
-    </ClInclude>
     <ClInclude Include="glcorearb.h">
       <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
@@ -117,6 +114,7 @@
     <ClInclude Include="Json Parser\nlohmann\json.hpp">
       <Filter>Sources\3rd party\Json</Filter>
     </ClInclude>
+    <ClInclude Include="SettingsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -167,9 +165,6 @@
     <ClCompile Include="imgui_impl_opengl3.cpp">
       <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClCompile>
-    <ClCompile Include="gl3w.c">
-      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
-    </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
@@ -179,5 +174,6 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Sources\Modules\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="SettingsWindow.cpp" />
   </ItemGroup>
 </Project>
