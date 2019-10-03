@@ -6,6 +6,8 @@
 
 #include "GLEW/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
@@ -134,6 +136,14 @@ bool ModuleGui::CleanUp()
 void ModuleGui::DrawImGui(float dt) {
 
 	// Menu bar
+	/*glLineWidth(100.0f);
+	glBegin(GL_POLYGON);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(100.f, 10.f, 220.f);
+	glEnd();
+
+	glClearColor(255, 0, 0, 0);*/
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -172,6 +182,7 @@ void ModuleGui::DrawImGui(float dt) {
 		{
 			ImGui::Checkbox("Demo Window", &show_demo_window);
 			ImGui::Checkbox("Settings", &show_settings);
+			ImGui::Checkbox("Console", &show_console);
 			ImGui::EndMenu();
 		}
 
@@ -229,6 +240,20 @@ void ModuleGui::DrawImGui(float dt) {
 	// Show settings window
 	if (show_settings) {
 		settings.Update(dt, App);
+	}
+
+	if (show_console) {
+		ImGui::Begin("Console");
+
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) LOG("Esta wea funciona");
+
+		for (int i = 0; i < log_list.size(); ++i) {
+
+			ImGui::SetScrollHereY(1.0f);
+			ImGui::Text(log_list[i].c_str());
+		}
+		
+		ImGui::End();
 	}
 
 	// Rendering

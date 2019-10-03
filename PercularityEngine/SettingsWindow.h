@@ -19,7 +19,6 @@ public:
 	// Called every frame
 	void Update(float dt, Application* App);
 
-
 	// Called before quitting
 	bool CleanUp();
 
