@@ -11,7 +11,7 @@ A clear and concise description of what the bug is.
 Write a brief and clear description of what you expected to happen.
 
 ### Actual behavior
-What you happened instead.
+What happened instead.
 
 ### Steps to reproduce the bug
 1.
