@@ -11,6 +11,8 @@
 
 #include "Json Parser/nlohmann/json.hpp"
 
+#include <vector>
+#include <string>
 #include <list>
 
 using json = nlohmann::json;
@@ -49,6 +51,9 @@ public:
 
 	void DisableVsync(bool mustDisable);
 
+public:
+	
+
 private:
 
 	void AddModule(Module* mod);
@@ -61,3 +66,4 @@ private:
 };
 
 extern Application* App;
+extern std::vector<std::string> log_list;

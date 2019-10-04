@@ -63,8 +63,6 @@ public:
 	bool show_scene = true;
 	bool show_elements = true;
 
-	std::vector<std::string> log_list;
-
 	ImGuiIO* io = nullptr;
 
 private:
