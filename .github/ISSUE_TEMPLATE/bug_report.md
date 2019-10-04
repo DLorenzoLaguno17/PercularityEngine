@@ -15,7 +15,7 @@ Write a brief and clear description of what you expected to happen.
 2. 
 3. 
 
-***
+...
 
 X. See the error
 
