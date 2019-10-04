@@ -10,6 +10,9 @@ A clear and concise description of what the bug is.
 ### Expected behavior
 Write a brief and clear description of what you expected to happen.
 
+### Actual behavior
+What you happened instead.
+
 ### Steps to reproduce the bug
 1.
 2. 
@@ -17,7 +20,7 @@ Write a brief and clear description of what you expected to happen.
 
 ...
 
-X. See the error
+ X. See the error
 
 ## Severity of the bug
 Select the type of bug with and "x" ([x])
@@ -30,8 +33,8 @@ Select the type of bug with and "x" ([x])
 If you can, add screenshots to help explain your problem.
 
 ## Desktop specifications:
- - Operative System: 
- - Version of the engine:
+- Operative System: 
+- Version of the engine:
 
 ### Additional context
 Add any other context about the problem here.
