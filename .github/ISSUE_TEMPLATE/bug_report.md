@@ -1,38 +1,35 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
+Name: Bug report template
+About: Create a report to help us improve our game engine
 
 ---
 
-**Describe the bug**
+## Describe the bug
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
-
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+Write a brief and clear description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Steps to reproduce the bug**
+1.
+2. 
+3. 
+...
+X. See the error
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+## Severity of the bug
+Select the type of bug with and "x" ([x])
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+- [ ] **A** if it crashed the program
+- [ ] **B** if it stopped the program
+- [ ] **C** if it is a visual bug
+
+## Screenshots
+If you can, add screenshots to help explain your problem.
+
+## Desktop specifications:
+ - Operative System: 
+ - Version of the engine:
 
 **Additional context**
 Add any other context about the problem here.
