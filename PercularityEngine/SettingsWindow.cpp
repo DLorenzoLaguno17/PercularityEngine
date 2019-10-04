@@ -9,32 +9,7 @@ void SettingsWindow::Update(float dt, Application* App) {
 	ImGui::Begin("Settings");
 
 	// General settings
-	ImGui::Text("GENERAL");
-	ImGui::NewLine();
-	if (ImGui::Checkbox("Depth test", &depthTest)) {
-		if (depthTest) glEnable(GL_DEPTH_TEST);
-		else
-			glDisable(GL_DEPTH_TEST);
-	}
-	ImGui::SameLine();
-	if (ImGui::Checkbox("Cull face", &cullFace)) {
-		if (cullFace) glEnable(GL_CULL_FACE);
-		else
-			glDisable(GL_CULL_FACE);
-	}
-	if (ImGui::Checkbox("Lighting", &lighting)) {
-		if (lighting) glEnable(GL_LIGHTING);
-		else glDisable(GL_LIGHTING);
-	}
-	ImGui::SameLine();
-	if (ImGui::Checkbox("Color material", &colorMaterial)) {
-		if (colorMaterial) glEnable(GL_COLOR_MATERIAL);
-		else glDisable(GL_COLOR_MATERIAL);
-	}
-	if (ImGui::Checkbox("Texture 2D", &texture2D)) {
-		if (texture2D) glEnable(GL_TEXTURE_2D);
-		else glDisable(GL_TEXTURE_2D);
-	}
+	ImGui::Text("STYLE");	
 
 	ImGui::NewLine();
 	ImGui::ShowFontSelector("Select font");
@@ -81,6 +56,38 @@ void SettingsWindow::Update(float dt, Application* App) {
 	ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f);
 	SDL_SetWindowBrightness(App->window->window, b);
 	SDL_SetWindowSize(App->window->window, w, h);
+
+	ImGui::NewLine();
+	ImGui::Separator();
+
+	// Renderer settings
+	ImGui::Text("RENDERER");
+	ImGui::NewLine();
+
+	if (ImGui::Checkbox("Depth test", &depthTest)) {
+		if (depthTest) glEnable(GL_DEPTH_TEST);
+		else
+			glDisable(GL_DEPTH_TEST);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Lighting", &lighting)) {
+		if (lighting) glEnable(GL_LIGHTING);
+		else glDisable(GL_LIGHTING);
+	}
+	if (ImGui::Checkbox("Texture 2D", &texture2D)) {
+		if (texture2D) glEnable(GL_TEXTURE_2D);
+		else glDisable(GL_TEXTURE_2D);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Color material", &colorMaterial)) {
+		if (colorMaterial) glEnable(GL_COLOR_MATERIAL);
+		else glDisable(GL_COLOR_MATERIAL);
+	}
+	if (ImGui::Checkbox("Cull face", &cullFace)) {
+		if (cullFace) glEnable(GL_CULL_FACE);
+		else
+			glDisable(GL_CULL_FACE);
+	}
 
 	ImGui::NewLine();
 	ImGui::Separator();

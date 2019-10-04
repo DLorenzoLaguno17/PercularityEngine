@@ -219,9 +219,20 @@ void ModuleGui::DrawImGui(float dt) {
 
 		if (ImGui::BeginMenu("Windows"))
 		{
-			ImGui::Checkbox("Demo Window", &show_demo_window);
-			ImGui::Checkbox("Settings", &show_settings);
-			ImGui::Checkbox("Console", &show_console);
+			ImGui::MenuItem("Demo window", NULL, &show_demo_window);
+			ImGui::MenuItem("Settings", NULL, &show_settings);
+			ImGui::MenuItem("Console", NULL, &show_console);
+			ImGui::MenuItem("Scene", NULL, &show_scene);
+			ImGui::MenuItem("Elements", NULL, &show_elements);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			if(ImGui::MenuItem("Report a bug"))
+				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine/issues/new/choose", NULL, NULL, SW_SHOWNORMAL);
+			if (ImGui::MenuItem("Download latest version"))
+				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine/releases", NULL, NULL, SW_SHOWNORMAL);
 			ImGui::EndMenu();
 		}
 
@@ -287,11 +298,22 @@ void ModuleGui::DrawImGui(float dt) {
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) LOG("Esta wea funciona");
 
 		for (int i = 0; i < log_list.size(); ++i) {
-
 			ImGui::SetScrollHereY(1.0f);
 			ImGui::Text(log_list[i].c_str());
 		}
 		
+		ImGui::End();
+	}
+
+	if (show_scene) {
+		ImGui::Begin("Scene");		
+
+		ImGui::End();
+	}
+
+	if (show_elements) {
+		ImGui::Begin("Elements");
+
 		ImGui::End();
 	}
 

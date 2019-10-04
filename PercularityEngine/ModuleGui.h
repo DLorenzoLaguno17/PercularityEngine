@@ -60,6 +60,8 @@ public:
 	bool show_demo_window = true;
 	bool show_settings = true;
 	bool show_console = true;
+	bool show_scene = true;
+	bool show_elements = true;
 
 	std::vector<std::string> log_list;
 

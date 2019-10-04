@@ -114,7 +114,9 @@
     <ClInclude Include="Json Parser\nlohmann\json.hpp">
       <Filter>Sources\3rd party\Json</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsWindow.h" />
+    <ClInclude Include="SettingsWindow.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -174,6 +176,8 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Sources\Modules\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="SettingsWindow.cpp" />
+    <ClCompile Include="SettingsWindow.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
