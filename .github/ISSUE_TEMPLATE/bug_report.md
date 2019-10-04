@@ -17,23 +17,20 @@ What you happened instead.
 1.
 2. 
 3. 
-
-...
-
- X. See the error
+4. See the error
 
 ## Severity of the bug
 Select the type of bug with and "x" ([x])
 
-- [ ] **A** if it crashed the program
-- [ ] **B** if it stopped the program
-- [ ] **C** if it is a visual bug
+* [ ] **A** if it crashed the program
+* [ ] **B** if it stopped the program
+* [ ] **C** if it is a visual bug
 
 ## Screenshots
 If you can, add screenshots to help explain your problem.
 
 ## Desktop specifications:
-- Operative System: 
+- Operative system: 
 - Version of the engine:
 
 ### Additional context
