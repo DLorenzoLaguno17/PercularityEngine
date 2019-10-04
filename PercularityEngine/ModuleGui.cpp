@@ -90,7 +90,7 @@ bool ModuleGui::Start()
 
 	io->Fonts->AddFontDefault();
 	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 13);
-	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 14);
+	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 	return true;

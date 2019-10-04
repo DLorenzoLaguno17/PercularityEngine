@@ -47,7 +47,7 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	void DisbleVsync(bool mustDisable);
+	void DisableVsync(bool mustDisable);
 
 private:
 

@@ -88,7 +88,7 @@ void SettingsWindow::Update(float dt, Application* App) {
 	// Performance settings
 	ImGui::Text("PERFORMANCE");
 	ImGui::NewLine();
-	ImGui::Checkbox("V. Sync", &vsync);
+	if (ImGui::Checkbox("V. Sync", &vsync)) App->DisableVsync(vsync);
 	ImGui::NewLine();
 
 	char title[25];

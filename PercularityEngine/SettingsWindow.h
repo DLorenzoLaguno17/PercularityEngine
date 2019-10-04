@@ -26,7 +26,7 @@ public:
 	bool fullscreen = false;
 	bool resizable = false;
 	bool borderless = false;
-	bool fulldesktop = false;
+	bool fulldesktop = true;
 	bool vsync = true;
 
 	bool cullFace = true;
