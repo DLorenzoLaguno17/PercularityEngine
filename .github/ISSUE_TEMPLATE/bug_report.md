@@ -1,16 +1,16 @@
 ---
-Name: Bug report template
-About: Create a report to help us improve our game engine
+name: Bug report template
+about: Create a report to help us improve our game engine
 
 ---
 
 ## Describe the bug
 A clear and concise description of what the bug is.
 
-**Expected behavior**
+### Expected behavior
 Write a brief and clear description of what you expected to happen.
 
-**Steps to reproduce the bug**
+### Steps to reproduce the bug
 1.
 2. 
 3. 
@@ -31,5 +31,5 @@ If you can, add screenshots to help explain your problem.
  - Operative System: 
  - Version of the engine:
 
-**Additional context**
+### Additional context
 Add any other context about the problem here.
