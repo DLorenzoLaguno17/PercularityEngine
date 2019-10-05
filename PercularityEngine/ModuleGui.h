@@ -2,15 +2,17 @@
 #define __ModuleGui_H__
 
 #include "Module.h"
-#include "Globals.h"
-#include <list>
 #include <string>
+#include <vector>
 #include "SettingsWindow.h"
+
+#include "imgui.h"
 
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL_video.h"
 
 #define CURSOR_WIDTH 2
+#define MAX_LOGS 30
 
 struct SDL_Texture;
 struct _TTF_Font;
@@ -55,14 +57,17 @@ public:
 	void DrawImGui(float dt);
 
 public:
-	//our state
 	bool show_demo_window = true;
 	bool show_settings = true;
+	bool show_console = true;
+
+	std::vector<std::string> log_list;
+
 	ImGuiIO* io = nullptr;
 
 private:
-	SDL_GLContext gl_context; 
 	SettingsWindow settings;
+	bool p_open = true;
 };
 
 #endif // __ModuleGui_H__

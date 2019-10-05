@@ -59,3 +59,5 @@ private:
 	void LoadSettings();
 	void SaveSettings();
 };
+
+extern Application* App;

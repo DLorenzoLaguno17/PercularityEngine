@@ -3,6 +3,8 @@
 #include "Module.h"
 #include "Globals.h"
 
+#include <list>
+
 #define MAX_MOUSE_BUTTONS 5
 
 enum KEY_STATE
@@ -58,6 +60,10 @@ public:
 	{
 		return mouse_y_motion;
 	}
+
+public:
+	std::list<SDL_Scancode> input_list;
+	std::list<KEY_STATE> input_state_list;
 
 private:
 	KEY_STATE* keyboard;

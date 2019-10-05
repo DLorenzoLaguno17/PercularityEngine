@@ -2,10 +2,11 @@
 #include "ModuleInput.h"
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
-#include "SettingsWindow.h"
 
 #include "GLEW/include/glew.h"
 #include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
@@ -24,7 +25,7 @@ ModuleGui::~ModuleGui()
 bool ModuleGui::Awake()
 {
 	LOG("Loading GUI atlas");
-	bool ret = true;	
+	bool ret = true;
 
 	return ret;
 }
@@ -33,24 +34,24 @@ bool ModuleGui::Awake()
 bool ModuleGui::Start()
 {
 	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	(void)io;
 
 	// Setting context
-	gl_context = SDL_GL_CreateContext(App->window->window);
-	SDL_GL_MakeCurrent(App->window->window, gl_context);
+	ImGui::CreateContext();
+	SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
+	// Setting GuiIO
 	io = &ImGui::GetIO(); (void)io;
 
-	// GL 3.0 + GLSL 130
-	const char* glsl_version = "#version 130";
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+	// Create window with graphics context
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
 	bool err = glewInit() != 0;
@@ -61,7 +62,7 @@ bool ModuleGui::Start()
 		return 1;
 	}
 	else {
-		//LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Sould be 2.0
+		LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Sould be 2.0
 
 		LOG("Vendor %s", glGetString(GL_VENDOR));
 		LOG("Renderer: %s", glGetString(GL_RENDERER));
@@ -74,12 +75,10 @@ bool ModuleGui::Start()
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-	ImGui::StyleColorsDark(); 
-	
-	//const char* glsl_version = "#version 130";
+	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;			//Enable docking
+	ImGui::StyleColorsDark();
 
-	ImGui_ImplSDL2_InitForOpenGL(App->window->window, gl_context);
-	ImGui_ImplOpenGL3_Init(glsl_version);
+	ImGui_ImplOpenGL3_Init();
 
 	// Load Fonts
 	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -87,7 +86,7 @@ bool ModuleGui::Start()
 	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
 	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
 	// - Read 'misc/fonts/README.txt' for more instructions and details.
-	// - Remember that in C/C++ if you want to include a backslash \ in a string literal 
+	// - Remember that in C/C++ if you want to include a backslash \ in a string literal
 
 	io->Fonts->AddFontDefault();
 	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 13);
@@ -120,6 +119,50 @@ update_status ModuleGui::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("GuiPostUpdate", Profiler::Color::Yellow)
 
+	bool opt_fullscreen = true;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+	// because it would be confusing to have two docking targets within each others.
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+	if (opt_fullscreen)
+	{
+		ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->Pos);
+		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowViewport(viewport->ID);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	}
+
+	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+	/*if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)*/
+	dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+	window_flags |= ImGuiWindowFlags_NoBackground;
+
+	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
+	// all active windows docked into it will lose their parent and become undocked.
+	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("DockSpace Demo", &p_open, window_flags);
+	ImGui::PopStyleVar();
+
+	if (opt_fullscreen)
+		ImGui::PopStyleVar(2);
+
+	// DockSpace
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+
+	ImGui::End();
 	return UPDATE_CONTINUE;
 }
 
@@ -130,7 +173,6 @@ bool ModuleGui::CleanUp()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-	SDL_GL_DeleteContext(gl_context);
 
 	return true;
 }
@@ -138,6 +180,14 @@ bool ModuleGui::CleanUp()
 void ModuleGui::DrawImGui(float dt) {
 
 	// Menu bar
+	/*glLineWidth(100.0f);
+	glBegin(GL_POLYGON);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(100.f, 10.f, 220.f);
+	glEnd();
+
+	glClearColor(255, 0, 0, 0);*/
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -176,6 +226,7 @@ void ModuleGui::DrawImGui(float dt) {
 		{
 			ImGui::Checkbox("Demo Window", &show_demo_window);
 			ImGui::Checkbox("Settings", &show_settings);
+			ImGui::Checkbox("Console", &show_console);
 			ImGui::EndMenu();
 		}
 
@@ -226,13 +277,27 @@ void ModuleGui::DrawImGui(float dt) {
 		ImGui::EndMainMenuBar();
 	}
 
-	// 1. Show the big demo window 
+	// 1. Show the big demo window
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
 	// Show settings window
 	if (show_settings) {
 		settings.Update(dt, App);
+	}
+
+	if (show_console) {
+		ImGui::Begin("Console");
+
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) LOG("Esta wea funciona");
+
+		for (int i = 0; i < log_list.size(); ++i) {
+
+			ImGui::SetScrollHereY(1.0f);
+			ImGui::Text(log_list[i].c_str());
+		}
+
+		ImGui::End();
 	}
 
 	// Rendering
