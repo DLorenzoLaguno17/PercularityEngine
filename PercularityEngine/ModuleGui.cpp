@@ -40,9 +40,7 @@ bool ModuleGui::Start()
 	gl_context = SDL_GL_CreateContext(App->window->window);
 	SDL_GL_MakeCurrent(App->window->window, gl_context);
 
-	//TEST
 	io = &ImGui::GetIO(); (void)io;
-
 
 	// GL 3.0 + GLSL 130
 	const char* glsl_version = "#version 130";
@@ -96,6 +94,11 @@ bool ModuleGui::Start()
 	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 14);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
+
+	///This is added in order to solve the errors realted to the 3D rendering
+	///I don't know what causes the problem, but this solves it for the moment - Joan
+	App->renderer3D->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	return true;
 }
 
@@ -116,6 +119,7 @@ update_status ModuleGui::PreUpdate(float dt)
 update_status ModuleGui::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("GuiPostUpdate", Profiler::Color::Yellow)
+
 	return UPDATE_CONTINUE;
 }
 
