@@ -90,7 +90,7 @@ bool ModuleGui::Start()
 
 	io->Fonts->AddFontDefault();
 	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 13);
-	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 14);
+	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 
@@ -182,96 +182,9 @@ void ModuleGui::DrawImGui(float dt) {
 	glVertex3f(100.f, 10.f, 220.f);
 	glEnd();
 
-	glClearColor(255, 0, 0, 0);*/
+	glClearColor(255, 0, 0, 0);*/	
 
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			ImGui::MenuItem("Open");
-			ImGui::MenuItem("Open recent", "Ctrl+0");
-			ImGui::MenuItem("New");
-			ImGui::Separator();
-			ImGui::MenuItem("Save", " Ctrl+S");
-			ImGui::MenuItem("Save as...", " Ctrl+Shift+S");
-			ImGui::Separator();
-			if (ImGui::MenuItem("Exit", "ESC"))
-				App->renderer3D->status = UPDATE_STOP;
-
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Edit"))
-		{
-			ImGui::MenuItem("Undo", "Ctrl+Z");
-			ImGui::MenuItem("Redo", "Ctrl+Y");
-
-			ImGui::Separator();
-			ImGui::MenuItem("Cut", "Ctrl+X");
-			ImGui::MenuItem("Copy", "Ctrl+C");
-			ImGui::MenuItem("Paste", "Ctrl+V");
-
-			ImGui::Separator();
-			ImGui::MenuItem("Duplicate", "Ctrl+D");
-			ImGui::MenuItem("Delete", "Supr");
-
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Windows"))
-		{
-			ImGui::Checkbox("Demo Window", &show_demo_window);
-			ImGui::Checkbox("Settings", &show_settings);
-			ImGui::Checkbox("Console", &show_console);
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("About"))
-		{
-			ImGui::Text("Percularity v0.1");
-			ImGui::Text("3D engine developed for student purposes");
-			ImGui::Text("By Joan Marin & Daniel Lorenzo");
-			if (ImGui::Button("Go to our GitHub"))
-				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine", NULL, NULL, SW_SHOWNORMAL);
-			ImGui::NewLine();
-
-			ImGui::Separator();
-			ImGui::Text("3rd party libraries used:");
-			ImGui::BulletText("SDL 2.0.6");
-			ImGui::BulletText("STL");
-			ImGui::BulletText("Dear ImGui 1.72b");
-			ImGui::BulletText("MathGeoLib 1.5");
-			ImGui::BulletText("Open GL 4.5");
-			ImGui::NewLine();
-
-			ImGui::Separator();
-			ImGui::Text("MIT License");
-			ImGui::NewLine();
-			ImGui::Text("Copyright(c) 2019 Joan Marin & Dani Lorenzo");
-			ImGui::NewLine();
-			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
-			ImGui::Text("of this software and associated documentation files (the 'Software'), to deal");
-			ImGui::Text("in the Software without restriction, including without limitation the rights");
-			ImGui::Text("to use, copy, modify, merge, publish, distribute, sublicense, and/or sell");
-			ImGui::Text("copies of the Software, and to permit persons to whom the Software is");
-			ImGui::Text("furnished to do so, subject to the following conditions:");
-			ImGui::NewLine();
-			ImGui::Text("The above copyright notice and this permission notice shall be included in all");
-			ImGui::Text("copies or substantial portions of the Software.");
-			ImGui::NewLine();
-			ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
-			ImGui::Text("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
-			ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
-			ImGui::Text("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
-			ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
-			ImGui::Text("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
-			ImGui::Text("SOFTWARE.");
-
-			ImGui::EndMenu();
-		}
-
-		ImGui::EndMainMenuBar();
-	}
+	main_menu_bar.Update(App);
 
 	// 1. Show the big demo window
 	if (show_demo_window)
@@ -288,10 +201,21 @@ void ModuleGui::DrawImGui(float dt) {
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) LOG("Esta wea funciona");
 
 		for (int i = 0; i < log_list.size(); ++i) {
-
 			ImGui::SetScrollHereY(1.0f);
 			ImGui::Text(log_list[i].c_str());
 		}
+
+		ImGui::End();
+	}
+
+	if (show_scene) {
+		ImGui::Begin("Scene");		
+
+		ImGui::End();
+	}
+
+	if (show_elements) {
+		ImGui::Begin("Elements");
 
 		ImGui::End();
 	}

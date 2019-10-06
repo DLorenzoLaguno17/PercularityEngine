@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "imgui.h"
+#include "Timer.h"
 
 class Application;
 
@@ -15,7 +16,6 @@ public:
 	// Destructor
 	virtual ~SettingsWindow() {};
 
-
 	// Called every frame
 	void Update(float dt, Application* App);
 
@@ -26,7 +26,7 @@ public:
 	bool fullscreen = false;
 	bool resizable = false;
 	bool borderless = false;
-	bool fulldesktop = false;
+	bool fulldesktop = true;
 	bool vsync = true;
 
 	bool cullFace = true;
@@ -35,10 +35,19 @@ public:
 	bool colorMaterial = true;
 	bool texture2D = true;
 
+	bool showButtonInfo = false;
+	bool showButtonInfo2 = false;
+	int mouseButton2;
+	int mouseButton;
+	float secs;
+
 private:
 	std::vector<float> fps;
 	std::vector<float> ms;
 
+	bool timerStarted = false;
+	Uint32 lastTime = 0;
+	Timer dblcTimer; 
 };
 
-#endif // __ModuleGui_H__
+#endif // __SettingsWindow_H__

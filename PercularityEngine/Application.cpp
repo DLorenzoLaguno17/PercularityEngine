@@ -1,6 +1,5 @@
 #include "Application.h"
 #include <fstream>
-//#include "gl3w.h"
 #include <iomanip>
 #include "GLEW/include/glew.h"
 
@@ -193,6 +192,7 @@ void Application::SaveSettings()
 	stream.close();
 }
 
-void Application::DisbleVsync(bool mustDisable) {
-	//if (mustDisable) SDL_Vsyn
+void Application::DisableVsync(bool mustDisable) {
+	if (mustDisable) SDL_GL_SetSwapInterval(1);
+	else SDL_GL_SetSwapInterval(0);
 }
