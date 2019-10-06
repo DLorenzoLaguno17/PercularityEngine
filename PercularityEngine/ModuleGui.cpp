@@ -25,7 +25,7 @@ ModuleGui::~ModuleGui()
 bool ModuleGui::Awake()
 {
 	LOG("Loading GUI atlas");
-	bool ret = true;	
+	bool ret = true;
 
 	return ret;
 }
@@ -44,14 +44,14 @@ bool ModuleGui::Start()
 	io = &ImGui::GetIO(); (void)io;
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);	
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
 	// Create window with graphics context
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);	
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
 	bool err = glewInit() != 0;
@@ -74,9 +74,9 @@ bool ModuleGui::Start()
 
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	
+
 	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;			//Enable docking
-	ImGui::StyleColorsDark(); 
+	ImGui::StyleColorsDark();
 
 	ImGui_ImplOpenGL3_Init();
 
@@ -86,13 +86,14 @@ bool ModuleGui::Start()
 	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
 	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
 	// - Read 'misc/fonts/README.txt' for more instructions and details.
-	// - Remember that in C/C++ if you want to include a backslash \ in a string literal 
+	// - Remember that in C/C++ if you want to include a backslash \ in a string literal
 
 	io->Fonts->AddFontDefault();
 	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 13);
 	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
+
 	return true;
 }
 
@@ -185,7 +186,7 @@ void ModuleGui::DrawImGui(float dt) {
 
 	main_menu_bar.Update(App);
 
-	// 1. Show the big demo window 
+	// 1. Show the big demo window
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -203,7 +204,7 @@ void ModuleGui::DrawImGui(float dt) {
 			ImGui::SetScrollHereY(1.0f);
 			ImGui::Text(log_list[i].c_str());
 		}
-		
+
 		ImGui::End();
 	}
 
