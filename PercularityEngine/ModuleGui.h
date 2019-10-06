@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "SettingsWindow.h"
+#include "MainMenuBar.h"
 
 #include "imgui.h"
 
@@ -12,7 +13,6 @@
 #include "SDL/include/SDL_video.h"
 
 #define CURSOR_WIDTH 2
-#define MAX_LOGS 30
 
 struct SDL_Texture;
 struct _TTF_Font;
@@ -67,6 +67,7 @@ public:
 
 private:
 	SettingsWindow settings;
+	MainMenuBar main_menu_bar;
 	bool p_open = true;
 };
 
