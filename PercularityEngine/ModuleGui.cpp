@@ -94,10 +94,6 @@ bool ModuleGui::Start()
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 
-	///This is added in order to solve the errors realted to the 3D rendering
-	///I don't know what causes the problem, but this solves it for the moment - Joan
-	App->renderer3D->OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	return true;
 }
 
