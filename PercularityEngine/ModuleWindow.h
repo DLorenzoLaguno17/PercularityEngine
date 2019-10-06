@@ -18,6 +18,13 @@ public:
 	bool Init();
 	bool CleanUp();
 
+	//Save & Load
+	void Load(const nlohmann::json  &config);
+
+void Save(nlohmann::json &config);
+
+public:
+
 	void SetTitle(const char* title);
 	void SetFullscreen(bool goingFullscreen);
 	void SetBorderless(bool goingBorderless);
@@ -30,6 +37,17 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
+
+private:
+
+	//We set values here in order to avoid issues with release
+	//but the right ones will be set on the Load() phase
+	bool winResizable=true;
+	bool winBorderless = true;
+	bool winFullscreen = false;
+	bool winFullscreenDesktop = false;
+	std::string winTitle;
+
 
 };				 
 

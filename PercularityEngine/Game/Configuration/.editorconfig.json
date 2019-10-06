@@ -1,6 +1,15 @@
 {
     "Application": {
         "Name": "Percularity",
-        "Version": "0.2"
+        "Version": "0.1"
+    },
+    "User Interface": {
+        "Show Settings": true
+    },
+    "Window": {
+        "Borderless": false,
+        "Full Screen": false,
+        "Full Screen Desktop": false,
+        "Resizable": true
     }
 }

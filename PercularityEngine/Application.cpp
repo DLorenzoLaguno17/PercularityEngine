@@ -44,6 +44,8 @@ bool Application::Init()
 {
 	bool ret = true;
 
+	LoadSettings();
+
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = modules.begin();
 	glewInit();
@@ -66,7 +68,6 @@ bool Application::Init()
 	
 	ms_timer.Start();
 
-	LoadSettings();
 
 	return ret;
 }

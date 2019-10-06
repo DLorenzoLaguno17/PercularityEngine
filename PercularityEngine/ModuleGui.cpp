@@ -301,3 +301,13 @@ void ModuleGui::DrawImGui(float dt) {
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
+void ModuleGui::Load(const json &config)
+{
+	show_settings = config["User Interface"]["Show Settings"];
+}
+
+void ModuleGui::Save(json &config)
+{
+	config["User Interface"]["Show Settings"] = show_settings;
+}

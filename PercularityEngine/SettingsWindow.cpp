@@ -6,7 +6,8 @@
 // Show settings window
 void SettingsWindow::Update(float dt, Application* App) {
 	
-	ImGui::Begin("Settings");
+	
+	ImGui::Begin("Settings",&App->gui->show_settings);
 
 	// General settings
 	ImGui::Text("GENERAL");
