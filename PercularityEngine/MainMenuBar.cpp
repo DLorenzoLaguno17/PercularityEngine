@@ -51,7 +51,7 @@ void MainMenuBar::Update(Application* App) {
 		{
 			if (ImGui::MenuItem("Report a bug"))
 				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine/issues/new/choose", NULL, NULL, SW_SHOWNORMAL);
-			if (ImGui::MenuItem("Download latest version"))
+			if (ImGui::MenuItem("Download the latest version"))
 				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine/releases", NULL, NULL, SW_SHOWNORMAL);
 			ImGui::EndMenu();
 		}
@@ -68,7 +68,7 @@ void MainMenuBar::Update(Application* App) {
 			ImGui::Separator();
 			ImGui::Text("3rd party libraries used:");
 			ImGui::BulletText("SDL 2.0.6");
-			ImGui::BulletText("STL");
+			ImGui::BulletText("STL 2.0");
 			ImGui::BulletText("Dear ImGui 1.72b");
 			ImGui::BulletText("MathGeoLib 1.5");
 			ImGui::BulletText("Open GL 4.5");

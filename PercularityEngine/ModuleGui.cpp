@@ -196,26 +196,26 @@ void ModuleGui::DrawImGui(float dt) {
 	}
 
 	if (show_console) {
-		ImGui::Begin("Console");
+		ImGui::Begin("Console", &show_console);
 
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) LOG("Esta wea funciona");
 
 		for (int i = 0; i < log_list.size(); ++i) {
-			ImGui::SetScrollHereY(1.0f);
 			ImGui::Text(log_list[i].c_str());
+			ImGui::SetScrollHereY(1.0f);
 		}
 
 		ImGui::End();
 	}
 
 	if (show_scene) {
-		ImGui::Begin("Scene");		
+		ImGui::Begin("Scene", &show_scene);		
 
 		ImGui::End();
 	}
 
 	if (show_elements) {
-		ImGui::Begin("Elements");
+		ImGui::Begin("Elements", &show_elements);
 
 		ImGui::End();
 	}

@@ -10,8 +10,7 @@ void SettingsWindow::Update(float dt, Application* App) {
 		dblcTimer.Start();
 		timerStarted = true;
 	}
-
-	ImGui::Begin("Settings");
+	ImGui::Begin("Settings", &App->gui->show_settings);
 
 	// General settings
 	ImGui::Text("STYLE");
