@@ -53,7 +53,7 @@ public:
 
 public:
 
-	void DisbleVsync(bool mustDisable);
+	void DisableVsync(bool mustDisable);
 
 private:
 
