@@ -1,17 +1,20 @@
 #include "SettingsWindow.h"
 #include "Application.h"
+#include "imgui.h"
 
 #include "SDL/include/SDL_opengl.h"
 
-// Show settings window
-void SettingsWindow::Update(float dt, Application* App) {
+SettingsWindow::SettingsWindow(char* name, bool active) : UIElement(name, active) {}
 
+// Show settings window
+void SettingsWindow::Update() {
+	
 	if (!timerStarted) {
 		dblcTimer.Start();
 		timerStarted = true;
 	}
 
-	ImGui::Begin("Settings", &App->gui->show_settings);
+	ImGui::Begin("Settings", &active);
 
 	// General settings
 	ImGui::Text("STYLE");
@@ -166,9 +169,4 @@ void SettingsWindow::Update(float dt, Application* App) {
 
 	//App->gui->io->KeysDownDuration[];
 	ImGui::End();
-}
-
-bool SettingsWindow::CleanUp() {
-
-	return true;
 }

@@ -1,8 +1,9 @@
 #include "MainMenuBar.h"
 #include "Application.h"
+#include "imgui.h"
 
 // Show main menu bar
-void MainMenuBar::Update(Application* App) {
+void MainMenuBar::Update(std::vector<UIElement*> list) {
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -39,10 +40,10 @@ void MainMenuBar::Update(Application* App) {
 
 		if (ImGui::BeginMenu("Windows"))
 		{
+			for(int i = 0; i < list.size(); ++i)
+				ImGui::MenuItem(list[i]->name, NULL, &list[i]->active);
+
 			ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
-			ImGui::MenuItem("Settings", NULL, &App->gui->show_settings);
-			ImGui::MenuItem("Console", NULL, &App->gui->show_console);
-			ImGui::MenuItem("Scene", NULL, &App->gui->show_scene);
 			ImGui::MenuItem("Elements", NULL, &App->gui->show_elements);
 			ImGui::EndMenu();
 		}
@@ -102,9 +103,4 @@ void MainMenuBar::Update(Application* App) {
 
 		ImGui::EndMainMenuBar();
 	}
-}
-
-bool MainMenuBar::CleanUp() {
-
-	return true;
 }
