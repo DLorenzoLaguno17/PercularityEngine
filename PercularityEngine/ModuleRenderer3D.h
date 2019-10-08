@@ -18,7 +18,19 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+public:
 	void OnResize(int width, int height);
+
+private:
+	
+	void DrawAxis() const;		//Draw XYZ axis of coordinates
+	void DrawSimplePlane()const;//Draw a plane with some lines
+
+	//Testing vertex arrays
+	void CreateCube();			
+
+	//Delete
+	void DrawDirectCube()const;	//Draw a cube in direct mode = Hardcoded
 
 public:
 

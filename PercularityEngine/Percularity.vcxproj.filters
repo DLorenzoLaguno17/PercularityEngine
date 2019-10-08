@@ -115,6 +115,9 @@
       <Filter>Sources\3rd party\Json</Filter>
     </ClInclude>
     <ClInclude Include="SettingsWindow.h" />
+    <ClInclude Include="OpenGL.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">

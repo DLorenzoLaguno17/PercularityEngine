@@ -10,6 +10,8 @@
         "Borderless": false,
         "Full Screen": false,
         "Full Screen Desktop": false,
-        "Resizable": true
+        "Height": 720,
+        "Resizable": true,
+        "Width": 1280
     }
 }

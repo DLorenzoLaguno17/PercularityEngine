@@ -20,8 +20,7 @@ public:
 
 	//Save & Load
 	void Load(const nlohmann::json  &config);
-
-void Save(nlohmann::json &config);
+	void Save(nlohmann::json &config);
 
 public:
 
@@ -31,6 +30,9 @@ public:
 	void SetResizable(bool goingResizable);
 	void SetFulldesktop(bool goingFulldesktop);
 
+
+	uint GetWindowWidth() const { return winWidth; }
+	uint GetWindowHeight()const { return winHeight; }
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;
@@ -48,6 +50,9 @@ private:
 	bool winFullscreenDesktop = false;
 	std::string winTitle;
 
+	//Window size
+	uint winWidth=0;
+	uint winHeight=0;
 
 };				 
 
