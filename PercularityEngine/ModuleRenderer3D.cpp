@@ -294,9 +294,4 @@ void ModuleRenderer3D::CreateCube()
 	vertexList.push_back(vec3(0.0f, 0.0f, 5.0f));
 	vertexList.push_back(vec3(0.0f, 5.0f, 5.0f));
 
-	uint my_id = 0;
-	glGenBuffers(1,  &my_id);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float)*vertexList.size * 3, &vertexList, GL_STATIC_DRAW);
-
 }
