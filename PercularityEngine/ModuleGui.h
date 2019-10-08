@@ -74,8 +74,6 @@ public:
 private:
 	SettingsWindow settings;
 	MainMenuBar main_menu_bar;
-
-	std::vector<UIElement> ui_elements_list;
 	bool p_open = true;
 };
 

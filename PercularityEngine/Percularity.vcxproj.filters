@@ -116,7 +116,7 @@
     </ClInclude>
     <ClInclude Include="OpenGL.h">
       <Filter>Sources\Tools</Filter>
-    </ClInclude>
+      </ClInclude>
     <ClInclude Include="SettingsWindow.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
@@ -127,9 +127,6 @@
       <Filter>Sources\3rd party</Filter>
     </ClInclude>
     <ClInclude Include="MainMenuBar.h">
-      <Filter>Sources\Modules\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="UIElement.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,8 +3,6 @@
 
 // Show main menu bar
 void MainMenuBar::Update(Application* App) {
-	name = "Show Menu";
-
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))

@@ -94,9 +94,6 @@ bool ModuleGui::Start()
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 
-	ui_elements_list.push_back(settings);
-	ui_elements_list.push_back(main_menu_bar);
-
 	return true;
 }
 
@@ -178,12 +175,25 @@ bool ModuleGui::CleanUp()
 
 void ModuleGui::DrawImGui(float dt) {
 
-	for (int i = 0; i < ui_elements_list.size(); ++i) 
-		if (ui_elements_list[i].active) ui_elements_list[i].Update(App);
+	// Menu bar
+	/*glLineWidth(100.0f);
+	glBegin(GL_POLYGON);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(100.f, 10.f, 220.f);
+	glEnd();
+
+	glClearColor(255, 0, 0, 0);*/	
+
+	main_menu_bar.Update(App);
 
 	// 1. Show the big demo window
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
+
+	// Show settings window
+	if (show_settings) {
+		settings.Update(dt, App);
+	}
 
 	if (show_console) {
 		ImGui::Begin("Console", &show_console);
@@ -218,12 +228,10 @@ void ModuleGui::DrawImGui(float dt) {
 
 void ModuleGui::Load(const json &config)
 {
-	for (int i = 0; i < ui_elements_list.size(); ++i)
-		ui_elements_list[i].active = config["User Interface"][ui_elements_list[i].name];
+	show_settings = config["User Interface"]["Show Settings"];
 }
 
 void ModuleGui::Save(json &config)
 {
-	for (int i = 0; i < ui_elements_list.size(); ++i)
-		config["User Interface"][ui_elements_list[i].name] = ui_elements_list[i].active;
+	config["User Interface"]["Show Settings"] = show_settings;
 }

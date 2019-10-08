@@ -4,10 +4,11 @@
 #include <vector>
 #include "imgui.h"
 #include "Timer.h"
-#include "UIElement.h"
+
+class Application;
 
 // ---------------------------------------------------
-class SettingsWindow : public UIElement
+class SettingsWindow
 {
 public:
 	SettingsWindow() {};
@@ -16,7 +17,7 @@ public:
 	virtual ~SettingsWindow() {};
 
 	// Called every frame
-	void Update(Application* App);
+	void Update(float dt, Application* App);
 
 	// Called before quitting
 	bool CleanUp();

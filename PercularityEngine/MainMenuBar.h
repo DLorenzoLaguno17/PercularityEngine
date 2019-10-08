@@ -3,10 +3,11 @@
 
 #include <vector>
 #include "imgui.h"
-#include "UIElement.h"
+
+class Application;
 
 // ---------------------------------------------------
-class MainMenuBar : public UIElement
+class MainMenuBar
 {
 public:
 	MainMenuBar() {};
@@ -19,6 +20,7 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
 };
 
 #endif // __MainManuBar_H__
