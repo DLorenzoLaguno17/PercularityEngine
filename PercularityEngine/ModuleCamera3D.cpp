@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "ModuleInput.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 

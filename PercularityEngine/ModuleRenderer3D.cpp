@@ -1,6 +1,8 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-
+#include "ModuleCamera3D.h"
+#include "ModuleWindow.h"
+#include "ModuleGui.h"
 #include <stdio.h>
 #include <iostream>
 

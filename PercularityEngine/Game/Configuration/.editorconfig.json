@@ -5,7 +5,7 @@
     },
     "User Interface": {
         "Console": true,
-        "Scene": false,
+        "Scene": true,
         "Settings": true
     },
     "Window": {

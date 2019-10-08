@@ -1,5 +1,8 @@
 #include "MainMenuBar.h"
 #include "Application.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleGui.h"
+#include "UIElement.h"
 #include "imgui.h"
 
 // Show main menu bar

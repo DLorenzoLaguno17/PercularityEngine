@@ -2,12 +2,9 @@
 #include "ModuleInput.h"
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
 
-#include "GLEW/include/glew.h"
-#include "SDL/include/SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
+#include "OpenGL.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 

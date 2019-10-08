@@ -1,6 +1,13 @@
 #include "Application.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleGui.h"
+
 #include <fstream>
 #include <iomanip>
+
 #include "GLEW/include/glew.h"
 
 Application::Application()

@@ -1,5 +1,7 @@
 #include "SettingsWindow.h"
 #include "Application.h"
+#include "ModuleGui.h"
+#include "ModuleWindow.h"
 #include "imgui.h"
 
 #include "SDL/include/SDL_opengl.h"
