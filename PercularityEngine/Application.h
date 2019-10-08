@@ -26,6 +26,10 @@ public:
 	ModuleCamera3D* camera;
 	ModuleGui* gui;
 
+	//Aditional data
+	std::string engineName;
+	std::string engineVersion;
+
 private:
 
 	Timer	ms_timer;
@@ -36,9 +40,7 @@ private:
 	const char* settingsAdress;
 	json		settingsFile;
 	
-	//Aditional data
-	std::string engineName;
-	std::string engineVersion;
+	
 
 public:
 
@@ -49,10 +51,9 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	void DisableVsync(bool mustDisable);
-
 public:
-	
+
+	void DisableVsync(bool mustDisable);
 
 private:
 
@@ -61,7 +62,7 @@ private:
 	void FinishUpdate();
 
 	//Save & load
-	void LoadSettings();
+	void LoadSettings();	//Called before modules Init() & Start()
 	void SaveSettings();
 };
 

@@ -54,6 +54,12 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//Save & Load
+	void Load(const nlohmann::json  &config);
+	void Save(nlohmann::json &config);
+
+public:
+
 	void DrawImGui(float dt);
 
 public:

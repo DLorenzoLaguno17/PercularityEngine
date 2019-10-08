@@ -16,6 +16,11 @@ ModuleWindow::~ModuleWindow()
 // Called before render is available
 bool ModuleWindow::Init()
 {
+	//Set the title of the screen
+	winTitle.append(App->engineName);
+	winTitle.append("  ");
+	winTitle.append(App->engineVersion);
+
 	LOG("Init SDL window & surface");
 	bool ret = true;
 
@@ -27,35 +32,35 @@ bool ModuleWindow::Init()
 	else
 	{
 		//Create window
-		int width = SCREEN_WIDTH * SCREEN_SIZE;
-		int height = SCREEN_HEIGHT * SCREEN_SIZE;
+		int width = winWidth* SCREEN_SIZE;
+		int height = winHeight* SCREEN_SIZE;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-		if(WIN_FULLSCREEN == true)
+		if(winFullscreen== true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(WIN_RESIZABLE == true)
+		if(winResizable == true)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(WIN_BORDERLESS == true)
+		if(winBorderless== true)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(WIN_FULLSCREEN_DESKTOP == true)
+		if(winFullscreenDesktop== true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(winTitle.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		LOG("%d %d", width, height);
 
@@ -114,4 +119,25 @@ void ModuleWindow::SetBorderless(bool goingBorderless) {
 void ModuleWindow::SetFulldesktop(bool goingFulldesktop) {
 	if (goingFulldesktop) SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	else SDL_SetWindowFullscreen(window, SDL_WINDOW_MINIMIZED);
+}
+
+void ModuleWindow::Load(const nlohmann::json &config) {
+	
+	winResizable = config["Window"]["Resizable"];
+	winBorderless= config["Window"]["Borderless"];
+	winFullscreen=config["Window"]["Full Screen"];
+	winFullscreenDesktop = config["Window"]["Full Screen Desktop"];
+	winWidth = config["Window"]["Width"];
+	winHeight = config["Window"]["Height"];
+
+}
+
+void ModuleWindow::Save(nlohmann::json &config) {
+
+	config["Window"]["Resizable"] = winResizable;
+	config["Window"]["Borderless"]=winBorderless;
+	config["Window"]["Full Screen"]=winFullscreen;
+	config["Window"]["Full Screen Desktop"]=winFullscreenDesktop;
+	config["Window"]["Width"] = winWidth;
+	config["Window"]["Height"]=winHeight;
 }

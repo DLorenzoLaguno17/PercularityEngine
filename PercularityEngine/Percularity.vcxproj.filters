@@ -114,6 +114,9 @@
     <ClInclude Include="Json Parser\nlohmann\json.hpp">
       <Filter>Sources\3rd party\Json</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGL.h">
+      <Filter>Sources\Tools</Filter>
+      </ClInclude>
     <ClInclude Include="SettingsWindow.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>

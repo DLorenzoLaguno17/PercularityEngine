@@ -1,13 +1,10 @@
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-#include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
 
 #include <stdio.h>
 #include <iostream>
 
+#include "OpenGL.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -15,6 +12,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	
 }
 
 // Destructor
@@ -85,7 +83,7 @@ bool ModuleRenderer3D::Init()
 		lights[0].ref = GL_LIGHT0;
 		lights[0].ambient.Set(0.25f, 0.25f, 0.25f, 1.0f);
 		lights[0].diffuse.Set(0.75f, 0.75f, 0.75f, 1.0f);
-		lights[0].SetPos(0.0f, 0.0f, 2.5f);
+		lights[0].SetPos(10.0f,10.0f, 10.0f);
 		lights[0].Init();
 
 		GLfloat MaterialAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -102,7 +100,9 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+
+	CreateCube();
 
 	return ret;
 }
@@ -128,30 +128,19 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	glLineWidth(10.0f);
+	//Draw a plane
+	DrawSimplePlane();
 
-	glBegin(GL_LINES);
-	
-		
-	//try to draw a plane
-	for (float i = 0.0f; i < 500; ++i)
-	{
-		glVertex3f(i, 0 ,0.0f);
-		glVertex3f(i, 0, 50.0f);
-	}
+	//Test 
+	DrawDirectCube();
 
-	for (float i = 0.0f; i < 500; ++i)
-	{
-		glVertex3f(0, 0.0f,  i);
-		glVertex3f(50.f, 0.0f, i);
-	}
-	
+	//Test
+	DrawAxis();
 
-	glEnd();
+	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
+								should find a better way to 
+								order module drawing  Joan M*/
 
-	glLineWidth(600.0f);
-
-	App->gui->DrawImGui(dt);
 	SDL_GL_SwapWindow(App->window->window);
 
 	return status;
@@ -178,4 +167,131 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::DrawSimplePlane()const
+{
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+
+	//try to draw a plane
+	for (float i = -100.0f; i < 100; ++i)
+	{
+		glVertex3f(i, 0.0f, -100.0f);
+		glVertex3f(i, 0.0f, 100.0f);
+	}
+
+	for (float i = -100.0f; i < 100; ++i)
+	{
+		glVertex3f(-100, 0.0f, i);
+		glVertex3f(100.f, 0.0f, i);
+	}
+	
+
+	glEnd();
+}
+
+void ModuleRenderer3D::DrawDirectCube()const {
+
+	glBegin(GL_TRIANGLES);
+
+	glRotatef(0.1f, 1.0f, 1.0f, 0.0f);
+
+	//Bottom face
+	glVertex3f(5.0f, 5.0f, 0.0f);
+	glVertex3f(0.0f, 5.0f, 0.0f);
+	glVertex3f(0.0f, 5.0f, 5.0f);
+
+	glVertex3f(0.0f, 5.0f, 5.0f);
+	glVertex3f(5.0f, 5.0f, 5.0f);
+	glVertex3f(5.0f, 5.0f, 0.0f);
+
+	//Top face
+	glVertex3f(5.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.0f, 5.0f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+
+	glVertex3f(0.0f, 0.0f, 5.0f);
+	glVertex3f(5.0f, 0.0f, 0.0f);
+	glVertex3f(5.0f, 0.0f, 5.0f);
+
+	//right face
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 5.0f, 5.0f);
+	glVertex3f(0.0f, 5.0f, 0.0f);
+
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.0f, 5.0f);
+	glVertex3f(0.0f, 5.0f, 5.0f);
+
+	//left face
+	glVertex3f(5.0f, 0.0f, 0.0f);
+	glVertex3f(5.0f, 5.0f, 0.0f);
+	glVertex3f(5.0f, 5.0f, 5.0f);
+
+	glVertex3f(5.0f, 0.0f, 0.0f);
+	glVertex3f(5.0f, 5.0f, 5.0f);
+	glVertex3f(5.0f, 0.0f, 5.0f);
+
+	//front face
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 5.0f, 0.0f);
+	glVertex3f(5.0f, 0.0f, 0.0f);
+
+	glVertex3f(5.0f, 5.0f, 0.0f);
+	glVertex3f(5.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 5.0f, 0.0f);
+
+	//back face
+	glVertex3f(0.0f, 0.0f, 5.0f);
+	glVertex3f(5.0f, 0.0f, 5.0f);
+	glVertex3f(0.0f, 5.0f, 5.0f);
+
+	glVertex3f(5.0f, 5.0f, 5.0f);
+	glVertex3f(0.0f, 5.0f, 5.0f);
+	glVertex3f(5.0f, 0.0f, 5.0f);
+
+	glEnd();
+
+}
+
+void ModuleRenderer3D::DrawAxis() const{
+	
+	glLineWidth(5.0f);
+	
+	glBegin(GL_LINES);
+	
+	//X axis
+	glColor3f(1, 0, 0); //Red color
+
+	glVertex3f(-0.1f, -0.1f, -0.1f);
+	glVertex3f(5.1f, -0.1f, -0.1f);
+
+	//Y axis
+	glColor3f(0, 1, 0); //Green color
+
+	glVertex3f(-0.1f, -0.1f, -0.1f);
+	glVertex3f(-0.1f, 5.1f, -0.1f);
+
+	//Z axis
+	glColor3f(0, 0, 1); //Blue color
+
+	glVertex3f(-0.1f, -0.1f, -0.1f);
+	glVertex3f(-0.1f, -0.1f, 5.1f);
+
+	glEnd();
+
+	glColor3f(1, 1, 1);//Set color back to white
+}
+
+void ModuleRenderer3D::CreateCube()
+{
+	
+	//create a list with the vertices
+	std::vector<vec3> vertexList;
+
+	vertexList.push_back(vec3(0.0f, 0.0f, 0.0f));
+	vertexList.push_back(vec3(0.0f, 0.0f, 5.0f));
+	vertexList.push_back(vec3(0.0f, 5.0f, 5.0f));
+
 }
