@@ -4,14 +4,16 @@
 #include "SDL/include/SDL_opengl.h"
 
 // Show settings window
-void SettingsWindow::Update(float dt, Application* App) {
+void SettingsWindow::Update(Application* App) {
+
+	name = "Show Settings";
 
 	if (!timerStarted) {
 		dblcTimer.Start();
 		timerStarted = true;
 	}
 
-	ImGui::Begin("Settings", &App->gui->show_settings);
+	ImGui::Begin("Settings", &active);
 
 	// General settings
 	ImGui::Text("STYLE");
