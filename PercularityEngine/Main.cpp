@@ -28,7 +28,10 @@ enum main_states
 	MAIN_FINISH,
 	MAIN_EXIT
 };
+
 	Application* App = NULL;
+	std::vector<std::string> log_list;
+
 int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
