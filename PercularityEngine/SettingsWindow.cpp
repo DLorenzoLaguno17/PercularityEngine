@@ -103,7 +103,6 @@ void SettingsWindow::Update() {
 		else glDisable(GL_CULL_FACE);
 	}
 		
-
 	ImGui::NewLine();
 	ImGui::Separator();
 

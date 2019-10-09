@@ -193,8 +193,14 @@ void ModuleGui::DrawImGui(float dt) {
 	for(int i = 0; i < ui_elements_list.size(); ++i)
 		if (ui_elements_list[i]->active) ui_elements_list[i]->Update();	
 
-	if (show_elements) {
-		ImGui::Begin("Elements", &show_elements);
+	if (show_hierarchy) {
+		ImGui::Begin("Hierarchy", &show_hierarchy);
+
+		ImGui::End();
+	}
+
+	if (show_project) {
+		ImGui::Begin("Project", &show_project);
 
 		ImGui::End();
 	}
