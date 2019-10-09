@@ -2,6 +2,7 @@
 #define __SceneWindow_H__
 
 #include "UIElement.h"
+#include "Globals.h"
 
 // ---------------------------------------------------
 class SceneWindow : public UIElement

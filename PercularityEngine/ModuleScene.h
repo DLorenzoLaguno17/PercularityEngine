@@ -3,11 +3,11 @@
 
 #include "Module.h"
 
-class ModuleScene :public Module
+class ModuleScene : public Module
 {
 public:
 
-	ModuleScene(Application* app, bool start_enabled);
+	ModuleScene(Application* app, bool start_enabled = true);
 	~ModuleScene();
 
 	bool Start();
@@ -15,6 +15,17 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	
+	//Save & Load
+	void Load(const nlohmann::json &config) {}
+	void Save(nlohmann::json &config) {}
+
+public:
+	uint texColorBuffer;
+
+private:
+	uint framebuffer;
+	uint rbo;
 
 };
 

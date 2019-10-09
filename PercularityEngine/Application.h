@@ -15,6 +15,7 @@ class ModuleInput;
 class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleGui;
+class ModuleScene;
 
 using json = nlohmann::json;
 
@@ -26,6 +27,7 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleGui* gui;
+	ModuleScene* scene;
 
 	//Aditional data
 	std::string engineName;
@@ -39,10 +41,8 @@ private:
 
 	//Save & load
 	const char* settingsAdress;
-	json		settingsFile;
+	json		settingsFile;	
 	
-	
-
 public:
 
 	Application();

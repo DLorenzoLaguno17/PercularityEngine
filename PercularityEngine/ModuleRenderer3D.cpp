@@ -11,7 +11,6 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
-
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	
@@ -130,15 +129,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	//Draw a plane
-	DrawSimplePlane();
-
-	//Test 
-	DrawDirectCube();
-
-	//Test
-	DrawAxis();
-
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
 								should find a better way to 
 								order module drawing  Joan M*/

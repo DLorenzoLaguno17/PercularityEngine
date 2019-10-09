@@ -4,6 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGui.h"
+#include "ModuleScene.h"
 
 #include <fstream>
 #include <iomanip>
@@ -17,6 +18,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	gui = new ModuleGui(this);
+	scene = new ModuleScene(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -29,6 +31,7 @@ Application::Application()
 	AddModule(gui);
 	
 	// Scenes
+	AddModule(scene);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -168,8 +171,7 @@ void Application::LoadSettings()
 
 	std::string version = config["Application"]["Version"];
 	engineVersion= version;
-
-
+	
 	while (it != modules.end())
 	{
 		(*it)->Load(config);
