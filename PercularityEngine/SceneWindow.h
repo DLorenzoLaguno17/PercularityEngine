@@ -16,6 +16,8 @@ public:
 	// Called every frame
 	void Update();
 
+private:
+	ImVec2 last_windowSize = { 0,0 };
 };
 
 #endif // __SceneWindow_H__

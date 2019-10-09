@@ -29,6 +29,7 @@ public:
 	bool depthTest = true;
 	bool colorMaterial = true;
 	bool texture2D = true;
+	bool wireframe = false;
 
 	bool showButtonInfo = false;
 	bool showButtonInfo2 = false;

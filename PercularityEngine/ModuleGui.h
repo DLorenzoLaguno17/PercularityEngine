@@ -70,11 +70,11 @@ public:
 	bool show_elements = true;
 
 	ImGuiIO* io = nullptr;
+	SceneWindow* scene_window = nullptr;
 
 private:
 	SettingsWindow* settings = nullptr;
 	MainMenuBar* main_menu_bar = nullptr;
-	SceneWindow* scene_window = nullptr;
 	ConsoleWindow* console = nullptr;
 
 	std::vector<UIElement*> ui_elements_list;
