@@ -44,6 +44,8 @@ bool ModuleScene::Start()
 
 update_status ModuleScene::PreUpdate(float dt)
 {
+	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange)
+
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -54,6 +56,8 @@ update_status ModuleScene::PreUpdate(float dt)
 
 update_status ModuleScene::Update(float dt)
 {
+	BROFILER_CATEGORY("SceneUpdate", Profiler::Color::LightSeaGreen)
+
 	//Draw a plane
 	App->renderer3D->DrawSimplePlane();
 
@@ -68,6 +72,8 @@ update_status ModuleScene::Update(float dt)
 
 update_status ModuleScene::PostUpdate(float dt)
 {
+	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow)
+
 	// Back to default
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); 
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);

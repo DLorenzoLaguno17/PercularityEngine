@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "OpenGL.h"
+#include "Brofiler/Lib/Brofiler.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -111,6 +112,8 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
+	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange)
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -129,6 +132,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow)
+
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
 								should find a better way to 
 								order module drawing  Joan M*/

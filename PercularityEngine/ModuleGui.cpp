@@ -86,8 +86,8 @@ bool ModuleGui::Start()
 	// - Remember that in C/C++ if you want to include a backslash \ in a string literal
 
 	io->Fonts->AddFontDefault();
-	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 13);
-	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 16);
+	io->Fonts->AddFontFromFileTTF("Fonts/Roboto-Medium.ttf", 13);
+	io->Fonts->AddFontFromFileTTF("Fonts/GOTHIC.TTF", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 

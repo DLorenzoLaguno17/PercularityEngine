@@ -4,6 +4,8 @@
 #include "ModuleRenderer3D.h"
 #include "UIElement.h"
 
+#include "Brofiler/Lib/Brofiler.h"
+
 #define MAX_KEYS 300
 #define MAX_INPUTS 20
 
@@ -39,6 +41,8 @@ bool ModuleInput::Init()
 // Called every draw update
 update_status ModuleInput::PreUpdate(float dt)
 {
+	BROFILER_CATEGORY("InputPreUpdate", Profiler::Color::Orange)
+
 	SDL_PumpEvents();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
