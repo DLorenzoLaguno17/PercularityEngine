@@ -10,6 +10,7 @@
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
 
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	
@@ -99,12 +100,19 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_COLOR_MATERIAL);
 	}
 
+
 	// Projection matrix for
 	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
 
-	CreateCube();
-
 	return ret;
+}
+
+bool ModuleRenderer3D::Start()
+{
+	//testing
+	CreateRenderingData();
+
+	return true;
 }
 
 // PreUpdate: clear buffer
@@ -131,11 +139,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//Draw a plane
 	DrawSimplePlane();
 
-	//Test 
-	DrawDirectCube();
+	//Draw the 3 axis of coordinates
+	DrawAxis();
 
 	//Test
-	DrawAxis();
+	Render();
 
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
 								should find a better way to 
@@ -191,70 +199,6 @@ void ModuleRenderer3D::DrawSimplePlane()const
 	glEnd();
 }
 
-void ModuleRenderer3D::DrawDirectCube()const {
-
-	glBegin(GL_TRIANGLES);
-
-	glRotatef(0.1f, 1.0f, 1.0f, 0.0f);
-
-	//Bottom face
-	glVertex3f(5.0f, 5.0f, 0.0f);
-	glVertex3f(0.0f, 5.0f, 0.0f);
-	glVertex3f(0.0f, 5.0f, 5.0f);
-
-	glVertex3f(0.0f, 5.0f, 5.0f);
-	glVertex3f(5.0f, 5.0f, 5.0f);
-	glVertex3f(5.0f, 5.0f, 0.0f);
-
-	//Top face
-	glVertex3f(5.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 0.0f, 5.0f);
-	glVertex3f(0.0f, 0.0f, 0.0f);
-
-	glVertex3f(0.0f, 0.0f, 5.0f);
-	glVertex3f(5.0f, 0.0f, 0.0f);
-	glVertex3f(5.0f, 0.0f, 5.0f);
-
-	//right face
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 5.0f, 5.0f);
-	glVertex3f(0.0f, 5.0f, 0.0f);
-
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 0.0f, 5.0f);
-	glVertex3f(0.0f, 5.0f, 5.0f);
-
-	//left face
-	glVertex3f(5.0f, 0.0f, 0.0f);
-	glVertex3f(5.0f, 5.0f, 0.0f);
-	glVertex3f(5.0f, 5.0f, 5.0f);
-
-	glVertex3f(5.0f, 0.0f, 0.0f);
-	glVertex3f(5.0f, 5.0f, 5.0f);
-	glVertex3f(5.0f, 0.0f, 5.0f);
-
-	//front face
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 5.0f, 0.0f);
-	glVertex3f(5.0f, 0.0f, 0.0f);
-
-	glVertex3f(5.0f, 5.0f, 0.0f);
-	glVertex3f(5.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 5.0f, 0.0f);
-
-	//back face
-	glVertex3f(0.0f, 0.0f, 5.0f);
-	glVertex3f(5.0f, 0.0f, 5.0f);
-	glVertex3f(0.0f, 5.0f, 5.0f);
-
-	glVertex3f(5.0f, 5.0f, 5.0f);
-	glVertex3f(0.0f, 5.0f, 5.0f);
-	glVertex3f(5.0f, 0.0f, 5.0f);
-
-	glEnd();
-
-}
-
 void ModuleRenderer3D::DrawAxis() const{
 	
 	glLineWidth(5.0f);
@@ -294,4 +238,134 @@ void ModuleRenderer3D::CreateCube()
 	vertexList.push_back(vec3(0.0f, 0.0f, 5.0f));
 	vertexList.push_back(vec3(0.0f, 5.0f, 5.0f));
 
+}
+
+GLfloat vertices2[] = {
+5.0f, 5.0f, 0.0f,
+0.0f, 5.0f, 0.0f,
+0.0f, 5.0f, 5.0f,
+
+0.0f, 5.0f, 5.0f,
+5.0f, 5.0f, 5.0f,
+5.0f, 5.0f, 0.0f,
+
+
+5.0f, 0.0f, 0.0f,
+0.0f, 0.0f, 5.0f,
+0.0f, 0.0f, 0.0f,
+
+0.0f, 0.0f, 5.0f,
+5.0f, 0.0f, 0.0f,
+5.0f, 0.0f, 5.0f,
+
+
+0.0f, 0.0f, 0.0f,
+0.0f, 5.0f, 5.0f,
+0.0f, 5.0f, 0.0f,
+
+0.0f, 0.0f, 0.0f,
+0.0f, 0.0f, 5.0f,
+0.0f, 5.0f, 5.0f,
+
+
+5.0f, 0.0f, 0.0f,
+5.0f, 5.0f, 0.0f,
+5.0f, 5.0f, 5.0f,
+
+5.0f, 0.0f, 0.0f,
+5.0f, 5.0f, 5.0f,
+5.0f, 0.0f, 5.0f,
+
+
+0.0f, 0.0f, 0.0f,
+0.0f, 5.0f, 0.0f,
+5.0f, 0.0f, 0.0f,
+
+5.0f, 5.0f, 0.0f,
+5.0f, 0.0f, 0.0f,
+0.0f, 5.0f, 0.0f,
+
+0.0f, 0.0f, 5.0f,
+5.0f, 0.0f, 5.0f,
+0.0f, 5.0f, 5.0f,
+
+5.0f, 5.0f, 5.0f,
+0.0f, 5.0f, 5.0f,
+5.0f, 0.0f, 5.0f, };
+
+GLfloat vertices[] =
+{
+	15.f,5.f,5.f,
+	5.f,5.f,5.f,
+	15.f,15.f,5.f,
+	5.f,15.f,5.f,
+
+	15.f,5.f,15.f,
+	5.f,5.f,15.f,
+	15.f,15.f,15.f,
+	5.f,15.f,15.f
+};
+
+GLubyte indices[] =
+{
+	0,1,2, 1,3,2,
+	1,5,3, 3,5,7,
+	3,7,6, 3,6,2,
+	4,0,2, 4,2,6,
+	0,5,1, 0,4,5,
+	7,5,4, 7,4,6
+};
+
+void ModuleRenderer3D::CreateRenderingData()
+{
+	//Create buffer for the vertices
+	glGenBuffers(1, (GLuint*) &(vbo));
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+
+	//Create buffer for the vertices
+	glGenBuffers(1, (GLuint*) &(vbo));
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//Create buffer for the indices
+	glGenBuffers(1, (GLuint*) &(ibo));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void ModuleRenderer3D::Render()
+{
+	//Draw a cube w/o indices
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, vertices2);
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//Draw a cube w/o indices
+	
+	//Draw a cube with indices
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);				//vertices buffer
+
+	glVertexPointer(3, GL_FLOAT, 0, NULL);			//specfy pointer to vertices coords
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);		//indices buffer
+
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE,nullptr);//draw elements
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//Draw a cube with indices
 }
