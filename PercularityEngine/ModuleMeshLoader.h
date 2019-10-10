@@ -9,7 +9,7 @@ struct MeshData {
 	uint num_indices = 0;
 	uint* indices = nullptr;
 
-	uint id_vertex = 0; // unique vertex in VRAM
+	uint id_vertex = 0; // Unique vertex in VRAM
 	uint num_vertices = 0;
 	float* vertices = nullptr;
 };
@@ -47,9 +47,11 @@ public:
 	void Save(nlohmann::json &config);
 
 	//Method to load a file
-	void LoadFBX(const char* path);
+	void LoadFBX(const char* path, std::vector<MeshData*> meshList);
+	void RenderFBX(std::vector<MeshData*> FBX);
 
 public:
+	std::vector<MeshData*> test_list;
 };
 
 #endif // __ModuleMeshLoader_H__
