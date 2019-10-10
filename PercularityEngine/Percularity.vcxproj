@@ -93,6 +93,7 @@
     <ClInclude Include="MainMenuBar.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleGui.h" />
+    <ClInclude Include="ModuleMeshLoader.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
@@ -126,6 +127,7 @@
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleGui.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
+    <ClCompile Include="ModuleMeshLoader.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />

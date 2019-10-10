@@ -138,6 +138,9 @@
     <ClInclude Include="ModuleGui.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleMeshLoader.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -207,6 +210,9 @@
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
     <ClCompile Include="ModuleGui.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleMeshLoader.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
