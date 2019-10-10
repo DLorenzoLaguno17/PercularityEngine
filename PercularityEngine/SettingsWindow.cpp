@@ -1,17 +1,22 @@
 #include "SettingsWindow.h"
 #include "Application.h"
+#include "ModuleGui.h"
+#include "ModuleWindow.h"
+#include "imgui.h"
 
 #include "SDL/include/SDL_opengl.h"
 
-// Show settings window
-void SettingsWindow::Update(float dt, Application* App) {
+SettingsWindow::SettingsWindow(char* name, bool active) : UIElement(name, active) {}
 
+// Show settings window
+void SettingsWindow::Update() {
+	
 	if (!timerStarted) {
 		dblcTimer.Start();
 		timerStarted = true;
 	}
 
-	ImGui::Begin("Settings", &App->gui->show_settings);
+	ImGui::Begin("Settings", &active);
 
 	// General settings
 	ImGui::Text("STYLE");
@@ -88,12 +93,16 @@ void SettingsWindow::Update(float dt, Application* App) {
 		if (colorMaterial) glEnable(GL_COLOR_MATERIAL);
 		else glDisable(GL_COLOR_MATERIAL);
 	}
+	if (ImGui::Checkbox("Wireframe", &wireframe)) {
+		if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	ImGui::SameLine();
 	if (ImGui::Checkbox("Cull face", &cullFace)) {
 		if (cullFace) glEnable(GL_CULL_FACE);
-		else
-			glDisable(GL_CULL_FACE);
+		else glDisable(GL_CULL_FACE);
 	}
-
+		
 	ImGui::NewLine();
 	ImGui::Separator();
 
@@ -166,9 +175,4 @@ void SettingsWindow::Update(float dt, Application* App) {
 
 	//App->gui->io->KeysDownDuration[];
 	ImGui::End();
-}
-
-bool SettingsWindow::CleanUp() {
-
-	return true;
 }

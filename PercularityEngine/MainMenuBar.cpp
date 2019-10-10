@@ -1,8 +1,12 @@
 #include "MainMenuBar.h"
 #include "Application.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleGui.h"
+#include "UIElement.h"
+#include "imgui.h"
 
 // Show main menu bar
-void MainMenuBar::Update(Application* App) {
+void MainMenuBar::Update(std::vector<UIElement*> list) {
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -39,11 +43,12 @@ void MainMenuBar::Update(Application* App) {
 
 		if (ImGui::BeginMenu("Windows"))
 		{
+			for(int i = 0; i < list.size(); ++i)
+				ImGui::MenuItem(list[i]->name, NULL, &list[i]->active);
+
 			ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
-			ImGui::MenuItem("Settings", NULL, &App->gui->show_settings);
-			ImGui::MenuItem("Console", NULL, &App->gui->show_console);
-			ImGui::MenuItem("Scene", NULL, &App->gui->show_scene);
-			ImGui::MenuItem("Elements", NULL, &App->gui->show_elements);
+			ImGui::MenuItem("Hierarchy", NULL, &App->gui->show_hierarchy);
+			ImGui::MenuItem("Project", NULL, &App->gui->show_project);
 			ImGui::EndMenu();
 		}
 
@@ -51,7 +56,7 @@ void MainMenuBar::Update(Application* App) {
 		{
 			if (ImGui::MenuItem("Report a bug"))
 				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine/issues/new/choose", NULL, NULL, SW_SHOWNORMAL);
-			if (ImGui::MenuItem("Download latest version"))
+			if (ImGui::MenuItem("Download the latest version"))
 				ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine/releases", NULL, NULL, SW_SHOWNORMAL);
 			ImGui::EndMenu();
 		}
@@ -68,7 +73,7 @@ void MainMenuBar::Update(Application* App) {
 			ImGui::Separator();
 			ImGui::Text("3rd party libraries used:");
 			ImGui::BulletText("SDL 2.0.6");
-			ImGui::BulletText("STL");
+			ImGui::BulletText("STL 2.0");
 			ImGui::BulletText("Dear ImGui 1.72b");
 			ImGui::BulletText("MathGeoLib 1.5");
 			ImGui::BulletText("Open GL 4.5");
@@ -102,9 +107,4 @@ void MainMenuBar::Update(Application* App) {
 
 		ImGui::EndMainMenuBar();
 	}
-}
-
-bool MainMenuBar::CleanUp() {
-
-	return true;
 }

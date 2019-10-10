@@ -1,14 +1,16 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-
+#include "ModuleCamera3D.h"
+#include "ModuleWindow.h"
+#include "ModuleGui.h"
 #include <stdio.h>
 #include <iostream>
 
 #include "OpenGL.h"
+#include "Brofiler/Lib/Brofiler.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
-
 
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -118,6 +120,8 @@ bool ModuleRenderer3D::Start()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
+	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange)
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -136,14 +140,17 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	//Draw a plane
-	DrawSimplePlane();
+	
+	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow)
 
-	//Draw the 3 axis of coordinates
-	DrawAxis();
+//Draw a plane
+DrawSimplePlane();
 
-	//Test
-	Render();
+//Draw the 3 axis of coordinates
+DrawAxis();
+
+//Test
+Render();
 
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
 								should find a better way to 
@@ -162,7 +169,6 @@ bool ModuleRenderer3D::CleanUp()
 
 	return true;
 }
-
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {

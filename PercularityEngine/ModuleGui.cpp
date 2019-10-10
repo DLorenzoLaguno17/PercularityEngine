@@ -2,12 +2,9 @@
 #include "ModuleInput.h"
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
 
-#include "GLEW/include/glew.h"
-#include "SDL/include/SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
+#include "OpenGL.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
@@ -89,10 +86,17 @@ bool ModuleGui::Start()
 	// - Remember that in C/C++ if you want to include a backslash \ in a string literal
 
 	io->Fonts->AddFontDefault();
-	io->Fonts->AddFontFromFileTTF("misc/fonts/Roboto-Medium.ttf", 13);
-	io->Fonts->AddFontFromFileTTF("misc/fonts/GOTHIC.TTF", 16);
+	io->Fonts->AddFontFromFileTTF("Fonts/Roboto-Medium.ttf", 13);
+	io->Fonts->AddFontFromFileTTF("Fonts/GOTHIC.TTF", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
+
+	settings = new SettingsWindow("Settings", true); 
+	scene_window = new SceneWindow("Scene", true);
+	console = new ConsoleWindow("Console", true);
+	ui_elements_list.push_back(settings);
+	ui_elements_list.push_back(scene_window);
+	ui_elements_list.push_back(console);
 
 	return true;
 }
@@ -170,52 +174,33 @@ bool ModuleGui::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
+	delete console;
+	delete scene_window;
+	delete settings;
+
 	return true;
 }
 
 void ModuleGui::DrawImGui(float dt) {
 
-	// Menu bar
-	/*glLineWidth(100.0f);
-	glBegin(GL_POLYGON);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(100.f, 10.f, 220.f);
-	glEnd();
-
-	glClearColor(255, 0, 0, 0);*/	
-
-	main_menu_bar.Update(App);
+	main_menu_bar->Update(ui_elements_list);
 
 	// 1. Show the big demo window
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
-	// Show settings window
-	if (show_settings) {
-		settings.Update(dt, App);
-	}
+	// Show windows if they are active
+	for(int i = 0; i < ui_elements_list.size(); ++i)
+		if (ui_elements_list[i]->active) ui_elements_list[i]->Update();	
 
-	if (show_console) {
-		ImGui::Begin("Console");
-
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) LOG("Esta wea funciona");
-
-		for (int i = 0; i < log_list.size(); ++i) {
-			ImGui::SetScrollHereY(1.0f);
-			ImGui::Text(log_list[i].c_str());
-		}
+	if (show_hierarchy) {
+		ImGui::Begin("Hierarchy", &show_hierarchy);
 
 		ImGui::End();
 	}
 
-	if (show_scene) {
-		ImGui::Begin("Scene");		
-
-		ImGui::End();
-	}
-
-	if (show_elements) {
-		ImGui::Begin("Elements");
+	if (show_project) {
+		ImGui::Begin("Project", &show_project);
 
 		ImGui::End();
 	}
@@ -228,10 +213,12 @@ void ModuleGui::DrawImGui(float dt) {
 
 void ModuleGui::Load(const json &config)
 {
-	show_settings = config["User Interface"]["Show Settings"];
+	for (int i = 0; i < ui_elements_list.size(); ++i)
+		ui_elements_list[i]->active = config["User Interface"][ui_elements_list[i]->name];
 }
 
 void ModuleGui::Save(json &config)
 {
-	config["User Interface"]["Show Settings"] = show_settings;
+	for (int i = 0; i < ui_elements_list.size(); ++i)
+		config["User Interface"][ui_elements_list[i]->name] = ui_elements_list[i]->active;
 }

@@ -1,6 +1,14 @@
 #include "Application.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleGui.h"
+#include "ModuleScene.h"
+
 #include <fstream>
 #include <iomanip>
+
 #include "GLEW/include/glew.h"
 
 Application::Application()
@@ -10,6 +18,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	gui = new ModuleGui(this);
+	scene = new ModuleScene(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -22,6 +31,7 @@ Application::Application()
 	AddModule(gui);
 	
 	// Scenes
+	AddModule(scene);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -56,7 +66,7 @@ bool Application::Init()
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOG("-------------- Application Start -------------- ");
+	LOG("-------------- Application Start --------------");
 	item = modules.begin();
 
 	while(item != modules.end() && ret == true)
@@ -161,8 +171,7 @@ void Application::LoadSettings()
 
 	std::string version = config["Application"]["Version"];
 	engineVersion= version;
-
-
+	
 	while (it != modules.end())
 	{
 		(*it)->Load(config);

@@ -30,7 +30,6 @@ public:
 	void SetResizable(bool goingResizable);
 	void SetFulldesktop(bool goingFulldesktop);
 
-
 	uint GetWindowWidth() const { return winWidth; }
 	uint GetWindowHeight()const { return winHeight; }
 public:

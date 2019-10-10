@@ -4,12 +4,14 @@
         "Version": "v0.1"
     },
     "User Interface": {
-        "Show Settings": true
+        "Console": true,
+        "Scene": true,
+        "Settings": true
     },
     "Window": {
         "Borderless": false,
         "Full Screen": false,
-        "Full Screen Desktop": false,
+        "Full Screen Desktop": true,
         "Height": 720,
         "Resizable": true,
         "Width": 1280

@@ -2,25 +2,20 @@
 #define __SettingsWindow_H__
 
 #include <vector>
-#include "imgui.h"
 #include "Timer.h"
-
-class Application;
+#include "UIElement.h"
 
 // ---------------------------------------------------
-class SettingsWindow
+class SettingsWindow : public UIElement
 {
 public:
-	SettingsWindow() {};
+	SettingsWindow(char* name, bool active = true);
 
 	// Destructor
 	virtual ~SettingsWindow() {};
 
 	// Called every frame
-	void Update(float dt, Application* App);
-
-	// Called before quitting
-	bool CleanUp();
+	void Update();
 
 public:
 	bool fullscreen = false;
@@ -34,6 +29,7 @@ public:
 	bool depthTest = true;
 	bool colorMaterial = true;
 	bool texture2D = true;
+	bool wireframe = false;
 
 	bool showButtonInfo = false;
 	bool showButtonInfo2 = false;

@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include "SettingsWindow.h"
+#include "SceneWindow.h"
+#include "ConsoleWindow.h"
 #include "MainMenuBar.h"
 
 #include "imgui.h"
@@ -64,16 +66,20 @@ public:
 
 public:
 	bool show_demo_window = true;
-	bool show_settings = true;
 	bool show_console = true;
-	bool show_scene = false;
-	bool show_elements = true;
+	bool show_hierarchy = true;
+	bool show_project = true;
 
 	ImGuiIO* io = nullptr;
+	SceneWindow* scene_window = nullptr;
 
 private:
-	SettingsWindow settings;
-	MainMenuBar main_menu_bar;
+	SettingsWindow* settings = nullptr;
+	MainMenuBar* main_menu_bar = nullptr;
+	ConsoleWindow* console = nullptr;
+
+	std::vector<UIElement*> ui_elements_list;
+
 	bool p_open = true;
 };
 

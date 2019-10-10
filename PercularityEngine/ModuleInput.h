@@ -7,6 +7,8 @@
 
 #define MAX_MOUSE_BUTTONS 5
 
+class UIElement;
+
 enum KEY_STATE
 {
 	KEY_IDLE = 0,
@@ -60,6 +62,8 @@ public:
 	{
 		return mouse_y_motion;
 	}
+
+	bool IsMouseInsideWindow(UIElement* window) const;
 
 public:
 	std::list<SDL_Scancode> input_list;

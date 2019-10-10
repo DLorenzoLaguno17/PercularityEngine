@@ -116,11 +116,8 @@
     </ClInclude>
     <ClInclude Include="OpenGL.h">
       <Filter>Sources\Tools</Filter>
-      </ClInclude>
-    <ClInclude Include="SettingsWindow.h">
-      <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleGui.h">
+    <ClInclude Include="SettingsWindow.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
     <ClInclude Include="par_shapes.h">
@@ -128,6 +125,18 @@
     </ClInclude>
     <ClInclude Include="MainMenuBar.h">
       <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElement.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneWindow.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleWindow.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleGui.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,11 +197,17 @@
     <ClCompile Include="SettingsWindow.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleGui.cpp">
-      <Filter>Sources\Modules\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="MainMenuBar.cpp">
       <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneWindow.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleWindow.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleGui.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

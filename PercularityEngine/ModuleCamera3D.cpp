@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "ModuleGui.h"
+#include "ModuleInput.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 
@@ -47,59 +49,70 @@ update_status ModuleCamera3D::Update(float dt)
 	BROFILER_CATEGORY("CameraUpdate", Profiler::Color::LightSeaGreen)
 
 	vec3 newPos(0,0,0);
-	float speed = 3.0f * dt;
+	float speed = 4.0f * dt;
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
 
-	if(App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
-	Position += newPos;
-	Reference += newPos;
+		Position += newPos;
+		Reference += newPos;
+	}
 
 	// Mouse motion ----------------
+	if (App->input->IsMouseInsideWindow(App->gui->scene_window)) {
 
-	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
-
-		float Sensitivity = 0.25f;
-
-		Position -= Reference;
-
-		if(dx != 0)
+		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
-			float DeltaX = (float)dx * Sensitivity;
+			int dx = -App->input->GetMouseXMotion();
+			int dy = -App->input->GetMouseYMotion();
 
-			X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-		}
+			float Sensitivity = 0.25f;
 
-		if(dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
+			Position -= Reference;
 
-			Y = rotate(Y, DeltaY, X);
-			Z = rotate(Z, DeltaY, X);
-
-			if(Y.y < 0.0f)
+			if (dx != 0)
 			{
-				Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = cross(Z, X);
+				float DeltaX = (float)dx * Sensitivity;
+
+				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
 			}
+
+			if (dy != 0)
+			{
+				float DeltaY = (float)dy * Sensitivity;
+
+				Y = rotate(Y, DeltaY, X);
+				Z = rotate(Z, DeltaY, X);
+
+				if (Y.y < 0.0f)
+				{
+					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+					Y = cross(Z, X);
+				}
+			}
+
+			Position = Reference + Z * length(Position);
+			Position;
 		}
 
-
-		Position = Reference + Z * length(Position);
-		Position;
+		// Scroll to zoom in and out
+		if (App->input->GetMouseZ() > 0) {
+			Position -= Z * speed * 12;
+		}
+		else if (App->input->GetMouseZ() < 0) {
+			Position += Z * speed * 12;
+		}
 	}
 
 	// Recalculate matrix -------------

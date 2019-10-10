@@ -1,6 +1,10 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
+#include "UIElement.h"
+
+#include "Brofiler/Lib/Brofiler.h"
 
 #define MAX_KEYS 300
 #define MAX_INPUTS 20
@@ -37,6 +41,8 @@ bool ModuleInput::Init()
 // Called every draw update
 update_status ModuleInput::PreUpdate(float dt)
 {
+	BROFILER_CATEGORY("InputPreUpdate", Profiler::Color::Orange)
+
 	SDL_PumpEvents();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
@@ -144,4 +150,10 @@ bool ModuleInput::CleanUp()
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
+}
+
+bool ModuleInput::IsMouseInsideWindow(UIElement* window) const {
+
+	return (ImGui::GetMousePos().x > window->windowPosition.x && ImGui::GetMousePos().x < window->windowSize.x + window->windowPosition.x
+		&& ImGui::GetMousePos().y > window->windowPosition.y && ImGui::GetMousePos().y < window->windowSize.y + window->windowPosition.y);
 }
