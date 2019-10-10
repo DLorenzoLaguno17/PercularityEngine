@@ -4,7 +4,9 @@
 #include "ModuleWindow.h"
 #include "ModuleGui.h"
 #include <stdio.h>
+#include "ModuleScene.h"
 #include <iostream>
+
 
 #include "OpenGL.h"
 #include "Brofiler/Lib/Brofiler.h"
@@ -114,6 +116,8 @@ bool ModuleRenderer3D::Start()
 	//testing
 	CreateRenderingData();
 
+	//test
+	SetUpScene();
 	return true;
 }
 
@@ -122,11 +126,15 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange)
 
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
+
+
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
@@ -143,9 +151,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	
 	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow)
 
-//Test
-Render();
+	//Test
+	Render();
 
+	
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
 								should find a better way to 
 								order module drawing  Joan M*/
@@ -175,20 +184,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-}
-
-
-
-void ModuleRenderer3D::CreateCube()
-{
-	
-	//create a list with the vertices
-	std::vector<vec3> vertexList;
-
-	vertexList.push_back(vec3(0.0f, 0.0f, 0.0f));
-	vertexList.push_back(vec3(0.0f, 0.0f, 5.0f));
-	vertexList.push_back(vec3(0.0f, 5.0f, 5.0f));
-
 }
 
 GLfloat vertices2[] = {
@@ -270,28 +265,28 @@ GLubyte indices[] =
 void ModuleRenderer3D::CreateRenderingData()
 {
 	//Create buffer for the vertices
-	glGenBuffers(1, (GLuint*) &(vbo));
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glGenBuffers(1, (GLuint*) &(verticesBuffer));
+	glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
-
 	//Create buffer for the vertices
-	glGenBuffers(1, (GLuint*) &(vbo));
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glGenBuffers(1, (GLuint*) &(verticesBuffer));
+	glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//Create buffer for the indices
-	glGenBuffers(1, (GLuint*) &(ibo));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glGenBuffers(1, (GLuint*) &(indicesBuffer));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void ModuleRenderer3D::Render()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 	//Draw a cube w/o indices
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -306,11 +301,11 @@ void ModuleRenderer3D::Render()
 	//Draw a cube with indices
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);				//vertices buffer
+	glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);				//vertices buffer
 
 	glVertexPointer(3, GL_FLOAT, 0, NULL);			//specfy pointer to vertices coords
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);		//indices buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);		//indices buffer
 
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE,nullptr);//draw elements
 
@@ -319,4 +314,36 @@ void ModuleRenderer3D::Render()
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	//Draw a cube with indices
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+}
+
+void ModuleRenderer3D::SetUpScene()
+{
+	glGenFramebuffers(1, &frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+	// Generate texture
+	glGenTextures(1, &texColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Attach it to currently bound framebuffer object
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
+
+	glGenRenderbuffers(1, &renderBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
+	
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		LOG("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

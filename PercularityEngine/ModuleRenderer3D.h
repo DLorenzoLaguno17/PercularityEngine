@@ -21,19 +21,13 @@ public:
 
 	void OnResize(int width, int height);
 
-
+	void SetUpScene();
 public:
 	
 	void CreateRenderingData();//Test method - MUST BE EREASED/EDITED
 	void Render();
 
-	
-
-	//Delete
-	//void DrawDirectCube()const;	//Draw a cube in direct mode = Hardcoded
-
-	//Testing vertex arrays
-	void CreateCube();			
+	uint GetTexColorBuffer() const { return texColorBuffer; }
 
 public:
 
@@ -43,10 +37,13 @@ public:
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	update_status status = UPDATE_CONTINUE;
 
+
+	
+
 private:
-
-	uint vbo = 0;	//vertex buffer object
-	uint ibo = 0;	//index
-
-
+	uint verticesBuffer		= 0;	//vertex buffer object
+	uint indicesBuffer		= 0;	//index
+	uint frameBuffer		= 0;
+	uint renderBuffer		= 0;
+	uint texColorBuffer		= 0;
 };
