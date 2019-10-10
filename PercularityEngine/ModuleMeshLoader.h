@@ -5,7 +5,7 @@
 #include <vector>
 
 struct MeshData {
-	uint id_index = 0; // index in VRAM
+	uint id_index = 0; // Index in VRAM
 	uint num_indices = 0;
 	uint* indices = nullptr;
 

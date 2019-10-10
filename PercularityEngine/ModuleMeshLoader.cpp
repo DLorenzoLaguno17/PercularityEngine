@@ -110,6 +110,17 @@ void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*> meshLis
 				}
 			}
 
+			// Assigning the VRAM
+			glGenBuffers(1, (GLuint*) &m->id_vertex);
+			glBindBuffer(GL_ARRAY_BUFFER, m->id_vertex);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(m->vertices), m->vertices, GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			glGenBuffers(1, (GLuint*) &m->id_index);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->id_index);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m->indices), m->indices, GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 			meshList.push_back(m);
 		}
 
