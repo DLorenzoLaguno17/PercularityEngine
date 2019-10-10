@@ -24,7 +24,7 @@ void SceneWindow::Update() {
 	}
 	
 	// Scene image
-	ImGui::Image((void*)App->scene->texColorBuffer, ImVec2(windowSize.x, windowSize.y),	ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.y),	ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::End();
 }
