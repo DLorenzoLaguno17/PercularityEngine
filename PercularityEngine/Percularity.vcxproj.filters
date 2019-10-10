@@ -120,9 +120,6 @@
     <ClInclude Include="SettingsWindow.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="par_shapes.h">
-      <Filter>Sources\3rd party</Filter>
-    </ClInclude>
     <ClInclude Include="MainMenuBar.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
@@ -137,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="ModuleGui.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Par Shapes\par_shapes.h">
+      <Filter>Sources\3rd party</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

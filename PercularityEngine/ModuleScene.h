@@ -20,6 +20,10 @@ public:
 	void Load(const nlohmann::json &config) {}
 	void Save(nlohmann::json &config) {}
 
+private:
+	void DrawAxis() const;		//Draw XYZ axis of coordinates
+	void DrawSimplePlane()const;//Draw a plane with some lines
+
 public:
 	uint texColorBuffer;
 

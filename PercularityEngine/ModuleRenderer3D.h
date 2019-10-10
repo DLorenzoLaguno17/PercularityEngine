@@ -27,11 +27,10 @@ public:
 	void CreateRenderingData();//Test method - MUST BE EREASED/EDITED
 	void Render();
 
-	void DrawAxis() const;		//Draw XYZ axis of coordinates
-	void DrawSimplePlane()const;//Draw a plane with some lines
+	
 
 	//Delete
-	void DrawDirectCube()const;	//Draw a cube in direct mode = Hardcoded
+	//void DrawDirectCube()const;	//Draw a cube in direct mode = Hardcoded
 
 	//Testing vertex arrays
 	void CreateCube();			
