@@ -2,6 +2,17 @@
 #define __ModuleMeshLoader_H__
 
 #include "Module.h"
+#include <vector>
+
+struct MeshData {
+	uint id_index = 0; // index in VRAM
+	uint num_indices = 0;
+	uint* indices = nullptr;
+
+	uint id_vertex = 0; // unique vertex in VRAM
+	uint num_vertices = 0;
+	float* vertices = nullptr;
+};
 
 // ---------------------------------------------------
 class ModuleMeshLoader : public Module
@@ -34,6 +45,9 @@ public:
 	//Save & Load
 	void Load(const nlohmann::json  &config);
 	void Save(nlohmann::json &config);
+
+	//Method to load a file
+	void LoadFBX(const char* path);
 
 public:
 };
