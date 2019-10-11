@@ -47,7 +47,7 @@ public:
 	void Save(nlohmann::json &config);
 
 	//Method to load a file
-	void LoadFBX(const char* path, std::vector<MeshData*>* meshList);
+	void LoadFBX(const char* path, std::vector<MeshData*> meshList);
 	void RenderFBX(std::vector<MeshData*> FBX);
 
 public:

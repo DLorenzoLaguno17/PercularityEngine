@@ -39,7 +39,7 @@ bool ModuleMeshLoader::Start()
 	aiAttachLogStream(&stream);
 
 	// Loading FBX
-	LoadFBX("Assets/warrior.FBX", &test_list);
+	LoadFBX("Assets/warrior.FBX", test_list);
 
 	return true;
 }
@@ -56,7 +56,7 @@ update_status ModuleMeshLoader::PreUpdate(float dt)
 update_status ModuleMeshLoader::Update(float dt)
 {
 	BROFILER_CATEGORY("MeshLoaderUpdate", Profiler::Color::LightSeaGreen)	
-
+		
 	RenderFBX(test_list);
 
 	return UPDATE_CONTINUE;
@@ -80,7 +80,7 @@ bool ModuleMeshLoader::CleanUp()
 	return true;
 }
 
-void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*>* meshList) {	
+void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*> meshList) {	
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
@@ -96,11 +96,6 @@ void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*>* meshLi
 			memcpy(m->vertices, scene->mMeshes[i]->mVertices, sizeof(float) * m->num_vertices * 3);
 			LOG("New mesh with %d vertices", m->num_vertices);
 
-			glGenBuffers(1, (GLuint*)&m->id_vertex);
-			glBindBuffer(GL_ARRAY_BUFFER, m->id_vertex);
-			glBufferData(GL_ARRAY_BUFFER, m->num_vertices, m->vertices, GL_STATIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -115,12 +110,18 @@ void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*>* meshLi
 				}
 			}
 
+			// Assigning the VRAM
+			glGenBuffers(1, (GLuint*) &m->id_vertex);
+			glBindBuffer(GL_ARRAY_BUFFER, m->id_vertex);
+			glBufferData(GL_ARRAY_BUFFER, m->num_vertices * 3 * sizeof(float), m->vertices, GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 			glGenBuffers(1, (GLuint*) &m->id_index);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->id_index);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, m->num_indices, m->indices, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, m->num_indices * 3 * sizeof(uint), m->indices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-			meshList->push_back(m);
+			meshList.push_back(m);
 		}
 
 		aiReleaseImport(scene);
@@ -133,7 +134,7 @@ void ModuleMeshLoader::RenderFBX(std::vector<MeshData*> FBX) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 
 		glBindBuffer(GL_ARRAY_BUFFER, FBX[i]->id_vertex);			 
-		glVertexPointer(3, GL_FLOAT, 0, NULL);					 
+		glVertexPointer(3, GL_FLOAT, FBX[i]->num_vertices, NULL);					 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, FBX[i]->id_index);		
 		glDrawElements(GL_TRIANGLES, FBX[i]->num_indices, GL_UNSIGNED_BYTE, NULL);
 
