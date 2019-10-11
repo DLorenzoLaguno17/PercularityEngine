@@ -120,9 +120,6 @@
     <ClInclude Include="SettingsWindow.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="par_shapes.h">
-      <Filter>Sources\3rd party</Filter>
-    </ClInclude>
     <ClInclude Include="MainMenuBar.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
@@ -141,6 +138,7 @@
     <ClInclude Include="ModuleMeshLoader.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Par Shapes\par_shapes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">

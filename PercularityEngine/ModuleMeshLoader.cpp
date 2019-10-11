@@ -113,12 +113,12 @@ void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*> meshLis
 			// Assigning the VRAM
 			glGenBuffers(1, (GLuint*) &m->id_vertex);
 			glBindBuffer(GL_ARRAY_BUFFER, m->id_vertex);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(m->vertices), m->vertices, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, m->num_vertices * 3 * sizeof(float), m->vertices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			glGenBuffers(1, (GLuint*) &m->id_index);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->id_index);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m->indices), m->indices, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, m->num_indices * 3 * sizeof(uint), m->indices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 			meshList.push_back(m);
@@ -130,24 +130,19 @@ void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*> meshLis
 }
 
 void ModuleMeshLoader::RenderFBX(std::vector<MeshData*> FBX) {
-	/*glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-
 	for (int i = 0; i < FBX.size(); ++i) {
-		glBindBuffer(GL_ARRAY_BUFFER, FBX[i]->num_vertices);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FBX[i]->vertices), 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(FBX[i]->vertices), (const GLvoid*)12);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(FBX[i]->vertices), (const GLvoid*)20);
+		glEnableClientState(GL_VERTEX_ARRAY);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, FBX[i]->num_indices);
+		glBindBuffer(GL_ARRAY_BUFFER, FBX[i]->id_vertex);			 
+		glVertexPointer(3, GL_FLOAT, FBX[i]->num_vertices, NULL);					 
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, FBX[i]->id_index);		
+		glDrawElements(GL_TRIANGLES, FBX[i]->num_indices, GL_UNSIGNED_BYTE, NULL);
 
-		glDrawElements(GL_TRIANGLES, FBX[i]->num_indices, GL_UNSIGNED_INT, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
 	}
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);*/
 }
 
 void ModuleMeshLoader::Load(const json &config)

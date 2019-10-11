@@ -134,8 +134,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
-
-
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 
@@ -147,13 +145,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
-{
-	
+{	
 	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow)
 
 	//Test
 	Render();
-
 	
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
 								should find a better way to 
@@ -287,9 +283,8 @@ void ModuleRenderer3D::Render()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-	//Draw a cube w/o indices
-	glEnableClientState(GL_VERTEX_ARRAY);
 
+	//Draw a cube w/o indices	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices2);
 
@@ -307,7 +302,7 @@ void ModuleRenderer3D::Render()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);		//indices buffer
 
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE,nullptr);//draw elements
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, nullptr); //draw elements
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
