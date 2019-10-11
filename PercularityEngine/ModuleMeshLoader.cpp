@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ModuleMeshLoader.h"
+#include "ModuleWindow.h"
 
 #include "OpenGL.h"
 #include "imgui.h"
@@ -39,7 +40,8 @@ bool ModuleMeshLoader::Start()
 	aiAttachLogStream(&stream);
 
 	// Loading FBX
-	LoadFBX("Assets/warrior.FBX", test_list);
+	LoadFBX("Assets/warrior.FBX", &test_model); 
+	//LoadFBX("Assets/demon.FBX", &test_model);
 
 	return true;
 }
@@ -48,6 +50,21 @@ bool ModuleMeshLoader::Start()
 update_status ModuleMeshLoader::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("MeshLoaderPreUpdate", Profiler::Color::Orange)
+		
+	/*SDL_Event e;
+	while (SDL_PollEvent(&e))
+	{
+		switch (e.type)
+		{
+		case SDL_DROPFILE:
+			path = e.drop.file;
+			LoadFBX(path, &test_model);
+			// Shows directory of dropped file
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "File dropped on window", path, App->window->window);
+			SDL_free((void*)path);    // Free dropped_filedir memory
+			break;
+		}
+	}*/
 
 	return UPDATE_CONTINUE;
 }
@@ -56,8 +73,8 @@ update_status ModuleMeshLoader::PreUpdate(float dt)
 update_status ModuleMeshLoader::Update(float dt)
 {
 	BROFILER_CATEGORY("MeshLoaderUpdate", Profiler::Color::LightSeaGreen)	
-		
-	RenderFBX(test_list);
+	
+	RenderFBX(test_model);
 
 	return UPDATE_CONTINUE;
 }
@@ -76,11 +93,12 @@ bool ModuleMeshLoader::CleanUp()
 	LOG("Freeing mesh loader");
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
+	test_model.clear();
 
 	return true;
 }
 
-void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*> meshList) {	
+void ModuleMeshLoader::LoadFBX(const char* path, Mesh* mesh) {	
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
@@ -88,7 +106,7 @@ void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*> meshLis
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (int i = 0; i < scene->mNumMeshes; ++i) {
 
-			MeshData* m = new MeshData();
+			MeshData* m = new MeshData;
 
 			// Copy vertices
 			m->num_vertices = scene->mMeshes[i]->mNumVertices;
@@ -113,15 +131,15 @@ void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*> meshLis
 			// Assigning the VRAM
 			glGenBuffers(1, (GLuint*) &m->id_vertex);
 			glBindBuffer(GL_ARRAY_BUFFER, m->id_vertex);
-			glBufferData(GL_ARRAY_BUFFER, m->num_vertices * 3 * sizeof(float), m->vertices, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * m->num_vertices, m->vertices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			glGenBuffers(1, (GLuint*) &m->id_index);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->id_index);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, m->num_indices * 3 * sizeof(uint), m->indices, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 3 * m->num_indices, m->indices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-			meshList.push_back(m);
+			mesh->push_back(m);
 		}
 
 		aiReleaseImport(scene);
@@ -129,14 +147,16 @@ void  ModuleMeshLoader::LoadFBX(const char* path, std::vector<MeshData*> meshLis
 	else LOG("Error loading scene %s", path);
 }
 
-void ModuleMeshLoader::RenderFBX(std::vector<MeshData*> FBX) {
-	for (int i = 0; i < FBX.size(); ++i) {
+void ModuleMeshLoader::RenderFBX(Mesh mesh) {
+	
+	for (int i = 0; i < mesh.size(); ++i) {
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 
-		glBindBuffer(GL_ARRAY_BUFFER, FBX[i]->id_vertex);			 
-		glVertexPointer(3, GL_FLOAT, FBX[i]->num_vertices, NULL);					 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, FBX[i]->id_index);		
-		glDrawElements(GL_TRIANGLES, FBX[i]->num_indices, GL_UNSIGNED_BYTE, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->id_vertex);			 
+		glVertexPointer(3, GL_FLOAT, 0, NULL);					 
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->id_index);		
+		glDrawElements(GL_TRIANGLES, mesh[i]->num_indices, GL_UNSIGNED_INT, NULL);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

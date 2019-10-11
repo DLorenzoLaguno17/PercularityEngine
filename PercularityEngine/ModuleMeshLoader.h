@@ -5,6 +5,7 @@
 #include <vector>
 
 struct MeshData {
+
 	uint id_index = 0; // Index in VRAM
 	uint num_indices = 0;
 	uint* indices = nullptr;
@@ -13,6 +14,8 @@ struct MeshData {
 	uint num_vertices = 0;
 	float* vertices = nullptr;
 };
+
+typedef std::vector<MeshData*> Mesh;
 
 // ---------------------------------------------------
 class ModuleMeshLoader : public Module
@@ -47,11 +50,14 @@ public:
 	void Save(nlohmann::json &config);
 
 	//Method to load a file
-	void LoadFBX(const char* path, std::vector<MeshData*> meshList);
-	void RenderFBX(std::vector<MeshData*> FBX);
+	void LoadFBX(const char* path, Mesh* mesh);
+	void RenderFBX(Mesh mesh);
 
 public:
-	std::vector<MeshData*> test_list;
+	Mesh test_model;
+
+private:
+	const char* path;
 };
 
 #endif // __ModuleMeshLoader_H__
