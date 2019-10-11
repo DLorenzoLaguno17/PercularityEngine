@@ -1,6 +1,5 @@
 #include "Application.h"
 #include "ModuleMeshLoader.h"
-#include "ModuleWindow.h"
 
 #include "OpenGL.h"
 #include "imgui.h"
@@ -40,8 +39,9 @@ bool ModuleMeshLoader::Start()
 	aiAttachLogStream(&stream);
 
 	// Loading FBX
-	LoadFBX("Assets/warrior.FBX", &test_model); 
-	//LoadFBX("Assets/demon.FBX", &test_model);
+	//LoadFBX("Assets/warrior.FBX"); 
+	//LoadFBX("Assets/demon.fbx");
+	//LoadFBX("Assets/BakerHouse.fbx");
 
 	return true;
 }
@@ -50,21 +50,6 @@ bool ModuleMeshLoader::Start()
 update_status ModuleMeshLoader::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("MeshLoaderPreUpdate", Profiler::Color::Orange)
-		
-	/*SDL_Event e;
-	while (SDL_PollEvent(&e))
-	{
-		switch (e.type)
-		{
-		case SDL_DROPFILE:
-			path = e.drop.file;
-			LoadFBX(path, &test_model);
-			// Shows directory of dropped file
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "File dropped on window", path, App->window->window);
-			SDL_free((void*)path);    // Free dropped_filedir memory
-			break;
-		}
-	}*/
 
 	return UPDATE_CONTINUE;
 }
@@ -74,7 +59,8 @@ update_status ModuleMeshLoader::Update(float dt)
 {
 	BROFILER_CATEGORY("MeshLoaderUpdate", Profiler::Color::LightSeaGreen)	
 	
-	RenderFBX(test_model);
+	for (int i = 0; i < FBX_list.size(); ++i)
+		RenderFBX(FBX_list[i]);
 
 	return UPDATE_CONTINUE;
 }
@@ -93,14 +79,20 @@ bool ModuleMeshLoader::CleanUp()
 	LOG("Freeing mesh loader");
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
-	test_model.clear();
+
+	for (int i = 0; i < FBX_list.size(); ++i)
+		FBX_list[i].clear();
+
+	FBX_list.clear();
 
 	return true;
 }
 
-void ModuleMeshLoader::LoadFBX(const char* path, Mesh* mesh) {	
+void ModuleMeshLoader::LoadFBX(const char* path) {
+
+	FBX_Mesh mesh;
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
-	
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
@@ -139,15 +131,16 @@ void ModuleMeshLoader::LoadFBX(const char* path, Mesh* mesh) {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 3 * m->num_indices, m->indices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-			mesh->push_back(m);
+			mesh.push_back(m);
 		}
 
+		FBX_list.push_back(mesh);
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading scene %s", path);
 }
 
-void ModuleMeshLoader::RenderFBX(Mesh mesh) {
+void ModuleMeshLoader::RenderFBX(FBX_Mesh mesh) {
 	
 	for (int i = 0; i < mesh.size(); ++i) {
 

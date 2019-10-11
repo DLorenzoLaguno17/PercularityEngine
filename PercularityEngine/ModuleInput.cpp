@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleWindow.h"
+#include "ModuleMeshLoader.h"
 #include "UIElement.h"
 
 #include "Brofiler/Lib/Brofiler.h"
@@ -131,10 +133,17 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_WINDOWEVENT:
-			{
-				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
+			if(e.window.event == SDL_WINDOWEVENT_RESIZED)
 					App->renderer3D->OnResize(e.window.data1, e.window.data2);
-			}
+			break;
+
+			case SDL_DROPFILE:
+			App->mesh_loader->LoadFBX(e.drop.file);
+			LOG("Loaded new model. Current FBX on scene: %d", App->mesh_loader->FBX_list.size());
+			// Free dropped_filedir memory
+			SDL_free((void*)e.drop.file);   
+
+			break;			
 		}
 	}
 

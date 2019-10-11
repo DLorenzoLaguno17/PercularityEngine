@@ -15,7 +15,7 @@ struct MeshData {
 	float* vertices = nullptr;
 };
 
-typedef std::vector<MeshData*> Mesh;
+typedef std::vector<MeshData*> FBX_Mesh;
 
 // ---------------------------------------------------
 class ModuleMeshLoader : public Module
@@ -50,14 +50,11 @@ public:
 	void Save(nlohmann::json &config);
 
 	//Method to load a file
-	void LoadFBX(const char* path, Mesh* mesh);
-	void RenderFBX(Mesh mesh);
+	void LoadFBX(const char* path);
+	void RenderFBX(FBX_Mesh mesh);
 
 public:
-	Mesh test_model;
-
-private:
-	const char* path;
+	std::vector<FBX_Mesh> FBX_list;
 };
 
 #endif // __ModuleMeshLoader_H__

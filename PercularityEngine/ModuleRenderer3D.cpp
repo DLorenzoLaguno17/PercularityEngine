@@ -285,7 +285,7 @@ void ModuleRenderer3D::Render()
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 
 	//Draw a cube w/o indices	
-	glEnableClientState(GL_VERTEX_ARRAY);
+	/*glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices2);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -308,7 +308,7 @@ void ModuleRenderer3D::Render()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	//Draw a cube with indices
+	//Draw a cube with indices*/
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
