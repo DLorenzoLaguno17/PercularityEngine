@@ -28,7 +28,7 @@ public:
 	bool lighting = true;
 	bool depthTest = true;
 	bool colorMaterial = true;
-	bool texture2D = true;
+	bool texture2D = false;
 	bool wireframe = false;
 
 	bool showButtonInfo = false;

@@ -2,17 +2,18 @@
 #include "ModuleMeshLoader.h"
 
 #include "OpenGL.h"
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl3.h"
-#include "Brofiler/Lib/Brofiler.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
 
+#include "Brofiler/Lib/Brofiler.h"
+
 #pragma comment (lib, "Assimp/lib86/assimp.lib")
+#pragma comment (lib, "DevIL/lib86/DevIL.lib" )
+#pragma comment (lib, "DevIL/lib86/ILU.lib" )
+#pragma comment (lib, "DevIL/lib86/ILUT.lib" )
 
 ModuleMeshLoader::ModuleMeshLoader(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -42,6 +43,9 @@ bool ModuleMeshLoader::Start()
 	//LoadFBX("Assets/warrior.FBX"); 
 	//LoadFBX("Assets/demon.fbx");
 	//LoadFBX("Assets/BakerHouse.fbx");
+
+	// Load textures
+	CreateTexture();
 
 	return true;
 }
@@ -146,16 +150,44 @@ void ModuleMeshLoader::RenderFBX(FBX_Mesh mesh) {
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
+		glBindTexture(GL_TEXTURE_2D, test_tex_buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->id_vertex);			 
 		glVertexPointer(3, GL_FLOAT, 0, NULL);					 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->id_index);		
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->id_index);
 		glDrawElements(GL_TRIANGLES, mesh[i]->num_indices, GL_UNSIGNED_INT, NULL);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
+}
+
+void ModuleMeshLoader::CreateTexture()
+{
+	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &test_tex_buffer);
+	glBindTexture(GL_TEXTURE_2D, test_tex_buffer);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ModuleMeshLoader::Load(const json &config)

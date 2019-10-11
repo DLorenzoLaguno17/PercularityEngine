@@ -4,6 +4,9 @@
 #include "Module.h"
 #include <vector>
 
+#define CHECKERS_WIDTH 10
+#define CHECKERS_HEIGHT 10
+
 struct MeshData {
 
 	uint id_index = 0; // Index in VRAM
@@ -49,12 +52,18 @@ public:
 	void Load(const nlohmann::json  &config);
 	void Save(nlohmann::json &config);
 
-	//Method to load a file
+	//Methods to load and draw a mesh
 	void LoadFBX(const char* path);
 	void RenderFBX(FBX_Mesh mesh);
 
+	//Method to create a texture
+	void CreateTexture();
+
 public:
 	std::vector<FBX_Mesh> FBX_list;
+
+private:
+	uint test_tex_buffer = 0;
 };
 
 #endif // __ModuleMeshLoader_H__

@@ -7,7 +7,6 @@
 #include "ModuleScene.h"
 #include <iostream>
 
-
 #include "OpenGL.h"
 #include "Brofiler/Lib/Brofiler.h"
 
