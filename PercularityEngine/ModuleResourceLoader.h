@@ -28,7 +28,7 @@ public:
 	virtual ~ModuleResourceLoader();
 
 	// Called when before render is available
-	bool Awake();
+	bool Init();
 
 	// Call before first frame
 	bool Start();

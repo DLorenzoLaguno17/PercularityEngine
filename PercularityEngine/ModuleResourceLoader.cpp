@@ -24,18 +24,9 @@ ModuleResourceLoader::~ModuleResourceLoader()
 {}
 
 // Called before render is available
-bool ModuleResourceLoader::Awake()
+bool ModuleResourceLoader::Init()
 {
 	LOG("Preparing resource loader");
-	// Initialize DevIL
-	ilInit();
-	iluInit();
-	
-	ilEnable(IL_CONV_PAL);
-	ilutEnable(ILUT_OPENGL_CONV);
-	ilutRenderer(ILUT_OPENGL);
-
-	ilutInit();
 
 	// DevIL version checking
 	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION || iluGetInteger(ILU_VERSION_NUM) < ILU_VERSION || ilutGetInteger(ILUT_VERSION_NUM) < ILUT_VERSION) {
@@ -43,8 +34,15 @@ bool ModuleResourceLoader::Awake()
 		return 1;
 	}
 
-	// Enable textures
-	glEnable(GL_TEXTURE_2D);
+	// Initialize DevIL
+	ilInit();
+	iluInit();
+
+	ilEnable(IL_CONV_PAL);
+	ilutEnable(ILUT_OPENGL_CONV);
+	ilutRenderer(ILUT_OPENGL);
+
+	ilutInit();
 
 	return true;
 }
@@ -62,8 +60,11 @@ bool ModuleResourceLoader::Start()
 	//LoadFBX("Assets/FBX/demon.fbx");
 	//LoadFBX("Assets/FBX/BakerHouse.fbx");
 
+	// Enable textures
+	glEnable(GL_TEXTURE_2D);
+
 	// Load textures
-	CreateTexture("Assets/Textures/lenna.png");
+	CreateTexture("Assets/Textures/Baker_house.png");
 
 	return true;
 }
@@ -81,7 +82,7 @@ update_status ModuleResourceLoader::Update(float dt)
 {
 	BROFILER_CATEGORY("ResourceLoaderUpdate", Profiler::Color::LightSeaGreen)	
 	
-	for (int i = 0; i < FBX_list.size(); ++i)
+	for (uint i = 0; i < FBX_list.size(); ++i)
 		RenderFBX(FBX_list[i]);
 
 	return UPDATE_CONTINUE;
@@ -102,7 +103,7 @@ bool ModuleResourceLoader::CleanUp()
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 
-	for (int i = 0; i < FBX_list.size(); ++i)
+	for (uint i = 0; i < FBX_list.size(); ++i)
 		FBX_list[i].clear();
 
 	FBX_list.clear();
@@ -118,7 +119,7 @@ void ModuleResourceLoader::LoadFBX(const char* path) {
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		for (int i = 0; i < scene->mNumMeshes; ++i) {
+		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 
 			MeshData* m = new MeshData;
 
@@ -166,7 +167,7 @@ void ModuleResourceLoader::LoadFBX(const char* path) {
 
 void ModuleResourceLoader::RenderFBX(FBX_Mesh mesh) {
 	
-	for (int i = 0; i < mesh.size(); ++i) {
+	for (uint i = 0; i < mesh.size(); ++i) {
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -186,25 +187,37 @@ void ModuleResourceLoader::RenderFBX(FBX_Mesh mesh) {
 
 void ModuleResourceLoader::CreateTexture(const char* path)
 {
-	ILuint ImgId = 0;
-	ilGenImages(1, &ImgId);
-	ilBindImage(ImgId);
+	ILuint image; 
+	ilGenImages(1, &image); 
+	ilBindImage(image);
 
-	//ilLoadImage(path);
-	tex = ilutGLBindTexImage();
+	if (!ilLoadImage(path))
+		ilDeleteImages(1, &image);
+	else {
 
-	ilBindImage(0);
-	ilDeleteImage(ImgId);
+		tex = ilutGLBindTexImage();
 
-	/*glBindTexture(GL_TEXTURE_2D, tex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 256, 256,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, tex);	
+		long h, v, bpp, f;
+		ILubyte *texdata = 0;
 
-	glBindTexture(GL_TEXTURE_2D, 0);*/
+		h = ilGetInteger(IL_IMAGE_WIDTH);
+		v = ilGetInteger(IL_IMAGE_HEIGHT);
+		bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
+		f = ilGetInteger(IL_IMAGE_FORMAT);
+		texdata = ilGetData();
+
+		glGenTextures(1, &tex);
+		glBindTexture(GL_TEXTURE_2D, tex);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, h, v, f, GL_UNSIGNED_BYTE, texdata);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		ilBindImage(0);
+		ilDeleteImage(image);
+	}
 }
 
 void ModuleResourceLoader::Load(const json &config)
