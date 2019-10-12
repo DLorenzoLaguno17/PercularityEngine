@@ -5,7 +5,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleGui.h"
 #include "ModuleScene.h"
-#include "ModuleMeshLoader.h"
+#include "ModuleResourceLoader.h"
 
 #include <fstream>
 #include <iomanip>
@@ -20,7 +20,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	gui = new ModuleGui(this);
 	scene = new ModuleScene(this);
-	mesh_loader = new ModuleMeshLoader(this);
+	res_loader = new ModuleResourceLoader(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -31,7 +31,7 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(gui);
-	AddModule(mesh_loader);
+	AddModule(res_loader);
 	
 	// Scenes
 	AddModule(scene);

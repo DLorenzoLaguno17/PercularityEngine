@@ -16,7 +16,7 @@ class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleGui;
 class ModuleScene;
-class ModuleMeshLoader;
+class ModuleResourceLoader;
 
 using json = nlohmann::json;
 
@@ -29,7 +29,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleGui* gui;
 	ModuleScene* scene;
-	ModuleMeshLoader* mesh_loader;
+	ModuleResourceLoader* res_loader;
 
 	//Aditional data
 	std::string engineName;

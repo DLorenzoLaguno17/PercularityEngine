@@ -3,7 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
-#include "ModuleMeshLoader.h"
+#include "ModuleResourceLoader.h"
 #include "UIElement.h"
 
 #include "Brofiler/Lib/Brofiler.h"
@@ -138,8 +138,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_DROPFILE:
-			App->mesh_loader->LoadFBX(e.drop.file);
-			LOG("Loaded new model. Current FBX on scene: %d", App->mesh_loader->FBX_list.size());
+			App->res_loader->LoadFBX(e.drop.file);
 			// Free dropped_filedir memory
 			SDL_free((void*)e.drop.file);   
 

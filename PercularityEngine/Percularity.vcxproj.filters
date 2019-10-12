@@ -135,10 +135,10 @@
     <ClInclude Include="ModuleGui.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleMeshLoader.h">
+    <ClInclude Include="Par Shapes\par_shapes.h" />
+    <ClInclude Include="ModuleResourceLoader.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Par Shapes\par_shapes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -210,7 +210,7 @@
     <ClCompile Include="ModuleGui.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleMeshLoader.cpp">
+    <ClCompile Include="ModuleResourceLoader.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
