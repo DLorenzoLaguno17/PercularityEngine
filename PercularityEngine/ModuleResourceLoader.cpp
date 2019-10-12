@@ -57,10 +57,11 @@ bool ModuleResourceLoader::Start()
 
 	// Load textures
 	default_tex = CreateTexture("Assets/Textures/Baker_house.png");
+	demon_tex = CreateTexture("Assets/Textures/Difuse.png");
 
 	// Loading FBX
 	//LoadFBX("Assets/FBX/warrior.FBX"); 
-	//LoadFBX("Assets/FBX/demon2.fbx", demon_tex); 
+	LoadFBX("Assets/FBX/demon2.fbx", demon_tex); 
 	//LoadFBX("Assets/FBX/BakerHouse.fbx");
 
 	// Enable textures

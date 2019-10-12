@@ -71,6 +71,7 @@ public:
 	uint default_tex;
 
 private:
+	uint demon_tex;
 
 };
 
