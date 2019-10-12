@@ -55,16 +55,16 @@ bool ModuleResourceLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	// Load textures
+	default_tex = CreateTexture("Assets/Textures/Baker_house.png");
+
 	// Loading FBX
 	//LoadFBX("Assets/FBX/warrior.FBX"); 
-	//LoadFBX("Assets/FBX/demon.fbx");
+	//LoadFBX("Assets/FBX/demon2.fbx", demon_tex); 
 	//LoadFBX("Assets/FBX/BakerHouse.fbx");
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
-
-	// Load textures
-	default_tex = CreateTexture("Assets/Textures/Baker_house.png");
 
 	return true;
 }
@@ -168,7 +168,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 
 			glGenBuffers(1, (GLuint*) &m->id_index);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->id_index);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 3 * m->num_indices, m->indices, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m->num_indices, m->indices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 			glGenBuffers(1, (GLuint*) &m->id_tex); 
@@ -179,13 +179,14 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			fbx_mesh.mesh.push_back(m);
 		}
 		
-		fbx_mesh.texture = tex;
+		if (tex == 0) fbx_mesh.texture = default_tex;
+		else fbx_mesh.texture = tex;
 		FBX_list.push_back(fbx_mesh);
 		LOG("Loaded new model. Current FBX on scene: %d", App->res_loader->FBX_list.size());
 
 		aiReleaseImport(scene);
 	}
-	else LOG("Error loading scene %s", path);
+	else LOG("Error loading FBX: %s", path);
 }
 
 void ModuleResourceLoader::RenderFBX(FBX_Mesh fbx_mesh) {

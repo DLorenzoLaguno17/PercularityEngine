@@ -60,7 +60,7 @@ public:
 	void Save(nlohmann::json &config);
 
 	// Methods to load and draw a mesh
-	void LoadFBX(const char* path, uint tex);
+	void LoadFBX(const char* path, uint tex = 0);
 	void RenderFBX(FBX_Mesh fbx_mesh);
 
 	// Method to create a texture
@@ -68,7 +68,9 @@ public:
 
 public:
 	std::vector<FBX_Mesh> FBX_list;
-	uint default_tex = 0;
+	uint default_tex;
+
+private:
 
 };
 
