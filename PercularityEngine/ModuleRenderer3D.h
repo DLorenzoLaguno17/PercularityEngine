@@ -37,9 +37,6 @@ public:
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	update_status status = UPDATE_CONTINUE;
 
-
-	
-
 private:
 	uint verticesBuffer		= 0;	//vertex buffer object
 	uint indicesBuffer		= 0;	//index

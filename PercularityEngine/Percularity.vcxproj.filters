@@ -135,8 +135,9 @@
     <ClInclude Include="ModuleGui.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Par Shapes\par_shapes.h">
-      <Filter>Sources\3rd party</Filter>
+    <ClInclude Include="Par Shapes\par_shapes.h" />
+    <ClInclude Include="ModuleResourceLoader.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -208,6 +209,9 @@
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
     <ClCompile Include="ModuleGui.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleResourceLoader.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>

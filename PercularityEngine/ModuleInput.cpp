@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleWindow.h"
+#include "ModuleResourceLoader.h"
 #include "UIElement.h"
 
 #include "Brofiler/Lib/Brofiler.h"
@@ -131,10 +133,20 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_WINDOWEVENT:
-			{
-				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
+			if(e.window.event == SDL_WINDOWEVENT_RESIZED)
 					App->renderer3D->OnResize(e.window.data1, e.window.data2);
-			}
+			break;
+
+			case SDL_DROPFILE:
+			// We check if its a .png (texture) or an FBX
+			if (strstr(e.drop.file, ".png") != nullptr)
+				App->res_loader->default_tex = App->res_loader->CreateTexture(e.drop.file);
+			else if (strstr(e.drop.file, ".fbx") != nullptr || strstr(e.drop.file, ".FBX") != nullptr)
+				App->res_loader->LoadFBX(e.drop.file);
+			// Free dropped_filedir memory
+			SDL_free((void*)e.drop.file);   
+
+			break;			
 		}
 	}
 

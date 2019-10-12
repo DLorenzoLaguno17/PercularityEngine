@@ -77,6 +77,8 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			ImGui::BulletText("Dear ImGui 1.72b");
 			ImGui::BulletText("MathGeoLib 1.5");
 			ImGui::BulletText("Open GL 4.5");
+			ImGui::BulletText("Glew 2.1");
+			ImGui::BulletText("DevIL 1.8");
 			ImGui::NewLine();
 
 			ImGui::Separator();

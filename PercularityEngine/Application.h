@@ -16,6 +16,7 @@ class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleGui;
 class ModuleScene;
+class ModuleResourceLoader;
 
 using json = nlohmann::json;
 
@@ -28,6 +29,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleGui* gui;
 	ModuleScene* scene;
+	ModuleResourceLoader* res_loader;
 
 	//Aditional data
 	std::string engineName;
@@ -51,9 +53,6 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
-
-public:
-
 	void DisableVsync(bool mustDisable);
 
 private:
