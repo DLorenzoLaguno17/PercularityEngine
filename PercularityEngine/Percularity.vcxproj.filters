@@ -138,6 +138,7 @@
     <ClInclude Include="Par Shapes\par_shapes.h">
       <Filter>Sources\3rd party</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -209,5 +210,11 @@
     <ClCompile Include="ModuleGui.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Percularity Engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Game\Icons\PercularityIcon7.ico" />
   </ItemGroup>
 </Project>
