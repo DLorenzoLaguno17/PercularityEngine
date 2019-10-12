@@ -64,7 +64,7 @@ bool ModuleResourceLoader::Start()
 	glEnable(GL_TEXTURE_2D);
 
 	// Load textures
-	CreateTexture("Assets/Textures/Baker_house.png");
+	default_tex = CreateTexture("Assets/Textures/Baker_house.png");
 
 	return true;
 }
@@ -104,16 +104,16 @@ bool ModuleResourceLoader::CleanUp()
 	aiDetachAllLogStreams();
 
 	for (uint i = 0; i < FBX_list.size(); ++i)
-		FBX_list[i].clear();
+		FBX_list[i].mesh.clear();
 
 	FBX_list.clear();
 
 	return true;
 }
 
-void ModuleResourceLoader::LoadFBX(const char* path) {
+void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 
-	FBX_Mesh mesh;
+	FBX_Mesh fbx_mesh;
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -143,6 +143,23 @@ void ModuleResourceLoader::LoadFBX(const char* path) {
 				}
 			}
 
+			// Copy texture UVs
+			if (scene->mMeshes[i]->HasTextureCoords(0))
+			{
+				m->num_tex = scene->mMeshes[i]->mNumVertices;
+				m->textures = new float[scene->mMeshes[i]->mNumVertices * 2];
+
+				for (uint j = 0; j < scene->mMeshes[i]->mNumVertices; ++j)
+				{
+					m->textures[j * 2] = scene->mMeshes[i]->mTextureCoords[0][j].x;
+					m->textures[(j * 2) + 1] = scene->mMeshes[i]->mTextureCoords[0][j].y;
+				}
+			}
+
+			if (scene->mMeshes[i]->HasNormals()) {
+
+			}
+
 			// Assigning the VRAM
 			glGenBuffers(1, (GLuint*) &m->id_vertex);
 			glBindBuffer(GL_ARRAY_BUFFER, m->id_vertex);
@@ -154,10 +171,16 @@ void ModuleResourceLoader::LoadFBX(const char* path) {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 3 * m->num_indices, m->indices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-			mesh.push_back(m);
-		}
+			glGenBuffers(1, (GLuint*) &m->id_tex); 
+			glBindBuffer(GL_ARRAY_BUFFER, m->id_tex);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * m->num_tex, m->textures, GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-		FBX_list.push_back(mesh);
+			fbx_mesh.mesh.push_back(m);
+		}
+		
+		fbx_mesh.texture = tex;
+		FBX_list.push_back(fbx_mesh);
 		LOG("Loaded new model. Current FBX on scene: %d", App->res_loader->FBX_list.size());
 
 		aiReleaseImport(scene);
@@ -165,37 +188,49 @@ void ModuleResourceLoader::LoadFBX(const char* path) {
 	else LOG("Error loading scene %s", path);
 }
 
-void ModuleResourceLoader::RenderFBX(FBX_Mesh mesh) {
+void ModuleResourceLoader::RenderFBX(FBX_Mesh fbx_mesh) {
 	
-	for (uint i = 0; i < mesh.size(); ++i) {
+	for (uint i = 0; i < fbx_mesh.mesh.size(); ++i) {
 
+		// Render the texture
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindTexture(GL_TEXTURE_2D, fbx_mesh.texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindBuffer(GL_ARRAY_BUFFER, fbx_mesh.mesh[i]->id_tex);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+		// Render the mesh
 		glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, fbx_mesh.mesh[i]->id_vertex);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx_mesh.mesh[i]->id_index);
+		glDrawElements(GL_TRIANGLES, fbx_mesh.mesh[i]->num_indices, GL_UNSIGNED_INT, NULL);
 
-		glBindTexture(GL_TEXTURE_2D, tex);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->id_vertex);			 
-		glVertexPointer(3, GL_FLOAT, 0, NULL);					 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->id_index);
-		glDrawElements(GL_TRIANGLES, mesh[i]->num_indices, GL_UNSIGNED_INT, NULL);
-
+		// Clean all buffers
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);		
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glActiveTexture(GL_TEXTURE0); 
+		glBindTexture(GL_TEXTURE_2D, 0); 
 	}
 }
 
-void ModuleResourceLoader::CreateTexture(const char* path)
+uint ModuleResourceLoader::CreateTexture(const char* path)
 {
 	ILuint image; 
+	uint tex;
 	ilGenImages(1, &image); 
 	ilBindImage(image);
 
-	if (!ilLoadImage(path))
+	if (!ilLoadImage(path)) {
 		ilDeleteImages(1, &image);
+		LOG("The texture image could not be loaded")
+		return 0;
+	}
 	else {
-
 		tex = ilutGLBindTexImage();
+		LOG("Created texture from: %s", path)
 
 		long h, v, bpp, f;
 		ILubyte *texdata = 0;
@@ -217,6 +252,8 @@ void ModuleResourceLoader::CreateTexture(const char* path)
 
 		ilBindImage(0);
 		ilDeleteImage(image);
+
+		return tex;
 	}
 }
 

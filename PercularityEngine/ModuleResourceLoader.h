@@ -10,12 +10,22 @@ struct MeshData {
 	uint num_indices = 0;
 	uint* indices = nullptr;
 
-	uint id_vertex = 0; // Unique vertex in VRAM
+	uint id_vertex = 0; // Vertex in VRAM
 	uint num_vertices = 0;
 	float* vertices = nullptr;
+
+	uint id_tex = 0;  // Texture in VRAM
+	uint num_tex = 0;
+	float* textures = nullptr;
 };
 
-typedef std::vector<MeshData*> FBX_Mesh;
+struct FBX_Mesh {
+
+	// List of data
+	std::vector<MeshData*> mesh;
+	// Texture of the FBX
+	uint texture = 0;
+};
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
@@ -50,15 +60,15 @@ public:
 	void Save(nlohmann::json &config);
 
 	// Methods to load and draw a mesh
-	void LoadFBX(const char* path);
-	void RenderFBX(FBX_Mesh mesh);
+	void LoadFBX(const char* path, uint tex);
+	void RenderFBX(FBX_Mesh fbx_mesh);
 
 	// Method to create a texture
-	void CreateTexture(const char* path);
+	uint CreateTexture(const char* path);
 
 public:
 	std::vector<FBX_Mesh> FBX_list;
-	uint tex = 0;
+	uint default_tex = 0;
 
 };
 
