@@ -79,17 +79,40 @@ void ModuleScene::DrawAxis() const {
 	glVertex3f(-0.1f, 0.1f, -0.1f);
 	glVertex3f(5.1f, 0.1f, -0.1f);
 
+	///Draw an X
+	glVertex3f(5.0f, 2.0f, -0.2f);
+	glVertex3f(4.5f, 1.5f, -0.2f);
+	glVertex3f(4.5f, 2.0f, -0.2f);
+	glVertex3f(5.0f, 1.5f, -0.2f);
+
 	//Y axis
 	glColor3f(0, 1, 0); //Green color
 
 	glVertex3f(-0.1f, 0.1f, -0.1f);
 	glVertex3f(-0.1f, 5.1f, -0.1f);
 
+	///Draw an Y
+	glVertex3f(0.0f, 5.5f, 0.0f);
+	glVertex3f(0.0f, 6.0f, 0.0f); 
+	glVertex3f(0.0f, 6.0f, 0.0f);
+	glVertex3f(-0.25f, 6.5f, 0.0f);
+	glVertex3f(0.0f, 6.0f, 0.0f);
+	glVertex3f(0.15f, 6.5f, 0.0f);
+
+
 	//Z axis
 	glColor3f(0, 0, 1); //Blue color
 
 	glVertex3f(-0.1f, 0.1f, -0.1f);
 	glVertex3f(-0.1f, 0.1f, 5.1f);
+
+	///Draw a Z
+	glVertex3f(0.0f, 2.0f, 4.5f);
+	glVertex3f(0.0f, 2.0f, 5.0f);
+	glVertex3f(0.0f, 2.0f, 5.0f);
+	glVertex3f(0.0f, 1.5f, 4.5f);
+	glVertex3f(0.0f, 1.5f, 4.5f);
+	glVertex3f(0.0f, 1.5f, 5.0f);
 
 	glEnd();
 

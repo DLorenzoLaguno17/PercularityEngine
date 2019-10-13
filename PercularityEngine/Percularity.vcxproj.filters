@@ -139,6 +139,7 @@
     <ClInclude Include="ModuleResourceLoader.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -213,5 +214,11 @@
     <ClCompile Include="ModuleResourceLoader.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Percularity Engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Game\Icons\PercularityIcon7.ico" />
   </ItemGroup>
 </Project>
