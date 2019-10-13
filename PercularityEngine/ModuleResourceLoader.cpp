@@ -30,11 +30,12 @@ bool ModuleResourceLoader::Init()
 
 	// DevIL version checking
 	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION || iluGetInteger(ILU_VERSION_NUM) < ILU_VERSION || ilutGetInteger(ILUT_VERSION_NUM) < ILUT_VERSION) {
-		printf("DevIL version is different...exiting!\n");
+		LOG("DevIL version is different...exiting!\n");
 		return 1;
 	}
 
 	// Initialize DevIL
+	LOG("Initialazing DevIL");
 	ilInit();
 	iluInit();
 
@@ -56,12 +57,13 @@ bool ModuleResourceLoader::Start()
 	aiAttachLogStream(&stream);
 
 	// Load textures
-	default_tex = CreateTexture("Assets/Textures/Baker_house.png");
+	default_tex = CreateTexture("Assets/Textures/Bh.dds");
 	demon_tex = CreateTexture("Assets/Textures/Difuse.png");
+	icon_tex = CreateTexture("Assets/Textures/icon.png");
 
 	// Loading FBX
 	//LoadFBX("Assets/FBX/warrior.FBX"); 
-	LoadFBX("Assets/FBX/demon2.fbx", demon_tex); 
+	//LoadFBX("Assets/FBX/demon2.fbx", demon_tex); 
 	//LoadFBX("Assets/FBX/BakerHouse.fbx");
 
 	// Enable textures
@@ -83,8 +85,8 @@ update_status ModuleResourceLoader::Update(float dt)
 {
 	BROFILER_CATEGORY("ResourceLoaderUpdate", Profiler::Color::LightSeaGreen)	
 	
-	for (uint i = 0; i < FBX_list.size(); ++i)
-		RenderFBX(FBX_list[i]);
+	for (uint i = 0; i < game_objects.size(); ++i)
+		RenderFBX(game_objects[i]);
 
 	return UPDATE_CONTINUE;
 }
@@ -104,17 +106,17 @@ bool ModuleResourceLoader::CleanUp()
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 
-	for (uint i = 0; i < FBX_list.size(); ++i)
-		FBX_list[i].mesh.clear();
+	for (uint i = 0; i < game_objects.size(); ++i)
+		game_objects[i].mesh.clear();
 
-	FBX_list.clear();
+	game_objects.clear();
 
 	return true;
 }
 
 void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 
-	FBX_Mesh fbx_mesh;
+	GameObject fbx_mesh;
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -182,15 +184,15 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 		
 		if (tex == 0) fbx_mesh.texture = default_tex;
 		else fbx_mesh.texture = tex;
-		FBX_list.push_back(fbx_mesh);
-		LOG("Loaded new model. Current FBX on scene: %d", App->res_loader->FBX_list.size());
+		game_objects.push_back(fbx_mesh);
+		LOG("Loaded new model. Current GameObjects on scene: %d", App->res_loader->game_objects.size());
 
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading FBX: %s", path);
 }
 
-void ModuleResourceLoader::RenderFBX(FBX_Mesh fbx_mesh) {
+void ModuleResourceLoader::RenderFBX(GameObject fbx_mesh) {
 	
 	for (uint i = 0; i < fbx_mesh.mesh.size(); ++i) {
 
@@ -221,7 +223,7 @@ void ModuleResourceLoader::RenderFBX(FBX_Mesh fbx_mesh) {
 uint ModuleResourceLoader::CreateTexture(const char* path)
 {
 	ILuint image; 
-	uint tex;
+	GLuint tex;
 	ilGenImages(1, &image); 
 	ilBindImage(image);
 
@@ -232,13 +234,13 @@ uint ModuleResourceLoader::CreateTexture(const char* path)
 	}
 	else {
 		tex = ilutGLBindTexImage();
-		LOG("Created texture from: %s", path)
+		LOG("Created texture from path: %s", path)
 
-		long h, v, bpp, f;
+		long h, w, bpp, f;
 		ILubyte *texdata = 0;
 
-		h = ilGetInteger(IL_IMAGE_WIDTH);
-		v = ilGetInteger(IL_IMAGE_HEIGHT);
+		w = ilGetInteger(IL_IMAGE_WIDTH);
+		h = ilGetInteger(IL_IMAGE_HEIGHT);
 		bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
 		f = ilGetInteger(IL_IMAGE_FORMAT);
 		texdata = ilGetData();
@@ -249,7 +251,8 @@ uint ModuleResourceLoader::CreateTexture(const char* path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, h, v, f, GL_UNSIGNED_BYTE, texdata);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		ilBindImage(0);
