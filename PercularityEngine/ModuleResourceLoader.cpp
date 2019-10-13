@@ -132,6 +132,14 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			memcpy(m->vertices, scene->mMeshes[i]->mVertices, sizeof(float) * m->num_vertices * 3);
 			LOG("New mesh with %d vertices", m->num_vertices);
 
+			// Copy normals
+			if (scene->mMeshes[i]->HasNormals())
+			{
+				m->num_normals = scene->mMeshes[i]->mNumVertices;
+				m->normals = new float[m->num_normals * 3];
+				memcpy(m->normals, scene->mMeshes[i]->mNormals, sizeof(float) * m->num_normals * 3);
+			}
+
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -157,11 +165,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 					m->textures[j * 2] = scene->mMeshes[i]->mTextureCoords[0][j].x;
 					m->textures[(j * 2) + 1] = scene->mMeshes[i]->mTextureCoords[0][j].y;
 				}
-			}
-
-			if (scene->mMeshes[i]->HasNormals()) {
-
-			}
+			}			
 
 			// Assigning the VRAM
 			glGenBuffers(1, (GLuint*) &m->id_vertex);
@@ -218,6 +222,43 @@ void ModuleResourceLoader::RenderFBX(GameObject fbx_mesh) {
 		glActiveTexture(GL_TEXTURE0); 
 		glBindTexture(GL_TEXTURE_2D, 0); 
 	}
+}
+
+
+void ModuleResourceLoader::RenderNormals(GameObject fbx_mesh) {
+
+	/*for (int i = 0; i < fbx_mesh.mesh.size(); ++i) {
+		if (fbx_mesh.mesh[i]->normals != nullptr) {
+			glBegin(GL_LINES);
+			glLineWidth(1.0f);
+
+			glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
+			// --- Draw Face Normals 
+
+			Triangle face;
+
+			for (uint j = 0; j < fbx_mesh.mesh[i]->num_vertices / 3; ++j)
+			{
+				face.a = fbx_mesh.mesh[i].vertices[(j * 3)];
+				face.b = fbx_mesh.mesh[i].vertices[(j * 3) + 1];
+				face.c = fbx_mesh.mesh[i].vertices[(j * 3) + 2];
+
+				float3 face_center = face.Centroid();
+				//float3 face_normal = face.NormalCW();
+
+				float3 face_normal = Cross(face.a - face.b, face.c - face.b);
+
+				face_normal.Normalize();
+
+				glVertex3f(face_center.x, face_center.y, face_center.z);
+				glVertex3f(face_center.x + face_normal.x*NORMAL_LENGTH, face_center.y + face_normal.y*NORMAL_LENGTH, face_center.z + face_normal.z*NORMAL_LENGTH);
+			}
+
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			glEnd();
+		}
+	}*/
 }
 
 uint ModuleResourceLoader::CreateTexture(const char* path)

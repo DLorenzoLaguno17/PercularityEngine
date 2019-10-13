@@ -6,6 +6,9 @@
 #include "ModuleResourceLoader.h"
 #include "UIElement.h"
 
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+
 #include "Brofiler/Lib/Brofiler.h"
 
 #define MAX_KEYS 300
@@ -148,6 +151,8 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			break;			
 		}
+
+		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 
 	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)

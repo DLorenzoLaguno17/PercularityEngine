@@ -61,7 +61,7 @@ bool ModuleGui::Start()
 	else {
 		LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Sould be 2.0
 
-		LOG("Vendor %s", glGetString(GL_VENDOR));
+		LOG("Vendor: %s", glGetString(GL_VENDOR));
 		LOG("Renderer: %s", glGetString(GL_RENDERER));
 		LOG("OpenGL version supported: %s", glGetString(GL_VERSION));
 		LOG("GLSL version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
