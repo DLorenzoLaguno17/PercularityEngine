@@ -37,6 +37,9 @@
     <Filter Include="Sources\Modules\GUI">
       <UniqueIdentifier>{7f17079d-9c99-457d-9f9f-cf75952d3f85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Primitives">
+      <UniqueIdentifier>{9908122d-0c2d-42b5-8dcb-2c5692432919}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -140,6 +143,9 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Primitive.h">
+      <Filter>Sources\Tools\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -213,6 +219,9 @@
     </ClCompile>
     <ClCompile Include="ModuleResourceLoader.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>Sources\Tools\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

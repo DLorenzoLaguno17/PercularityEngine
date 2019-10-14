@@ -3,6 +3,8 @@
 #include "ModuleRenderer3D.h"
 #include "OpenGL.h"
 
+#include "Primitive.h"
+
 #include "Brofiler/Lib/Brofiler.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled):Module(app, start_enabled)
@@ -13,6 +15,8 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
+	lmao = new Cube();
+	
 	return true;
 }
 
@@ -36,12 +40,15 @@ update_status ModuleScene::Update(float dt)
 
 update_status ModuleScene::PostUpdate(float dt)
 {
+	lmao->Render();
 
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleScene::CleanUp()
 {
+	delete lmao;
+
 	return true;
 }
 

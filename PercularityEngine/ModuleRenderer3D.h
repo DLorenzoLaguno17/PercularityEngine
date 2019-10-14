@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _MODULER_RENDERER_H__
+#define _MODULER_RENDERER_H__
 
 #include "Module.h"
 #include "Globals.h"
@@ -27,7 +28,9 @@ public:
 	void CreateRenderingData();//Test method - MUST BE EREASED/EDITED
 	void Render();
 
-	uint GetTexColorBuffer() const { return texColorBuffer; }
+	uint GetTexColorBuffer() const	{ return texColorBuffer;}
+	uint GetFrameBuffer() const		{ return frameBuffer;	}
+	uint GetRenderBuffer() const	{ return renderBuffer;	}
 
 public:
 
@@ -44,3 +47,5 @@ private:
 	uint renderBuffer		= 0;
 	uint texColorBuffer		= 0;
 };
+
+#endif

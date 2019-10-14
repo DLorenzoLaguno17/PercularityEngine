@@ -2,6 +2,7 @@
 #define _MODULE_SCENE_H__
 
 #include "Module.h"
+#include "Primitive.h"
 
 class ModuleScene : public Module
 {
@@ -24,6 +25,9 @@ private:
 
 	void DrawAxis() const;		//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;//Draw a plane with some lines
+
+	//TEST
+	Cube* lmao = nullptr;
 };
 
 #endif
