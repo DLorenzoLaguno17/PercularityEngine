@@ -4,20 +4,15 @@
 #include "ModuleWindow.h"
 #include "ModuleGui.h"
 #include <stdio.h>
-#include "ModuleScene.h"
 #include <iostream>
-
 #include "OpenGL.h"
 #include "Brofiler/Lib/Brofiler.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
-
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
-{
-	
-}
+{}
 
 // Destructor
 ModuleRenderer3D::~ModuleRenderer3D()
@@ -266,7 +261,7 @@ void ModuleRenderer3D::CreateRenderingData()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//Create buffer for the vertices
-	glGenBuffers(1, (GLuint*) &(verticesBuffer));
+	//glGenBuffers(1, (GLuint*) &(verticesBuffer));
 	glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -282,9 +277,9 @@ void ModuleRenderer3D::Render()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-
+	
 	//Draw a cube w/o indices	
-	/*glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices2);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -297,7 +292,7 @@ void ModuleRenderer3D::Render()
 
 	glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);				//vertices buffer
 
-	glVertexPointer(3, GL_FLOAT, 0, NULL);			//specfy pointer to vertices coords
+	glVertexPointer(3, GL_FLOAT, 0, NULL);						//specfy pointer to vertices coords
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);		//indices buffer
 
@@ -307,7 +302,7 @@ void ModuleRenderer3D::Render()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	//Draw a cube with indices*/
+	//Draw a cube with indices
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);

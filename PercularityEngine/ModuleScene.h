@@ -2,6 +2,7 @@
 #define _MODULE_SCENE_H__
 
 #include "Module.h"
+#include "Primitive.h"
 
 class ModuleScene : public Module
 {

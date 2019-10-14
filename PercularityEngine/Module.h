@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _MODULE_H__
+#define _MODULE_H__
 
 #include "Globals.h"
 #include "Json Parser/nlohmann/json.hpp"
@@ -61,3 +62,5 @@ public:
 
 
 };
+
+#endif
