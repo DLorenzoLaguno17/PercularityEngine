@@ -4,9 +4,9 @@
         "Version": "v0.1"
     },
     "User Interface": {
+        "Configuration": true,
         "Console": true,
-        "Scene": true,
-        "Settings": true
+        "Scene": true
     },
     "Window": {
         "Borderless": false,

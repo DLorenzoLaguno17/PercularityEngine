@@ -91,7 +91,7 @@ bool ModuleGui::Start()
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 
-	settings = new SettingsWindow("Settings", true); 
+	settings = new ConfigWindow("Configuration", true); 
 	scene_window = new SceneWindow("Scene", true);
 	console = new ConsoleWindow("Console", true);
 	ui_elements_list.push_back(settings);

@@ -1,4 +1,4 @@
-#include "SettingsWindow.h"
+#include "ConfigWindow.h"
 #include "Application.h"
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
@@ -8,17 +8,17 @@
 #include "DevIL/include/il.h"
 #include "SDL/include/SDL_opengl.h"
 
-SettingsWindow::SettingsWindow(char* name, bool active) : UIElement(name, active) {}
+ConfigWindow::ConfigWindow(char* name, bool active) : UIElement(name, active) {}
 
-// Show settings window
-void SettingsWindow::Update() {
+// Show config window
+void ConfigWindow::Update() {
 	
 	if (!timerStarted) {
 		dblcTimer.Start();
 		timerStarted = true;
 	}
 
-	ImGui::Begin("Settings", &active);
+	ImGui::Begin("Configuration", &active);
 
 	// General settings
 	if (ImGui::CollapsingHeader("Style")) {
@@ -131,11 +131,39 @@ void SettingsWindow::Update() {
 		ImGui::PlotHistogram("##milliseconds", &ms[0], ms.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 
 		ImGui::NewLine();
+		ImGui::Separator();
+		ImGui::TextColored(ImVec4(0, 128, 128, 255), "Current device");
+		ImGui::NewLine();
+		ImGui::Text("CPUs: %d (Cache: %d kb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+		ImGui::Text("System RAM: %f Gb", SDL_GetSystemRAM() / 1024.0f);
 		ImGui::Text("Vendor: %s", glGetString(GL_VENDOR));
 		ImGui::Text("GPU: %s", glGetString(GL_RENDERER));
+		ImGui::NewLine();
+		ImGui::Separator();
+
+		ImGui::TextColored(ImVec4(0, 128, 128, 255), "VRAM");
+		ImGui::NewLine();
+		GLint total, avail, used;
+		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total);
+		ImGui::Text("Total video memory:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "%.2f Mb", float(total) / (1024.0f));
+		glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &avail);
+		ImGui::Text("Available video memory:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "%.2f Mb", float(used) / (1024.0f));
+		used = total - avail;
+		ImGui::Text("Video memory used:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "%.2f Mb", float(avail) / (1024.0f));
+		ImGui::NewLine();
+		ImGui::Separator();
+
+		ImGui::TextColored(ImVec4(0, 128, 128, 255), "Library versions");
+		ImGui::NewLine();
 		SDL_version v; SDL_GetVersion(&v);
 		ImGui::Text("SDL version: %d.%d.%d", v.major, v.minor, v.patch);
-		ImGui::Text("OpenGL version supported: %s", glGetString(GL_VERSION));
+		ImGui::Text("OpenGL version: %s", glGetString(GL_VERSION));
 		ImGui::Text("DevIL version: %d", ilGetInteger(IL_VERSION_NUM));
 		ImGui::Text("Dear ImGui version: %s", ImGui::GetVersion());
 		ImGui::Text("Glew version: %s", glewGetString(GLEW_VERSION)); 

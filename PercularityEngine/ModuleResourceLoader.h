@@ -81,6 +81,7 @@ public:
 
 private:
 	uint demon_tex;
+	uint house_tex;
 
 };
 

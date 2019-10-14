@@ -57,14 +57,15 @@ bool ModuleResourceLoader::Start()
 	aiAttachLogStream(&stream);
 
 	// Load textures
-	default_tex = CreateTexture("Assets/Textures/Bh.dds");
+	default_tex = CreateTexture("Assets/Textures/Baker_house.png");
+	house_tex = CreateTexture("Assets/Textures/Bh.dds");
 	demon_tex = CreateTexture("Assets/Textures/Difuse.png");
 	icon_tex = CreateTexture("Assets/Textures/icon.png");
 
 	// Loading FBX
 	//LoadFBX("Assets/FBX/warrior.FBX"); 
 	//LoadFBX("Assets/FBX/demon2.fbx", demon_tex); 
-	//LoadFBX("Assets/FBX/BakerHouse.fbx");
+	LoadFBX("Assets/FBX/BakerHouse.fbx", house_tex);
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
