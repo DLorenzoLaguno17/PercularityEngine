@@ -18,6 +18,8 @@ public:
 protected:
 
 	//Send data to vram buffers
+	/*This function MUST be called in all the constructors of Primitive
+	subclasses after creating the mesh, otherwise, they won't be drawn*/
 	void StoreData();
 
 protected:

@@ -25,9 +25,6 @@ private:
 
 	void DrawAxis() const;		//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;//Draw a plane with some lines
-
-	//TEST
-	Cube* lmao = nullptr;
 };
 
 #endif

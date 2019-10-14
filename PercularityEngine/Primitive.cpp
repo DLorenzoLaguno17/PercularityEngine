@@ -86,7 +86,6 @@ Sphere::~Sphere()
 Cube::Cube()
 {
 	mesh = par_shapes_create_cube();
-	par_shapes_scale(mesh, 15.0f, 15.0f, 15.0f);
 
 	StoreData();
 }

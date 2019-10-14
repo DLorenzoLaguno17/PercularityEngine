@@ -15,7 +15,6 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
-	lmao = new Cube();
 	
 	return true;
 }
@@ -40,14 +39,12 @@ update_status ModuleScene::Update(float dt)
 
 update_status ModuleScene::PostUpdate(float dt)
 {
-	lmao->Render();
 
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleScene::CleanUp()
 {
-	delete lmao;
 
 	return true;
 }
