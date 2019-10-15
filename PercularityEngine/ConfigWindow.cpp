@@ -151,8 +151,8 @@ void ConfigWindow::Update() {
 		glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &avail);
 		ImGui::Text("Available video memory:");
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(255, 255, 0, 255), "%.2f Mb", float(used) / (1024.0f));
 		used = total - avail;
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), "%.2f Mb", float(used) / (1024.0f));
 		ImGui::Text("Video memory used:");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), "%.2f Mb", float(avail) / (1024.0f));
