@@ -15,6 +15,9 @@ public:
 
 	// Called every frame
 	void Update(std::vector<UIElement*> list);
+
+private:
+	bool popup_open = false;
 };
 
 #endif // __MainManuBar_H__

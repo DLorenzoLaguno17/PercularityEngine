@@ -1,18 +1,18 @@
-#ifndef __SettingsWindow_H__
-#define __SettingsWindow_H__
+#ifndef __ConfigWindow_H__
+#define __ConfigWindow_H__
 
 #include <vector>
 #include "Timer.h"
 #include "UIElement.h"
 
 // ---------------------------------------------------
-class SettingsWindow : public UIElement
+class ConfigWindow : public UIElement
 {
 public:
-	SettingsWindow(char* name, bool active = true);
+	ConfigWindow(char* name, bool active = true);
 
 	// Destructor
-	virtual ~SettingsWindow() {};
+	virtual ~ConfigWindow() {};
 
 	// Called every frame
 	void Update();
@@ -46,4 +46,4 @@ private:
 	Timer dblcTimer; 
 };
 
-#endif // __SettingsWindow_H__
+#endif // __ConfigWindow_H__

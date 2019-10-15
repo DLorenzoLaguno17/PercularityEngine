@@ -4,7 +4,7 @@
 #include "Module.h"
 #include <string>
 #include <vector>
-#include "SettingsWindow.h"
+#include "ConfigWindow.h"
 #include "SceneWindow.h"
 #include "ConsoleWindow.h"
 #include "MainMenuBar.h"
@@ -74,7 +74,7 @@ public:
 	SceneWindow* scene_window = nullptr;
 
 private:
-	SettingsWindow* settings = nullptr;
+	ConfigWindow* settings = nullptr;
 	MainMenuBar* main_menu_bar = nullptr;
 	ConsoleWindow* console = nullptr;
 

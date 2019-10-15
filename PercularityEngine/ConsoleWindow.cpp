@@ -9,8 +9,8 @@ void ConsoleWindow::Update() {
 	ImGui::Begin("Console", &active);
 
 	for (int i = 0; i < log_list.size(); ++i) {
-		ImGui::Text(log_list[i].c_str());
-		ImGui::SetScrollHereY(1.0f);
+		ImGui::Text(log_list[i].c_str()); 		
+		//ImGui::SetScrollHereY(1.0f);
 	}
 
 	ImGui::End();

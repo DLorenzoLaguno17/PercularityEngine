@@ -1,6 +1,7 @@
 #include "MainMenuBar.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleResourceLoader.h"
 #include "ModuleGui.h"
 #include "UIElement.h"
 #include "imgui.h"
@@ -52,6 +53,11 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Shapes"))
+		{
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Report a bug"))
@@ -63,6 +69,8 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 		if (ImGui::BeginMenu("About"))
 		{
+			ImGui::Image((void*)App->res_loader->icon_tex, ImVec2(20, 20));
+			ImGui::SameLine();
 			ImGui::Text("Percularity v0.1");
 			ImGui::Text("3D engine developed for student purposes");
 			ImGui::Text("By Joan Marin & Daniel Lorenzo");
@@ -72,12 +80,13 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 			ImGui::Separator();
 			ImGui::Text("3rd party libraries used:");
-			ImGui::BulletText("SDL 2.0.6");
+			ImGui::BulletText("SDL 2.0.10");
 			ImGui::BulletText("STL 2.0");
 			ImGui::BulletText("Dear ImGui 1.72b");
 			ImGui::BulletText("MathGeoLib 1.5");
-			ImGui::BulletText("Open GL 4.5");
+			ImGui::BulletText("Open GL 4.6");
 			ImGui::BulletText("Glew 2.1");
+			ImGui::BulletText("Assimp 4.1");
 			ImGui::BulletText("DevIL 1.8");
 			ImGui::NewLine();
 
