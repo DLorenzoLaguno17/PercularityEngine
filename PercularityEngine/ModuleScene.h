@@ -23,6 +23,9 @@ public:
 
 private:
 
+	//TEST SHAPE
+	Cone* lmao;
+
 	void DrawAxis() const;		//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;//Draw a plane with some lines
 };

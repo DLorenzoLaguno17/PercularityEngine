@@ -15,7 +15,8 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
-	
+	lmao = new Cone();
+
 	return true;
 }
 
@@ -39,7 +40,7 @@ update_status ModuleScene::Update(float dt)
 
 update_status ModuleScene::PostUpdate(float dt)
 {
-
+	lmao->Render();
 	return UPDATE_CONTINUE;
 }
 

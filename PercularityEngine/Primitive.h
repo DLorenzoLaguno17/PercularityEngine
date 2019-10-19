@@ -18,8 +18,9 @@ public:
 protected:
 
 	//Send data to vram buffers
-	/*This function MUST be called in all the constructors of Primitive
-	subclasses after creating the mesh, otherwise, they won't be drawn*/
+	/*IMPORTANT: This function MUST be called in all the constructors of 
+	Primitive subclasses after creating the mesh, otherwise, they won't 
+	be drawn*/
 	void StoreData();
 
 protected:
@@ -51,4 +52,12 @@ public:
 	~Cube();
 };
 
+class Cone:public Primitive
+{
+public:
+	//Constructors & destructor
+	Cone(int slices=10, int stacks=10);
+
+	~Cone();
+};
 #endif

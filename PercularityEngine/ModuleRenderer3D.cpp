@@ -107,11 +107,11 @@ bool ModuleRenderer3D::Init()
 
 bool ModuleRenderer3D::Start()
 {
-	//testing
-	CreateRenderingData();
+	////testing
+	//CreateRenderingData();
 
-	//test
 	SetUpScene();
+
 	return true;
 }
 
@@ -142,8 +142,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {	
 	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow)
 
-	//Test
-	Render();
+	////Test
+	//Render();
 	
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
 								should find a better way to 

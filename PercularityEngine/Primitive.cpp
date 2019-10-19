@@ -94,3 +94,16 @@ Cube::~Cube()
 {
 
 }
+
+//~~~~~~~~Cone~~~~~~~~~~
+Cone::Cone(int slices, int stacks)
+{
+	mesh = par_shapes_create_cone(slices, stacks);
+
+	StoreData();
+}
+
+Cone::~Cone()
+{
+
+}
