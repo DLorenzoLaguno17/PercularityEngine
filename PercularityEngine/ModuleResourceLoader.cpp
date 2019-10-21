@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "OpenGL.h"
+#include "glmath.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -86,8 +87,10 @@ update_status ModuleResourceLoader::Update(float dt)
 {
 	BROFILER_CATEGORY("ResourceLoaderUpdate", Profiler::Color::LightSeaGreen)	
 	
-	for (uint i = 0; i < game_objects.size(); ++i)
+	for (uint i = 0; i < game_objects.size(); ++i){
 		RenderFBX(game_objects[i]);
+		if (normalsShown) RenderNormals(game_objects[i]);
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -107,8 +110,13 @@ bool ModuleResourceLoader::CleanUp()
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 
-	for (uint i = 0; i < game_objects.size(); ++i)
+	// Delete all the GameObjects
+	for (uint i = 0; i < game_objects.size(); ++i) {
+		for (uint j = 0; j < game_objects[i].mesh.size(); ++j)
+			game_objects[i].mesh[j]->CleanUp();
+
 		game_objects[i].mesh.clear();
+	}
 
 	game_objects.clear();
 
@@ -141,6 +149,21 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 				memcpy(m->normals, scene->mMeshes[i]->mNormals, sizeof(float) * m->num_normals * 3);
 			}
 
+			// Copy colors
+			if (scene->mMeshes[i]->HasVertexColors(0))
+			{
+				m->num_colors = scene->mMeshes[i]->mNumVertices;
+				m->colors = new uint[m->num_colors * 4]; 
+				
+				for (uint j = 0; j < m->num_colors; ++j)
+				{
+					m->colors[j * 4] = scene->mMeshes[i]->mColors[0][j].r;
+					m->colors[j * 4 + 1] = scene->mMeshes[i]->mColors[0][j].g;
+					m->colors[j * 4 + 2] = scene->mMeshes[i]->mColors[0][j].b;
+					m->colors[j * 4 + 3] = scene->mMeshes[i]->mColors[0][j].a;
+				}
+			}
+
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -151,7 +174,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3) 
 						LOG("WARNING, geometry face with != 3 indices!")
 					else 
-						memcpy(&m->indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
+						memcpy(&m->indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, sizeof(uint) * 3);
 				}
 			}
 
@@ -159,12 +182,12 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			if (scene->mMeshes[i]->HasTextureCoords(0))
 			{
 				m->num_tex = scene->mMeshes[i]->mNumVertices;
-				m->textures = new float[scene->mMeshes[i]->mNumVertices * 2];
+				m->textures = new float[m->num_tex * 2];
 
-				for (uint j = 0; j < scene->mMeshes[i]->mNumVertices; ++j)
+				for (uint j = 0; j < m->num_tex; ++j)
 				{
 					m->textures[j * 2] = scene->mMeshes[i]->mTextureCoords[0][j].x;
-					m->textures[(j * 2) + 1] = scene->mMeshes[i]->mTextureCoords[0][j].y;
+					m->textures[j * 2 + 1] = scene->mMeshes[i]->mTextureCoords[0][j].y;
 				}
 			}			
 
@@ -225,41 +248,25 @@ void ModuleResourceLoader::RenderFBX(GameObject fbx_mesh) {
 	}
 }
 
-
 void ModuleResourceLoader::RenderNormals(GameObject fbx_mesh) {
 
-	/*for (int i = 0; i < fbx_mesh.mesh.size(); ++i) {
+	for (int i = 0; i < fbx_mesh.mesh.size(); ++i) {
+
 		if (fbx_mesh.mesh[i]->normals != nullptr) {
-			glBegin(GL_LINES);
-			glLineWidth(1.0f);
+			// Vertex normals
+			for (uint j = 0; j < fbx_mesh.mesh[i]->num_vertices; ++j) {
+				vec3 point = vec3(fbx_mesh.mesh[i]->vertices[j * 3], fbx_mesh.mesh[i]->vertices[j * 3 + 1], fbx_mesh.mesh[i]->vertices[j * 3 + 2]);
+				vec3 vec = vec3(fbx_mesh.mesh[i]->normals[j * 3], fbx_mesh.mesh[i]->normals[j * 3 + 1], fbx_mesh.mesh[i]->normals[j * 3 + 2]);
 
-			glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-
-			// --- Draw Face Normals 
-
-			Triangle face;
-
-			for (uint j = 0; j < fbx_mesh.mesh[i]->num_vertices / 3; ++j)
-			{
-				face.a = fbx_mesh.mesh[i].vertices[(j * 3)];
-				face.b = fbx_mesh.mesh[i].vertices[(j * 3) + 1];
-				face.c = fbx_mesh.mesh[i].vertices[(j * 3) + 2];
-
-				float3 face_center = face.Centroid();
-				//float3 face_normal = face.NormalCW();
-
-				float3 face_normal = Cross(face.a - face.b, face.c - face.b);
-
-				face_normal.Normalize();
-
-				glVertex3f(face_center.x, face_center.y, face_center.z);
-				glVertex3f(face_center.x + face_normal.x*NORMAL_LENGTH, face_center.y + face_normal.y*NORMAL_LENGTH, face_center.z + face_normal.z*NORMAL_LENGTH);
-			}
-
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			glEnd();
+				glBegin(GL_LINES);
+				glColor3f(0, 255, 255);
+				glLineWidth(0.01f);
+				glVertex3f(point.x, point.y, point.z);
+				glVertex3f((point.x + vec.x * 1.0f), (point.y + vec.y * 1.0f), (point.z + vec.z * 1.0f));
+				glEnd();
+			}			
 		}
-	}*/
+	}
 }
 
 uint ModuleResourceLoader::CreateTexture(const char* path)
@@ -303,6 +310,9 @@ uint ModuleResourceLoader::CreateTexture(const char* path)
 		return tex;
 	}
 }
+
+void ModuleResourceLoader::EnableNormals() { normalsShown = true; }
+void ModuleResourceLoader::DisableNormals() { normalsShown = false; }
 
 void ModuleResourceLoader::Load(const json &config)
 {

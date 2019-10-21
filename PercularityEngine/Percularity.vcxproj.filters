@@ -238,4 +238,9 @@
       <Filter>Sources\Tools</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Game\Configuration\.editorconfig.json">
+      <Filter>Sources\3rd party\Json</Filter>
+    </None>
+  </ItemGroup>
 </Project>

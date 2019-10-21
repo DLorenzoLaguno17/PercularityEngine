@@ -24,6 +24,19 @@ struct MeshData {
 	// Normals
 	uint num_normals = 0;
 	float* normals = nullptr;
+
+	// Colors
+	uint num_colors = 0;
+	uint* colors = nullptr;
+
+	// Delete the struct
+	void CleanUp() {
+		if (indices != nullptr) { delete indices; indices = nullptr; }
+		if (vertices != nullptr) { delete vertices; vertices = nullptr;	}
+		if (textures != nullptr) { delete textures; textures = nullptr; }
+		if (normals != nullptr) { delete normals; normals = nullptr; }
+		if (colors != nullptr) { delete colors; colors = nullptr; }
+	}
 };
 
 struct GameObject {
@@ -63,7 +76,7 @@ public:
 	bool CleanUp();
 
 	// Save & Load
-	void Load(const nlohmann::json  &config);
+	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
 
 	// Methods to load and draw a mesh
@@ -74,6 +87,10 @@ public:
 	// Method to create a texture
 	uint CreateTexture(const char* path);
 
+	// Methods to enable/disable normals
+	void EnableNormals();
+	void DisableNormals();
+
 public:
 	std::vector<GameObject> game_objects;
 	uint default_tex;
@@ -82,6 +99,7 @@ public:
 private:
 	uint demon_tex;
 	uint house_tex;
+	bool normalsShown = true;
 
 };
 
