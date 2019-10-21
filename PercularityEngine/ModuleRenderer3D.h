@@ -24,9 +24,6 @@ public:
 
 	void SetUpScene();
 public:
-	
-	void CreateRenderingData();//Test method - MUST BE EREASED/EDITED
-	void Render();
 
 	uint GetTexColorBuffer() const	{ return texColorBuffer;}
 	uint GetFrameBuffer() const		{ return frameBuffer;	}
