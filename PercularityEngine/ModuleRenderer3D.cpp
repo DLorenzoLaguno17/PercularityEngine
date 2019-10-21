@@ -11,6 +11,8 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
+#include "mmgr/mmgr.h"
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {}
 
@@ -107,11 +109,9 @@ bool ModuleRenderer3D::Init()
 
 bool ModuleRenderer3D::Start()
 {
-	//testing
-	CreateRenderingData();
 
-	//test
 	SetUpScene();
+
 	return true;
 }
 
@@ -142,8 +142,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {	
 	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow)
 
-	//Test
-	Render();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
 								should find a better way to 
@@ -176,138 +175,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-GLfloat vertices2[] = {
-5.0f, 5.0f, 0.0f,
-0.0f, 5.0f, 0.0f,
-0.0f, 5.0f, 5.0f,
-
-0.0f, 5.0f, 5.0f,
-5.0f, 5.0f, 5.0f,
-5.0f, 5.0f, 0.0f,
-
-
-5.0f, 0.0f, 0.0f,
-0.0f, 0.0f, 5.0f,
-0.0f, 0.0f, 0.0f,
-
-0.0f, 0.0f, 5.0f,
-5.0f, 0.0f, 0.0f,
-5.0f, 0.0f, 5.0f,
-
-
-0.0f, 0.0f, 0.0f,
-0.0f, 5.0f, 5.0f,
-0.0f, 5.0f, 0.0f,
-
-0.0f, 0.0f, 0.0f,
-0.0f, 0.0f, 5.0f,
-0.0f, 5.0f, 5.0f,
-
-
-5.0f, 0.0f, 0.0f,
-5.0f, 5.0f, 0.0f,
-5.0f, 5.0f, 5.0f,
-
-5.0f, 0.0f, 0.0f,
-5.0f, 5.0f, 5.0f,
-5.0f, 0.0f, 5.0f,
-
-
-0.0f, 0.0f, 0.0f,
-0.0f, 5.0f, 0.0f,
-5.0f, 0.0f, 0.0f,
-
-5.0f, 5.0f, 0.0f,
-5.0f, 0.0f, 0.0f,
-0.0f, 5.0f, 0.0f,
-
-0.0f, 0.0f, 5.0f,
-5.0f, 0.0f, 5.0f,
-0.0f, 5.0f, 5.0f,
-
-5.0f, 5.0f, 5.0f,
-0.0f, 5.0f, 5.0f,
-5.0f, 0.0f, 5.0f, };
-
-GLfloat vertices[] =
-{
-	15.f,5.f,5.f,
-	5.f,5.f,5.f,
-	15.f,15.f,5.f,
-	5.f,15.f,5.f,
-
-	15.f,5.f,15.f,
-	5.f,5.f,15.f,
-	15.f,15.f,15.f,
-	5.f,15.f,15.f
-};
-
-GLubyte indices[] =
-{
-	0,1,2, 1,3,2,
-	1,5,3, 3,5,7,
-	3,7,6, 3,6,2,
-	4,0,2, 4,2,6,
-	0,5,1, 0,4,5,
-	7,5,4, 7,4,6
-};
-
-void ModuleRenderer3D::CreateRenderingData()
-{
-	//Create buffer for the vertices
-	glGenBuffers(1, (GLuint*) &(verticesBuffer));
-	glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	//Create buffer for the vertices
-	//glGenBuffers(1, (GLuint*) &(verticesBuffer));
-	glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	//Create buffer for the indices
-	glGenBuffers(1, (GLuint*) &(indicesBuffer));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void ModuleRenderer3D::Render()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-	
-	//Draw a cube w/o indices	
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vertices2);
-
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	//Draw a cube w/o indices
-	
-	//Draw a cube with indices
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);				//vertices buffer
-
-	glVertexPointer(3, GL_FLOAT, 0, NULL);						//specfy pointer to vertices coords
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);		//indices buffer
-
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, nullptr); //draw elements
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	//Draw a cube with indices
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-}
-
 void ModuleRenderer3D::SetUpScene()
 {
 	glGenFramebuffers(1, &frameBuffer);
@@ -327,12 +194,12 @@ void ModuleRenderer3D::SetUpScene()
 	glGenRenderbuffers(1, &renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
 	
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		LOG("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

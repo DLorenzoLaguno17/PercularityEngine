@@ -4,6 +4,8 @@
 #include "ModuleRenderer3D.h"
 #include "imgui.h"
 
+#include "mmgr/mmgr.h"
+
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
 
 // Show scene window
