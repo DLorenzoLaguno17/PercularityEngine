@@ -63,7 +63,7 @@ bool ModuleGui::Start()
 	else {
 		LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Sould be 2.0
 
-		LOG("Vendor %s", glGetString(GL_VENDOR));
+		LOG("Vendor: %s", glGetString(GL_VENDOR));
 		LOG("Renderer: %s", glGetString(GL_RENDERER));
 		LOG("OpenGL version supported: %s", glGetString(GL_VERSION));
 		LOG("GLSL version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -93,7 +93,7 @@ bool ModuleGui::Start()
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 
-	settings = new SettingsWindow("Settings", true); 
+	settings = new ConfigWindow("Configuration", true); 
 	scene_window = new SceneWindow("Scene", true);
 	console = new ConsoleWindow("Console", true);
 	ui_elements_list.push_back(settings);

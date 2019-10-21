@@ -6,24 +6,31 @@
 
 struct MeshData {
 
-	uint id_index = 0; // Index in VRAM
+	// Index 
+	uint id_index = 0; 
 	uint num_indices = 0;
 	uint* indices = nullptr;
 
-	uint id_vertex = 0; // Vertex in VRAM
+	// Vertex
+	uint id_vertex = 0; 
 	uint num_vertices = 0;
 	float* vertices = nullptr;
 
-	uint id_tex = 0;  // Texture in VRAM
+	// Texture
+	uint id_tex = 0;   
 	uint num_tex = 0;
 	float* textures = nullptr;
+
+	// Normals
+	uint num_normals = 0;
+	float* normals = nullptr;
 };
 
-struct FBX_Mesh {
+struct GameObject {
 
 	// List of data
 	std::vector<MeshData*> mesh;
-	// Texture of the FBX
+	// Texture of the GameObject
 	uint texture = 0;
 };
 
@@ -61,16 +68,20 @@ public:
 
 	// Methods to load and draw a mesh
 	void LoadFBX(const char* path, uint tex = 0);
-	void RenderFBX(FBX_Mesh fbx_mesh);
+	void RenderFBX(GameObject fbx_mesh);
+	void RenderNormals(GameObject fbx_mesh);
 
 	// Method to create a texture
 	uint CreateTexture(const char* path);
 
 public:
-	std::vector<FBX_Mesh> FBX_list;
+	std::vector<GameObject> game_objects;
 	uint default_tex;
+	uint icon_tex;
 
 private:
+	uint demon_tex;
+	uint house_tex;
 
 };
 

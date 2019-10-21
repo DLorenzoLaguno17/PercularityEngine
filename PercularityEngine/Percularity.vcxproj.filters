@@ -123,9 +123,6 @@
     <ClInclude Include="OpenGL.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsWindow.h">
-      <Filter>Sources\Modules\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="MainMenuBar.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
@@ -141,19 +138,27 @@
     <ClInclude Include="ModuleGui.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Par Shapes\par_shapes.h" />
     <ClInclude Include="ModuleResourceLoader.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Tools\Primitives</Filter>
     </ClInclude>
+
     <ClInclude Include="mmgr\mmgr.h">
       <Filter>Sources\3rd party\MMGR</Filter>
     </ClInclude>
     <ClInclude Include="mmgr\nommgr.h">
       <Filter>Sources\3rd party\MMGR</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigWindow.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Par Shapes\par_shapes.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +216,6 @@
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Sources\Modules\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="SettingsWindow.cpp">
-      <Filter>Sources\Modules\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="MainMenuBar.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
@@ -234,12 +236,19 @@
     </ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>Sources\3rd party\MMGR</Filter>
+      </ClCompile>
+    <ClCompile Include="ConfigWindow.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Percularity Engine.rc" />
+    <Image Include="Game\Icons\PercularityIcon7.ico">
+      <Filter>Sources\Tools</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Game\Icons\PercularityIcon7.ico" />
+    <ResourceCompile Include="Percularity Engine.rc">
+      <Filter>Sources\Tools</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

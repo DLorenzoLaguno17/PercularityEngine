@@ -109,7 +109,7 @@
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneWindow.h" />
-    <ClInclude Include="SettingsWindow.h" />
+    <ClInclude Include="ConfigWindow.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UIElement.h" />
   </ItemGroup>
@@ -138,7 +138,7 @@
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="SceneWindow.cpp" />
-    <ClCompile Include="SettingsWindow.cpp" />
+    <ClCompile Include="ConfigWindow.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
