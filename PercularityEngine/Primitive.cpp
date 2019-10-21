@@ -8,9 +8,12 @@
 
 #include "Par Shapes/par_shapes.h"
 
+#include "mmgr/mmgr.h"
 
 Primitive::Primitive()
-{}
+{
+	int* paco = new int();
+}
 
 Primitive::~Primitive()
 {

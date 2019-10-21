@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "imgui.h"
 
+#include "mmgr/mmgr.h"
+
 ConsoleWindow::ConsoleWindow(char* name, bool active) : UIElement(name, active) {}
 
 // Show scene window

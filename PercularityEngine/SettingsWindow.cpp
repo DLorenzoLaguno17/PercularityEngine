@@ -6,6 +6,8 @@
 
 #include "SDL/include/SDL_opengl.h"
 
+#include "mmgr/mmgr.h"
+
 SettingsWindow::SettingsWindow(char* name, bool active) : UIElement(name, active) {}
 
 // Show settings window

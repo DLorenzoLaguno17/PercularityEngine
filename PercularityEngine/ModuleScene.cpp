@@ -7,6 +7,8 @@
 
 #include "Brofiler/Lib/Brofiler.h"
 
+#include "mmgr/mmgr.h"
+
 ModuleScene::ModuleScene(Application* app, bool start_enabled):Module(app, start_enabled)
 {}
 
@@ -15,8 +17,6 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
-	lmao = new Cone();
-
 	return true;
 }
 
@@ -40,7 +40,6 @@ update_status ModuleScene::Update(float dt)
 
 update_status ModuleScene::PostUpdate(float dt)
 {
-	lmao->Render();
 	return UPDATE_CONTINUE;
 }
 

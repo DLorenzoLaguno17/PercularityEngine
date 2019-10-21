@@ -5,6 +5,8 @@
 #include "UIElement.h"
 #include "imgui.h"
 
+#include "mmgr/mmgr.h"
+
 // Show main menu bar
 void MainMenuBar::Update(std::vector<UIElement*> list) {
 	if (ImGui::BeginMainMenuBar())

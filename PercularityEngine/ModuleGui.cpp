@@ -10,6 +10,8 @@
 
 #include "Brofiler/Lib/Brofiler.h"
 
+#include "mmgr/mmgr.h"
+
 ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -182,6 +184,7 @@ bool ModuleGui::CleanUp()
 }
 
 void ModuleGui::DrawImGui(float dt) {
+
 
 	main_menu_bar->Update(ui_elements_list);
 
