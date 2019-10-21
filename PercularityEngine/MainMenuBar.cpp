@@ -4,6 +4,8 @@
 #include "ModuleGui.h"
 #include "UIElement.h"
 #include "imgui.h"
+#include "ModuleScene.h"
+#include "Primitive.h"
 
 #include "mmgr/mmgr.h"
 
@@ -42,6 +44,34 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 			ImGui::EndMenu();
 		}
+
+		//Provisional
+		//The methods used 
+		if (ImGui::BeginMenu("Game Objects"))
+		{
+			if (ImGui::BeginMenu("Primitives"))
+			{
+				//Create sphere
+				if (ImGui::MenuItem("Sphere"))
+				{
+					App->scene->scenePrimitives.push_back(new Sphere());
+				}
+				//Create cube
+				if (ImGui::MenuItem("Cube"))
+				{
+					App->scene->scenePrimitives.push_back(new Cube());
+				}
+				//Create cone
+				if (ImGui::MenuItem("Cone"))
+				{
+					App->scene->scenePrimitives.push_back(new Cone());
+				}
+
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+		//Provisional
 
 		if (ImGui::BeginMenu("Windows"))
 		{

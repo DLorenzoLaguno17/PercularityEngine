@@ -11,20 +11,19 @@
 #include "mmgr/mmgr.h"
 
 Primitive::Primitive()
-{
-	int* paco = new int();
-}
+{}
 
 Primitive::~Primitive()
 {
-	delete mesh;
+	par_shapes_free_mesh(mesh);
+
 }
 
 void Primitive::Render() const 
 {
-	//Bind frame & render buffers
-	glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->GetFrameBuffer());
-	glBindRenderbuffer(GL_FRAMEBUFFER, App->renderer3D->GetRenderBuffer());
+	//EREASE Bind frame & render buffers	--> this is actually done in the RendererModule, i leave the code commented for a while just in case
+	//glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->GetFrameBuffer());
+	//glBindRenderbuffer(GL_FRAMEBUFFER, App->renderer3D->GetRenderBuffer());
 
 	//Enable client state
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -44,8 +43,8 @@ void Primitive::Render() const
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	//Unbind frame & render buffers
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 void Primitive::StoreData()
@@ -66,12 +65,6 @@ void Primitive::StoreData()
 }
 
 //~~~~~~~~SPHERE~~~~~~~~
-
-Sphere::Sphere()
-{
-
-}
-
 Sphere::Sphere(int slices, int stacks)
 {
 	mesh = par_shapes_create_parametric_sphere(slices, stacks);

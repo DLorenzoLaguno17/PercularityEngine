@@ -23,10 +23,8 @@ public:
 	void OnResize(int width, int height);
 
 	void SetUpScene();
+
 public:
-	
-	void CreateRenderingData();//Test method - MUST BE EREASED/EDITED
-	void Render();
 
 	uint GetTexColorBuffer() const	{ return texColorBuffer;}
 	uint GetFrameBuffer() const		{ return frameBuffer;	}
@@ -41,6 +39,7 @@ public:
 	update_status status = UPDATE_CONTINUE;
 
 private:
+
 	uint verticesBuffer		= 0;	//vertex buffer object
 	uint indicesBuffer		= 0;	//index
 	uint frameBuffer		= 0;

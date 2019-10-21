@@ -11,6 +11,7 @@ public:
 	//Constructor & destructor
 	Primitive();
 	~Primitive();
+	void CleanUp();
 
 	//Render the figure
 	void Render() const;
@@ -37,8 +38,7 @@ class Sphere :public Primitive
 {
 public:
 	//Constructors & destructor
-	Sphere();
-	Sphere(int slices, int stacks);
+	Sphere(int slices=10, int stacks=10);
 
 	~Sphere();
 

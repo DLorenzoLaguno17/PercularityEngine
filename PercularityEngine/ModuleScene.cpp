@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "OpenGL.h"
-
 #include "Primitive.h"
 
 #include "Brofiler/Lib/Brofiler.h"
@@ -17,6 +16,7 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
+
 	return true;
 }
 
@@ -27,7 +27,11 @@ update_status ModuleScene::PreUpdate(float dt)
 
 update_status ModuleScene::Update(float dt)
 {
-	BROFILER_CATEGORY("SceneUpdate", Profiler::Color::LightSeaGreen)
+	BROFILER_CATEGORY("SceneUpdate", Profiler::Color::LightSeaGreen);
+
+	//Draw primitives
+	for (int i = 0; i < scenePrimitives.size(); ++i)
+		scenePrimitives[i]->Render();
 
 	//Draw a plane
 	DrawSimplePlane();
@@ -45,6 +49,10 @@ update_status ModuleScene::PostUpdate(float dt)
 
 bool ModuleScene::CleanUp()
 {
+	for (int i = 0; i < scenePrimitives.size(); ++i)
+		delete scenePrimitives[i];
+
+	scenePrimitives.clear();
 
 	return true;
 }
