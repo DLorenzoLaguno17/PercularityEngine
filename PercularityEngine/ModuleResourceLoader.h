@@ -4,6 +4,8 @@
 #include "Module.h"
 #include <vector>
 
+#define NORMALS_LENGTH 1.0f
+
 struct MeshData {
 
 	// Index 

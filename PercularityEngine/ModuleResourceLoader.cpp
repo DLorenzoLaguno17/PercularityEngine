@@ -167,9 +167,9 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
-				m->num_indices = scene->mMeshes[i]->mNumFaces * 3;
-				m->indices = new uint[m->num_indices]; // Assume each face is a triangle
-				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
+				m->num_indices = scene->mMeshes[i]->mNumFaces;
+				m->indices = new uint[m->num_indices * 3]; // Assume each face is a triangle
+				for (uint j = 0; j < m->num_indices; ++j)
 				{
 					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3) 
 						LOG("WARNING, geometry face with != 3 indices!")
@@ -199,7 +199,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 
 			glGenBuffers(1, (GLuint*) &m->id_index);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->id_index);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m->num_indices, m->indices, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 3 * m->num_indices, m->indices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 			glGenBuffers(1, (GLuint*) &m->id_tex); 
@@ -236,7 +236,7 @@ void ModuleResourceLoader::RenderFBX(GameObject fbx_mesh) {
 		glBindBuffer(GL_ARRAY_BUFFER, fbx_mesh.mesh[i]->id_vertex);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx_mesh.mesh[i]->id_index);
-		glDrawElements(GL_TRIANGLES, fbx_mesh.mesh[i]->num_indices, GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, fbx_mesh.mesh[i]->num_indices * 3, GL_UNSIGNED_INT, NULL);
 
 		// Clean all buffers
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -253,6 +253,7 @@ void ModuleResourceLoader::RenderNormals(GameObject fbx_mesh) {
 	for (int i = 0; i < fbx_mesh.mesh.size(); ++i) {
 
 		if (fbx_mesh.mesh[i]->normals != nullptr) {
+
 			// Vertex normals
 			for (uint j = 0; j < fbx_mesh.mesh[i]->num_vertices; ++j) {
 				vec3 point = vec3(fbx_mesh.mesh[i]->vertices[j * 3], fbx_mesh.mesh[i]->vertices[j * 3 + 1], fbx_mesh.mesh[i]->vertices[j * 3 + 2]);
@@ -260,11 +261,39 @@ void ModuleResourceLoader::RenderNormals(GameObject fbx_mesh) {
 
 				glBegin(GL_LINES);
 				glColor3f(0, 255, 255);
-				glLineWidth(0.01f);
+				glLineWidth(1.0f);
 				glVertex3f(point.x, point.y, point.z);
-				glVertex3f((point.x + vec.x * 1.0f), (point.y + vec.y * 1.0f), (point.z + vec.z * 1.0f));
+				glVertex3f((point.x + vec.x * NORMALS_LENGTH), 
+					(point.y + vec.y * NORMALS_LENGTH), 
+					(point.z + vec.z * NORMALS_LENGTH));
+
 				glEnd();
-			}			
+			}	
+
+			// Face normals
+			/*for (uint j = 0; j < fbx_mesh.mesh[i]->num_vertices; j += 3)
+			{
+				vec3 a = vec3(fbx_mesh.mesh[i]->vertices[j * 3], fbx_mesh.mesh[i]->vertices[j * 3 + 1], fbx_mesh.mesh[i]->vertices[j * 3 + 2]);
+				vec3 b = vec3(fbx_mesh.mesh[i]->vertices[j * 3], fbx_mesh.mesh[i]->vertices[j * 3 + 1], fbx_mesh.mesh[i]->vertices[j * 3 + 2]);
+				vec3 c = vec3(fbx_mesh.mesh[i]->vertices[j * 3], fbx_mesh.mesh[i]->vertices[j * 3 + 1], fbx_mesh.mesh[i]->vertices[j * 3 + 2]);
+
+				vec3 vec = cross((b - a), (c - a));
+
+				vec3 face_center = vec3(
+					(a.x + b.x + c.x) / 3,
+					(a.y + b.y + c.y) / 3,
+					(a.z + b.z + c.z) / 3
+				);
+
+				glBegin(GL_LINES);
+				glColor3f(0, 255, 0);
+				glVertex3f(face_center.x, face_center.y, face_center.z);
+				glVertex3f((face_center.x + vec.x * NORMALS_LENGTH), 
+					(face_center.y + vec.y * NORMALS_LENGTH), 
+					(face_center.z + vec.z * NORMALS_LENGTH));
+
+				glEnd();
+			}*/ 
 		}
 	}
 }

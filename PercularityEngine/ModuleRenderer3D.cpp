@@ -277,7 +277,7 @@ void ModuleRenderer3D::Render()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-	
+
 	//Draw a cube w/o indices	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices2);
