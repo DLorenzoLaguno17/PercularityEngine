@@ -50,6 +50,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
 			ImGui::MenuItem("Hierarchy", NULL, &App->gui->show_hierarchy);
 			ImGui::MenuItem("Project", NULL, &App->gui->show_project);
+			ImGui::MenuItem("Inspector", NULL, &App->gui->show_inspector);
 			ImGui::EndMenu();
 		}
 

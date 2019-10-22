@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="ConsoleWindow.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glcorearb.h" />

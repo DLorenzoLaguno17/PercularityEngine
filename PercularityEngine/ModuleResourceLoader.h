@@ -2,10 +2,11 @@
 #define __ModuleResourceLoader_H__
 
 #include "Module.h"
-#include "GameObject.h"
 #include <vector>
 
 #define NORMALS_LENGTH 1.0f
+
+class GameObject;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
@@ -46,6 +47,8 @@ public:
 	void EnableNormals();
 	void DisableNormals();
 
+	GameObject* CreateGameObject();
+
 public:
 	std::vector<GameObject> game_objects;
 	uint default_tex;
@@ -56,6 +59,7 @@ private:
 	uint house_tex;
 	bool normalsShown = true;
 
+	GameObject* root = nullptr;
 };
 
 #endif // __ModuleResourceLoader_H__

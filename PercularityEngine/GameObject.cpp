@@ -29,6 +29,20 @@ void GameObject::Render() const {
 	}
 }
 
+void GameObject::CreateComponent(COMPONENT_TYPE type) {
+	Component* ret = nullptr;
+	/*switch (type)
+	{
+	case COMPONENT_TYPE::TEXTURE:
+		ret = new j1Player(type);
+		if (ret != nullptr) components.push_back(ret); break;
+
+	case COMPONENT_TYPE::MESH:
+		ret = new j1Hook(type);
+		if (ret != nullptr) components.push_back(ret); break;
+	}*/
+}
+
 void GameObject::CleanUp() {
 
 	for (uint i = 0; i < mesh.size(); ++i)

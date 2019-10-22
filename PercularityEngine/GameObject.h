@@ -1,7 +1,7 @@
 #ifndef __GameObject_H__
 #define __GameObject_H__
 
-#include "Globals.h"
+#include "Component.h"
 //#include "MathGeoLib/include/MathGeoLib.h"
 #include <vector>
 
@@ -44,7 +44,10 @@ struct MeshData {
 
 class GameObject {
 public:
+	//Constructors
 	GameObject() {};
+	GameObject(char* name, bool active, GameObject* parent = nullptr) : 
+		name(name), active(active), parent(parent) {};
 
 	// Destructor
 	virtual ~GameObject() {};
@@ -53,8 +56,13 @@ public:
 	void Render() const;
 	void ShowNormals();
 
+	// Called every frame
+	void Update();
+
 	// Removes the memory
 	void CleanUp();
+
+	void CreateComponent(COMPONENT_TYPE type);
 
 public:
 	// List of data
@@ -63,6 +71,12 @@ public:
 	uint texture = 0;
 	// Transform
 	//float4x4 transform;
+
+	char* name;
+	bool active;
+	std::vector<Component*> components;
+	std::vector<GameObject*> children;
+	GameObject* parent;
 };
 
 #endif // __GameObject_H__

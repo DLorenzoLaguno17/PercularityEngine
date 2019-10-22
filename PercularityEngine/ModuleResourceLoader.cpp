@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "OpenGL.h"
+#include "GameObject.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -108,6 +109,12 @@ update_status ModuleResourceLoader::PostUpdate(float dt)
 	BROFILER_CATEGORY("ResourceLoaderPostUpdate", Profiler::Color::Yellow)
 	
 	return UPDATE_CONTINUE;
+}
+
+GameObject* ModuleResourceLoader::CreateGameObject() {
+	GameObject* ret = nullptr;
+
+	return ret;
 }
 
 // Called before quitting

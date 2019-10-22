@@ -21,21 +21,10 @@ struct _TTF_Font;
 struct SDL_Rect;
 struct SDL_Color; 
 
-enum UIELEMENT_TYPES
-{
-	BUTTON,
-	CHECKBOX,
-	INPUTTEXT,
-	LABEL,
-	IMAGE,
-	BOX
-};
-
 // ---------------------------------------------------
 class ModuleGui : public Module
 {
 public:
-
 	ModuleGui(Application* app, bool start_enabled = true);
 
 	// Destructor
@@ -60,15 +49,13 @@ public:
 	void Load(const nlohmann::json  &config);
 	void Save(nlohmann::json &config);
 
-public:
-
 	void DrawImGui(float dt);
 
 public:
 	bool show_demo_window = true;
-	bool show_console = true;
 	bool show_hierarchy = true;
 	bool show_project = true;
+	bool show_inspector = true;
 
 	ImGuiIO* io = nullptr;
 	SceneWindow* scene_window = nullptr;
