@@ -40,6 +40,9 @@
     <Filter Include="Sources\Tools\Primitives">
       <UniqueIdentifier>{9908122d-0c2d-42b5-8dcb-2c5692432919}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\3rd party\MMGR">
+      <UniqueIdentifier>{d210b81f-cb8c-44dd-a226-223eb804aa40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -141,6 +144,13 @@
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Tools\Primitives</Filter>
     </ClInclude>
+
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Sources\3rd party\MMGR</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Sources\3rd party\MMGR</Filter>
+    </ClInclude>
     <ClInclude Include="ConfigWindow.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
@@ -224,6 +234,9 @@
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Tools\Primitives</Filter>
     </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Sources\3rd party\MMGR</Filter>
+      </ClCompile>
     <ClCompile Include="ConfigWindow.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>

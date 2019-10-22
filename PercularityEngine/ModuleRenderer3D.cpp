@@ -11,6 +11,8 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
+#include "mmgr/mmgr.h"
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {}
 
@@ -138,13 +140,13 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
-{	
+{
 	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow);
-	
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	App->gui->DrawImGui(dt);	/*Shouldn't really be here, 
-								should find a better way to 
+	App->gui->DrawImGui(dt);	/*Shouldn't really be here,
+								should find a better way to
 								order module drawing  Joan M*/
 
 	SDL_GL_SwapWindow(App->window->window);
@@ -193,12 +195,12 @@ void ModuleRenderer3D::SetUpScene()
 	glGenRenderbuffers(1, &renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
-	
+
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		LOG("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

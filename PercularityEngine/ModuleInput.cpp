@@ -11,6 +11,8 @@
 
 #include "Brofiler/Lib/Brofiler.h"
 
+#include "mmgr/mmgr.h"
+
 #define MAX_KEYS 300
 #define MAX_INPUTS 20
 

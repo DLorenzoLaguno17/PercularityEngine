@@ -2,7 +2,8 @@
 #define _MODULE_SCENE_H__
 
 #include "Module.h"
-#include "Primitive.h"
+
+class Primitive;
 
 class ModuleScene : public Module
 {
@@ -20,6 +21,9 @@ public:
 	//Save & Load
 	void Load(const nlohmann::json &config) {}
 	void Save(nlohmann::json &config) {}
+
+	//Vector with all the primitives - This is something provisional that might be changed/ereased in the future
+	std::vector<Primitive*> scenePrimitives;
 
 private:
 

@@ -11,6 +11,7 @@ public:
 	//Constructor & destructor
 	Primitive();
 	~Primitive();
+	void CleanUp();
 
 	//Render the figure
 	void Render() const;
@@ -18,8 +19,9 @@ public:
 protected:
 
 	//Send data to vram buffers
-	/*This function MUST be called in all the constructors of Primitive
-	subclasses after creating the mesh, otherwise, they won't be drawn*/
+	/*IMPORTANT: This function MUST be called in all the constructors of 
+	Primitive subclasses after creating the mesh, otherwise, they won't 
+	be drawn*/
 	void StoreData();
 
 protected:
@@ -36,8 +38,7 @@ class Sphere :public Primitive
 {
 public:
 	//Constructors & destructor
-	Sphere();
-	Sphere(int slices, int stacks);
+	Sphere(int slices=10, int stacks=10);
 
 	~Sphere();
 
@@ -51,4 +52,12 @@ public:
 	~Cube();
 };
 
+class Cone:public Primitive
+{
+public:
+	//Constructors & destructor
+	Cone(int slices=10, int stacks=10);
+
+	~Cone();
+};
 #endif

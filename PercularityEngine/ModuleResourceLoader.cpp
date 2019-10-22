@@ -15,6 +15,8 @@
 #pragma comment (lib, "DevIL/lib86/ILU.lib" )
 #pragma comment (lib, "DevIL/lib86/ILUT.lib" )
 
+#include "mmgr/mmgr.h"
+
 ModuleResourceLoader::ModuleResourceLoader(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
