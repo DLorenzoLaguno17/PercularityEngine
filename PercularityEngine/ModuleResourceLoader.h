@@ -2,58 +2,15 @@
 #define __ModuleResourceLoader_H__
 
 #include "Module.h"
+#include "GameObject.h"
 #include <vector>
 
 #define NORMALS_LENGTH 1.0f
-
-struct MeshData {
-
-	// Index 
-	uint id_index = 0; 
-	uint num_indices = 0;
-	uint* indices = nullptr;
-
-	// Vertex
-	uint id_vertex = 0; 
-	uint num_vertices = 0;
-	float* vertices = nullptr;
-
-	// Texture
-	uint id_tex = 0;   
-	uint num_tex = 0;
-	float* textures = nullptr;
-
-	// Normals
-	uint num_normals = 0;
-	float* normals = nullptr;
-
-	// Colors
-	uint num_colors = 0;
-	uint* colors = nullptr;
-
-	// Delete the struct
-	void CleanUp() {
-		if (indices != nullptr) { delete indices; indices = nullptr; }
-		if (vertices != nullptr) { delete vertices; vertices = nullptr;	}
-		if (textures != nullptr) { delete textures; textures = nullptr; }
-		if (normals != nullptr) { delete normals; normals = nullptr; }
-		if (colors != nullptr) { delete colors; colors = nullptr; }
-	}
-};
-
-struct GameObject {
-
-	// List of data
-	std::vector<MeshData*> mesh;
-	// Texture of the GameObject
-	uint texture = 0;
-};
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
 {
 public:
-
 	ModuleResourceLoader(Application* app, bool start_enabled = true);
 
 	// Destructor
@@ -81,12 +38,8 @@ public:
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
 
-	// Methods to load and draw a mesh
+	// Methods to load
 	void LoadFBX(const char* path, uint tex = 0);
-	void RenderFBX(GameObject fbx_mesh);
-	void RenderNormals(GameObject fbx_mesh);
-
-	// Method to create a texture
 	uint CreateTexture(const char* path);
 
 	// Methods to enable/disable normals
