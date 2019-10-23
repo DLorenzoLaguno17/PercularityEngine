@@ -1,12 +1,16 @@
 #include "GameObject.h"
 #include "ComponentMaterial.h"
+#include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "OpenGL.h"
 #include "glmath.h"
 
+#include "mmgr/mmgr.h"
+
 GameObject::GameObject(char* name, GameObject* parent) :
 	name(name), parent(parent)
 {
+	c_transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
 	c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
 }
@@ -19,7 +23,9 @@ void GameObject::Update() {
 
 // Creates components for its GameObject
 Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
+
 	Component* ret = nullptr;
+
 	switch (type)
 	{
 	case COMPONENT_TYPE::MATERIAL:
@@ -30,12 +36,17 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 		ret = new ComponentMesh(type, this, active);
 		if (ret != nullptr) components.push_back(ret); break;
 
-	/*case COMPONENT_TYPE::TRANSFORM
-		ret = new ComponentMesh(type, this, active);
-		if (ret != nullptr) components.push_back(ret); break;*/
+	case COMPONENT_TYPE::TRANSFORM:
+		ret = new ComponentTransform(type, this, active);
+		if (ret != nullptr) components.push_back(ret); break;
 	}
 
 	return ret;
+}
+
+void GameObject::OnEditor() {
+	for (int i = 0; i < components.size(); ++i)
+		components[i]->OnEditor();
 }
 
 // Cleans the memory of the GameObject
@@ -50,11 +61,13 @@ void GameObject::Render() const {
 	for (uint i = 0; i < c_mesh->mesh.size(); ++i) {
 
 		// Render the texture
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindTexture(GL_TEXTURE_2D, c_texture->texture);
-		glActiveTexture(GL_TEXTURE0);
-		glBindBuffer(GL_ARRAY_BUFFER, c_mesh->mesh[i]->id_tex);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		if (c_texture->active) {
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glBindTexture(GL_TEXTURE_2D, c_texture->texture);
+			glActiveTexture(GL_TEXTURE0);
+			glBindBuffer(GL_ARRAY_BUFFER, c_mesh->mesh[i]->id_tex);
+			glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		}
 
 		// Render the mesh
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -75,14 +88,14 @@ void GameObject::Render() const {
 
 void GameObject::ShowNormals() {
 
-	/*for (int i = 0; i < c_mesh->mesh.size(); ++i) {
+	for (int i = 0; i < c_mesh->mesh.size(); ++i) {
 
 		if (c_mesh->mesh[i]->normals != nullptr) {
 
 			// Vertex normals
 			for (uint j = 0; j < c_mesh->mesh[i]->num_vertices; ++j) {
-				vec3 point = vec3(mesh[i]->vertices[j * 3], mesh[i]->vertices[j * 3 + 1], mesh[i]->vertices[j * 3 + 2]);
-				vec3 vec = vec3(mesh[i]->normals[j * 3], mesh[i]->normals[j * 3 + 1], mesh[i]->normals[j * 3 + 2]);
+				vec3 point = vec3(c_mesh->mesh[i]->vertices[j * 3], c_mesh->mesh[i]->vertices[j * 3 + 1], c_mesh->mesh[i]->vertices[j * 3 + 2]);
+				vec3 vec = vec3(c_mesh->mesh[i]->normals[j * 3], c_mesh->mesh[i]->normals[j * 3 + 1], c_mesh->mesh[i]->normals[j * 3 + 2]);
 
 				glBegin(GL_LINES);
 				glColor3f(0, 255, 255);
@@ -118,7 +131,7 @@ void GameObject::ShowNormals() {
 					(face_center.z + vec.z * NORMALS_LENGTH));
 
 				glEnd();
-			}
+			}*/
 		}
-	}*/
+	}
 }

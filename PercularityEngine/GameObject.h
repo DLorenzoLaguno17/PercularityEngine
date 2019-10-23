@@ -2,13 +2,13 @@
 #define __GameObject_H__
 
 #include "Component.h"
-//#include "MathGeoLib/include/MathGeoLib.h"
 #include <vector>
 
 #define NORMALS_LENGTH 1.0f
 
 class ComponentMesh;
 class ComponentMaterial;
+class ComponentTransform;
 
 class GameObject {
 public:
@@ -18,8 +18,6 @@ public:
 
 	// Destructor
 	virtual ~GameObject() {};
-
-	void Start();
 
 	// Rendering methods
 	void Render() const;
@@ -32,14 +30,12 @@ public:
 	void CleanUp();
 
 	Component* CreateComponent(COMPONENT_TYPE type, bool active = true);
+	void OnEditor();
 
 public:
-	// List of data
 	ComponentMesh* c_mesh = nullptr;
-	// Texture of the GameObject
 	ComponentMaterial* c_texture = nullptr;
-	// Transform
-	// ComponentTransform* transform;
+	ComponentTransform* c_transform = nullptr;
 
 	char* name;
 	std::vector<Component*> components;

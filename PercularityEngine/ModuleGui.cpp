@@ -93,12 +93,15 @@ bool ModuleGui::Start()
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 
+	// Creating all UI windows
 	settings = new ConfigWindow("Configuration", true); 
 	scene_window = new SceneWindow("Scene", true);
 	console = new ConsoleWindow("Console", true);
+	inspector = new InspectorWindow("Inspector", true);
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
 	ui_elements_list.push_back(console);
+	ui_elements_list.push_back(inspector);
 
 	return true;
 }
@@ -176,6 +179,7 @@ bool ModuleGui::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
+	delete inspector; inspector = nullptr;
 	delete console; console = nullptr;
 	delete scene_window; scene_window = nullptr;
 	delete settings; settings = nullptr;
@@ -184,8 +188,6 @@ bool ModuleGui::CleanUp()
 }
 
 void ModuleGui::DrawImGui(float dt) {
-
-
 	main_menu_bar->Update(ui_elements_list);
 
 	// 1. Show the big demo window
@@ -204,12 +206,6 @@ void ModuleGui::DrawImGui(float dt) {
 
 	if (show_project) {
 		ImGui::Begin("Project", &show_project);
-
-		ImGui::End();
-	}
-
-	if (show_inspector) {
-		ImGui::Begin("Inspector", &show_inspector);
 
 		ImGui::End();
 	}

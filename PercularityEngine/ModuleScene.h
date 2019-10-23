@@ -4,6 +4,7 @@
 #include "Module.h"
 
 class Primitive;
+class GameObject;
 
 class ModuleScene : public Module
 {
@@ -25,10 +26,22 @@ public:
 	//Vector with all the primitives - This is something provisional that might be changed/ereased in the future
 	std::vector<Primitive*> scenePrimitives;
 
+	// Methods to enable/disable normals
+	void EnableNormals();
+	void DisableNormals();
+
 private:
 
 	void DrawAxis() const;		//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;//Draw a plane with some lines
+
+public:
+	std::vector<GameObject> game_objects;
+	GameObject* root = nullptr;
+	GameObject* selected = nullptr;
+
+private:
+	bool normalsShown = true;
 };
 
 #endif

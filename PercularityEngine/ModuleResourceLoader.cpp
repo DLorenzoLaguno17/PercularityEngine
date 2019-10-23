@@ -1,7 +1,10 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleScene.h"
+#include "ModuleGui.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentTransform.h"
 #include "OpenGL.h"
 #include "GameObject.h"
 
@@ -85,35 +88,6 @@ bool ModuleResourceLoader::Start()
 	return true;
 }
 
-// Called before Update
-update_status ModuleResourceLoader::PreUpdate(float dt)
-{
-	BROFILER_CATEGORY("ResourceLoaderPreUpdate", Profiler::Color::Orange)
-
-	return UPDATE_CONTINUE;
-}
-
-// Called every frame
-update_status ModuleResourceLoader::Update(float dt)
-{
-	BROFILER_CATEGORY("ResourceLoaderUpdate", Profiler::Color::LightSeaGreen)	
-	
-	for (uint i = 0; i < game_objects.size(); ++i){
-		game_objects[i].Render();
-		if (normalsShown) game_objects[i].ShowNormals();
-	}
-
-	return UPDATE_CONTINUE;
-}
-
-// Called after Update
-update_status ModuleResourceLoader::PostUpdate(float dt)
-{
-	BROFILER_CATEGORY("ResourceLoaderPostUpdate", Profiler::Color::Yellow)
-	
-	return UPDATE_CONTINUE;
-}
-
 GameObject* ModuleResourceLoader::CreateGameObject() {
 	GameObject* ret = nullptr;
 
@@ -127,19 +101,15 @@ bool ModuleResourceLoader::CleanUp()
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 
-	// Delete all the GameObjects
-	for (uint i = 0; i < game_objects.size(); ++i) {		
-		game_objects[i].CleanUp();
-	}
-
-	game_objects.clear();
-
 	return true;
 }
 
-void ModuleResourceLoader::LoadFBX(const char* path, uint tex, char* name) {
+void ModuleResourceLoader::LoadFBX(char* path, uint tex, char* name) {
 
-	GameObject fbx_mesh(name);
+	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
+	
+	char* n = strstr(path, "/FBX/");
+	GameObject fbx_mesh(n);
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -226,21 +196,21 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex, char* name) {
 
 		aiNode* node = scene->mRootNode;
 
-		for (uint i = 0; i < node->mNumChildren; ++i) {			
+		/*for (uint i = 0; i < node->mNumChildren; ++i) {			
 			aiVector3D translation, scale;
 			aiQuaternion rotation;
 			node->mTransformation.Decompose(scale, rotation, translation);
 
-			//float3 t(translation.x, translation.y, translation.z);
-			//Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
-			//float3 s(scale.x, scale.y, scale.z);
-			//fbx_mesh.transform = math::float4x4::FromTRS(t, r, s);
-		}
+			float3 t(translation.x, translation.y, translation.z);
+			Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
+			float3 s(scale.x, scale.y, scale.z);
+			fbx_mesh.c_transform->transform = math::float4x4::FromTRS(t, r, s);
+		}*/
 
 		if (tex == 0) fbx_mesh.c_texture->texture = default_tex;
 		else fbx_mesh.c_texture->texture = tex;
-		game_objects.push_back(fbx_mesh);
-		LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh.name, App->res_loader->game_objects.size());
+		App->scene->game_objects.push_back(fbx_mesh);
+		LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh.name, App->scene->game_objects.size());
 
 		aiReleaseImport(scene);
 	}
@@ -288,9 +258,6 @@ uint ModuleResourceLoader::CreateTexture(const char* path)
 		return tex;
 	}
 }
-
-void ModuleResourceLoader::EnableNormals() { normalsShown = true; }
-void ModuleResourceLoader::DisableNormals() { normalsShown = false; }
 
 void ModuleResourceLoader::Load(const json &config)
 {

@@ -48,12 +48,7 @@ public:
 
 	// Methods
 	void Update() {}
-	void Enable() { active = true; }
-	void Disable() { active = false; }
-
 	void OnEditor() {}
-
-	void Load() {};
 
 public:
 	std::vector<MeshData*> mesh;
