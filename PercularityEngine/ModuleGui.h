@@ -56,7 +56,6 @@ public:
 	bool show_demo_window = true;
 	bool show_hierarchy = true;
 	bool show_project = true;
-	bool show_inspector = true;
 
 	ImGuiIO* io = nullptr;
 	SceneWindow* scene_window = nullptr;

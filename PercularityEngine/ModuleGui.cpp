@@ -99,6 +99,7 @@ bool ModuleGui::Start()
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
 	ui_elements_list.push_back(console);
+	ui_elements_list.push_back(inspector);
 
 	return true;
 }
@@ -185,8 +186,6 @@ bool ModuleGui::CleanUp()
 }
 
 void ModuleGui::DrawImGui(float dt) {
-
-
 	main_menu_bar->Update(ui_elements_list);
 
 	// 1. Show the big demo window
@@ -205,12 +204,6 @@ void ModuleGui::DrawImGui(float dt) {
 
 	if (show_project) {
 		ImGui::Begin("Project", &show_project);
-
-		ImGui::End();
-	}
-
-	if (show_inspector) {
-		ImGui::Begin("Inspector", &show_inspector);
 
 		ImGui::End();
 	}

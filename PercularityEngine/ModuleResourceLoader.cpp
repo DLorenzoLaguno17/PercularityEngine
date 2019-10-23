@@ -106,8 +106,12 @@ void ModuleResourceLoader::LoadFBX(char* path, uint tex) {
 	
 	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
 
-	char* n = strstr(path, "/FBX/");
+	char* n = strstr(path, ".fbx");
+	if (n == nullptr) n = strstr(path, ".FBX");
+
+	//char* n
 	GameObject fbx_mesh(n);
+
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -192,7 +196,7 @@ void ModuleResourceLoader::LoadFBX(char* path, uint tex) {
 			fbx_mesh.c_mesh->mesh.push_back(m);
 		}
 
-		aiNode* node = scene->mRootNode;
+		/*aiNode* node = scene->mRootNode;
 
 		for (uint i = 0; i < node->mNumChildren; ++i) {			
 			aiVector3D translation, scale;
@@ -203,7 +207,7 @@ void ModuleResourceLoader::LoadFBX(char* path, uint tex) {
 			//Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
 			//float3 s(scale.x, scale.y, scale.z);
 			//fbx_mesh.transform = math::float4x4::FromTRS(t, r, s);
-		}
+		}*/
 
 		fbx_mesh.c_texture->texture = tex;
 		App->scene->game_objects.push_back(fbx_mesh);

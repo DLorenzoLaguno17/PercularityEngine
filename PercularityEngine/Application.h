@@ -28,8 +28,8 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleGui* gui;
-	ModuleScene* scene;
 	ModuleResourceLoader* res_loader;
+	ModuleScene* scene;
 
 	//Aditional data
 	std::string engineName;

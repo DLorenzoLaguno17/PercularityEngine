@@ -16,7 +16,6 @@ public:
 
 	// Called every frame
 	void Update();
-
 };
 
 #endif // __InspectorWindow_H__

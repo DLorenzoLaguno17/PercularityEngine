@@ -25,7 +25,7 @@ public:
 	bool vsync = true;
 
 	bool cullFace = true;
-	bool normals = true;
+	bool normals = false;
 	bool lighting = true;
 	bool depthTest = true;
 	bool colorMaterial = true;

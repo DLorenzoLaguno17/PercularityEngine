@@ -16,7 +16,8 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
-	selected = &App->scene->game_objects[0];
+	selected = &game_objects.front();
+
 	return true;
 }
 

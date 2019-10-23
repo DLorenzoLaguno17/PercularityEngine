@@ -37,7 +37,7 @@ public:
 	ComponentMaterial* c_texture = nullptr;
 	ComponentTransform* c_transform;
 
-	char* name;
+	char* name = nullptr;
 	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	GameObject* parent;
