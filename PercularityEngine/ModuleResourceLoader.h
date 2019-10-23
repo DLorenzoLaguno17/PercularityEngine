@@ -40,7 +40,7 @@ public:
 	void Save(nlohmann::json &config);
 
 	// Methods to load
-	void LoadFBX(const char* path, uint tex = 0);
+	void LoadFBX(const char* path, uint tex = 0, char* name = "Unknown");
 	uint CreateTexture(const char* path);
 
 	// Methods to enable/disable normals

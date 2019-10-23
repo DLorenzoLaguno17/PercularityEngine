@@ -77,6 +77,8 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentMaterial.h" />
+    <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ConsoleWindow.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glcorearb.h" />

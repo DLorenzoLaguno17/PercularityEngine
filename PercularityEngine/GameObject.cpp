@@ -1,23 +1,67 @@
 #include "GameObject.h"
+#include "ComponentMaterial.h"
+#include "ComponentMesh.h"
 #include "OpenGL.h"
 #include "glmath.h"
 
+GameObject::GameObject(char* name, GameObject* parent) :
+	name(name), parent(parent)
+{
+	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
+	c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
+}
+
+// Called every frame
+void GameObject::Update() {
+	for (int i = 0; i < components.size(); ++i)
+		if (components[i]->active) components[i]->Update();
+}
+
+// Creates components for its GameObject
+Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
+	Component* ret = nullptr;
+	switch (type)
+	{
+	case COMPONENT_TYPE::MATERIAL:
+		ret = new ComponentMaterial(type, this, active);
+		if (ret != nullptr) components.push_back(ret); break;
+
+	case COMPONENT_TYPE::MESH:
+		ret = new ComponentMesh(type, this, active);
+		if (ret != nullptr) components.push_back(ret); break;
+
+	/*case COMPONENT_TYPE::TRANSFORM
+		ret = new ComponentMesh(type, this, active);
+		if (ret != nullptr) components.push_back(ret); break;*/
+	}
+
+	return ret;
+}
+
+// Cleans the memory of the GameObject
+void GameObject::CleanUp() {
+	for (int i = 0; i < components.size(); ++i) {
+		delete components[i];
+		components[i] = nullptr;
+	}
+}
+
 void GameObject::Render() const {
-	for (uint i = 0; i < mesh.size(); ++i) {
+	for (uint i = 0; i < c_mesh->mesh.size(); ++i) {
 
 		// Render the texture
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindTexture(GL_TEXTURE_2D, c_texture->texture);
 		glActiveTexture(GL_TEXTURE0);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->id_tex);
+		glBindBuffer(GL_ARRAY_BUFFER, c_mesh->mesh[i]->id_tex);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 		// Render the mesh
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->id_vertex);
+		glBindBuffer(GL_ARRAY_BUFFER, c_mesh->mesh[i]->id_vertex);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->id_index);
-		glDrawElements(GL_TRIANGLES, mesh[i]->num_indices * 3, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, c_mesh->mesh[i]->id_index);
+		glDrawElements(GL_TRIANGLES, c_mesh->mesh[i]->num_indices * 3, GL_UNSIGNED_INT, NULL);
 
 		// Clean all buffers
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -29,36 +73,14 @@ void GameObject::Render() const {
 	}
 }
 
-void GameObject::CreateComponent(COMPONENT_TYPE type) {
-	Component* ret = nullptr;
-	/*switch (type)
-	{
-	case COMPONENT_TYPE::TEXTURE:
-		ret = new j1Player(type);
-		if (ret != nullptr) components.push_back(ret); break;
-
-	case COMPONENT_TYPE::MESH:
-		ret = new j1Hook(type);
-		if (ret != nullptr) components.push_back(ret); break;
-	}*/
-}
-
-void GameObject::CleanUp() {
-
-	for (uint i = 0; i < mesh.size(); ++i)
-		mesh[i]->CleanUp();
-
-	mesh.clear();
-}
-
 void GameObject::ShowNormals() {
 
-	for (int i = 0; i < mesh.size(); ++i) {
+	/*for (int i = 0; i < c_mesh->mesh.size(); ++i) {
 
-		if (mesh[i]->normals != nullptr) {
+		if (c_mesh->mesh[i]->normals != nullptr) {
 
 			// Vertex normals
-			for (uint j = 0; j < mesh[i]->num_vertices; ++j) {
+			for (uint j = 0; j < c_mesh->mesh[i]->num_vertices; ++j) {
 				vec3 point = vec3(mesh[i]->vertices[j * 3], mesh[i]->vertices[j * 3 + 1], mesh[i]->vertices[j * 3 + 2]);
 				vec3 vec = vec3(mesh[i]->normals[j * 3], mesh[i]->normals[j * 3 + 1], mesh[i]->normals[j * 3 + 2]);
 
@@ -96,7 +118,7 @@ void GameObject::ShowNormals() {
 					(face_center.z + vec.z * NORMALS_LENGTH));
 
 				glEnd();
-			}*/
+			}
 		}
-	}
+	}*/
 }

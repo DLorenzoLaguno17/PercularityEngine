@@ -8,14 +8,14 @@ class GameObject;
 enum class COMPONENT_TYPE {
 	NONE,
 	TRANSFORM,
-	TEXTURE,
+	MATERIAL,
 	MESH
 };
 
 class Component {
 public:
 	//Constructors
-	Component(COMPONENT_TYPE type, bool active, GameObject* parent = nullptr) : 
+	Component(COMPONENT_TYPE type, GameObject* parent = nullptr, bool active = true) :
 		type(type), active(active), parent(parent) {}
 
 	// Destructor
@@ -25,6 +25,8 @@ public:
 	virtual void Update() {}
 	virtual void Enable() {}
 	virtual void Disable() {}
+
+	virtual void OnEditor() {}
 
 public:
 	COMPONENT_TYPE type;

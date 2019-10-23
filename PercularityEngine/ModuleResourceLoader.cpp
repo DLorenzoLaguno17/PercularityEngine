@@ -1,5 +1,7 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 #include "OpenGL.h"
 #include "GameObject.h"
 
@@ -134,9 +136,9 @@ bool ModuleResourceLoader::CleanUp()
 	return true;
 }
 
-void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
+void ModuleResourceLoader::LoadFBX(const char* path, uint tex, char* name) {
 
-	GameObject fbx_mesh;
+	GameObject fbx_mesh(name);
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -218,7 +220,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * m->num_tex, m->textures, GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-			fbx_mesh.mesh.push_back(m);
+			fbx_mesh.c_mesh->mesh.push_back(m);
 		}
 
 		aiNode* node = scene->mRootNode;
@@ -234,10 +236,10 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			//fbx_mesh.transform = math::float4x4::FromTRS(t, r, s);
 		}
 
-		if (tex == 0) fbx_mesh.texture = default_tex;
-		else fbx_mesh.texture = tex;
+		if (tex == 0) fbx_mesh.c_texture->texture = default_tex;
+		else fbx_mesh.c_texture->texture = tex;
 		game_objects.push_back(fbx_mesh);
-		LOG("Loaded new model. Current GameObjects on scene: %d", App->res_loader->game_objects.size());
+		LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh.name, App->res_loader->game_objects.size());
 
 		aiReleaseImport(scene);
 	}
