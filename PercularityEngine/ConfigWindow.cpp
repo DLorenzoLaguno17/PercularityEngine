@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
-#include "ModuleScene.h"
+#include "ModuleResourceLoader.h"
 #include "imgui.h"
 
 #include "OpenGL.h"
@@ -106,8 +106,8 @@ void ConfigWindow::Update() {
 			else glDisable(GL_CULL_FACE);
 		}
 		if (ImGui::Checkbox("Normals", &normals)) {
-			if (normals) App->scene->EnableNormals();
-			else App->scene->DisableNormals();
+			if (normals) App->res_loader->EnableNormals();
+			else App->res_loader->DisableNormals();
 		}
 
 		ImGui::NewLine();

@@ -1,11 +1,11 @@
 #include "ModuleScene.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-#include "GameObject.h"
 #include "OpenGL.h"
 #include "Primitive.h"
 
 #include "Brofiler/Lib/Brofiler.h"
+
 #include "mmgr/mmgr.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled):Module(app, start_enabled)
@@ -16,15 +16,12 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
-	selected = &App->scene->game_objects[0];
 
 	return true;
 }
 
 update_status ModuleScene::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange)
-
 	return UPDATE_CONTINUE;
 }
 
@@ -41,37 +38,21 @@ update_status ModuleScene::Update(float dt)
 
 	//Test
 	DrawAxis();
-
-	// Draw all models
-	for (uint i = 0; i < game_objects.size(); ++i) {
-		game_objects[i].Render();
-		if (normalsShown) game_objects[i].ShowNormals();
-	}
 	
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleScene::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow)
-
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleScene::CleanUp()
 {
-	// Delete all the primitives
 	for (int i = 0; i < scenePrimitives.size(); ++i)
 		delete scenePrimitives[i];
 
 	scenePrimitives.clear();
-
-	// Delete all the GameObjects
-	for (uint i = 0; i < game_objects.size(); ++i) {
-		game_objects[i].CleanUp();
-	}
-
-	game_objects.clear();
 
 	return true;
 }
@@ -130,6 +111,7 @@ void ModuleScene::DrawAxis() const {
 	glVertex3f(0.0f, 6.0f, 0.0f);
 	glVertex3f(0.15f, 6.5f, 0.0f);
 
+
 	//Z axis
 	glColor3f(0, 0, 1); //Blue color
 
@@ -148,6 +130,3 @@ void ModuleScene::DrawAxis() const {
 
 	glColor3f(1, 1, 1);//Set color back to white
 }
-
-void ModuleScene::EnableNormals() { normalsShown = true; }
-void ModuleScene::DisableNormals() { normalsShown = false; }

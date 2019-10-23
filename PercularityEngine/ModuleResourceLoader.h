@@ -23,6 +23,15 @@ public:
 	// Call before first frame
 	bool Start();
 
+	// Called before all Updates
+	update_status PreUpdate(float dt);
+
+	// Called every frame
+	update_status Update(float dt);
+
+	// Called after all Updates
+	update_status PostUpdate(float dt);
+
 	// Called before quitting
 	bool CleanUp();
 
@@ -31,18 +40,26 @@ public:
 	void Save(nlohmann::json &config);
 
 	// Methods to load
-	void LoadFBX(char* path, uint tex = 0, char* name = "Unknown");
+	void LoadFBX(const char* path, uint tex = 0, char* name = "Unknown");
 	uint CreateTexture(const char* path);
+
+	// Methods to enable/disable normals
+	void EnableNormals();
+	void DisableNormals();
 
 	GameObject* CreateGameObject();
 
 public:
+	std::vector<GameObject> game_objects;
 	uint default_tex;
 	uint icon_tex;
 
 private:
 	uint demon_tex;
 	uint house_tex;
+	bool normalsShown = true;
+
+	GameObject* root = nullptr;
 };
 
 #endif // __ModuleResourceLoader_H__

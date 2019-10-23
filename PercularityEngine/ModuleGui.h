@@ -8,7 +8,6 @@
 #include "SceneWindow.h"
 #include "ConsoleWindow.h"
 #include "MainMenuBar.h"
-#include "InspectorWindow.h"
 
 #include "imgui.h"
 
@@ -56,10 +55,10 @@ public:
 	bool show_demo_window = true;
 	bool show_hierarchy = true;
 	bool show_project = true;
+	bool show_inspector = true;
 
 	ImGuiIO* io = nullptr;
 	SceneWindow* scene_window = nullptr;
-	InspectorWindow* inspector = nullptr;
 
 private:
 	ConfigWindow* settings = nullptr;

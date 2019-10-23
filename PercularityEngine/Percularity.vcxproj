@@ -79,7 +79,6 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentMesh.h" />
-    <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="ConsoleWindow.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glcorearb.h" />
@@ -93,7 +92,6 @@
     <ClInclude Include="imstb_rectpack.h" />
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
-    <ClInclude Include="InspectorWindow.h" />
     <ClInclude Include="Json Parser\nlohmann\json.hpp" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MainMenuBar.h" />
@@ -131,7 +129,6 @@
     <ClCompile Include="imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui_impl_sdl.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
-    <ClCompile Include="InspectorWindow.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />

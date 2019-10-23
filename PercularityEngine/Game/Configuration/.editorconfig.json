@@ -6,7 +6,6 @@
     "User Interface": {
         "Configuration": true,
         "Console": true,
-        "Inspector": true,
         "Scene": true
     },
     "Window": {

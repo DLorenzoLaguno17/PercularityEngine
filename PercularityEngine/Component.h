@@ -2,7 +2,6 @@
 #define __Component_H__
 
 #include "Globals.h"
-#include "imgui.h"
 
 class GameObject;
 
@@ -24,6 +23,9 @@ public:
 
 	// Methods
 	virtual void Update() {}
+	virtual void Enable() {}
+	virtual void Disable() {}
+
 	virtual void OnEditor() {}
 
 public:

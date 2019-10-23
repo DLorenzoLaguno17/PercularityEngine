@@ -174,12 +174,6 @@
     <ClInclude Include="ModuleResourceLoader.h">
       <Filter>Sources\Modules\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="InspectorWindow.h">
-      <Filter>Sources\Modules\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentTransform.h">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -262,9 +256,6 @@
     </ClCompile>
     <ClCompile Include="ModuleResourceLoader.cpp">
       <Filter>Sources\Modules\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="InspectorWindow.cpp">
-      <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

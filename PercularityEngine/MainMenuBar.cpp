@@ -48,9 +48,9 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 		//Provisional
 		//The methods used 
-		if (ImGui::BeginMenu("GameObject"))
+		if (ImGui::BeginMenu("Game Objects"))
 		{
-			if (ImGui::BeginMenu("Primitive"))
+			if (ImGui::BeginMenu("Primitives"))
 			{
 				//Create sphere
 				if (ImGui::MenuItem("Sphere"))
@@ -82,6 +82,12 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
 			ImGui::MenuItem("Hierarchy", NULL, &App->gui->show_hierarchy);
 			ImGui::MenuItem("Project", NULL, &App->gui->show_project);
+			ImGui::MenuItem("Inspector", NULL, &App->gui->show_inspector);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Shapes"))
+		{
 			ImGui::EndMenu();
 		}
 
