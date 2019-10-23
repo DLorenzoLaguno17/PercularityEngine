@@ -3,7 +3,7 @@
 #include "ModuleScene.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
-//#include "ComponentTransform.h"
+#include "ComponentTransform.h"
 #include "OpenGL.h"
 #include "GameObject.h"
 

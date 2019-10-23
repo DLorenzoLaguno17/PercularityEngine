@@ -48,9 +48,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Module.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleCamera3D.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -180,6 +177,12 @@
     <ClInclude Include="InspectorWindow.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="HierarchyWindow.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.h">
+      <Filter>Sources\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -264,6 +267,9 @@
       <Filter>Sources\Modules\Resources</Filter>
     </ClCompile>
     <ClCompile Include="InspectorWindow.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyWindow.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
   </ItemGroup>

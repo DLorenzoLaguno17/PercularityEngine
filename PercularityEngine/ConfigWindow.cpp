@@ -3,7 +3,6 @@
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
-#include "imgui.h"
 
 #include "OpenGL.h"
 #include "DevIL/include/il.h"

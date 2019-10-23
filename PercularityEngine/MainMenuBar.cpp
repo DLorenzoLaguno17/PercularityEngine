@@ -4,7 +4,6 @@
 #include "ModuleResourceLoader.h"
 #include "ModuleGui.h"
 #include "UIElement.h"
-#include "imgui.h"
 #include "ModuleScene.h"
 #include "Primitive.h"
 
@@ -47,7 +46,6 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 		}
 
 		//Provisional
-		//The methods used 
 		if (ImGui::BeginMenu("GameObject"))
 		{
 			if (ImGui::BeginMenu("Primitive"))
@@ -80,7 +78,6 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 				ImGui::MenuItem(list[i]->name, NULL, &list[i]->active);
 
 			ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
-			ImGui::MenuItem("Hierarchy", NULL, &App->gui->show_hierarchy);
 			ImGui::MenuItem("Project", NULL, &App->gui->show_project);
 			ImGui::EndMenu();
 		}

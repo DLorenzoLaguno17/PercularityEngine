@@ -3,8 +3,6 @@
 
 #include "UIElement.h"
 
-class GameObject;
-
 // ---------------------------------------------------
 class InspectorWindow : public UIElement
 {
