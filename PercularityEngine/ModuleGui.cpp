@@ -9,7 +9,6 @@
 #include "imgui_impl_opengl3.h"
 
 #include "Brofiler/Lib/Brofiler.h"
-
 #include "mmgr/mmgr.h"
 
 ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -96,6 +95,7 @@ bool ModuleGui::Start()
 	settings = new ConfigWindow("Configuration", true); 
 	scene_window = new SceneWindow("Scene", true);
 	console = new ConsoleWindow("Console", true);
+	inspector = new InspectorWindow("Inspector", true);
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
 	ui_elements_list.push_back(console);
@@ -176,6 +176,7 @@ bool ModuleGui::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
+	delete inspector; inspector = nullptr;
 	delete console; console = nullptr;
 	delete scene_window; scene_window = nullptr;
 	delete settings; settings = nullptr;

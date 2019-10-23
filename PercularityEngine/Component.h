@@ -23,9 +23,6 @@ public:
 
 	// Methods
 	virtual void Update() {}
-	virtual void Enable() {}
-	virtual void Disable() {}
-
 	virtual void OnEditor() {}
 
 public:

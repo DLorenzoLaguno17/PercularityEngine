@@ -7,6 +7,7 @@
 #include "ConfigWindow.h"
 #include "SceneWindow.h"
 #include "ConsoleWindow.h"
+#include "InspectorWindow.h"
 #include "MainMenuBar.h"
 
 #include "imgui.h"
@@ -64,6 +65,7 @@ private:
 	ConfigWindow* settings = nullptr;
 	MainMenuBar* main_menu_bar = nullptr;
 	ConsoleWindow* console = nullptr;
+	InspectorWindow* inspector = nullptr;
 
 	std::vector<UIElement*> ui_elements_list;
 
