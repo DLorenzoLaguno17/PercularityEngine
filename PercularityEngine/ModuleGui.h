@@ -8,6 +8,7 @@
 #include "SceneWindow.h"
 #include "ConsoleWindow.h"
 #include "InspectorWindow.h"
+#include "HierarchyWindow.h"
 #include "MainMenuBar.h"
 
 #include "imgui.h"
@@ -54,7 +55,6 @@ public:
 
 public:
 	bool show_demo_window = true;
-	bool show_hierarchy = true;
 	bool show_project = true;
 
 	ImGuiIO* io = nullptr;
@@ -65,6 +65,7 @@ private:
 	MainMenuBar* main_menu_bar = nullptr;
 	ConsoleWindow* console = nullptr;
 	InspectorWindow* inspector = nullptr;
+	HierarchyWindow* hierarchy = nullptr;
 
 	std::vector<UIElement*> ui_elements_list;
 

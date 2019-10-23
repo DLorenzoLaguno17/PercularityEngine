@@ -3,6 +3,8 @@
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleScene.h"
+#include "GameObject.h"
 
 #include "OpenGL.h"
 #include "imgui_impl_sdl.h"
@@ -96,10 +98,12 @@ bool ModuleGui::Start()
 	scene_window = new SceneWindow("Scene", true);
 	console = new ConsoleWindow("Console", true);
 	inspector = new InspectorWindow("Inspector", true);
+	hierarchy = new HierarchyWindow("Hierarchy", true);
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
 	ui_elements_list.push_back(console);
 	ui_elements_list.push_back(inspector);
+	ui_elements_list.push_back(hierarchy);
 
 	return true;
 }
@@ -195,12 +199,6 @@ void ModuleGui::DrawImGui(float dt) {
 	// Show windows if they are active
 	for(int i = 0; i < ui_elements_list.size(); ++i)
 		if (ui_elements_list[i]->active) ui_elements_list[i]->Update();	
-
-	if (show_hierarchy) {
-		ImGui::Begin("Hierarchy", &show_hierarchy);
-
-		ImGui::End();
-	}
 
 	if (show_project) {
 		ImGui::Begin("Project", &show_project);

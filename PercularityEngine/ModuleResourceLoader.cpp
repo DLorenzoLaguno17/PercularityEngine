@@ -106,14 +106,14 @@ void ModuleResourceLoader::LoadFBX(char* path, uint tex) {
 	
 	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
 
-	char* n = strstr(path, ".fbx");
-	if (n == nullptr) n = strstr(path, ".FBX");
+	/*char* n = strstr(path, ".fbx");
+	if (n == nullptr) n = strstr(path, ".FBX");*/
+	char* n = strstr(path, "FBX");
 
 	//char* n
 	GameObject fbx_mesh(n);
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
-
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
