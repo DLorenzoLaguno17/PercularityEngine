@@ -181,6 +181,7 @@ bool ModuleGui::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
+	delete hierarchy; hierarchy = nullptr;
 	delete inspector; inspector = nullptr;
 	delete console; console = nullptr;
 	delete scene_window; scene_window = nullptr;
