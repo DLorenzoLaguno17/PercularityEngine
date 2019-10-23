@@ -7,7 +7,6 @@
 class UIElement
 {
 public:
-
 	UIElement(char* name, bool active = true) : name(name), active(active) {}
 
 	// Destructor

@@ -4,6 +4,7 @@
 #include "Module.h"
 
 class Primitive;
+class GameObject;
 
 class ModuleScene : public Module
 {
@@ -26,9 +27,14 @@ public:
 	std::vector<Primitive*> scenePrimitives;
 
 private:
-
 	void DrawAxis() const;		//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;//Draw a plane with some lines
+
+public:
+	std::vector<GameObject> game_objects;
+	GameObject* root = nullptr;
+	GameObject* selected = nullptr;
+	bool normalsShown = true;
 };
 
 #endif
