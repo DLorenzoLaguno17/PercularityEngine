@@ -12,14 +12,6 @@
 #include "Brofiler/Lib/Brofiler.h"
 #pragma comment ( lib, "Brofiler/Lib/ProfilerCore32.lib" )
 
-#ifdef _DEBUG
-#pragma comment( lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib" )
-
-#else
-#pragma comment( lib, "MathGeoLib/libx86/Release/MathGeoLib.lib" )
-
-#endif
-
 enum main_states
 {
 	MAIN_CREATION,

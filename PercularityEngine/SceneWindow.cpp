@@ -21,7 +21,7 @@ void SceneWindow::Update() {
 	// Check if the scene window has been resized
 	if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
 	{
-		App->renderer3D->OnResize(windowSize.x, windowSize.y);
+		App->renderer3D->OnResize((int)windowSize.x, (int)windowSize.y);
 		last_windowSize = windowSize;
 	}
 	

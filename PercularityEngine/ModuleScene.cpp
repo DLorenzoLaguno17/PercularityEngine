@@ -61,6 +61,7 @@ void ModuleScene::DrawSimplePlane()const
 {
 	glLineWidth(2.0f);
 	glBegin(GL_LINES);
+	glColor3f(255, 255, 255);
 
 	//try to draw a plane
 	for (float i = -100.0f; i < 100; ++i)
@@ -74,7 +75,6 @@ void ModuleScene::DrawSimplePlane()const
 		glVertex3f(-100, 0.0f, i);
 		glVertex3f(100.f, 0.0f, i);
 	}
-
 
 	glEnd();
 }

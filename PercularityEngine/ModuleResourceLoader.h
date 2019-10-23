@@ -4,41 +4,14 @@
 #include "Module.h"
 #include <vector>
 
-struct MeshData {
+#define NORMALS_LENGTH 1.0f
 
-	// Index 
-	uint id_index = 0; 
-	uint num_indices = 0;
-	uint* indices = nullptr;
-
-	// Vertex
-	uint id_vertex = 0; 
-	uint num_vertices = 0;
-	float* vertices = nullptr;
-
-	// Texture
-	uint id_tex = 0;   
-	uint num_tex = 0;
-	float* textures = nullptr;
-
-	// Normals
-	uint num_normals = 0;
-	float* normals = nullptr;
-};
-
-struct GameObject {
-
-	// List of data
-	std::vector<MeshData*> mesh;
-	// Texture of the GameObject
-	uint texture = 0;
-};
+class GameObject;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
 {
 public:
-
 	ModuleResourceLoader(Application* app, bool start_enabled = true);
 
 	// Destructor
@@ -63,16 +36,18 @@ public:
 	bool CleanUp();
 
 	// Save & Load
-	void Load(const nlohmann::json  &config);
+	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
 
-	// Methods to load and draw a mesh
-	void LoadFBX(const char* path, uint tex = 0);
-	void RenderFBX(GameObject fbx_mesh);
-	void RenderNormals(GameObject fbx_mesh);
-
-	// Method to create a texture
+	// Methods to load
+	void LoadFBX(const char* path, uint tex = 0, char* name = "Unknown");
 	uint CreateTexture(const char* path);
+
+	// Methods to enable/disable normals
+	void EnableNormals();
+	void DisableNormals();
+
+	GameObject* CreateGameObject();
 
 public:
 	std::vector<GameObject> game_objects;
@@ -82,7 +57,9 @@ public:
 private:
 	uint demon_tex;
 	uint house_tex;
+	bool normalsShown = true;
 
+	GameObject* root = nullptr;
 };
 
 #endif // __ModuleResourceLoader_H__

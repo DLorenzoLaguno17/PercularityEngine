@@ -176,9 +176,9 @@ bool ModuleGui::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
-	delete console;
-	delete scene_window;
-	delete settings;
+	delete console; console = nullptr;
+	delete scene_window; scene_window = nullptr;
+	delete settings; settings = nullptr;
 
 	return true;
 }
@@ -204,6 +204,12 @@ void ModuleGui::DrawImGui(float dt) {
 
 	if (show_project) {
 		ImGui::Begin("Project", &show_project);
+
+		ImGui::End();
+	}
+
+	if (show_inspector) {
+		ImGui::Begin("Inspector", &show_inspector);
 
 		ImGui::End();
 	}
