@@ -109,24 +109,15 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
 		
 	std::string n = path;
-	std::string directory;
+	std::string full_name;
+
+	if (loadedAll) full_name = n.substr(n.find_last_of("\\") + 1);
+	else full_name = n.substr(n.find_last_of("//") + 1);
 	
-	size_t i;
-	if (loadedAll) i = n.rfind('\\', n.length());
-	else i = n.rfind('//', n.length());
+	std::string::size_type const p(full_name.find_last_of('.'));
+	std::string file_name = full_name.substr(0, p);
 
-	if (i != std::string::npos) {
-		directory = (n.substr(i + 1, n.length() - i));
-	}
-
-	std::string name;
-	const size_t last_slash_idx = directory.rfind('.');
-	if (std::string::npos != last_slash_idx)
-	{
-		name = directory.substr(0, last_slash_idx);
-	}
-
-	GameObject fbx_mesh(name);
+	GameObject fbx_mesh(file_name);
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
@@ -164,6 +155,13 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 					m->colors[j * 4 + 3] = scene->mMeshes[i]->mColors[0][j].a;
 				}
 			}
+
+			// Copy materials
+			aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+			uint totalTex = material->GetTextureCount(aiTextureType_DIFFUSE);
+			aiString path;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+			m->assigned_tex = path.C_Str();
 
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())

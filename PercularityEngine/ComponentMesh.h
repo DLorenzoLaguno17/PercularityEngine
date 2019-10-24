@@ -21,6 +21,7 @@ struct MeshData {
 	uint id_tex = 0;
 	uint num_tex = 0;
 	float* textures = nullptr;
+	const char* assigned_tex;
 
 	// Normals
 	uint num_normals = 0;
@@ -59,10 +60,10 @@ public:
 			for (uint i = 0; i < mesh.size(); ++i) cnt1 += mesh[i]->num_vertices;
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%d", cnt1);
 
-			ImGui::Text("Faces:");
+			ImGui::Text("Polygons:");
 			ImGui::SameLine();
 			uint cnt2 = 0;
-			for (uint i = 0; i < mesh.size(); ++i) cnt2 += mesh[i]->num_indices;
+			for (uint i = 0; i < mesh.size(); ++i) cnt2 += (mesh[i]->num_indices / 3);
 			ImGui::TextColored({ 255, 255, 0, 255 }, "%d", cnt2);
 
 			ImGui::NewLine();

@@ -3,6 +3,8 @@
 
 #include "UIElement.h"
 
+class GameObject;
+
 // ---------------------------------------------------
 class HierarchyWindow : public UIElement
 {
@@ -14,6 +16,9 @@ public:
 
 	// Called every frame
 	void Update();
+
+private:
+	void RecursiveTree(GameObject* root);
 };
 
 #endif // __HierarchyWindow_H__

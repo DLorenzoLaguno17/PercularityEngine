@@ -15,7 +15,7 @@ public:
 	void Update() {}
 	void OnEditor() {
 		if (ImGui::CollapsingHeader("Material")) {
-			ImGui::Checkbox("Enabled", &this->active);
+			ImGui::Checkbox("Enabled", &active);
 
 			ImGui::Image((void*)texture, ImVec2(300, 300), ImVec2(0, 1), ImVec2(1, 0));
 			ImGui::NewLine();
@@ -24,6 +24,7 @@ public:
 
 public:
 	uint texture = 0;
+	const char* tex_name;
 };
 
 #endif // _ComponentMaterial_H_
