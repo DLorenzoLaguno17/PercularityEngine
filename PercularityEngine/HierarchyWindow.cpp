@@ -10,12 +10,11 @@ HierarchyWindow::HierarchyWindow(char* name, bool active) : UIElement(name, acti
 // Show scene window
 void HierarchyWindow::Update() {
 	ImGui::Begin("Hierarchy", &active);
-	
-	static int selected = -1;
+
 	for (int i = 0; i < App->scene->game_objects.size(); ++i) {
 
-		if (ImGui::Selectable(App->scene->game_objects[i].name, selected == i)) {
-			selected = i;
+		if (ImGui::Selectable(App->scene->game_objects[i].name, App->scene->selected_id == i)) {
+			App->scene->selected_id = i;
 			App->scene->selected = &App->scene->game_objects[i];
 		}
 	}

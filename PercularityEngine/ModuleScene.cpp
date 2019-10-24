@@ -17,6 +17,7 @@ ModuleScene::~ModuleScene()
 bool ModuleScene::Start()
 {
 	selected = &game_objects.front();
+	selected_id = game_objects.size() - 1;
 
 	return true;
 }

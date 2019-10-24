@@ -3,6 +3,7 @@
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
+#include "ModuleRenderer3D.h"
 
 #include "OpenGL.h"
 #include "DevIL/include/il.h"
@@ -68,6 +69,18 @@ void ConfigWindow::Update() {
 		ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f);
 		SDL_SetWindowBrightness(App->window->window, b);
 		SDL_SetWindowSize(App->window->window, w, h);
+		
+		windowPosition.x = ImGui::GetWindowPos().x;
+		windowPosition.y = ImGui::GetWindowPos().y;
+		windowSize.x = ImGui::GetContentRegionAvail().x;
+		windowSize.y = ImGui::GetContentRegionAvail().y;
+
+		// Check if the scene window has been resized
+		/*if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
+		{
+			App->renderer3D->OnResize((int)windowSize.x, (int)windowSize.y);
+			last_windowSize = windowSize;
+		}*/
 
 		ImGui::NewLine();
 	}
