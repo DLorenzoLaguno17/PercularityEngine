@@ -31,7 +31,7 @@ public:
 	void Save(nlohmann::json &config);
 
 	// Methods to load
-	void LoadFBX(char* path, uint tex = 0);
+	void LoadFBX(const char* path, uint tex = 0);
 	uint CreateTexture(const char* path);
 
 	GameObject* CreateGameObject();
@@ -42,6 +42,7 @@ public:
 private:
 	uint demon_tex;
 	uint house_tex;
+	bool loadedAll = false;
 };
 
 #endif // __ModuleResourceLoader_H__

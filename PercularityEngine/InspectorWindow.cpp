@@ -13,7 +13,7 @@ void InspectorWindow::Update() {
 	ImGui::Begin("Inspector", &active);
 
 	if (App->scene->selected != nullptr) {
-		ImGui::TextColored(ImVec4(0, 128, 128, 255), App->scene->selected->name);		
+		ImGui::TextColored(ImVec4(0, 128, 128, 255), App->scene->selected->name.c_str());		
 
 		//if (ImGui::TreeNode("Multi-line Text Input"))
   //      {

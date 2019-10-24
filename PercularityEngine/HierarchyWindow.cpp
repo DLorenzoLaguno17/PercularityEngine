@@ -13,7 +13,7 @@ void HierarchyWindow::Update() {
 
 	for (int i = 0; i < App->scene->game_objects.size(); ++i) {
 
-		if (ImGui::Selectable(App->scene->game_objects[i].name, App->scene->selected_id == i)) {
+		if (ImGui::Selectable(App->scene->game_objects[i].name.c_str(), App->scene->selected_id == i)) {
 			App->scene->selected_id = i;
 			App->scene->selected = &App->scene->game_objects[i];
 		}

@@ -6,6 +6,7 @@
 #include "ComponentTransform.h"
 #include "OpenGL.h"
 #include "GameObject.h"
+#include <string>
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -79,6 +80,7 @@ bool ModuleResourceLoader::Start()
 	//LoadFBX("Assets/FBX/warrior.FBX"); 
 	//LoadFBX("Assets/FBX/demon2.fbx", demon_tex); 
 	LoadFBX("Assets/FBX/BakerHouse.fbx", house_tex);
+	loadedAll = true;
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -102,16 +104,29 @@ bool ModuleResourceLoader::CleanUp()
 	return true;
 }
 
-void ModuleResourceLoader::LoadFBX(char* path, uint tex) {
+void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	
 	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
+		
+	std::string n = path;
+	std::string directory;
+	
+	size_t i;
+	if (loadedAll) i = n.rfind('\\', n.length());
+	else i = n.rfind('//', n.length());
 
-	/*char* n = strstr(path, ".fbx");
-	if (n == nullptr) n = strstr(path, ".FBX");*/
-	char* n = strstr(path, "FBX");
+	if (i != std::string::npos) {
+		directory = (n.substr(i + 1, n.length() - i));
+	}
 
-	//char* n
-	GameObject fbx_mesh(n);
+	std::string name;
+	const size_t last_slash_idx = directory.rfind('.');
+	if (std::string::npos != last_slash_idx)
+	{
+		name = directory.substr(0, last_slash_idx);
+	}
+
+	GameObject fbx_mesh(name);
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
@@ -211,7 +226,8 @@ void ModuleResourceLoader::LoadFBX(char* path, uint tex) {
 
 		fbx_mesh.c_texture->texture = tex;
 		App->scene->game_objects.push_back(fbx_mesh);
-		LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh.name, App->scene->game_objects.size());
+		LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh.name.c_str(), App->scene->game_objects.size());
+		LOG("Loaded new model %s. Current GameObjects on scene: %d", path, App->scene->game_objects.size());
 
 		aiReleaseImport(scene);
 	}

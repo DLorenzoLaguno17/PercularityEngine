@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include <vector>
+#include <string>
 
 #define NORMALS_LENGTH 1.0f
 
@@ -14,7 +15,7 @@ class GameObject {
 public:
 	//Constructors
 	GameObject() {};
-	GameObject(char* name, GameObject* parent = nullptr);
+	GameObject(std::string name, GameObject* parent = nullptr);
 
 	// Destructor
 	virtual ~GameObject() {};
@@ -37,7 +38,7 @@ public:
 	ComponentMaterial* c_texture = nullptr;
 	ComponentTransform* c_transform;
 
-	char* name = nullptr;
+	std::string name;
 	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	GameObject* parent;

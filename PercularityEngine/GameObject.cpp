@@ -7,7 +7,7 @@
 
 #include "mmgr/mmgr.h"
 
-GameObject::GameObject(char* name, GameObject* parent) :
+GameObject::GameObject(std::string name, GameObject* parent) :
 	name(name), parent(parent)
 {
 	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
