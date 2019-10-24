@@ -72,26 +72,16 @@ bool ModuleResourceLoader::Start()
 	aiAttachLogStream(&stream);
 
 	// Load textures
-	house_tex = CreateTexture("Assets/Textures/Bh.dds");
-	demon_tex = CreateTexture("Assets/Textures/Difuse.png");
 	icon_tex = CreateTexture("Assets/Textures/icon.png");
 
 	// Loading FBX
-	//LoadFBX("Assets/FBX/warrior.FBX"); 
-	//LoadFBX("Assets/FBX/demon2.fbx", demon_tex); 
-	LoadFBX("Assets/FBX/BakerHouse.fbx", house_tex);
+	//LoadFBX("Assets/FBX/BakerHouse.fbx");
 	loadedAll = true;
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
 
 	return true;
-}
-
-GameObject* ModuleResourceLoader::CreateGameObject() {
-	GameObject* ret = nullptr;
-
-	return ret;
 }
 
 // Called before quitting
@@ -104,20 +94,28 @@ bool ModuleResourceLoader::CleanUp()
 	return true;
 }
 
+std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
+	std::string full_name;
+
+	if (loadedAll) full_name = path.substr(path.find_last_of("\\") + 1);
+	else full_name = path.substr(path.find_last_of("//") + 1);
+
+	if (withExtension)
+		return full_name;
+	else {
+		std::string::size_type const p(full_name.find_last_of('.'));
+		std::string file_name = full_name.substr(0, p);
+
+		return file_name;
+	}
+}
+
 void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	
 	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
 		
-	std::string n = path;
-	std::string full_name;
-
-	if (loadedAll) full_name = n.substr(n.find_last_of("\\") + 1);
-	else full_name = n.substr(n.find_last_of("//") + 1);
-	
-	std::string::size_type const p(full_name.find_last_of('.'));
-	std::string file_name = full_name.substr(0, p);
-
-	GameObject fbx_mesh(file_name);
+	// Create GameObject
+	GameObject fbx_mesh(getNameFromPath(path));
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
@@ -161,7 +159,12 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			uint totalTex = material->GetTextureCount(aiTextureType_DIFFUSE);
 			aiString path;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-			m->assigned_tex = path.C_Str();
+			
+			std::string s1 = "Assets/Textures/";
+			std::string s2 = getNameFromPath(path.C_Str(), true);
+			std::string full_path = s1 + s2; 
+
+			fbx_mesh.c_texture->texture = CreateTexture(full_path.c_str());
 
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())
@@ -222,10 +225,9 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			//fbx_mesh.transform = math::float4x4::FromTRS(t, r, s);
 		}*/
 
-		fbx_mesh.c_texture->texture = tex;
+		//fbx_mesh.c_texture->texture = tex;
 		App->scene->game_objects.push_back(fbx_mesh);
 		LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh.name.c_str(), App->scene->game_objects.size());
-		LOG("Loaded new model %s. Current GameObjects on scene: %d", path, App->scene->game_objects.size());
 
 		aiReleaseImport(scene);
 	}
@@ -234,21 +236,24 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 
 uint ModuleResourceLoader::CreateTexture(const char* path)
 {
-	ILuint image; 
+	ILuint image;
 	GLuint tex;
-	ilGenImages(1, &image); 
+	ilGenImages(1, &image);
 	ilBindImage(image);
+
+	const char* a = path;
+	const char* b = a;
 
 	if (!ilLoadImage(path)) {
 		ilDeleteImages(1, &image);
 		LOG("The texture image could not be loaded")
-		return 0;
+			return 0;
 	}
 	else {
 		tex = ilutGLBindTexImage();
 		LOG("Created texture from path: %s", path)
 
-		long h, w, bpp, f;
+			long h, w, bpp, f;
 		ILubyte *texdata = 0;
 
 		w = ilGetInteger(IL_IMAGE_WIDTH);
@@ -273,6 +278,29 @@ uint ModuleResourceLoader::CreateTexture(const char* path)
 		return tex;
 	}
 }
+
+/*GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+
+for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+	for (int j = 0; j < CHECKERS_WIDTH; j++) {
+		int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+		checkImage[i][j][0] = (GLubyte)c;
+		checkImage[i][j][1] = (GLubyte)c;
+		checkImage[i][j][2] = (GLubyte)c;
+		checkImage[i][j][3] = (GLubyte)255;
+	}
+}
+
+glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+glGenTextures(1, &test_tex_buffer);
+glBindTexture(GL_TEXTURE_2D, test_tex_buffer);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+	0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+glBindTexture(GL_TEXTURE_2D, 0);*/
 
 void ModuleResourceLoader::Load(const json &config)
 {

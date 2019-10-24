@@ -33,15 +33,12 @@ public:
 	// Methods to load
 	void LoadFBX(const char* path, uint tex = 0);
 	uint CreateTexture(const char* path);
-
-	GameObject* CreateGameObject();
+	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
 	uint icon_tex;
 
 private:
-	uint demon_tex;
-	uint house_tex;
 	bool loadedAll = false;
 };
 

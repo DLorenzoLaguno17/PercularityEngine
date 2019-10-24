@@ -68,7 +68,7 @@ void HierarchyWindow::Update() {
 			ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 		ImGui::TreePop();*/
 
-	if (ImGui::TreeNode("Scene")) {
+	//if (ImGui::TreeNode("Scene")) {
 		for (int i = 0; i < App->scene->game_objects.size(); ++i) {		
 
 			if (ImGui::Selectable(App->scene->game_objects[i].name.c_str(), App->scene->selected_id == i)) {
@@ -80,8 +80,8 @@ void HierarchyWindow::Update() {
 		
 		}
 
-		ImGui::TreePop();
-	}
+	//	ImGui::TreePop();
+//	}
 	//RecursiveTree(App->scene->root);
 
 	ImGui::End();

@@ -21,7 +21,6 @@ struct MeshData {
 	uint id_tex = 0;
 	uint num_tex = 0;
 	float* textures = nullptr;
-	const char* assigned_tex;
 
 	// Normals
 	uint num_normals = 0;
