@@ -121,14 +121,15 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 
-			GameObject fbx_mesh(getNameFromPath(path));
+			GameObject fbx_mesh(scene->mMeshes[i]->mName.C_Str());
 			MeshData m;
 
 			// Copy vertices
 			m.num_vertices = scene->mMeshes[i]->mNumVertices;
 			m.vertices = new float[m.num_vertices * 3];
 			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float) * m.num_vertices * 3);
-			LOG("New mesh with %d vertices", m.num_vertices);
+			LOG("NEW MESH");
+			LOG("Vertices: %d", m.num_vertices);
 
 			// Copy normals
 			if (scene->mMeshes[i]->HasNormals())
@@ -153,19 +154,6 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 				}
 			}
 
-			// Copy materials
-			aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-			uint totalTex = material->GetTextureCount(aiTextureType_DIFFUSE);
-			aiString path;
-			material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-			
-			std::string s1 = "Assets/Textures/";
-			std::string s2 = getNameFromPath(path.C_Str(), true);
-			std::string full_path = s1 + s2; 
-
-			fbx_mesh.c_texture->texture = CreateTexture(full_path.c_str());
-			if (fbx_mesh.c_texture->texture == 0) fbx_mesh.c_texture->texture = default_tex;
-
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -178,6 +166,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 					else
 						memcpy(&m.indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, sizeof(uint) * 3);
 				}
+				LOG("Faces: %d", m.num_indices/3);
 			}
 
 			// Copy texture UVs
@@ -209,9 +198,28 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * m.num_tex, m.textures, GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+			// Copy materials
+			aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+			uint totalTex = material->GetTextureCount(aiTextureType_DIFFUSE);
+			aiString path;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+			std::string file = "Assets/Textures/";
+			std::string name = getNameFromPath(path.C_Str(), true);
+			std::string full_path = file + name;
+
+			fbx_mesh.c_texture->texture = CreateTexture(full_path.c_str(), &fbx_mesh.c_texture->width, &fbx_mesh.c_texture->height);
+			fbx_mesh.c_texture->tex_name = name;
+
+			if (fbx_mesh.c_texture->texture == 0) {
+				fbx_mesh.c_texture->texture = default_tex;
+				fbx_mesh.c_texture->tex_name = "Default texture";
+			}
+
 			fbx_mesh.c_mesh->mesh = m;
 			App->scene->game_objects.push_back(fbx_mesh);
 			LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh.name.c_str(), App->scene->game_objects.size());
+			LOG("_____________________");
 		}
 
 		/*aiNode* node = scene->mRootNode;
@@ -232,7 +240,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	else LOG("Error loading FBX: %s", path);
 }
 
-uint ModuleResourceLoader::CreateTexture(const char* path)
+uint ModuleResourceLoader::CreateTexture(const char* path, long* width, long* height)
 {
 	ILuint image;
 	GLuint tex;
@@ -248,7 +256,7 @@ uint ModuleResourceLoader::CreateTexture(const char* path)
 		tex = ilutGLBindTexImage();
 		LOG("Created texture from path: %s", path)
 
-			long h, w, bpp, f;
+		long h, w, bpp, f;
 		ILubyte *texdata = 0;
 
 		w = ilGetInteger(IL_IMAGE_WIDTH);
@@ -269,6 +277,9 @@ uint ModuleResourceLoader::CreateTexture(const char* path)
 
 		ilBindImage(0);
 		ilDeleteImage(image);
+
+		if (width) *width = w;
+		if (height) *height = h;
 
 		return tex;
 	}

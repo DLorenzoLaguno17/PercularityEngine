@@ -34,7 +34,7 @@ public:
 	// Methods to load
 	void LoadFBX(const char* path, uint tex = 0);
 	void CreateDefaultTexture();
-	uint CreateTexture(const char* path);
+	uint CreateTexture(const char* path, long* width = nullptr, long* height = nullptr);
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:

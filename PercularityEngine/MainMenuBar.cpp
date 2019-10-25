@@ -82,11 +82,6 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Shapes"))
-		{
-			ImGui::EndMenu();
-		}
-
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Report a bug"))

@@ -2,6 +2,7 @@
 #define _ComponentMaterial_H_
 
 #include "Component.h"
+#include <string>
 #include "imgui.h"
 
 class ComponentMaterial : public Component {
@@ -15,7 +16,9 @@ public:
 	void Update() {}
 	void OnEditor() {
 		if (ImGui::CollapsingHeader("Material")) {
-			ImGui::Checkbox("Enabled", &this->active);
+			ImGui::Checkbox(tex_name.c_str(), &active);
+			ImGui::Text("Size: %dx%d", height, width);
+			ImGui::NewLine();
 
 			ImGui::Image((void*)texture, ImVec2(300, 300), ImVec2(0, 1), ImVec2(1, 0));
 			ImGui::NewLine();
@@ -24,7 +27,9 @@ public:
 
 public:
 	uint texture = 0;
-	const char* tex_name;
+	long width = 0;
+	long height = 0;
+	std::string tex_name;
 };
 
 #endif // _ComponentMaterial_H_
