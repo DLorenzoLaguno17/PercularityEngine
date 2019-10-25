@@ -4,7 +4,8 @@
 #include "Module.h"
 #include <vector>
 
-#define NORMALS_LENGTH 1.0f
+#define CHECKERS_WIDTH 150
+#define CHECKERS_HEIGHT 150
 
 class GameObject;
 
@@ -32,11 +33,13 @@ public:
 
 	// Methods to load
 	void LoadFBX(const char* path, uint tex = 0);
+	void CreateDefaultTexture();
 	uint CreateTexture(const char* path);
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
-	uint icon_tex;
+	uint icon_tex = 0;
+	uint default_tex = 0;
 
 private:
 	bool loadedAll = false;

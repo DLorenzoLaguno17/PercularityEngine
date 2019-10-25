@@ -5,8 +5,6 @@
 #include <vector>
 #include <string>
 
-#define NORMALS_LENGTH 1.0f
-
 class ComponentMesh;
 class ComponentMaterial;
 class ComponentTransform;
@@ -22,7 +20,6 @@ public:
 
 	// Rendering methods
 	void Render() const;
-	void ShowNormals();
 
 	// Called every frame
 	void Update();

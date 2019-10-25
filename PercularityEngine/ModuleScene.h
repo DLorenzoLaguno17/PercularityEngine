@@ -36,8 +36,6 @@ public:
 
 	GameObject* selected = nullptr;
 	int selected_id = -1;
-
-	bool normalsShown = false;
 };
 
 #endif

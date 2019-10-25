@@ -117,9 +117,6 @@ void ConfigWindow::Update() {
 			if (cullFace) glEnable(GL_CULL_FACE);
 			else glDisable(GL_CULL_FACE);
 		}
-		if (ImGui::Checkbox("Normals", &normals)) {
-			App->scene->normalsShown = !App->scene->normalsShown;
-		}
 
 		ImGui::NewLine();
 	}

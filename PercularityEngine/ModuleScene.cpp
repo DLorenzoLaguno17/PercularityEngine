@@ -43,10 +43,10 @@ update_status ModuleScene::Update(float dt)
 	//Test
 	DrawAxis();
 
-	// Draw all models
+	// Draw all GameObjects
 	for (uint i = 0; i < game_objects.size(); ++i) {
+		game_objects[i].Update();
 		game_objects[i].Render();
-		if (normalsShown) game_objects[i].ShowNormals();
 	}
 	
 	return UPDATE_CONTINUE;

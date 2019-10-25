@@ -2,8 +2,8 @@
 #define _ComponentMesh_H_
 
 #include "Component.h"
-#include "imgui.h"
-#include <vector>
+
+#define NORMALS_LENGTH 1.0f
 
 struct MeshData {
 
@@ -48,29 +48,17 @@ public:
 	~ComponentMesh() {}
 
 	// Methods
-	void Update() {}
-	void OnEditor() {
-		if (ImGui::CollapsingHeader("Mesh")) {
-			ImGui::Checkbox("Enabled", &active);
-
-			ImGui::Text("Vertices:");
-			ImGui::SameLine();
-			uint cnt1 = 0;
-			for (uint i = 0; i < mesh.size(); ++i) cnt1 += mesh[i]->num_vertices;
-			ImGui::TextColored({ 255, 255, 0, 255 }, "%d", cnt1);
-
-			ImGui::Text("Polygons:");
-			ImGui::SameLine();
-			uint cnt2 = 0;
-			for (uint i = 0; i < mesh.size(); ++i) cnt2 += (mesh[i]->num_indices / 3);
-			ImGui::TextColored({ 255, 255, 0, 255 }, "%d", cnt2);
-
-			ImGui::NewLine();
-		}
-	}
+	void Update() override;
+	void OnEditor();
+	void RenderFaceNormals();
+	void RenderVertexNormals();
 
 public:
-	std::vector<MeshData*> mesh;
+	MeshData mesh;
+
+private:
+	bool showVertexNormals = false;
+	bool showFaceNormals = false;
 };
 
 #endif // _ComponentMesh_H_
