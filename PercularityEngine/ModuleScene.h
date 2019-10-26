@@ -31,7 +31,7 @@ private:
 	void DrawSimplePlane()const;	//Draw a plane with some lines
 
 public:
-	std::vector<GameObject> game_objects;
+	std::vector<GameObject*> game_objects;
 	GameObject* root = nullptr;
 
 	GameObject* selected = nullptr;

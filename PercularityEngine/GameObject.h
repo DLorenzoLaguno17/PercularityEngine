@@ -33,7 +33,7 @@ public:
 public:
 	ComponentMesh* c_mesh = nullptr;
 	ComponentMaterial* c_texture = nullptr;
-	ComponentTransform* c_transform;
+	ComponentTransform* c_transform = nullptr;
 
 	std::string name;
 	std::vector<Component*> components;

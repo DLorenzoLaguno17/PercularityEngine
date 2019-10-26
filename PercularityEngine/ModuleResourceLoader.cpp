@@ -121,7 +121,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 
-			GameObject fbx_mesh(scene->mMeshes[i]->mName.C_Str());
+			GameObject* fbx_mesh= new GameObject(scene->mMeshes[i]->mName.C_Str());
 			MeshData m;
 
 			// Copy vertices
@@ -208,33 +208,34 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			std::string name = getNameFromPath(path.C_Str(), true);
 			std::string full_path = file + name;
 
-			fbx_mesh.c_texture->texture = CreateTexture(full_path.c_str(), &fbx_mesh.c_texture->width, &fbx_mesh.c_texture->height);
-			fbx_mesh.c_texture->tex_name = name;
+			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), &fbx_mesh->c_texture->width, &fbx_mesh->c_texture->height);
+			fbx_mesh->c_texture->tex_name = name;
 
-			if (fbx_mesh.c_texture->texture == 0) {
-				fbx_mesh.c_texture->texture = default_tex;
-				fbx_mesh.c_texture->tex_name = "Default texture";
+			if (fbx_mesh->c_texture->texture == 0) {
+				fbx_mesh->c_texture->texture = default_tex;
+				fbx_mesh->c_texture->tex_name = "Default texture";
 			}
 
-			fbx_mesh.c_mesh->mesh = m;
-			App->scene->game_objects.push_back(fbx_mesh);
-			LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh.name.c_str(), App->scene->game_objects.size());
-			LOG("_____________________");
-		}
+			fbx_mesh->c_mesh->mesh = m;
 
-		/*aiNode* node = scene->mRootNode;
+		aiNode* node = scene->mRootNode;
+
+
 
 		for (uint i = 0; i < node->mNumChildren; ++i) {			
 			aiVector3D translation, scale;
 			aiQuaternion rotation;
 			node->mTransformation.Decompose(scale, rotation, translation);
 
-			//float3 t(translation.x, translation.y, translation.z);
-			//Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
-			//float3 s(scale.x, scale.y, scale.z);
-			//fbx_mesh.transform = math::float4x4::FromTRS(t, r, s);
-		}*/
-
+			float3 t(translation.x, translation.y, translation.z);
+			Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
+			float3 s(scale.x, scale.y, scale.z);
+			fbx_mesh->c_transform->transform = math::float4x4::FromTRS(t, r, s);
+		}
+			App->scene->game_objects.push_back(fbx_mesh);
+			LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh->name.c_str(), App->scene->game_objects.size());
+			LOG("_____________________");
+		}
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading FBX: %s", path);

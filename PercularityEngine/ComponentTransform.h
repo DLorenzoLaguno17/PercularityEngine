@@ -7,17 +7,14 @@
 
 class ComponentTransform : public Component {
 public:
-	ComponentTransform(COMPONENT_TYPE type, GameObject* parent, bool active);
+
+	ComponentTransform(GameObject* parent, bool active=true);
 
 	~ComponentTransform();
 
 	// Methods
-	void Update() {}
-	void OnEditor() {
-		if (ImGui::CollapsingHeader("Transform")) {
-			ImGui::Checkbox("Enabled", &active);
-		}
-	}
+	void Update();
+	void OnEditor();
 
 public:
 	float4x4 transform;

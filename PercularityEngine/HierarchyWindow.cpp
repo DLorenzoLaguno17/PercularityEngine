@@ -71,9 +71,9 @@ void HierarchyWindow::Update() {
 	//if (ImGui::TreeNode("Scene")) {
 		for (int i = 0; i < App->scene->game_objects.size(); ++i) {		
 
-			if (ImGui::Selectable(App->scene->game_objects[i].name.c_str(), App->scene->selected_id == i)) {
+			if (ImGui::Selectable(App->scene->game_objects[i]->name.c_str(), App->scene->selected_id == i)) {
 				App->scene->selected_id = i;
-				App->scene->selected = &App->scene->game_objects[i];
+				App->scene->selected = App->scene->game_objects[i];
 
 				//if (ImGui::TreeNode("Test")) { ImGui::TreePop(); }
 			}
@@ -92,9 +92,9 @@ void HierarchyWindow::RecursiveTree(GameObject* root) {
 	if (ImGui::TreeNode(root->name.c_str())) {
 		for (int i = 0; i < App->scene->game_objects.size(); ++i) {
 
-			if (ImGui::Selectable(App->scene->game_objects[i].name.c_str(), App->scene->selected_id == i)) {
+			if (ImGui::Selectable(App->scene->game_objects[i]->name.c_str(), App->scene->selected_id == i)) {
 				App->scene->selected_id = i;
-				App->scene->selected = &App->scene->game_objects[i];
+				App->scene->selected = App->scene->game_objects[i];
 			}
 
 			RecursiveTree(root->children[i]);

@@ -16,7 +16,9 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Start()
 {
-	selected = &game_objects.front();
+	if (!game_objects.empty())
+		selected = game_objects.front();
+
 	selected_id = game_objects.size() - 1;
 
 	return true;
@@ -45,8 +47,8 @@ update_status ModuleScene::Update(float dt)
 
 	// Draw all GameObjects
 	for (uint i = 0; i < game_objects.size(); ++i) {
-		game_objects[i].Update();
-		game_objects[i].Render();
+		game_objects[i]->Update();
+		//game_objects[i].Render();
 	}
 	
 	return UPDATE_CONTINUE;
@@ -69,7 +71,7 @@ bool ModuleScene::CleanUp()
 
 	// Delete all the GameObjects
 	for (uint i = 0; i < game_objects.size(); ++i) {
-		game_objects[i].CleanUp();
+		game_objects[i]->CleanUp();
 	}
 
 	game_objects.clear();

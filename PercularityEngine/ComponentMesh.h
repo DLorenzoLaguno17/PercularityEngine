@@ -50,6 +50,8 @@ public:
 	// Methods
 	void Update() override;
 	void OnEditor();
+
+	void Render() const ;
 	void RenderFaceNormals();
 	void RenderVertexNormals();
 

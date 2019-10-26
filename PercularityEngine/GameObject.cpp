@@ -1,7 +1,7 @@
 #include "GameObject.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
-//#include "ComponentTransform.h"
+#include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "OpenGL.h"
@@ -12,8 +12,9 @@
 GameObject::GameObject(std::string name, GameObject* parent) :
 	name(name), parent(parent)
 {
-	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
+	c_transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 	c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
+	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
 }
 
 // Called every frame
@@ -37,11 +38,10 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 		ret = new ComponentMesh(type, this, active);
 		if (ret != nullptr) components.push_back(ret); break;
 
-	/*case COMPONENT_TYPE::TRANSFORM
-		ret = new ComponentMesh(type, this, active);
-		if (ret != nullptr) components.push_back(ret); break;*/
+	case COMPONENT_TYPE::TRANSFORM:
+		ret = new ComponentTransform(this, active);
+		if (ret != nullptr) components.push_back(ret); break;
 	}
-
 	return ret;
 }
 
@@ -61,8 +61,11 @@ void GameObject::CleanUp() {
 void GameObject::Render() const {
 	// Render the texture
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	if (c_texture->active) glBindTexture(GL_TEXTURE_2D, c_texture->texture);
-	else glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
+
+	if (c_texture->active)
+		glBindTexture(GL_TEXTURE_2D, c_texture->texture);
+	else 
+		glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
 	glActiveTexture(GL_TEXTURE0);
 	glBindBuffer(GL_ARRAY_BUFFER, c_mesh->mesh.id_tex);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
