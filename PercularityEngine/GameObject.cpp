@@ -57,31 +57,3 @@ void GameObject::CleanUp() {
 		components[i] = nullptr;
 	}
 }
-
-void GameObject::Render() const {
-	// Render the texture
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	if (c_texture->active)
-		glBindTexture(GL_TEXTURE_2D, c_texture->texture);
-	else 
-		glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
-	glActiveTexture(GL_TEXTURE0);
-	glBindBuffer(GL_ARRAY_BUFFER, c_mesh->mesh.id_tex);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-	// Render the mesh
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, c_mesh->mesh.id_vertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, c_mesh->mesh.id_index);
-	glDrawElements(GL_TRIANGLES, c_mesh->mesh.num_indices * 3, GL_UNSIGNED_INT, NULL);
-
-	// Clean all buffers
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}

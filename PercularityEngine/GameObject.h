@@ -18,9 +18,6 @@ public:
 	// Destructor
 	virtual ~GameObject() {};
 
-	// Rendering methods
-	void Render() const;
-
 	// Called every frame
 	void Update();
 
