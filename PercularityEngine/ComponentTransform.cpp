@@ -10,7 +10,6 @@ ComponentTransform::~ComponentTransform()
 void ComponentTransform::Update()
 {}
 
-
 void ComponentTransform::OnEditor() {
 
 	if (ImGui::CollapsingHeader("Transform")) {
@@ -33,5 +32,6 @@ void ComponentTransform::OnEditor() {
 		float auxRotation2[3] = { auxRotation.x ,auxRotation.y ,auxRotation.z };
 		ImGui::InputFloat3("Rotation", auxRotation2);
 
+		ImGui::NewLine();
 	}
 }

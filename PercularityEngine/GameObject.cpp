@@ -13,8 +13,8 @@ GameObject::GameObject(std::string name, GameObject* parent) :
 	name(name), parent(parent)
 {
 	c_transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
 	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
+	c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
 }
 
 // Called every frame

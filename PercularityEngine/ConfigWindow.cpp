@@ -70,13 +70,13 @@ void ConfigWindow::Update() {
 		SDL_SetWindowBrightness(App->window->window, b);
 		SDL_SetWindowSize(App->window->window, w, h);
 		
-		windowPosition.x = ImGui::GetWindowPos().x;
+		/*windowPosition.x = ImGui::GetWindowPos().x;
 		windowPosition.y = ImGui::GetWindowPos().y;
 		windowSize.x = ImGui::GetContentRegionAvail().x;
 		windowSize.y = ImGui::GetContentRegionAvail().y;
 
 		// Check if the scene window has been resized
-		/*if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
+		if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
 		{
 			App->renderer3D->OnResize((int)windowSize.x, (int)windowSize.y);
 			last_windowSize = windowSize;
@@ -188,6 +188,7 @@ void ConfigWindow::Update() {
 	if (ImGui::CollapsingHeader("Input")) {
 		ImGui::NewLine();
 
+		// Mouse
 		if (ImGui::IsMousePosValid())
 			ImGui::Text("Mouse pos: (%g, %g)", App->gui->io->MousePos.x, App->gui->io->MousePos.y);
 		else
@@ -200,18 +201,16 @@ void ConfigWindow::Update() {
 			if (App->gui->io->MouseDownDuration[i] >= 0.0f) {
 				showButtonInfo = false;
 				ImGui::Text("Button %d (%.02f secs)", i, App->gui->io->MouseDownDuration[i]);
-				secs = App->gui->io->MouseDownDuration[i];
+				m_secs = App->gui->io->MouseDownDuration[i];
 				mouseButton = i;
 			}
 
 			if (ImGui::IsMouseReleased(i))
 				showButtonInfo = true;
 		}
-		if (showButtonInfo) ImGui::Text("Button %d (%.02f secs)", mouseButton, secs);
+		if (showButtonInfo) ImGui::Text("Button %d (%.02f secs)", mouseButton, m_secs);
 
 		ImGui::Text("Double click:");
-		ImGui::SameLine();
-
 		for (int i = 0; i < IM_ARRAYSIZE(App->gui->io->MouseDown); i++) {
 			if (ImGui::IsMouseDoubleClicked(i)) {
 				showButtonInfo2 = true;
@@ -219,14 +218,46 @@ void ConfigWindow::Update() {
 				mouseButton2 = i;
 			}
 		}
-		if (showButtonInfo2) ImGui::Text("Button %d", mouseButton2);
+		if (showButtonInfo2) {
+			ImGui::SameLine();
+			ImGui::Text("Button %d", mouseButton2);
+		}
 
 		if (showButtonInfo2 && dblcTimer.Read() > lastTime + 750) {
 			showButtonInfo2 = false;
 			lastTime = dblcTimer.Read();
 		}
+
+		ImGui::NewLine();
+
+		// Keyboard
+		ImGui::Text("Last letter pressed:");
+		for (int i = 0; i < App->gui->io->InputQueueCharacters.Size; i++) {
+			showKeyInfo = true;
+			c = App->gui->io->InputQueueCharacters[i];
+		}
+		if (showKeyInfo) { ImGui::SameLine(); ImGui::Text("Key ' %c '", (c > ' ' && c <= 255) ? (char)c : '?');	}
+
+		ImGui::Text("Key down:");
+		for (int i = 0; i < IM_ARRAYSIZE(App->gui->io->KeysDown); i++) {
+			if (App->gui->io->KeysDownDuration[i] >= 0.0f)
+			{
+				showKeyInfo2 = false;
+				ImGui::SameLine();
+				ImGui::Text("Key %d (%.02f secs)", i, App->gui->io->KeysDownDuration[i]); 
+				k_secs = App->gui->io->KeysDownDuration[i];
+				keyButton = i;
+			}
+
+			if (ImGui::IsKeyReleased(i))
+				showKeyInfo2 = true;
+		}
+		if (showKeyInfo2) {	ImGui::SameLine(); ImGui::Text("Key %d (%.02f secs)", keyButton, k_secs); }
+
+		ImGui::Text("Mod keys pressed: %s%s%s%s", App->gui->io->KeyCtrl ? "CTRL " : "", App->gui->io->KeyShift ? "SHIFT " : "", App->gui->io->KeyAlt ? "ALT " : "", App->gui->io->KeySuper ? "SUPER " : "");
+
+		ImGui::NewLine();
 	}
 
-	//App->gui->io->KeysDownDuration[];
 	ImGui::End();
 }

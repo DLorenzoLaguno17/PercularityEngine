@@ -2,6 +2,7 @@
 #define _ComponentMesh_H_
 
 #include "Component.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 #define NORMALS_LENGTH 1.0f
 
@@ -15,16 +16,15 @@ struct MeshData {
 	// Vertex
 	uint id_vertex = 0;
 	uint num_vertices = 0;
-	float* vertices = nullptr;
+	float3* vertices = nullptr;
 
-	// Texture
+	// Texture coordinates
 	uint id_tex = 0;
 	uint num_tex = 0;
 	float* textures = nullptr;
 
 	// Normals
-	uint num_normals = 0;
-	float* normals = nullptr;
+	float3* normals = nullptr;
 
 	// Colors
 	uint num_colors = 0;
@@ -51,9 +51,9 @@ public:
 	void Update() override;
 	void OnEditor();
 
+	// Rendering methods
 	void Render() const ;
-	void RenderFaceNormals();
-	void RenderVertexNormals();
+	void RenderNormals();
 
 public:
 	MeshData mesh;

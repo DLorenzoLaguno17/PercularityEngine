@@ -201,12 +201,6 @@ void ModuleGui::DrawImGui(float dt) {
 	for(int i = 0; i < ui_elements_list.size(); ++i)
 		if (ui_elements_list[i]->active) ui_elements_list[i]->Update();	
 
-	if (show_project) {
-		ImGui::Begin("Project", &show_project);
-
-		ImGui::End();
-	}
-
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);

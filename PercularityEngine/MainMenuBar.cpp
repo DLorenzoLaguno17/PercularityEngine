@@ -78,7 +78,6 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 				ImGui::MenuItem(list[i]->name, NULL, &list[i]->active);
 
 			ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
-			ImGui::MenuItem("Project", NULL, &App->gui->show_project);
 			ImGui::EndMenu();
 		}
 

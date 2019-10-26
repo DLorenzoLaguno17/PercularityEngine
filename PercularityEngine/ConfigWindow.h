@@ -34,9 +34,14 @@ public:
 
 	bool showButtonInfo = false;
 	bool showButtonInfo2 = false;
+	bool showKeyInfo = false;
+	bool showKeyInfo2 = false;
 	int mouseButton2;
 	int mouseButton;
-	float secs;
+	int keyButton; 
+	ImWchar c;
+	float m_secs;
+	float k_secs;
 
 private:
 	std::vector<float> fps;

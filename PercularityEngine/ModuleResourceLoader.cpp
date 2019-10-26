@@ -126,17 +126,56 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 
 			// Copy vertices
 			m.num_vertices = scene->mMeshes[i]->mNumVertices;
-			m.vertices = new float[m.num_vertices * 3];
-			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float) * m.num_vertices * 3);
+			m.vertices = new float3[m.num_vertices];
+			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float3) * m.num_vertices);
 			LOG("NEW MESH");
 			LOG("Vertices: %d", m.num_vertices);
+
+			// Copy faces
+			if (scene->mMeshes[i]->HasFaces())
+			{
+				m.num_indices = scene->mMeshes[i]->mNumFaces;
+				m.indices = new uint[m.num_indices * 3]; // Assume each face is a triangle
+				for (uint j = 0; j < m.num_indices; ++j)
+				{
+					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
+						LOG("WARNING, geometry face with != 3 indices!")
+					else
+						memcpy(&m.indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, sizeof(uint) * 3);
+				}
+				LOG("Faces: %d", m.num_indices / 3);
+			}
 
 			// Copy normals
 			if (scene->mMeshes[i]->HasNormals())
 			{
-				m.num_normals = scene->mMeshes[i]->mNumVertices;
-				m.normals = new float[m.num_normals * 3];
-				memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float) * m.num_normals * 3);
+				m.normals = new float3[m.num_vertices];
+				memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float3) * m.num_vertices);
+
+				//Calculate the positions and vectors of the face Normals
+				/*num_faces = loaded_mesh->mNumFaces;
+				normals_faces = new float3[num_index];
+				normals_faces_vector = new float3[num_index];
+				for (int j = 0; j < num_index; j += 3)
+				{
+					// 3 points of the triangle/face
+					float3 vert1 = vertex[index[j]];
+					float3 vert2 = vertex[index[j + 1]];
+					float3 vert3 = vertex[index[j + 2]];
+
+					//Calculate starting point of the normal
+					normals_faces[j] = (vert1 + vert2 + vert3) / 3;
+
+					//Calculate Cross product of 2 edges of the triangle to obtain Normal vector
+					float3 edge_a = vert2 - vert1;
+					float3 edge_b = vert3 - vert1;
+
+					float3 normal;
+					normal = Cross(edge_a, edge_b);
+					normal.Normalize();
+
+					normals_faces_vector[j] = normal * 0.25f;
+				}*/
 			}
 
 			// Copy colors
@@ -152,21 +191,6 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 					m.colors[j * 4 + 2] = scene->mMeshes[i]->mColors[0][j].b;
 					m.colors[j * 4 + 3] = scene->mMeshes[i]->mColors[0][j].a;
 				}
-			}
-
-			// Copy faces
-			if (scene->mMeshes[i]->HasFaces())
-			{
-				m.num_indices = scene->mMeshes[i]->mNumFaces;
-				m.indices = new uint[m.num_indices * 3]; // Assume each face is a triangle
-				for (uint j = 0; j < m.num_indices; ++j)
-				{
-					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
-						LOG("WARNING, geometry face with != 3 indices!")
-					else
-						memcpy(&m.indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, sizeof(uint) * 3);
-				}
-				LOG("Faces: %d", m.num_indices/3);
 			}
 
 			// Copy texture UVs
@@ -185,7 +209,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			// Assigning the VRAM
 			glGenBuffers(1, (GLuint*)&m.id_vertex);
 			glBindBuffer(GL_ARRAY_BUFFER, m.id_vertex);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * m.num_vertices, m.vertices, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * m.num_vertices, m.vertices, GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			glGenBuffers(1, (GLuint*)&m.id_index);
