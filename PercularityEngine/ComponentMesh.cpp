@@ -165,4 +165,59 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 		}
 	}
 
+	CreateBoundingBox();
+
+}
+
+void ComponentMesh::CreateBoundingBox()
+{
+	float minX, minY, minZ, maxX, maxY,maxZ;
+
+	for (uint i = 0; i < mesh.num_vertices; ++i)
+	{
+		if (i == 0)
+		{
+			minX = mesh.vertices[i].x;
+			maxX = mesh.vertices[i].x;
+			minY = mesh.vertices[i].y;
+			maxY = mesh.vertices[i].y;
+			minZ = mesh.vertices[i].z;
+			maxZ = mesh.vertices[i].z;
+		}
+			
+		else
+		{
+			if (mesh.vertices[i].x > maxX)
+				maxX = mesh.vertices[i].x;
+			else if (mesh.vertices[i].x < minX)
+				minX = mesh.vertices[i].x;
+
+			if (mesh.vertices[i].y > maxY)
+				maxY = mesh.vertices[i].y;
+			else if (mesh.vertices[i].y < minY)
+				minY = mesh.vertices[i].y;
+
+			if (mesh.vertices[i].z > maxZ)
+				maxZ = mesh.vertices[i].z;
+			else if (mesh.vertices[i].z < minZ)
+				minZ = mesh.vertices[i].z;
+		}
+	}
+
+	parent->boundingBox.maxX = maxX;
+	parent->boundingBox.minX = minX;
+	parent->boundingBox.maxY = maxY;
+	parent->boundingBox.minY = minY;
+	parent->boundingBox.maxZ = maxZ;
+	parent->boundingBox.minZ = minZ;
+
+	parent->boundingBox.box[0] = {maxX, maxY, maxZ};
+	parent->boundingBox.box[1] = { maxX, maxY, minZ };
+	parent->boundingBox.box[2] = { maxX, minY, maxZ };
+	parent->boundingBox.box[3] = { maxX, minY, minZ };
+	parent->boundingBox.box[4] = { minX, maxY, maxZ };
+	parent->boundingBox.box[5] = { minX, maxY, minZ };
+	parent->boundingBox.box[6] = { minX, minY, maxZ };
+	parent->boundingBox.box[7] = { minX, minY, minZ };
+
 }

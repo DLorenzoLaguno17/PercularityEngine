@@ -214,6 +214,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			}
 
 			fbx_mesh->c_mesh->mesh = m;
+			fbx_mesh->c_mesh->CreateBoundingBox();
 
 		aiNode* node = scene->mRootNode;
 

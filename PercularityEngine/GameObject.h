@@ -1,6 +1,7 @@
 #ifndef __GameObject_H__
 #define __GameObject_H__
 
+#include "MathGeoLib/include/MathGeoLib.h"
 #include "Component.h"
 #include <vector>
 #include <string>
@@ -8,6 +9,17 @@
 class ComponentMesh;
 class ComponentMaterial;
 class ComponentTransform;
+
+struct BoundingBox {
+	BoundingBox() {
+		//Initialize the bounding box as this, in case there's no mesh
+		for (int i = 0; i < 8; ++i)
+			box[i] = { 0,0,0 };
+	}
+
+	float3 box[8];
+	float minX, maxX, minY, maxY, minZ, maxZ = 0.0f;
+};
 
 class GameObject {
 public:
@@ -36,6 +48,8 @@ public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	GameObject* parent;
+
+	BoundingBox boundingBox;
 };
 
 #endif // __GameObject_H__

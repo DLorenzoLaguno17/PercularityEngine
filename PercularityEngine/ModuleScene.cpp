@@ -45,7 +45,7 @@ update_status ModuleScene::Update(float dt)
 	BROFILER_CATEGORY("SceneUpdate", Profiler::Color::LightSeaGreen);
 
 	//Draw a plane
-	//DrawSimplePlane();
+	DrawSimplePlane();
 
 	//Test
 	DrawAxis();

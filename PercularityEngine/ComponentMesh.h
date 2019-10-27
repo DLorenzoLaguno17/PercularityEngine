@@ -60,6 +60,9 @@ public:
 	//Create a primitive shape
 	void LoadParShape(par_shapes_mesh_s* parShape);
 
+	//Create the bouding box
+	void CreateBoundingBox();
+
 public:
 	MeshData mesh;
 
