@@ -75,6 +75,8 @@ bool ModuleResourceLoader::Start()
 	CreateDefaultTexture();
 	icon_tex = CreateTexture("Assets/Textures/icon.png");
 
+	// Loading FBX
+	LoadFBX("Assets/FBX/BakerHouse.fbx");
 	loadedAll = true;
 
 	// Enable textures
@@ -205,31 +207,23 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			std::string name = getNameFromPath(path.C_Str(), true);
 			std::string full_path = file + name;
 
-			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), &fbx_mesh->c_texture->width, &fbx_mesh->c_texture->height);
-			fbx_mesh->c_texture->tex_name = name;
-
-			if (fbx_mesh->c_texture->texture == 0) {
-				fbx_mesh->c_texture->texture = default_tex;
-				fbx_mesh->c_texture->tex_name = "Default texture";
-			}
-
+			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), fbx_mesh);
 			fbx_mesh->c_mesh->mesh = m;
 			fbx_mesh->c_mesh->CreateBoundingBox();
 
-		aiNode* node = scene->mRootNode;
+			aiNode* node = scene->mRootNode;
 
+			for (uint i = 0; i < node->mNumChildren; ++i) {			
+				aiVector3D translation, scale;
+				aiQuaternion rotation;
+				node->mTransformation.Decompose(scale, rotation, translation);
 
+				float3 t(translation.x, translation.y, translation.z);
+				Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
+				float3 s(scale.x, scale.y, scale.z);
+				fbx_mesh->c_transform->transform = math::float4x4::FromTRS(t, r, s);
+			}
 
-		for (uint i = 0; i < node->mNumChildren; ++i) {			
-			aiVector3D translation, scale;
-			aiQuaternion rotation;
-			node->mTransformation.Decompose(scale, rotation, translation);
-
-			float3 t(translation.x, translation.y, translation.z);
-			Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
-			float3 s(scale.x, scale.y, scale.z);
-			fbx_mesh->c_transform->transform = math::float4x4::FromTRS(t, r, s);
-		}
 			App->scene->game_objects.push_back(fbx_mesh);
 			LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh->name.c_str(), App->scene->game_objects.size());
 			LOG("_____________________");
@@ -239,7 +233,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	else LOG("Error loading FBX: %s", path);
 }
 
-uint ModuleResourceLoader::CreateTexture(const char* path, long* width, long* height)
+uint ModuleResourceLoader::CreateTexture(const char* path, GameObject* parent)
 {
 	ILuint image;
 	GLuint tex;
@@ -277,8 +271,20 @@ uint ModuleResourceLoader::CreateTexture(const char* path, long* width, long* he
 		ilBindImage(0);
 		ilDeleteImage(image);
 
-		if (width) *width = w;
-		if (height) *height = h;
+		if (parent) {
+			if (tex == 0)
+				parent->c_texture->tex_name = "Default texture";
+			else {
+				parent->c_texture->width = w;
+				parent->c_texture->height = h;
+				
+				std::string p = path;
+				if (strstr(path, "Assets/Textures/"))
+					parent->c_texture->tex_name = p.substr(p.find_last_of("//") + 1);
+				else 
+					parent->c_texture->tex_name = getNameFromPath(p, true);
+			}
+		}
 
 		return tex;
 	}
