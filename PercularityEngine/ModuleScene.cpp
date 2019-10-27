@@ -178,7 +178,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 {
 	GameObject* item = new GameObject();
-	item->name = "Sphere";
+	item->name = "Cube";
 
 	//Create the mesh with Par_Shapes
 	//create 6 faces of the cube (we don't use par_shapes_create_cube

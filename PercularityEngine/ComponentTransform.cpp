@@ -2,7 +2,13 @@
 
 ComponentTransform::ComponentTransform( GameObject* parent, bool active) :
 	Component(COMPONENT_TYPE::TRANSFORM, parent, active)
-{}
+{
+	transform = {	1.0f,	0.0f ,0.0f ,0.0f ,
+					0.0f,	1.0f ,0.0f ,0.0f,
+					0.0f,	0.0f ,1.0f ,0.0f,
+					0.0f,	0.0f ,0.0f ,1.0f };
+				
+}
 
 ComponentTransform::~ComponentTransform()
 {}
