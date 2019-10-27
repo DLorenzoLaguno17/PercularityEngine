@@ -76,7 +76,7 @@ bool ModuleResourceLoader::Start()
 	icon_tex = CreateTexture("Assets/Textures/icon.png");
 
 	// Loading FBX
-	//LoadFBX("Assets/FBX/BakerHouse.fbx");
+	LoadFBX("Assets/FBX/BakerHouse.fbx");
 	loadedAll = true;
 
 	// Enable textures
@@ -151,31 +151,6 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			{
 				m.normals = new float3[m.num_vertices];
 				memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float3) * m.num_vertices);
-
-				//Calculate the positions and vectors of the face Normals
-				/*num_faces = loaded_mesh->mNumFaces;
-				normals_faces = new float3[num_index];
-				normals_faces_vector = new float3[num_index];
-				for (int j = 0; j < num_index; j += 3)
-				{
-					// 3 points of the triangle/face
-					float3 vert1 = vertex[index[j]];
-					float3 vert2 = vertex[index[j + 1]];
-					float3 vert3 = vertex[index[j + 2]];
-
-					//Calculate starting point of the normal
-					normals_faces[j] = (vert1 + vert2 + vert3) / 3;
-
-					//Calculate Cross product of 2 edges of the triangle to obtain Normal vector
-					float3 edge_a = vert2 - vert1;
-					float3 edge_b = vert3 - vert1;
-
-					float3 normal;
-					normal = Cross(edge_a, edge_b);
-					normal.Normalize();
-
-					normals_faces_vector[j] = normal * 0.25f;
-				}*/
 			}
 
 			// Copy colors
@@ -232,30 +207,22 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			std::string name = getNameFromPath(path.C_Str(), true);
 			std::string full_path = file + name;
 
-			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), &fbx_mesh->c_texture->width, &fbx_mesh->c_texture->height);
-			fbx_mesh->c_texture->tex_name = name;
-
-			if (fbx_mesh->c_texture->texture == 0) {
-				fbx_mesh->c_texture->texture = default_tex;
-				fbx_mesh->c_texture->tex_name = "Default texture";
-			}
-
+			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), fbx_mesh);
 			fbx_mesh->c_mesh->mesh = m;
 
-		aiNode* node = scene->mRootNode;
+			aiNode* node = scene->mRootNode;
 
+			for (uint i = 0; i < node->mNumChildren; ++i) {			
+				aiVector3D translation, scale;
+				aiQuaternion rotation;
+				node->mTransformation.Decompose(scale, rotation, translation);
 
+				float3 t(translation.x, translation.y, translation.z);
+				Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
+				float3 s(scale.x, scale.y, scale.z);
+				fbx_mesh->c_transform->transform = math::float4x4::FromTRS(t, r, s);
+			}
 
-		for (uint i = 0; i < node->mNumChildren; ++i) {			
-			aiVector3D translation, scale;
-			aiQuaternion rotation;
-			node->mTransformation.Decompose(scale, rotation, translation);
-
-			float3 t(translation.x, translation.y, translation.z);
-			Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
-			float3 s(scale.x, scale.y, scale.z);
-			fbx_mesh->c_transform->transform = math::float4x4::FromTRS(t, r, s);
-		}
 			App->scene->game_objects.push_back(fbx_mesh);
 			LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh->name.c_str(), App->scene->game_objects.size());
 			LOG("_____________________");
@@ -265,7 +232,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	else LOG("Error loading FBX: %s", path);
 }
 
-uint ModuleResourceLoader::CreateTexture(const char* path, long* width, long* height)
+uint ModuleResourceLoader::CreateTexture(const char* path, GameObject* parent)
 {
 	ILuint image;
 	GLuint tex;
@@ -303,8 +270,20 @@ uint ModuleResourceLoader::CreateTexture(const char* path, long* width, long* he
 		ilBindImage(0);
 		ilDeleteImage(image);
 
-		if (width) *width = w;
-		if (height) *height = h;
+		if (parent) {
+			if (tex == 0)
+				parent->c_texture->tex_name = "Default texture";
+			else {
+				parent->c_texture->width = w;
+				parent->c_texture->height = h;
+				
+				std::string p = path;
+				if (strstr(path, "Assets/Textures/"))
+					parent->c_texture->tex_name = p.substr(p.find_last_of("//") + 1);
+				else 
+					parent->c_texture->tex_name = getNameFromPath(p, true);
+			}
+		}
 
 		return tex;
 	}
