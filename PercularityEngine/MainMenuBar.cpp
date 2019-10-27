@@ -46,7 +46,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 		if (ImGui::BeginMenu("GameObjects"))
 		{
-			if (ImGui::BeginMenu("GameObjects"))
+			if (ImGui::BeginMenu("3D Objects"))
 			{
 				if (ImGui::MenuItem("Plane"))
 					App->scene->CreatePlane(20.0f, 20.0f);
