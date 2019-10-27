@@ -26,7 +26,7 @@ bool ModuleScene::Start()
 
 	selected_id = game_objects.size() - 1;
 
-	selected = CreateCube(10.0f, 10.0f, 10.0f);
+	//selected = CreateCube(10.0f, 10.0f, 10.0f);
 
 	return true;
 }

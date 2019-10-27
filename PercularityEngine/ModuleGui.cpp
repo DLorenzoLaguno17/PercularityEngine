@@ -194,8 +194,8 @@ void ModuleGui::DrawImGui(float dt) {
 	main_menu_bar->Update(ui_elements_list);
 
 	// 1. Show the big demo window
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
+	//if (show_demo_window)
+		//ImGui::ShowDemoWindow(&show_demo_window);
 
 	// Show windows if they are active
 	for(int i = 0; i < ui_elements_list.size(); ++i)
