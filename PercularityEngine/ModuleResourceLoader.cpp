@@ -210,6 +210,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), fbx_mesh);
 			fbx_mesh->c_mesh->mesh = m;
 			fbx_mesh->c_mesh->CreateBoundingBox();
+			//m.CleanUp();
 
 			aiNode* node = scene->mRootNode;
 

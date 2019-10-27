@@ -25,6 +25,8 @@ public:
 		}
 	}
 
+	void CleanUp(){}
+
 public:
 	uint texture = 0;
 	long width = 0;
