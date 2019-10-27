@@ -236,7 +236,6 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	GameObject* item = new GameObject();
 	item->name = "Plane";
 
-
 	//Convert the par_Mesh into a regular mesh
 	par_shapes_mesh_s* plane = par_shapes_create_plane(2,2);
 
@@ -262,7 +261,7 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 {
 	GameObject* item = new GameObject();
-	item->name = "Cone";
+	item->name = "Donut";
 
 	//Create the mesh with Par_Shapes
 	par_shapes_mesh_s* newMesh = par_shapes_create_torus(slices, stacks, 0.5f);

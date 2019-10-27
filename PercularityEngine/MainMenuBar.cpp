@@ -46,7 +46,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 		if (ImGui::BeginMenu("GameObjects"))
 		{
-			if (ImGui::BeginMenu("GameObjects"))
+			if (ImGui::BeginMenu("3D Objects"))
 			{
 				if (ImGui::MenuItem("Plane"))
 					App->scene->CreatePlane(20.0f, 20.0f);
@@ -71,7 +71,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			for(int i = 0; i < list.size(); ++i)
 				ImGui::MenuItem(list[i]->name, NULL, &list[i]->active);
 
-			ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
+			//ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
 			ImGui::EndMenu();
 		}
 
