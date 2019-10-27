@@ -5,6 +5,10 @@
 #include "ComponentMaterial.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleRenderer3D.h"
+
+
+#include "Par Shapes/par_shapes.h"
 
 #include "mmgr/mmgr.h"
 
@@ -108,4 +112,57 @@ void ComponentMesh::Render() const  {
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
+{
+	
+	mesh.num_indices = parShape->ntriangles * 3;
+	mesh.num_vertices = parShape->npoints;
+
+	//Load the vertices
+	mesh.vertices = new float3[mesh.num_vertices];
+
+	for (uint i = 0; i < mesh.num_vertices; ++i)
+	{
+		mesh.vertices[i].x = parShape->points[3 * i];
+		mesh.vertices[i].y = parShape->points[(3 * i)+1];
+		mesh.vertices[i].z = parShape->points[(3 * i)+2];
+	}
+
+	mesh.id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float)*mesh.num_vertices*3, mesh.vertices);
+
+	//Load the indices
+	mesh.indices = new uint[mesh.num_indices];
+
+	for (uint i = 0; i < mesh.num_indices; ++i)
+		mesh.indices[i] = parShape->triangles[i];
+
+	mesh.id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*mesh.num_indices , mesh.indices);
+	
+	//Load texture coords
+	mesh.num_tex = mesh.num_vertices * 2;
+	mesh.textures = new float[mesh.num_tex];
+
+	for (uint i = 0; i < mesh.num_vertices; ++i)
+	{
+		mesh.textures[2 * i] = parShape->tcoords[2 * i];
+		mesh.textures[(2 * i)+1] = parShape->tcoords[(2 * i) + 1];
+	}
+
+	mesh.id_tex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float)*mesh.num_tex, mesh.textures);
+
+	//Load normals
+	if (parShape->normals)
+	{
+		mesh.normals = new float3[parShape->npoints];
+
+		for (uint i = 0; i < parShape->npoints; ++i)
+		{
+			mesh.normals[i].x =parShape->normals[3 * i];
+			mesh.normals[i].y = parShape->normals[(3 * i)+1];
+			mesh.normals[i].z = parShape->normals[(3 * i)+2];
+		}
+	}
+
 }

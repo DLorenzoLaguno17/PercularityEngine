@@ -12,7 +12,7 @@ class ComponentTransform;
 class GameObject {
 public:
 	//Constructors
-	GameObject() {};
+	GameObject();
 	GameObject(std::string name, GameObject* parent = nullptr);
 
 	// Destructor

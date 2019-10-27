@@ -26,6 +26,8 @@ public:
 
 public:
 
+	uint CreateBuffer(uint bufferType, uint size, void* data);
+
 	uint GetTexColorBuffer() const	{ return texColorBuffer;}
 	uint GetFrameBuffer() const		{ return frameBuffer;	}
 	uint GetRenderBuffer() const	{ return renderBuffer;	}

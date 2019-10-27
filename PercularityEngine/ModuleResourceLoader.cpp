@@ -75,8 +75,6 @@ bool ModuleResourceLoader::Start()
 	CreateDefaultTexture();
 	icon_tex = CreateTexture("Assets/Textures/icon.png");
 
-	// Loading FBX
-	//LoadFBX("Assets/FBX/BakerHouse.fbx");
 	loadedAll = true;
 
 	// Enable textures
@@ -151,31 +149,6 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			{
 				m.normals = new float3[m.num_vertices];
 				memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float3) * m.num_vertices);
-
-				//Calculate the positions and vectors of the face Normals
-				/*num_faces = loaded_mesh->mNumFaces;
-				normals_faces = new float3[num_index];
-				normals_faces_vector = new float3[num_index];
-				for (int j = 0; j < num_index; j += 3)
-				{
-					// 3 points of the triangle/face
-					float3 vert1 = vertex[index[j]];
-					float3 vert2 = vertex[index[j + 1]];
-					float3 vert3 = vertex[index[j + 2]];
-
-					//Calculate starting point of the normal
-					normals_faces[j] = (vert1 + vert2 + vert3) / 3;
-
-					//Calculate Cross product of 2 edges of the triangle to obtain Normal vector
-					float3 edge_a = vert2 - vert1;
-					float3 edge_b = vert3 - vert1;
-
-					float3 normal;
-					normal = Cross(edge_a, edge_b);
-					normal.Normalize();
-
-					normals_faces_vector[j] = normal * 0.25f;
-				}*/
 			}
 
 			// Copy colors

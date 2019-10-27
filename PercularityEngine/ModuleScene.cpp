@@ -2,9 +2,14 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "OpenGL.h"
-#include "Primitive.h"
 #include "GameObject.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
+#include "ModuleResourceLoader.h"
 
+#define PAR_SHAPES_IMPLEMENTATION
+
+#include "Par Shapes/par_shapes.h"
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
@@ -21,12 +26,16 @@ bool ModuleScene::Start()
 
 	selected_id = game_objects.size() - 1;
 
+	selected = CreateCube(10.0f, 10.0f, 10.0f);
+
 	return true;
 }
 
 update_status ModuleScene::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange)
+	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange);
+
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -35,12 +44,8 @@ update_status ModuleScene::Update(float dt)
 {
 	BROFILER_CATEGORY("SceneUpdate", Profiler::Color::LightSeaGreen);
 
-	//Draw primitives
-	for (int i = 0; i < scenePrimitives.size(); ++i)
-		scenePrimitives[i]->Render();
-
 	//Draw a plane
-	DrawSimplePlane();
+	//DrawSimplePlane();
 
 	//Test
 	DrawAxis();
@@ -62,12 +67,6 @@ update_status ModuleScene::PostUpdate(float dt)
 
 bool ModuleScene::CleanUp()
 {
-	// Delete all the primitives
-	for (int i = 0; i < scenePrimitives.size(); ++i)
-		delete scenePrimitives[i];
-
-	scenePrimitives.clear();
-
 	// Delete all the GameObjects
 	for (uint i = 0; i < game_objects.size(); ++i) {
 		game_objects[i]->CleanUp();
@@ -149,4 +148,84 @@ void ModuleScene::DrawAxis() const {
 	glEnd();
 
 	glColor3f(1, 1, 1);//Set color back to white
+}
+
+GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
+{
+	GameObject* item=new GameObject();
+	item->name = "Sphere";
+
+	//Create the mesh with Par_Shapes
+	par_shapes_mesh_s* newMesh;
+	newMesh = par_shapes_create_parametric_sphere(slices,stacks);
+	par_shapes_scale(newMesh, diameter, diameter, diameter);
+
+	//Convert the par_Mesh into a regular mesh
+	item->c_mesh->LoadParShape(newMesh);
+
+	//Free the Par_mesh
+	par_shapes_free_mesh(newMesh);
+
+	//Set default texture
+	item->c_texture->texture = App->res_loader->default_tex;
+
+	//Add the object to the list
+	App->scene->game_objects.push_back(item);
+
+	return item;
+}
+
+GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
+{
+	GameObject* item = new GameObject();
+	item->name = "Sphere";
+
+	//Create the mesh with Par_Shapes
+	//create 6 faces of the cube (we don't use par_shapes_create_cube
+	//because it doesn't have normals or uvs
+	par_shapes_mesh_s* mesh_front =par_shapes_create_plane(1,1);
+	par_shapes_mesh_s* back = par_shapes_create_plane(1, 1);
+	par_shapes_mesh_s* right = par_shapes_create_plane(1, 1);
+	par_shapes_mesh_s* left = par_shapes_create_plane(1, 1);
+	par_shapes_mesh_s* top = par_shapes_create_plane(1, 1);
+	par_shapes_mesh_s* bottom = par_shapes_create_plane(1, 1);
+
+	par_shapes_translate(back, -0.5f, -0.5f, 0.5f);
+
+	par_shapes_rotate(mesh_front, PAR_PI, (float*)&float3::unitY);
+	par_shapes_translate(mesh_front, 0.5f, -0.5f, -0.5f);
+
+	par_shapes_rotate(left, PAR_PI/2, (float*)&float3::unitY);
+	par_shapes_translate(left, 0.5f, -0.5f, 0.5f);
+
+	par_shapes_rotate(right, -PAR_PI / 2, (float*)&float3::unitY);
+	par_shapes_translate(right, -0.5f, -0.5f, -0.5f);
+
+	par_shapes_rotate(bottom, PAR_PI / 2, (float*)&float3::unitX);
+	par_shapes_translate(bottom, -0.5f, -0.5f, -0.5f);
+	
+	par_shapes_rotate(top, -PAR_PI / 2, (float*)&float3::unitX);
+	par_shapes_translate(top, -0.5f, 0.5f, 0.5f);
+
+	par_shapes_merge_and_free(mesh_front, back);
+	par_shapes_merge_and_free(mesh_front, left);
+	par_shapes_merge_and_free(mesh_front,right);
+	par_shapes_merge_and_free(mesh_front, bottom);
+	par_shapes_merge_and_free(mesh_front, top);
+	
+	par_shapes_scale(mesh_front, sizeX, sizeY, sizeZ);
+
+	//Convert the par_Mesh into a regular mesh
+	item->c_mesh->LoadParShape(mesh_front);
+
+	//Free the Par_mesh
+	par_shapes_free_mesh(mesh_front);
+
+	//Set default texture
+	item->c_texture->texture = App->res_loader->default_tex;
+
+	//Add the object to the list
+	App->scene->game_objects.push_back(item);
+
+	return item;
 }
