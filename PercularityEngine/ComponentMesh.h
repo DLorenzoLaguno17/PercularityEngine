@@ -33,13 +33,7 @@ struct MeshData {
 	uint* colors = nullptr;
 
 	// Delete the struct
-	void CleanUp() {
-		if (indices != nullptr) { delete indices; indices = nullptr; }
-		if (vertices != nullptr) { delete vertices; vertices = nullptr; }
-		if (textures != nullptr) { delete textures; textures = nullptr; }
-		if (normals != nullptr) { delete normals; normals = nullptr; }
-		if (colors != nullptr) { delete colors; colors = nullptr; }
-	}
+	void CleanUp();
 };
 
 class ComponentMesh : public Component {
@@ -52,6 +46,7 @@ public:
 	// Methods
 	void Update() override;
 	void OnEditor();
+	void CleanUp()override;
 
 	// Rendering methods
 	void Render() const ;

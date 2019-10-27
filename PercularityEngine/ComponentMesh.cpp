@@ -12,6 +12,26 @@
 
 #include "mmgr/mmgr.h"
 
+void MeshData::CleanUp()
+{
+		if (indices != nullptr) 
+		{ delete[] indices;
+		indices = nullptr; }
+		if (vertices != nullptr) {
+			delete[] vertices;
+			vertices = nullptr; }
+		if (textures != nullptr) {
+			delete[] textures;
+			textures = nullptr; }
+		if (normals != nullptr) {
+			delete[] normals;
+			normals = nullptr; }
+		if (colors != nullptr) { 
+			delete[] colors; 
+colors = nullptr; }
+	
+}
+
 void ComponentMesh::Update() {
 	
 	Render();	
@@ -37,6 +57,11 @@ void ComponentMesh::OnEditor() {
 
 		ImGui::NewLine();
 	}
+}
+
+void ComponentMesh::CleanUp()
+{
+	mesh.CleanUp();
 }
 
 // Method to render vertex normals

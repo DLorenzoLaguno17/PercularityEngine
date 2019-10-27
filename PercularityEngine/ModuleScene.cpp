@@ -70,6 +70,7 @@ bool ModuleScene::CleanUp()
 	// Delete all the GameObjects
 	for (uint i = 0; i < game_objects.size(); ++i) {
 		game_objects[i]->CleanUp();
+		delete game_objects[i];
 	}
 
 	game_objects.clear();

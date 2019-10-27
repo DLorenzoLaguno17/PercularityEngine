@@ -24,6 +24,7 @@ public:
 	// Methods
 	virtual void Update() {}
 	virtual void OnEditor() {}
+	virtual void CleanUp() {}
 
 public:
 	COMPONENT_TYPE type;

@@ -15,7 +15,7 @@ public:
 	// Methods
 	void Update();
 	void OnEditor();
-
+	void CleanUp() {}
 public:
 	float4x4 transform;
 };
