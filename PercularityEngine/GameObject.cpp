@@ -9,8 +9,7 @@
 
 #include "mmgr/mmgr.h"
 
-GameObject::GameObject():name("Untitled"), parent(nullptr)
-{
+GameObject::GameObject():name("Untitled"), parent(nullptr){
 
 	c_transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);

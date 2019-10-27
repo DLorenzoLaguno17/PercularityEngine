@@ -147,7 +147,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_DROPFILE:
 			// We check if its a .png (texture) or an FBX
-			if (strstr(e.drop.file, ".png") || strstr(e.drop.file, ".dds") || strstr(e.drop.file, ".jpg")) {
+			if (strstr(e.drop.file, ".png") || strstr(e.drop.file, ".dds") || strstr(e.drop.file, ".DDS") || strstr(e.drop.file, ".jpg")) {
 				if (App->scene->selected) App->scene->selected->c_texture->texture = App->res_loader->CreateTexture(e.drop.file, App->scene->selected);
 			}
 			else if (strstr(e.drop.file, ".fbx") || strstr(e.drop.file, ".FBX")) {

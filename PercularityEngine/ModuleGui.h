@@ -54,7 +54,7 @@ public:
 	void DrawImGui(float dt);
 
 public:
-	bool show_demo_window = true;
+	//bool show_demo_window = true;
 
 	ImGuiIO* io = nullptr;
 	SceneWindow* scene_window = nullptr;
