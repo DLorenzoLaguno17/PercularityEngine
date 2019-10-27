@@ -25,6 +25,8 @@ public:
 	//Methods to create primitives
 	GameObject* CreateSphere(int slices, int stacks, float diameter);
 	GameObject* CreateCube(float sizeX, float sizeY, float sizeZ);
+	GameObject* CreatePlane(float length, float depth);
+	GameObject* CreateDonut(int slices, int stacks, float radius);
 
 private:
 	void DrawAxis() const;			//Draw XYZ axis of coordinates

@@ -26,7 +26,7 @@ bool ModuleScene::Start()
 
 	selected_id = game_objects.size() - 1;
 
-	selected = CreateCube(10.0f, 10.0f, 10.0f);
+	//selected = CreateDonut(6, 6,5);
 
 	return true;
 }
@@ -220,6 +220,61 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(mesh_front);
+
+	//Set default texture
+	item->c_texture->texture = App->res_loader->default_tex;
+
+	//Add the object to the list
+	App->scene->game_objects.push_back(item);
+
+	return item;
+}
+
+GameObject* ModuleScene::CreatePlane(float length, float depth)
+{
+	GameObject* item = new GameObject();
+	item->name = "Plane";
+
+
+	//Convert the par_Mesh into a regular mesh
+	par_shapes_mesh_s* plane = par_shapes_create_plane(2,2);
+
+	par_shapes_rotate(plane, -PAR_PI / 2, (float*)&float3::unitX);
+
+	par_shapes_scale(plane,length,0.0f, depth);
+
+	//Convert the par_Mesh into a regular mesh
+	item->c_mesh->LoadParShape(plane);
+
+	//Free the Par_mesh
+	par_shapes_free_mesh(plane);
+
+	//Set default texture
+	item->c_texture->texture = App->res_loader->default_tex;
+
+	//Add the object to the list
+	App->scene->game_objects.push_back(item);
+
+	return item;
+}
+
+GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
+{
+	GameObject* item = new GameObject();
+	item->name = "Cone";
+
+	//Create the mesh with Par_Shapes
+	par_shapes_mesh_s* newMesh = par_shapes_create_torus(slices, stacks, 0.5f);
+
+	par_shapes_rotate(newMesh, -PAR_PI / 2, (float*)&float3::unitX);
+
+	par_shapes_scale(newMesh, radius, radius, radius);
+
+	//Convert the par_Mesh into a regular mesh
+	item->c_mesh->LoadParShape(newMesh);
+
+	//Free the Par_mesh
+	par_shapes_free_mesh(newMesh);
 
 	//Set default texture
 	item->c_texture->texture = App->res_loader->default_tex;
