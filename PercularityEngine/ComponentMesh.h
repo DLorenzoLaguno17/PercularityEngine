@@ -6,6 +6,8 @@
 
 #define NORMALS_LENGTH 1.0f
 
+struct par_shapes_mesh_s;
+
 struct MeshData {
 
 	// Index 
@@ -54,6 +56,12 @@ public:
 	// Rendering methods
 	void Render() const ;
 	void RenderNormals();
+
+	//Create a primitive shape
+	void LoadParShape(par_shapes_mesh_s* parShape);
+
+	//Create the bouding box
+	void CreateBoundingBox();
 
 public:
 	MeshData mesh;

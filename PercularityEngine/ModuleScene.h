@@ -3,7 +3,6 @@
 
 #include "Module.h"
 
-class Primitive;
 class GameObject;
 
 class ModuleScene : public Module
@@ -23,8 +22,9 @@ public:
 	void Load(const nlohmann::json &config) {}
 	void Save(nlohmann::json &config) {}
 
-	//Vector with all the primitives - This is something provisional that might be changed/ereased in the future
-	std::vector<Primitive*> scenePrimitives;
+	//Methods to create primitives
+	GameObject* CreateSphere(int slices, int stacks, float diameter);
+	GameObject* CreateCube(float sizeX, float sizeY, float sizeZ);
 
 private:
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
@@ -36,6 +36,6 @@ public:
 
 	GameObject* selected = nullptr;
 	int selected_id = -1;
-};
 
+};
 #endif

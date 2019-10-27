@@ -121,6 +121,10 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange);
 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -203,4 +207,16 @@ void ModuleRenderer3D::SetUpScene()
 
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+uint ModuleRenderer3D::CreateBuffer(uint bufferType, uint size, void* data)
+{
+	uint bufferID;
+
+	glGenBuffers(1, (GLuint*)&(bufferID));
+	glBindBuffer(bufferType, bufferID);
+	glBufferData(bufferType, size, data, GL_STATIC_DRAW);
+	glBindBuffer(bufferType, 0);
+
+	return bufferID;
 }

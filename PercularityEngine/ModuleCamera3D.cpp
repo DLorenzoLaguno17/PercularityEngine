@@ -3,6 +3,10 @@
 #include "ModuleCamera3D.h"
 #include "ModuleGui.h"
 #include "ModuleInput.h"
+#include "GameObject.h"
+#include "ModuleScene.h"
+
+#include "Par Shapes/par_shapes.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 
@@ -54,6 +58,9 @@ update_status ModuleCamera3D::Update(float dt)
 	float speed = 4.0f * dt;
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		FocusCameraOn(App->scene->selected);
 
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {
 		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
@@ -174,4 +181,23 @@ void ModuleCamera3D::CalculateViewMatrix()
 {
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
+}
+
+void ModuleCamera3D::FocusCameraOn(GameObject* object)
+{
+	vec3 boxCenter;//center of the bounding box
+	vec3 vertexToCenter;//vector between the benter of the box and the vertices
+
+	boxCenter.x = (object->boundingBox.minX + object->boundingBox.maxX) / 2;
+	boxCenter.y = (object->boundingBox.minY + object->boundingBox.maxY) / 2;
+	boxCenter.z = (object->boundingBox.minZ + object->boundingBox.maxZ) / 2;	
+
+	vertexToCenter.x = object->boundingBox.box[0].x - boxCenter.x;
+	vertexToCenter.y = object->boundingBox.box[0].y - boxCenter.y;
+	vertexToCenter.z = object->boundingBox.box[0].z - boxCenter.z;
+
+	Position = boxCenter;
+	Reference = boxCenter;
+
+	Position += Z * length(vertexToCenter)*1.5f;
 }
