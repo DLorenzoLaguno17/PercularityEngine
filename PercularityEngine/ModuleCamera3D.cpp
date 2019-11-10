@@ -199,5 +199,5 @@ void ModuleCamera3D::FocusCameraOn(GameObject* object)
 	Position = boxCenter;
 	Reference = boxCenter;
 
-	Position += Z * length(vertexToCenter)*1.5f;
+	//Position += Z * length(vertexToCenter)*3.5f;
 }

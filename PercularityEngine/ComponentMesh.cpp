@@ -14,20 +14,26 @@
 
 void MeshData::CleanUp()
 {
-		if (indices != nullptr) 
+		
+	if (indices != nullptr) 
 		{ delete[] indices;
 		indices = nullptr; }
+		
 		if (vertices != nullptr) {
 			delete[] vertices;
 			vertices = nullptr; }
+		
 		if (textures != nullptr) {
 			delete[] textures;
 			textures = nullptr; }
+		
 		if (normals != nullptr) {
 			delete[] normals;
 			normals = nullptr; }
+		
 		if (colors != nullptr) { 
 			delete[] colors; 
+
 colors = nullptr; }
 	
 }
