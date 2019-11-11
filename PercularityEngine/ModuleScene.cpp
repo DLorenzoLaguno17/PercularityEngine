@@ -22,9 +22,7 @@ ModuleScene::~ModuleScene()
 bool ModuleScene::Start()
 {
 	if (!game_objects.empty())
-		selected = game_objects.front();
-
-	selected_id = game_objects.size() - 1;
+		selected = game_objects.back();
 
 	return true;
 }
@@ -72,6 +70,9 @@ bool ModuleScene::CleanUp()
 	}
 
 	game_objects.clear();
+	delete root;
+
+	root = nullptr;
 
 	return true;
 }

@@ -36,11 +36,14 @@ public:
 	// Removes the memory
 	void CleanUp();
 
+	// Makes a GameObject its parent
+	void MakeParent(GameObject* parent);
+
 	Component* CreateComponent(COMPONENT_TYPE type, bool active = true);
 	void OnEditor();
 
 	Component* GetComponent(COMPONENT_TYPE componentType);
-	const Component* GetComponent(COMPONENT_TYPE componentType)const ;
+	const Component* GetComponent(COMPONENT_TYPE componentType) const;
 
 	template<class T>
 	T* GetComponent() { return reinterpret_cast<T*>(GetComponent(T::GetComponentType())); }
@@ -54,6 +57,7 @@ public:
 	GameObject* parent;
 
 	BoundingBox boundingBox;
+	bool extended = true;
 };
 
 #endif // __GameObject_H__

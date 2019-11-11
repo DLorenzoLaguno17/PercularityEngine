@@ -53,6 +53,11 @@ void GameObject::OnEditor() {
 		components[i]->OnEditor();
 }
 
+void GameObject::MakeParent(GameObject* parent) {
+	this->parent = parent;
+	parent->children.push_back(this);
+}
+
 // Cleans the memory of the GameObject
 void GameObject::CleanUp() {
 	for (int i = 0; i < components.size(); ++i) {

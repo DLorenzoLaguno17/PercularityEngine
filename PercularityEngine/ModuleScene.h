@@ -36,9 +36,6 @@ private:
 public:
 	std::vector<GameObject*> game_objects;
 	GameObject* root = nullptr;
-
 	GameObject* selected = nullptr;
-	int selected_id = -1;
-
 };
 #endif

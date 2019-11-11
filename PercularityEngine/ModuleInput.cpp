@@ -159,7 +159,6 @@ update_status ModuleInput::PreUpdate(float dt)
 			else if (strstr(e.drop.file, ".fbx") || strstr(e.drop.file, ".FBX")) {
 				App->res_loader->LoadFBX(e.drop.file);
 				App->scene->selected = App->scene->game_objects.back();
-				App->scene->selected_id = App->scene->game_objects.size() - 1;
 			}
 			// Free dropped_filedir memory
 			SDL_free((void*)e.drop.file);   

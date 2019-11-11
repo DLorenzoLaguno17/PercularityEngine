@@ -76,6 +76,7 @@ bool ModuleResourceLoader::Start()
 	//icon_tex = CreateTexture("Assets/Textures/icon.png"); MUST BE SOLVED
 
 	// Loading FBX
+	App->scene->root = new GameObject("World");
 	LoadFBX("Assets/FBX/BakerHouse.fbx");
 	loadedAll = true;
 
@@ -122,6 +123,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 			
 			GameObject* fbx_mesh = new GameObject(scene->mMeshes[i]->mName.C_Str());
+			fbx_mesh->MakeParent(App->scene->root);
 			MeshData m;
 
 			// Copy vertices
