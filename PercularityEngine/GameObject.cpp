@@ -12,16 +12,12 @@
 GameObject::GameObject():name("Untitled"), parent(nullptr){
 
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	//c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
-	//c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
 }
 
 GameObject::GameObject(std::string name, GameObject* parent) :
 	name(name), parent(parent)
 {
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	//c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
-	//c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
 }
 
 // Called every frame
@@ -35,7 +31,7 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 
 	Component* ret = nullptr;
 
-	/*switch (type)
+	switch (type)
 	{
 	case COMPONENT_TYPE::MATERIAL:
 		ret = new ComponentMaterial(type, this, active);
@@ -48,7 +44,7 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 	case COMPONENT_TYPE::TRANSFORM:
 		ret = new ComponentTransform(this, active);
 		if (ret != nullptr) components.push_back(ret); break;
-	}*/
+	}
 	return ret;
 }
 

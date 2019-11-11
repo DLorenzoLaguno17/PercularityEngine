@@ -73,7 +73,7 @@ bool ModuleResourceLoader::Start()
 
 	// Load textures
 	CreateDefaultTexture();
-	icon_tex = CreateTexture("Assets/Textures/icon.png");
+	//icon_tex = CreateTexture("Assets/Textures/icon.png"); MUST BE SOLVED
 
 	// Loading FBX
 	LoadFBX("Assets/FBX/BakerHouse.fbx");
