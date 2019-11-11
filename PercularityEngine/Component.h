@@ -26,6 +26,8 @@ public:
 	virtual void OnEditor() {}
 	virtual void CleanUp() {}
 
+	COMPONENT_TYPE GetType() const { return type; }
+
 public:
 	COMPONENT_TYPE type;
 	GameObject* parent;

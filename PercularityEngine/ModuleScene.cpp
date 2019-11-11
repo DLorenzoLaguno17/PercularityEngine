@@ -26,8 +26,6 @@ bool ModuleScene::Start()
 
 	selected_id = game_objects.size() - 1;
 
-	//selected = CreateDonut(6, 6,5);
-
 	return true;
 }
 
@@ -156,19 +154,22 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	GameObject* item=new GameObject();
 	item->name = "Sphere";
 
+	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
+	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
+
 	//Create the mesh with Par_Shapes
 	par_shapes_mesh_s* newMesh;
 	newMesh = par_shapes_create_parametric_sphere(slices,stacks);
 	par_shapes_scale(newMesh, diameter, diameter, diameter);
 
 	//Convert the par_Mesh into a regular mesh
-	item->c_mesh->LoadParShape(newMesh);
+	mesh->LoadParShape(newMesh);
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
 
 	//Set default texture
-	item->c_texture->texture = App->res_loader->default_tex;
+	material->texture = App->res_loader->default_tex;
 
 	//Add the object to the list
 	App->scene->game_objects.push_back(item);
@@ -180,6 +181,9 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 {
 	GameObject* item = new GameObject();
 	item->name = "Cube";
+
+	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
+	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
 
 	//Create the mesh with Par_Shapes
 	//create 6 faces of the cube (we don't use par_shapes_create_cube
@@ -217,13 +221,13 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	par_shapes_scale(mesh_front, sizeX, sizeY, sizeZ);
 
 	//Convert the par_Mesh into a regular mesh
-	item->c_mesh->LoadParShape(mesh_front);
+	mesh->LoadParShape(mesh_front);
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(mesh_front);
 
 	//Set default texture
-	item->c_texture->texture = App->res_loader->default_tex;
+	material->texture = App->res_loader->default_tex;
 
 	//Add the object to the list
 	App->scene->game_objects.push_back(item);
@@ -236,6 +240,9 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	GameObject* item = new GameObject();
 	item->name = "Plane";
 
+	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
+	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
+
 	//Convert the par_Mesh into a regular mesh
 	par_shapes_mesh_s* plane = par_shapes_create_plane(2,2);
 
@@ -244,13 +251,13 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	par_shapes_scale(plane,length,0.0f, depth);
 
 	//Convert the par_Mesh into a regular mesh
-	item->c_mesh->LoadParShape(plane);
+	mesh->LoadParShape(plane);
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(plane);
 
 	//Set default texture
-	item->c_texture->texture = App->res_loader->default_tex;
+	material->texture = App->res_loader->default_tex;
 
 	//Add the object to the list
 	App->scene->game_objects.push_back(item);
@@ -263,6 +270,9 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	GameObject* item = new GameObject();
 	item->name = "Donut";
 
+	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
+	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
+
 	//Create the mesh with Par_Shapes
 	par_shapes_mesh_s* newMesh = par_shapes_create_torus(slices, stacks, 0.5f);
 
@@ -271,13 +281,13 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	par_shapes_scale(newMesh, radius, radius, radius);
 
 	//Convert the par_Mesh into a regular mesh
-	item->c_mesh->LoadParShape(newMesh);
+	mesh->LoadParShape(newMesh);
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
 
 	//Set default texture
-	item->c_texture->texture = App->res_loader->default_tex;
+	material->texture = App->res_loader->default_tex;
 
 	//Add the object to the list
 	App->scene->game_objects.push_back(item);

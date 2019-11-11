@@ -43,7 +43,7 @@ public:
 	const Component* GetComponent(COMPONENT_TYPE componentType)const ;
 
 	template<class T>
-	T* GetComponent() { return reinterpret_cast<T*>(GetComponent(T::GetClassType())); }
+	T* GetComponent() { return reinterpret_cast<T*>(GetComponent(T::GetComponentType())); }
 	
 public:
 	ComponentTransform* transform = nullptr;

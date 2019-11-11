@@ -207,12 +207,19 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			std::string name = getNameFromPath(p.C_Str(), true);
 			std::string full_path = file + name;
 
-			if (fbx_mesh->c_mesh==nullptr)
-				fbx_mesh->c_mesh= (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
 			
-			fbx_mesh->c_mesh->mesh = m;
-			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), fbx_mesh);
-			fbx_mesh->c_mesh->CreateBoundingBox();
+			ComponentMesh* mesh = fbx_mesh->GetComponent<ComponentMesh>();
+			if (mesh == nullptr)
+				mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
+			
+			mesh->mesh = m;
+			mesh->CreateBoundingBox();
+
+			ComponentMaterial* objectMaterial = fbx_mesh->GetComponent<ComponentMaterial>();
+			if (objectMaterial == nullptr)
+				objectMaterial = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
+
+			objectMaterial->texture = CreateTexture(full_path.c_str(), fbx_mesh);
 			//m.CleanUp();
 
 			aiNode* node = scene->mRootNode;
@@ -244,9 +251,13 @@ uint ModuleResourceLoader::CreateTexture(const char* path, GameObject* parent)
 	ilGenImages(1, &image);
 	ilBindImage(image);
 
+	ComponentMaterial* material = parent->GetComponent<ComponentMaterial>();
+	if (material == nullptr)
+		material = (ComponentMaterial*)parent->CreateComponent(COMPONENT_TYPE::MATERIAL);
+
 	if (!ilLoadImage(path)) {
 		ilDeleteImages(1, &image);
-		parent->c_texture->tex_name = "Default texture";
+		material->tex_name = "Default texture";
 		LOG("The texture image could not be loaded")
 			return default_tex;
 	}
@@ -277,14 +288,14 @@ uint ModuleResourceLoader::CreateTexture(const char* path, GameObject* parent)
 		ilDeleteImage(image);
 
 		if (parent) {
-			parent->c_texture->width = w;
-			parent->c_texture->height = h;
+			material->width = w;
+			material->height = h;
 			
 			std::string p = path;
 			if (strstr(path, "Assets/Textures/"))
-				parent->c_texture->tex_name = p.substr(p.find_last_of("//") + 1);
+				material->tex_name = p.substr(p.find_last_of("//") + 1);
 			else 
-				parent->c_texture->tex_name = getNameFromPath(p, true);			
+				material->tex_name = getNameFromPath(p, true);			
 		}
 
 		return tex;

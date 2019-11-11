@@ -35,7 +35,7 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 
 	Component* ret = nullptr;
 
-	switch (type)
+	/*switch (type)
 	{
 	case COMPONENT_TYPE::MATERIAL:
 		ret = new ComponentMaterial(type, this, active);
@@ -48,7 +48,7 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 	case COMPONENT_TYPE::TRANSFORM:
 		ret = new ComponentTransform(this, active);
 		if (ret != nullptr) components.push_back(ret); break;
-	}
+	}*/
 	return ret;
 }
 

@@ -58,6 +58,8 @@ public:
 	//Create the bouding box
 	void CreateBoundingBox();
 
+	static COMPONENT_TYPE GetComponentType()  { return COMPONENT_TYPE::MESH; }
+
 public:
 	MeshData mesh;
 

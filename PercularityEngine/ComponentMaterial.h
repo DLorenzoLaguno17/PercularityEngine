@@ -27,6 +27,8 @@ public:
 
 	void CleanUp(){}
 
+	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MATERIAL; }
+
 public:
 	uint texture = 0;
 	long width = 0;

@@ -123,7 +123,7 @@ void ComponentMesh::Render() const  {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	
 	ComponentMaterial* texture = parent->GetComponent<ComponentMaterial>();
-
+	
 	if (texture->active) 
 		glBindTexture(GL_TEXTURE_2D, texture->texture);
 
