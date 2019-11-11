@@ -207,8 +207,11 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			std::string name = getNameFromPath(p.C_Str(), true);
 			std::string full_path = file + name;
 
-			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), fbx_mesh);
+			if (fbx_mesh->c_mesh==nullptr)
+				fbx_mesh->c_mesh= (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
+			
 			fbx_mesh->c_mesh->mesh = m;
+			fbx_mesh->c_texture->texture = CreateTexture(full_path.c_str(), fbx_mesh);
 			fbx_mesh->c_mesh->CreateBoundingBox();
 			//m.CleanUp();
 
@@ -222,7 +225,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 				float3 t(translation.x, translation.y, translation.z);
 				Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
 				float3 s(scale.x, scale.y, scale.z);
-				fbx_mesh->c_transform->transform = math::float4x4::FromTRS(t, r, s);
+				fbx_mesh->transform->transform = math::float4x4::FromTRS(t, r, s);
 			}
 
 			App->scene->game_objects.push_back(fbx_mesh);

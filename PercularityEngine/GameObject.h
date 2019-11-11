@@ -39,10 +39,14 @@ public:
 	Component* CreateComponent(COMPONENT_TYPE type, bool active = true);
 	void OnEditor();
 
+	Component* GetComponent(COMPONENT_TYPE componentType);
+	const Component* GetComponent(COMPONENT_TYPE componentType)const ;
+
+	template<class T>
+	T* GetComponent() { return reinterpret_cast<T*>(GetComponent(T::GetClassType())); }
+	
 public:
-	ComponentMesh* c_mesh = nullptr;
-	ComponentMaterial* c_texture = nullptr;
-	ComponentTransform* c_transform = nullptr;
+	ComponentTransform* transform = nullptr;
 
 	std::string name;
 	std::vector<Component*> components;

@@ -15,11 +15,14 @@ public:
 	// Methods
 	void Update();
 	void OnEditor();
-	void CleanUp() {}
+	void CleanUp();
 
 public:
 
 	float4x4 transform;
+
+	float3 translation=float3::zero;
+	float3 scale = float3::one;
 };
 
 #endif // _ComponentTransform_H_

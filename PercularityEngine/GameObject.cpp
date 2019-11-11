@@ -11,17 +11,17 @@
 
 GameObject::GameObject():name("Untitled"), parent(nullptr){
 
-	c_transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
-	c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
+	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+	//c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
+	//c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
 }
 
 GameObject::GameObject(std::string name, GameObject* parent) :
 	name(name), parent(parent)
 {
-	c_transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
-	c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
+	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+	//c_mesh = (ComponentMesh*)CreateComponent(COMPONENT_TYPE::MESH);
+	//c_texture = (ComponentMaterial*)CreateComponent(COMPONENT_TYPE::MATERIAL);
 }
 
 // Called every frame
@@ -65,4 +65,26 @@ void GameObject::CleanUp() {
 		delete components[i];
 		components[i] = nullptr;
 	}
+}
+
+Component* GameObject::GetComponent(COMPONENT_TYPE componentType)
+{
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->type == componentType)
+			return components[i];
+	}
+
+	return nullptr;
+}
+
+const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
+{
+	for (int i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->type == componentType)
+			return components[i];
+	}
+
+	return nullptr;
 }

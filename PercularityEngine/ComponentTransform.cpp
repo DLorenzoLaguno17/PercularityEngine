@@ -16,6 +16,9 @@ ComponentTransform::~ComponentTransform()
 void ComponentTransform::Update()
 {}
 
+void ComponentTransform::CleanUp()
+{}
+
 void ComponentTransform::OnEditor() {
 
 	if (ImGui::CollapsingHeader("Transform")) {

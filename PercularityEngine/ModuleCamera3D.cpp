@@ -16,9 +16,9 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 {
 	CalculateViewMatrix();
 
-	X = vec3(1.0f, 0.0f, 0.0f);
-	Y = vec3(0.0f, 1.0f, 0.0f);
-	Z = vec3(0.0f, 0.0f, 1.0f);
+	X = vec3(0.0f, 0.0f, 0.0f);
+	Y = vec3(0.0f, 0.0f, 0.0f);
+	Z = vec3(0.0f, 0.0f, 0.0f);
 
 	Position = vec3(0.0f, 0.0f, -5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
@@ -199,5 +199,5 @@ void ModuleCamera3D::FocusCameraOn(GameObject* object)
 	Position = boxCenter;
 	Reference = boxCenter;
 
-	//Position += Z * length(vertexToCenter)*3.5f;
+	Position += Z * length(vertexToCenter)*3.5f;
 }
