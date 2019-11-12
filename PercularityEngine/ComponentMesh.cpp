@@ -36,6 +36,7 @@ void MeshData::CleanUp()
 
 colors = nullptr; }
 	
+
 }
 
 void ComponentMesh::Update() {
@@ -119,13 +120,8 @@ void ComponentMesh::RenderNormals() {
 
 void ComponentMesh::Render() const  {
 	
-	mat4x4 paco;
-	for (int i = 0; i < 4; ++i)
-		for (int j = 0; j < 4; ++j)
-			paco.M[i*4 + j] = parent->transform->localTransform[j][i];
-
 	glPushMatrix();
-	glMultMatrixf(paco.M);
+	glMultMatrixf(parent->transform->renderTransform.M);
 
 	// Render the texture
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
