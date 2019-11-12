@@ -21,7 +21,7 @@ public:
 	//Update transform
 	void UpdateTransform();
 
-	void UpdateRenderTransform();
+	void UpdateRenderTransform();//float4x4 -> mat4x4
 
 public:
 
@@ -33,9 +33,11 @@ public:
 	mat4x4 renderTransform;
 
 	Quat rotation		=Quat::identity;
+	float3 uiRotation	=float3::zero;
 
 	float3 translation	=float3::zero;
 	float3 scale		=float3::one;
+
 };
 
 #endif // _ComponentTransform_H_

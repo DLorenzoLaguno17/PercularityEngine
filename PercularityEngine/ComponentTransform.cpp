@@ -26,6 +26,12 @@ void ComponentTransform::OnEditor() {
 		ImGui::DragFloat3("Translation", &translation.x,0.05f);
 		ImGui::DragFloat3("Scale", &scale.x, 0.05f);
 
+		uiRotation = rotation.ToEulerXYZ();
+		uiRotation *= 180 / pi;
+		ImGui::DragFloat3("Rotation", &uiRotation.x, 0.5f);
+		uiRotation /= 180 / pi;
+		rotation = Quat::FromEulerXYZ(uiRotation.x, uiRotation.y, uiRotation.z);
+
 		ImGui::NewLine();
 	}
 }
