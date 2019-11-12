@@ -75,11 +75,6 @@ bool ModuleResourceLoader::Start()
 	CreateDefaultTexture();
 	//icon_tex = CreateTexture("Assets/Textures/icon.png"); MUST BE SOLVED
 
-	// Loading FBX
-	App->scene->root = new GameObject("World");
-	LoadFBX("Assets/FBX/BakerHouse.fbx");
-	loadedAll = true;
-
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
 
@@ -99,7 +94,7 @@ bool ModuleResourceLoader::CleanUp()
 std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
 	std::string full_name;
 
-	if (loadedAll) full_name = path.substr(path.find_last_of("\\") + 1);
+	if (App->scene->loadedAll) full_name = path.substr(path.find_last_of("\\") + 1);
 	else full_name = path.substr(path.find_last_of("//") + 1);
 
 	if (withExtension)

@@ -4,6 +4,7 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleScene.h"
 #include "OpenGL.h"
 #include "glmath.h"
 
@@ -18,6 +19,8 @@ GameObject::GameObject(std::string name, GameObject* parent) :
 	name(name), parent(parent)
 {
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+	/*if (!strcmp(name.c_str(), "World"))	
+		UUID = App->scene->GenerateRandomUUID();*/
 }
 
 // Called every frame

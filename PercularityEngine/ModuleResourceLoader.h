@@ -35,15 +35,14 @@ public:
 	void LoadFBX(const char* path, uint tex = 0);
 	uint CreateTexture(const char* path, GameObject* parent = nullptr);
 
+	bool SaveTexture(std::string& name);
+
 	void CreateDefaultTexture();
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
 	uint icon_tex = 0;
 	uint default_tex = 0;
-
-private:
-	bool loadedAll = false;
 };
 
 #endif // __ModuleResourceLoader_H__

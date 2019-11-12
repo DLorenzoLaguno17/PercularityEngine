@@ -13,14 +13,23 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
-ModuleScene::ModuleScene(Application* app, bool start_enabled):Module(app, start_enabled)
+ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {}
 
 ModuleScene::~ModuleScene()
 {}
 
+bool ModuleScene::Init() {
+	App->scene->root = new GameObject("World");
+	return true;
+}
+
 bool ModuleScene::Start()
 {
+	// Loading FBX
+	App->res_loader->LoadFBX("Assets/FBX/BakerHouse.fbx");
+	loadedAll = true;
+
 	if (!game_objects.empty())
 		selected = game_objects.back();
 
