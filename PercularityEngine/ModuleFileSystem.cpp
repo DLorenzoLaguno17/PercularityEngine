@@ -310,7 +310,7 @@ SDL_RWops* ModuleFileSystem::Load(const char* file) const
 		return nullptr;
 }
 
-void * ModuleFileSystem::BassLoad(const char * file) const
+void* ModuleFileSystem::BassLoad(const char* file) const
 {
 	PHYSFS_file* fs_file = PHYSFS_openRead(file);
 
@@ -363,7 +363,7 @@ uint ModuleFileSystem::Save(const char* file, const void* buffer, unsigned int s
 	return ret;
 }
 
-bool ModuleFileSystem::SaveUnique(string& name, const void * buffer, uint size, const char * path, const char * prefix, const char * extension)
+bool ModuleFileSystem::SaveUnique(string& name, const void* buffer, uint size, const char* path, const char* prefix, const char* extension)
 {
 	char result[250];
 

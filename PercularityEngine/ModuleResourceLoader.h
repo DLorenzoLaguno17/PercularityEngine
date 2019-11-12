@@ -13,10 +13,10 @@ class GameObject;
 class ModuleResourceLoader : public Module
 {
 public:
-	ModuleResourceLoader(Application* app, bool start_enabled = true);
+	ModuleResourceLoader(Application* app, bool start_enabled = true) : Module(app, start_enabled) {}
 
 	// Destructor
-	virtual ~ModuleResourceLoader();
+	virtual ~ModuleResourceLoader() {}
 
 	// Called before render is available
 	bool Init();
@@ -35,7 +35,7 @@ public:
 	void LoadFBX(const char* path, uint tex = 0);
 	uint CreateTexture(const char* path, GameObject* parent = nullptr);
 
-	bool SaveTexture(std::string& name);
+	bool SaveTexture(std::string& output_file);
 
 	void CreateDefaultTexture();
 	std::string getNameFromPath(std::string path, bool withExtension = false);

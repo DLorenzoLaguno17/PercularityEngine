@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleScene.h"
+#include "ModuleFileSystem.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
@@ -29,14 +30,6 @@
 #pragma comment (lib, "DevIL/lib86/ILUT.lib" )
 
 #include "mmgr/mmgr.h"
-
-ModuleResourceLoader::ModuleResourceLoader(Application* app, bool start_enabled) : Module(app, start_enabled)
-{
-}
-
-// Destructor
-ModuleResourceLoader::~ModuleResourceLoader()
-{}
 
 // Called before render is available
 bool ModuleResourceLoader::Init()
@@ -284,19 +277,37 @@ uint ModuleResourceLoader::CreateTexture(const char* path, GameObject* parent)
 		ilBindImage(0);
 		ilDeleteImage(image);
 
-		if (parent) {
-			material->width = w;
-			material->height = h;
-			
-			std::string p = path;
-			if (strstr(path, "Assets/Textures/"))
-				material->tex_name = p.substr(p.find_last_of("//") + 1);
-			else 
-				material->tex_name = getNameFromPath(p, true);			
-		}
+		// Storing texture data
+		material->width = w;
+		material->height = h;
+		
+		std::string p = path;
+		if (strstr(path, "Assets/Textures/"))
+			material->tex_name = p.substr(p.find_last_of("//") + 1);
+		else 
+			material->tex_name = getNameFromPath(p, true);				
 
 		return tex;
 	}
+}
+
+bool ModuleResourceLoader::SaveTexture(std::string& output_file) {
+	bool ret = false;
+
+	ILuint size;
+	ILubyte *data;
+	// We pick a specific DXT compression use and get the size of the data buffer
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+	size = ilSaveL(IL_DDS, NULL, 0); 
+	if (size > 0) {
+		// We allocate data buffer
+		data = new ILubyte[size]; 
+		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+			ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_TEXTURE_FOLDER, "texture", "dds");
+		RELEASE_ARRAY(data);
+	}
+
+	return ret;
 }
 
 void ModuleResourceLoader::CreateDefaultTexture() {
