@@ -13,18 +13,8 @@ public:
 	~ComponentMaterial() {}
 
 	// Methods
-	void Update() {}
-	void OnEditor() {
-		if (ImGui::CollapsingHeader("Material")) {
-			ImGui::Checkbox(tex_name.c_str(), &active);
-			ImGui::Text("Size: %dx%d", height, width);
-			ImGui::NewLine();
-
-			ImGui::Image((void*)texture, ImVec2(300, 300), ImVec2(0, 1), ImVec2(1, 0));
-			ImGui::NewLine();
-		}
-	}
-
+	void Update();
+	void OnEditor();
 	void CleanUp(){}
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MATERIAL; }

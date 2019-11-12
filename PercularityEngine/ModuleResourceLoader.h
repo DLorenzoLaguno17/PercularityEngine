@@ -18,7 +18,7 @@ public:
 	// Destructor
 	virtual ~ModuleResourceLoader();
 
-	// Called when before render is available
+	// Called before render is available
 	bool Init();
 
 	// Call before first frame
@@ -28,13 +28,14 @@ public:
 	bool CleanUp();
 
 	// Save & Load
-	void Load(const nlohmann::json &config);
-	void Save(nlohmann::json &config);
+	void Load(const nlohmann::json &config) {}
+	void Save(nlohmann::json &config) {}
 
-	// Methods to load
+	// Loading methods
 	void LoadFBX(const char* path, uint tex = 0);
-	void CreateDefaultTexture();
 	uint CreateTexture(const char* path, GameObject* parent = nullptr);
+
+	void CreateDefaultTexture();
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:

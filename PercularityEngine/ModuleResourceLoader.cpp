@@ -328,11 +328,3 @@ void ModuleResourceLoader::CreateDefaultTexture() {
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-void ModuleResourceLoader::Load(const json &config)
-{
-}
-
-void ModuleResourceLoader::Save(json &config)
-{
-}
