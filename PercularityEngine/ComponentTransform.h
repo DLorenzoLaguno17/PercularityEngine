@@ -17,12 +17,18 @@ public:
 	void OnEditor();
 	void CleanUp();
 
+	//Update transform
+	void UpdateTransform();
+
 public:
 
-	float4x4 transform;
+	float4x4 globalTransform	=float4x4::identity;
+	float4x4 localTransform		=float4x4::identity;
 
-	float3 translation=float3::zero;
-	float3 scale = float3::one;
+	Quat rotation		=Quat::identity;
+
+	float3 translation	=float3::zero;
+	float3 scale		=float3::one;
 };
 
 #endif // _ComponentTransform_H_

@@ -232,7 +232,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 				float3 t(translation.x, translation.y, translation.z);
 				Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
 				float3 s(scale.x, scale.y, scale.z);
-				fbx_mesh->transform->transform = math::float4x4::FromTRS(t, r, s);
+				fbx_mesh->transform->localTransform = math::float4x4::FromTRS(t, r, s);
 			}
 
 			App->scene->game_objects.push_back(fbx_mesh);

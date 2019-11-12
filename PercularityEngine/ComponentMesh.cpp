@@ -6,7 +6,7 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleRenderer3D.h"
-
+#include "ComponentTransform.h"
 
 #include "Par Shapes/par_shapes.h"
 
@@ -119,6 +119,14 @@ void ComponentMesh::RenderNormals() {
 
 void ComponentMesh::Render() const  {
 	
+	mat4x4 paco;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			paco.M[i*4 + j] = parent->transform->localTransform[j][i];
+
+	glPushMatrix();
+	glMultMatrixf(paco.M);
+
 	// Render the texture
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	
@@ -147,6 +155,8 @@ void ComponentMesh::Render() const  {
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glPopMatrix();
 }
 
 void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
