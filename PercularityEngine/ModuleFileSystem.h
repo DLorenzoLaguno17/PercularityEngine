@@ -12,7 +12,6 @@ struct aiFileIO;
 class ModuleFileSystem : public Module
 {
 public:
-
 	ModuleFileSystem(Application* app, const char* game_path = nullptr, bool start_enabled = true);
 
 	// Destructor
@@ -46,7 +45,7 @@ public:
 	aiFileIO* GetAssimpIO();
 
 	unsigned int Save(const char* file, const void* buffer, unsigned int size, bool append = false) const;
-	//bool SaveUnique(std::string& output, const void* buffer, uint size, const char* path, const char* prefix, const char* extension);
+	bool SaveUnique(std::string& output, const void* buffer, uint size, const char* path, const char* prefix, const char* extension);
 	bool Remove(const char* file);
 
 	const char* GetBasePath() const;

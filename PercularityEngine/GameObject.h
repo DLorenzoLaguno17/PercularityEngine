@@ -55,7 +55,7 @@ public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	GameObject* parent;
-	//UID UUID = 0;
+	uint UUID = 0;
 
 	BoundingBox boundingBox;
 	bool extended = true;

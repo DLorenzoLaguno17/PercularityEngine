@@ -1,11 +1,13 @@
 #pragma once
 
-// Warning disabled ---
-#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
+// Warning that exceptions are disabled
+#pragma warning( disable : 4577 ) 
 #pragma warning( disable : 4530 )
 
 #include <windows.h>
 #include <stdio.h>
+#include <list>
+#include <vector>
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
@@ -17,7 +19,35 @@ void log(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
 
+#ifdef NULL
+#undef NULL
+#endif
+#define NULL  0
+
+// Deletes a buffer
+#define RELEASE( x ) \
+    {                        \
+    if( x != NULL )        \
+	    {                      \
+      delete x;            \
+	  x = NULL;              \
+	    }                      \
+    }
+
+// Deletes an array of buffers
+#define RELEASE_ARRAY( x ) \
+    {                              \
+    if( x != NULL )              \
+	    {                            \
+      delete[] x;                \
+	  x = NULL;                    \
+	    }                            \
+                              \
+    }
+
 typedef unsigned int uint;
+typedef unsigned char uchar;
+typedef unsigned long ulong;
 
 enum update_status
 {
@@ -36,3 +66,11 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP true
 #define VSYNC true
 #define TITLE "Percularity v0.1"
+#define ORG "UPC - Tech Talent Center"
+
+#define ASSETS_FOLDER "/Assets/"
+#define LIBRARY_FOLDER "/Library/"
+#define LIBRARY_TEXTURE_FOLDER "/Library/Textures/"
+#define LIBRARY_MESH_FOLDER "/Library/Meshes/"
+#define LIBRARY_MODEL_FOLDER "/Library/Models/"
+#define LIBRARY_MATERIAL_FOLDER "/Library/Materials/"

@@ -86,6 +86,10 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
+uint ModuleScene::GenerateRandomUUID() {
+	return 0;
+}
+
 void ModuleScene::DrawSimplePlane()const
 {
 	glLineWidth(2.0f);
