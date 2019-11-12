@@ -32,17 +32,23 @@ void ComponentTransform::OnEditor() {
 		uiRotation /= 180 / pi;
 		rotation = Quat::FromEulerXYZ(uiRotation.x, uiRotation.y, uiRotation.z);
 
+		mustUpdate = true;
 		ImGui::NewLine();
 	}
 }
 
 void ComponentTransform::UpdateTransform()
 {
+	if (mustUpdate)
+	{
 		localTransform = float4x4::FromTRS(translation, rotation, scale);
-		if (parent!=nullptr)
+		
+		if (parent != nullptr)
 			globalTransform = parent->transform->globalTransform * localTransform;
+		
 		UpdateRenderTransform();
 		mustUpdate = false;
+	}
 }
 
 void ComponentTransform::UpdateRenderTransform()
@@ -50,4 +56,22 @@ void ComponentTransform::UpdateRenderTransform()
 	for (int i = 0; i < 4; ++i)
 		for (int j = 0; j < 4; ++j)
 			renderTransform.M[i * 4 + j] = localTransform[j][i];
+}
+
+void ComponentTransform::SetPosition(float3 newPosition)
+{
+	translation = newPosition;
+	mustUpdate = true;
+}
+
+void ComponentTransform::Move(float3 positionIncrease)
+{
+	translation += positionIncrease;
+	mustUpdate = true;
+}
+
+void ComponentTransform::Scale(float3 scale_)
+{
+	scale += scale_;
+	mustUpdate = true;
 }

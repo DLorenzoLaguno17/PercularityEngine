@@ -7,6 +7,7 @@
 #include "glmath.h"
 
 class ComponentTransform : public Component {
+	friend class ComponentMesh;
 public:
 
 	ComponentTransform(GameObject* parent, bool active=true);
@@ -20,10 +21,11 @@ public:
 
 	//Update transform
 	void UpdateTransform();
-
 	void UpdateRenderTransform();//float4x4 -> mat4x4
+	void SetPosition(float3 newPosition);
+	void Move(float3 positionIncrease);
 
-public:
+private:
 
 	bool mustUpdate = true;
 
