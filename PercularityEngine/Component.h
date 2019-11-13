@@ -25,6 +25,8 @@ public:
 	virtual void Update() {}
 	virtual void OnEditor() {}
 	virtual void CleanUp() {}
+	virtual void OnLoad(const nlohmann::json &config) {}
+	virtual void OnSave(nlohmann::json &config) {}
 
 	COMPONENT_TYPE GetType() const { return type; }
 

@@ -3,7 +3,6 @@
 
 #include "Module.h"
 #include <string>
-#include <vector>
 #include "ConfigWindow.h"
 #include "SceneWindow.h"
 #include "ConsoleWindow.h"

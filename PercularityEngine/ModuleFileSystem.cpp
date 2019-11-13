@@ -66,7 +66,6 @@ bool ModuleFileSystem::Init()
 	//if(PHYSFS_setWriteDir(write_path) == 0)
 		//LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
 
-
 	SDL_free(write_path);
 
 	return ret;
@@ -395,17 +394,17 @@ bool ModuleFileSystem::Remove(const char * file)
 	return ret;
 }
 
-const char * ModuleFileSystem::GetBasePath() const
+const char* ModuleFileSystem::GetBasePath() const
 {
 	return PHYSFS_getBaseDir();
 }
 
-const char * ModuleFileSystem::GetWritePath() const
+const char* ModuleFileSystem::GetWritePath() const
 {
 	return PHYSFS_getWriteDir();
 }
 
-const char * ModuleFileSystem::GetReadPaths() const
+const char* ModuleFileSystem::GetReadPaths() const
 {
 	static char paths[512];
 
@@ -520,7 +519,7 @@ void ModuleFileSystem::CreateAssimpIO()
 	AssimpIO->CloseProc = AssimpClose;
 }
 
-aiFileIO * ModuleFileSystem::GetAssimpIO()
+aiFileIO* ModuleFileSystem::GetAssimpIO()
 {
 	return AssimpIO;
 }

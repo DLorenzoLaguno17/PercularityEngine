@@ -8,6 +8,7 @@
 #define CHECKERS_HEIGHT 150
 
 class GameObject;
+class ComponentMesh;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
@@ -35,7 +36,10 @@ public:
 	void LoadFBX(const char* path, uint tex = 0);
 	uint CreateTexture(const char* path, GameObject* parent = nullptr);
 
-	bool SaveTexture(std::string& output_file);
+	// Own file format methods 
+	bool ImportTexture(std::string& output_file);
+	bool ImportMesh(ComponentMesh* mesh, std::string& output_file);
+	void LoadMesh(ComponentMesh* mesh, char* buffer);
 
 	void CreateDefaultTexture();
 	std::string getNameFromPath(std::string path, bool withExtension = false);

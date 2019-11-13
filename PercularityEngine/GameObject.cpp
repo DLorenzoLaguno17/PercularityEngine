@@ -61,8 +61,20 @@ void GameObject::MakeParent(GameObject* parent) {
 	parent->children.push_back(this);
 }
 
+//Save & Load
+void GameObject::OnLoad(const nlohmann::json &config){
+	for (int i = 0; i < components.size(); ++i)
+		components[i]->OnLoad(config);
+}
+
+void GameObject::OnSave(nlohmann::json &config) {
+	for (int i = 0; i < components.size(); ++i)
+		components[i]->OnSave(config);
+}
+
 // Cleans the memory of the GameObject
 void GameObject::CleanUp() {
+
 	for (int i = 0; i < components.size(); ++i) {
 		//c_mesh->CleanUp();
 		components[i]->CleanUp();

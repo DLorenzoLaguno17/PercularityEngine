@@ -9,6 +9,8 @@
 #include <list>
 #include <vector>
 
+#include "Json Parser/nlohmann/json.hpp"
+
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
 void log(const char file[], int line, const char* format, ...);
@@ -69,6 +71,8 @@ enum update_status
 #define ORG "UPC - Tech Talent Center"
 
 #define ASSETS_FOLDER "/Assets/"
+#define ASSETS_MESH_FOLDER "/Assets/FBX/"
+#define ASSETS_TEXTURE_FOLDER "/Assets/Textures/"
 #define LIBRARY_FOLDER "/Library/"
 #define LIBRARY_TEXTURE_FOLDER "/Library/Textures/"
 #define LIBRARY_MESH_FOLDER "/Library/Meshes/"

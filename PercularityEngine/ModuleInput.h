@@ -4,8 +4,6 @@
 #include "Module.h"
 #include "Globals.h"
 
-#include <list>
-
 #define MAX_MOUSE_BUTTONS 5
 
 class UIElement;

@@ -20,8 +20,8 @@ public:
 	bool CleanUp();
 	
 	//Save & Load
-	void Load(const nlohmann::json &config) {}
-	void Save(nlohmann::json &config) {}	
+	void Load(const nlohmann::json &config);
+	void Save(nlohmann::json &config);
 
 	//Methods to create primitives
 	GameObject* CreateSphere(int slices, int stacks, float diameter);

@@ -36,6 +36,16 @@ bool ModuleScene::Start()
 	return true;
 }
 
+void ModuleScene::Load(const nlohmann::json &config) {
+	for (int i = 0; i < game_objects.size(); ++i)
+		game_objects[i]->OnLoad(config);
+}
+
+void ModuleScene::Save(nlohmann::json &config) {
+	for (int i = 0; i < game_objects.size(); ++i)
+		game_objects[i]->OnSave(config);
+}
+
 update_status ModuleScene::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange);

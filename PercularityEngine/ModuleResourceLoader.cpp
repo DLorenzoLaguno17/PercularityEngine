@@ -118,8 +118,8 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			m.num_vertices = scene->mMeshes[i]->mNumVertices;
 			m.vertices = new float3[m.num_vertices];
 			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float3) * m.num_vertices);
-			LOG("NEW MESH");
-			LOG("Vertices: %d", m.num_vertices);
+			LOG("NEW MESH")
+			LOG("Vertices: %d", m.num_vertices)
 
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())
@@ -139,8 +139,9 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			// Copy normals
 			if (scene->mMeshes[i]->HasNormals())
 			{
-				m.normals = new float3[m.num_vertices];
-				memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float3) * m.num_vertices);
+				m.num_normals = scene->mMeshes[i]->mNumVertices;
+				m.normals = new float3[m.num_normals];
+				memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float3) * m.num_normals);
 			}
 
 			// Copy colors
@@ -196,18 +197,17 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			std::string file = "Assets/Textures/";
 			std::string name = getNameFromPath(p.C_Str(), true);
 			std::string full_path = file + name;
-
-			
+						
 			ComponentMesh* mesh = fbx_mesh->GetComponent<ComponentMesh>();
 			if (mesh == nullptr)
-				mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
+				mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH, fbx_mesh);
 			
 			mesh->mesh = m;
 			mesh->CreateBoundingBox();
 
 			ComponentMaterial* objectMaterial = fbx_mesh->GetComponent<ComponentMaterial>();
 			if (objectMaterial == nullptr)
-				objectMaterial = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
+				objectMaterial = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
 
 			objectMaterial->texture = CreateTexture(full_path.c_str(), fbx_mesh);
 			//m.CleanUp();
@@ -291,18 +291,129 @@ uint ModuleResourceLoader::CreateTexture(const char* path, GameObject* parent)
 	}
 }
 
-bool ModuleResourceLoader::SaveTexture(std::string& output_file) {
-	bool ret = false;
+bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_file) {
+	
+	LOG("Importing mesh")
+	bool ret = false; 
 
+	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
+	uint ranges[5] = { 
+		mesh->mesh.num_indices, 
+		mesh->mesh.num_vertices, 
+		mesh->mesh.num_colors, 
+		mesh->mesh.num_normals, 
+		mesh->mesh.num_tex 
+	};
+
+	uint size = sizeof(ranges) 
+		+ sizeof(uint) * mesh->mesh.num_indices * 3
+		+ sizeof(float3) * mesh->mesh.num_vertices
+		+ sizeof(uint) * mesh->mesh.num_colors * 4
+		+ sizeof(float3) * mesh->mesh.num_normals
+		+ sizeof(float) * mesh->mesh.num_tex * 2;
+	
+	// Allocate memory
+	char* data = new char[size]; 
+	char* cursor = data;
+
+	// First store ranges
+	uint bytes = sizeof(ranges); 
+	memcpy(cursor, ranges, bytes);
+
+	// Store indices
+	cursor += bytes; 
+	bytes = sizeof(uint) * mesh->mesh.num_indices * 3;
+	memcpy(cursor, mesh->mesh.indices, bytes);
+
+	// Store vertices
+	cursor += bytes;
+	bytes = sizeof(float3) * mesh->mesh.num_vertices;
+	memcpy(cursor, mesh->mesh.vertices, bytes);
+
+	// Store colors
+	cursor += bytes;
+	bytes = sizeof(uint) * mesh->mesh.num_colors * 4;
+	memcpy(cursor, mesh->mesh.colors, bytes);
+
+	// Store normals
+	cursor += bytes;
+	bytes = sizeof(float3) * mesh->mesh.num_normals;
+	memcpy(cursor, mesh->mesh.normals, bytes);
+
+	// Store UVs
+	cursor += bytes;
+	bytes = sizeof(float) * mesh->mesh.num_tex * 2;
+	memcpy(cursor, mesh->mesh.textures, bytes);
+
+	ret = App->file_system->SaveUnique(output_file, cursor, size, LIBRARY_MESH_FOLDER, "mesh", "fbx");
+	RELEASE_ARRAY(cursor);
+
+	if (ret) LOG("Imported mesh: %s", output_file)
+	else LOG("Could not import mesh")
+
+	return ret;
+}
+
+void ModuleResourceLoader::LoadMesh(ComponentMesh* mesh, char* buffer) {
+	
+	char* cursor = buffer;
+
+	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
+	uint ranges[5];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+
+	mesh->mesh.num_indices = ranges[0];
+	mesh->mesh.num_vertices = ranges[1];
+	mesh->mesh.num_colors = ranges[2];
+	mesh->mesh.num_normals = ranges[3];
+	mesh->mesh.num_tex = ranges[4];
+
+	// Load indices
+	cursor += bytes;
+	bytes = sizeof(uint) * mesh->mesh.num_indices * 3;
+	mesh->mesh.indices = new uint[mesh->mesh.num_indices];
+	memcpy(mesh->mesh.indices, cursor, bytes);
+
+	// Load vertices
+	cursor += bytes;
+	bytes = sizeof(float3) * mesh->mesh.num_vertices;
+	mesh->mesh.vertices = new float3[mesh->mesh.num_vertices];
+	memcpy(mesh->mesh.vertices, cursor, bytes);
+
+	// Load colors
+	cursor += bytes;
+	bytes = sizeof(uint) * mesh->mesh.num_colors * 4;
+	mesh->mesh.colors = new uint[mesh->mesh.num_colors];
+	memcpy(mesh->mesh.colors, cursor, bytes);
+
+	// Load normals
+	cursor += bytes;
+	bytes = sizeof(float3) * mesh->mesh.num_normals;
+	mesh->mesh.normals = new float3[mesh->mesh.num_normals];
+	memcpy(mesh->mesh.normals, cursor, bytes);
+
+	// Load UVs
+	cursor += bytes;
+	bytes = sizeof(float) * mesh->mesh.num_tex;
+	mesh->mesh.textures = new float[mesh->mesh.num_tex];
+	memcpy(mesh->mesh.textures, cursor, bytes);
+}
+
+bool ModuleResourceLoader::ImportTexture(std::string& output_file) {
+	bool ret = false;
 	ILuint size;
 	ILubyte *data;
+
 	// We pick a specific DXT compression use and get the size of the data buffer
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
 	size = ilSaveL(IL_DDS, NULL, 0); 
+
 	if (size > 0) {
 		// We allocate data buffer
 		data = new ILubyte[size]; 
-		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+		// Save to buffer
+		if (ilSaveL(IL_DDS, data, size) > 0) 
 			ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_TEXTURE_FOLDER, "texture", "dds");
 		RELEASE_ARRAY(data);
 	}
