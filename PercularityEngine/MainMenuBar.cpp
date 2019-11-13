@@ -4,6 +4,7 @@
 #include "ModuleResourceLoader.h"
 #include "ModuleGui.h"
 #include "UIElement.h"
+#include "ComponentMaterial.h"
 #include "ModuleScene.h"
 
 #include "mmgr/mmgr.h"
@@ -86,7 +87,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 		if (ImGui::BeginMenu("About"))
 		{
-			ImGui::Image((void*)App->res_loader->icon_tex, ImVec2(20, 20));
+			ImGui::Image((void*)App->res_loader->icon_tex->texture, ImVec2(20, 20));
 			ImGui::SameLine();
 			ImGui::Text("Percularity v0.1");
 			ImGui::Text("3D engine developed for student purposes");

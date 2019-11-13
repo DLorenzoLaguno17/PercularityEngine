@@ -66,7 +66,8 @@ bool ModuleResourceLoader::Start()
 
 	// Load textures
 	CreateDefaultTexture();
-	//icon_tex = CreateTexture("Assets/Textures/icon.png"); MUST BE SOLVED
+	icon_tex = new ComponentMaterial(COMPONENT_TYPE::MATERIAL, nullptr, true);
+	icon_tex->CreateTexture("Assets/Textures/icon.png"); 
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -209,7 +210,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			if (objectMaterial == nullptr)
 				objectMaterial = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
 
-			objectMaterial->texture = CreateTexture(full_path.c_str(), fbx_mesh);
+			objectMaterial->CreateTexture(full_path.c_str());
 			//m.CleanUp();
 
 			aiNode* node = scene->mRootNode;
@@ -232,63 +233,6 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading FBX: %s", path);
-}
-
-uint ModuleResourceLoader::CreateTexture(const char* path, GameObject* parent)
-{
-	ILuint image;
-	GLuint tex;
-	ilGenImages(1, &image);
-	ilBindImage(image);
-
-	ComponentMaterial* material = parent->GetComponent<ComponentMaterial>();
-	if (material == nullptr)
-		material = (ComponentMaterial*)parent->CreateComponent(COMPONENT_TYPE::MATERIAL);
-
-	if (!ilLoadImage(path)) {
-		ilDeleteImages(1, &image);
-		material->tex_name = "Default texture";
-		LOG("The texture image could not be loaded")
-			return default_tex;
-	}
-	else {
-		tex = ilutGLBindTexImage();
-		LOG("Created texture from path: %s", path)
-
-		long h, w, bpp, f;
-		ILubyte *texdata = 0;
-
-		w = ilGetInteger(IL_IMAGE_WIDTH);
-		h = ilGetInteger(IL_IMAGE_HEIGHT);
-		bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
-		f = ilGetInteger(IL_IMAGE_FORMAT);
-		texdata = ilGetData();
-
-		glGenTextures(1, &tex);
-		glBindTexture(GL_TEXTURE_2D, tex);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		ilBindImage(0);
-		ilDeleteImage(image);
-
-		// Storing texture data
-		material->width = w;
-		material->height = h;
-		
-		std::string p = path;
-		if (strstr(path, "Assets/Textures/"))
-			material->tex_name = p.substr(p.find_last_of("//") + 1);
-		else 
-			material->tex_name = getNameFromPath(p, true);				
-
-		return tex;
-	}
 }
 
 bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_file) {
@@ -356,6 +300,7 @@ bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_f
 
 void ModuleResourceLoader::LoadMesh(ComponentMesh* mesh, char* buffer) {
 	
+	LOG("Loading mesh")
 	char* cursor = buffer;
 
 	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
@@ -398,6 +343,7 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* mesh, char* buffer) {
 	bytes = sizeof(float) * mesh->mesh.num_tex;
 	mesh->mesh.textures = new float[mesh->mesh.num_tex];
 	memcpy(mesh->mesh.textures, cursor, bytes);
+	LOG("Loaded mesh")
 }
 
 bool ModuleResourceLoader::ImportTexture(std::string& output_file) {

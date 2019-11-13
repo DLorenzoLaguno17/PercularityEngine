@@ -9,6 +9,7 @@
 
 class GameObject;
 class ComponentMesh;
+class ComponentMaterial;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
@@ -34,7 +35,6 @@ public:
 
 	// Loading methods
 	void LoadFBX(const char* path, uint tex = 0);
-	uint CreateTexture(const char* path, GameObject* parent = nullptr);
 
 	// Own file format methods 
 	bool ImportTexture(std::string& output_file);
@@ -45,7 +45,7 @@ public:
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
-	uint icon_tex = 0;
+	ComponentMaterial* icon_tex = nullptr;
 	uint default_tex = 0;
 };
 

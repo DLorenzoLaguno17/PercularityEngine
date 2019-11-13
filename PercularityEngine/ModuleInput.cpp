@@ -147,14 +147,14 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_DROPFILE:
 
-			ComponentMaterial* material = App->scene->selected->GetComponent< ComponentMaterial>();
+			ComponentMaterial* material = App->scene->selected->GetComponent<ComponentMaterial>();
 			if (material == nullptr)
-				material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
+				material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL, App->scene->selected);
 
 			// We check if its a .png (texture) or an FBX
 			if (strstr(e.drop.file, ".png") || strstr(e.drop.file, ".dds") || strstr(e.drop.file, ".DDS") || strstr(e.drop.file, ".jpg")) {
 				if (App->scene->selected) 
-					material->texture = App->res_loader->CreateTexture(e.drop.file, App->scene->selected);
+					material->CreateTexture(e.drop.file);
 			}
 			else if (strstr(e.drop.file, ".fbx") || strstr(e.drop.file, ".FBX")) {
 				App->res_loader->LoadFBX(e.drop.file);
