@@ -37,7 +37,8 @@ public:
 	void LoadFBX(const char* path, uint tex = 0);
 
 	// Own file format methods 
-	bool ImportTexture(std::string& output_file);
+	void ImportFile(const char* full_path);
+	bool ImportTexture(const char* path, std::string& output_file);
 	bool ImportMesh(ComponentMesh* mesh, std::string& output_file);
 	void LoadMesh(ComponentMesh* mesh, char* buffer);
 

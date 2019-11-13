@@ -235,6 +235,36 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	else LOG("Error loading FBX: %s", path);
 }
 
+void ModuleResourceLoader::ImportFile(const char* full_path) {
+	// We create the correct path
+	std::string final_path;
+	std::string extension;
+
+	App->file_system->SplitFilePath(full_path, nullptr, &final_path, &extension);
+
+	if (strcmp(extension.c_str(), "dds") == 0 || strcmp(extension.c_str(), "png") == 0)
+		final_path = ASSETS_TEXTURE_FOLDER + final_path;
+	if (strcmp(extension.c_str(), "fbx") == 0 || strcmp(extension.c_str(), "FBX") == 0)
+		final_path = ASSETS_MODEL_FOLDER + final_path;
+
+	// We try to copy the file to its corresponding assets' folder
+	if (App->file_system->CopyFromOutsideFS(full_path, final_path.c_str()))
+	{
+		// If it has been copied, we import it to our own libraries
+		std::string written_file;
+		if (strcmp(extension.c_str(), "dds") == 0 || strcmp(extension.c_str(), "png") == 0)
+		{
+			ImportTexture(final_path.c_str(), written_file);
+		}
+		else if (strcmp(extension.c_str(), "fbx") == 0 || strcmp(extension.c_str(), "FBX") == 0) {
+			//ComponentMesh* mesh = new ComponentMesh(COMPONENT_TYPE::MESH, nullptr, true);
+			//ImportMesh(mesh, written_file);
+		}
+		else
+			LOG("Importing of [%s] FAILED", final_path.c_str())
+	}
+}
+
 bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_file) {
 	
 	LOG("Importing mesh")
@@ -346,23 +376,26 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* mesh, char* buffer) {
 	LOG("Loaded mesh")
 }
 
-bool ModuleResourceLoader::ImportTexture(std::string& output_file) {
+bool ModuleResourceLoader::ImportTexture(const char* path, std::string& output_file) {
 	bool ret = false;
+
 	ILuint size;
 	ILubyte *data;
 
 	// We pick a specific DXT compression use and get the size of the data buffer
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
-	size = ilSaveL(IL_DDS, NULL, 0); 
+	size = ilSaveL(IL_DDS, NULL, 0);
 
 	if (size > 0) {
 		// We allocate data buffer
-		data = new ILubyte[size]; 
+		data = new ILubyte[size];
 		// Save to buffer
-		if (ilSaveL(IL_DDS, data, size) > 0) 
+		if (ilSaveL(IL_DDS, data, size) > 0)
 			ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_TEXTURE_FOLDER, "texture", "dds");
 		RELEASE_ARRAY(data);
 	}
+
+	if (!ret) LOG("Cannot load texture %s from path %s", path);
 
 	return ret;
 }

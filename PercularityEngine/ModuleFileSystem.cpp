@@ -29,7 +29,7 @@ ModuleFileSystem::ModuleFileSystem(Application* app, const char* game_path, bool
 	LOG("FileSystem Operations base is [%s] plus:", GetBasePath());
 	LOG(GetReadPaths());
 
-	// enable us to write in the game's dir area
+	// Enable us to write in the game's dir area
 	if (PHYSFS_setWriteDir(".") == 0)
 		LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
 
@@ -38,8 +38,8 @@ ModuleFileSystem::ModuleFileSystem(Application* app, const char* game_path, bool
 
 	for (uint i = 0; i < sizeof(dirs) / sizeof(const char*); ++i)
 	{
-		if (PHYSFS_exists(dirs[i]) == 0)
-			PHYSFS_mkdir(dirs[i]);
+		if (!Exists(dirs[i]))
+			CreateDirectory(dirs[i]);
 	}
 
 	// Generate IO interfaces
@@ -74,7 +74,7 @@ bool ModuleFileSystem::Init()
 // Called before quitting
 bool ModuleFileSystem::CleanUp()
 {
-	//LOG("Freeing File System subsystem");
+	LOG("Freeing File System subsystem");
 
 	return true;
 }
@@ -106,6 +106,7 @@ bool ModuleFileSystem::IsDirectory(const char* file) const
 	return PHYSFS_isDirectory(file) != 0;
 }
 
+// Creates a directory
 void ModuleFileSystem::CreateDirectory(const char* directory)
 {
 	PHYSFS_mkdir(directory);
@@ -129,7 +130,7 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string> & fil
 	PHYSFS_freeList(rc);
 }
 
-bool ModuleFileSystem::CopyFromOutsideFS(const char * full_path, const char * destination)
+bool ModuleFileSystem::CopyFromOutsideFS(const char* full_path, const char* destination)
 {
 	// Only place we acces non virtual filesystem
 	bool ret = false;
@@ -158,7 +159,7 @@ bool ModuleFileSystem::CopyFromOutsideFS(const char * full_path, const char * de
 	return ret;
 }
 
-bool ModuleFileSystem::Copy(const char * source, const char * destination)
+bool ModuleFileSystem::Copy(const char* source, const char* destination)
 {
 	bool ret = false;
 
@@ -185,7 +186,7 @@ bool ModuleFileSystem::Copy(const char * source, const char * destination)
 	return ret;
 }
 
-void ModuleFileSystem::SplitFilePath(const char * full_path, std::string * path, std::string * file, std::string * extension) const
+void ModuleFileSystem::SplitFilePath(const char* full_path, std::string* path, std::string* file, std::string* extension) const
 {
 	if (full_path != nullptr)
 	{

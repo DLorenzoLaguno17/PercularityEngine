@@ -50,6 +50,7 @@ void log(const char file[], int line, const char* format, ...);
 typedef unsigned int uint;
 typedef unsigned char uchar;
 typedef unsigned long ulong;
+typedef unsigned long long UID;
 
 enum update_status
 {
@@ -71,7 +72,7 @@ enum update_status
 #define ORG "UPC - Tech Talent Center"
 
 #define ASSETS_FOLDER "/Assets/"
-#define ASSETS_MESH_FOLDER "/Assets/FBX/"
+#define ASSETS_MODEL_FOLDER "/Assets/FBX/"
 #define ASSETS_TEXTURE_FOLDER "/Assets/Textures/"
 #define LIBRARY_FOLDER "/Library/"
 #define LIBRARY_TEXTURE_FOLDER "/Library/Textures/"
