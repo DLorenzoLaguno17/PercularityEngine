@@ -2,6 +2,8 @@
 #define _MODULE_SCENE_H__
 
 #include "Module.h"
+#include "Tree.h"
+
 
 class GameObject;
 
@@ -28,6 +30,8 @@ public:
 	GameObject* CreateCube(float sizeX, float sizeY, float sizeZ);
 	GameObject* CreatePlane(float length, float depth);
 	GameObject* CreateDonut(int slices, int stacks, float radius);
+
+	Tree* testQuadTree;
 
 private:
 	void DrawAxis() const;			//Draw XYZ axis of coordinates

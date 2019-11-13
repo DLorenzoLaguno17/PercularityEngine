@@ -24,6 +24,7 @@ public:
 	void UpdateRenderTransform();//float4x4 -> mat4x4
 	void SetPosition(float3 newPosition);
 	void Move(float3 positionIncrease);
+	void Scale(float3 scale_);
 
 private:
 

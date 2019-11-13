@@ -26,6 +26,11 @@ bool ModuleScene::Start()
 
 	selected_id = game_objects.size() - 1;
 
+	//test
+	testQuadTree = new Tree(TREE_TYPE::OCTREE, float3(50,50,50), float3(-50,-50,-50));
+	testQuadTree->rootNode->Split();
+	//test
+
 	return true;
 }
 
@@ -42,10 +47,10 @@ update_status ModuleScene::Update(float dt)
 {
 	BROFILER_CATEGORY("SceneUpdate", Profiler::Color::LightSeaGreen);
 
-	//Draw a plane
-	DrawSimplePlane();
+	//TEST
+	testQuadTree->Draw();
 
-	//Test
+	//DrawSimplePlane();
 	DrawAxis();
 
 	// Draw all GameObjects
