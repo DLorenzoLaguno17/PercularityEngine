@@ -154,8 +154,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			// We check if its a .png (texture) or an FBX
 			if (strstr(e.drop.file, ".png") || strstr(e.drop.file, ".dds") || strstr(e.drop.file, ".DDS") || strstr(e.drop.file, ".jpg")) {
 				App->res_loader->ImportFile(e.drop.file);
-				if (App->scene->selected) 
-					material->CreateTexture(e.drop.file);
+				if (App->scene->selected) App->res_loader->CreateTexture(e.drop.file, material);
 			}
 			else if (strstr(e.drop.file, ".fbx") || strstr(e.drop.file, ".FBX")) {
 				App->res_loader->ImportFile(e.drop.file);

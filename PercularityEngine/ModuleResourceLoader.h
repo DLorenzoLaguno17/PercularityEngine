@@ -43,6 +43,7 @@ public:
 	void LoadMesh(ComponentMesh* mesh, char* buffer);
 
 	void CreateDefaultTexture();
+	void CreateTexture(const char* path, ComponentMaterial* material = nullptr);
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:

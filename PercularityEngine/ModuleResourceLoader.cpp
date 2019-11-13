@@ -67,7 +67,7 @@ bool ModuleResourceLoader::Start()
 	// Load textures
 	CreateDefaultTexture();
 	icon_tex = new ComponentMaterial(COMPONENT_TYPE::MATERIAL, nullptr, true);
-	icon_tex->CreateTexture("Assets/Textures/icon.png"); 
+	CreateTexture("Assets/Textures/icon.png", icon_tex); 
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -81,23 +81,38 @@ bool ModuleResourceLoader::CleanUp()
 	LOG("Freeing mesh loader");
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
+	RELEASE(icon_tex);
 
 	return true;
 }
 
-std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
-	std::string full_name;
+void ModuleResourceLoader::ImportFile(const char* full_path) {
+	// We create the correct path
+	std::string final_path;
+	std::string extension;
 
-	App->file_system->NormalizePath(path);
-	full_name = path.substr(path.find_last_of("//") + 1);
+	App->file_system->SplitFilePath(full_path, nullptr, &final_path, &extension);
 
-	if (withExtension)
-		return full_name;
-	else {
-		std::string::size_type const p(full_name.find_last_of('.'));
-		std::string file_name = full_name.substr(0, p);
+	if (strcmp(extension.c_str(), "dds") == 0 || strcmp(extension.c_str(), "png") == 0)
+		final_path = ASSETS_TEXTURE_FOLDER + final_path;
+	if (strcmp(extension.c_str(), "fbx") == 0 || strcmp(extension.c_str(), "FBX") == 0)
+		final_path = ASSETS_MODEL_FOLDER + final_path;
 
-		return file_name;
+	// We try to copy the file to its corresponding assets' folder
+	if (App->file_system->CopyFromOutsideFS(full_path, final_path.c_str()))
+	{
+		// If it has been copied, we import it to our own libraries
+		std::string written_file;
+		if (strcmp(extension.c_str(), "dds") == 0 || strcmp(extension.c_str(), "png") == 0)
+		{
+			CreateTexture(full_path);
+		}
+		else if (strcmp(extension.c_str(), "fbx") == 0 || strcmp(extension.c_str(), "FBX") == 0) {
+			//ComponentMesh* mesh = new ComponentMesh(COMPONENT_TYPE::MESH, nullptr, true);
+			//ImportMesh(mesh, written_file);
+		}
+		else
+			LOG("Importing of [%s] FAILED", final_path.c_str())
 	}
 }
 
@@ -210,7 +225,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			if (objectMaterial == nullptr)
 				objectMaterial = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
 
-			objectMaterial->CreateTexture(full_path.c_str());
+			CreateTexture(full_path.c_str(), objectMaterial);
 			//m.CleanUp();
 
 			aiNode* node = scene->mRootNode;
@@ -235,35 +250,9 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	else LOG("Error loading FBX: %s", path);
 }
 
-void ModuleResourceLoader::ImportFile(const char* full_path) {
-	// We create the correct path
-	std::string final_path;
-	std::string extension;
-
-	App->file_system->SplitFilePath(full_path, nullptr, &final_path, &extension);
-
-	if (strcmp(extension.c_str(), "dds") == 0 || strcmp(extension.c_str(), "png") == 0)
-		final_path = ASSETS_TEXTURE_FOLDER + final_path;
-	if (strcmp(extension.c_str(), "fbx") == 0 || strcmp(extension.c_str(), "FBX") == 0)
-		final_path = ASSETS_MODEL_FOLDER + final_path;
-
-	// We try to copy the file to its corresponding assets' folder
-	if (App->file_system->CopyFromOutsideFS(full_path, final_path.c_str()))
-	{
-		// If it has been copied, we import it to our own libraries
-		std::string written_file;
-		if (strcmp(extension.c_str(), "dds") == 0 || strcmp(extension.c_str(), "png") == 0)
-		{
-			ImportTexture(final_path.c_str(), written_file);
-		}
-		else if (strcmp(extension.c_str(), "fbx") == 0 || strcmp(extension.c_str(), "FBX") == 0) {
-			//ComponentMesh* mesh = new ComponentMesh(COMPONENT_TYPE::MESH, nullptr, true);
-			//ImportMesh(mesh, written_file);
-		}
-		else
-			LOG("Importing of [%s] FAILED", final_path.c_str())
-	}
-}
+// -----------------------------------------------------------------------------------------------
+// MESH-RELATED METHODS
+// -----------------------------------------------------------------------------------------------
 
 bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_file) {
 	
@@ -376,11 +365,75 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* mesh, char* buffer) {
 	LOG("Loaded mesh")
 }
 
+// -----------------------------------------------------------------------------------------------
+// TEXTURE-RELATED METHODS
+// -----------------------------------------------------------------------------------------------
+
+void ModuleResourceLoader::CreateTexture(const char* path, ComponentMaterial* material) {
+		ILuint image;
+		GLuint tex;
+		ilGenImages(1, &image);
+		ilBindImage(image);
+
+		if (!ilLoadImage(path)) {
+			ilDeleteImages(1, &image);
+			LOG("The texture image could not be loaded");
+
+			if (material) {
+				material->tex_name = "Default texture";
+				material->texture = default_tex;
+			}
+		}
+		else {
+			tex = ilutGLBindTexImage();
+			LOG("Created texture from path: %s", path);
+			LOG("");
+
+			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+				LOG("Error converting image: %s", iluErrorString(ilGetError()));
+
+			long h, w, bpp, f;
+			ILubyte *texdata = 0;
+
+			w = ilGetInteger(IL_IMAGE_WIDTH);
+			h = ilGetInteger(IL_IMAGE_HEIGHT);
+			bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
+			f = ilGetInteger(IL_IMAGE_FORMAT);
+			texdata = ilGetData();
+
+			glGenTextures(1, &tex);
+			glBindTexture(GL_TEXTURE_2D, tex);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
+			gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			// We import the texture to our library
+			std::string name;
+			ImportTexture(path, name);
+
+			// Storing texture data
+			if (material) {
+				material->width = w;
+				material->height = h;
+				material->tex_name = getNameFromPath(path, true);
+				material->texture = tex;
+			}
+
+			ilBindImage(0);
+			ilDeleteImage(image);
+		}
+	}
+
+// Stores a texture as a DDS in the library
 bool ModuleResourceLoader::ImportTexture(const char* path, std::string& output_file) {
 	bool ret = false;
 
 	ILuint size;
-	ILubyte *data;
+	ILubyte* data;
 
 	// We pick a specific DXT compression use and get the size of the data buffer
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
@@ -391,11 +444,13 @@ bool ModuleResourceLoader::ImportTexture(const char* path, std::string& output_f
 		data = new ILubyte[size];
 		// Save to buffer
 		if (ilSaveL(IL_DDS, data, size) > 0)
-			ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_TEXTURE_FOLDER, "texture", "dds");
+			ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_TEXTURE_FOLDER, getNameFromPath(path).c_str(), "dds");
 		RELEASE_ARRAY(data);
+
+		LOG("Imported texture %s", output_file);		
 	}
 
-	if (!ret) LOG("Cannot load texture %s from path %s", path);
+	if (!ret) LOG("Cannot import texture from path %s", path);
 
 	return ret;
 }
@@ -423,4 +478,20 @@ void ModuleResourceLoader::CreateDefaultTexture() {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
+	std::string full_name;
+
+	App->file_system->NormalizePath(path);
+	full_name = path.substr(path.find_last_of("//") + 1);
+
+	if (withExtension)
+		return full_name;
+	else {
+		std::string::size_type const p(full_name.find_last_of('.'));
+		std::string file_name = full_name.substr(0, p);
+
+		return file_name;
+	}
 }

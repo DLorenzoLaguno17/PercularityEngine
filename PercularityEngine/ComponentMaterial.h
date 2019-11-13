@@ -18,7 +18,6 @@ public:
 	void CleanUp(){}
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MATERIAL; }
-	void CreateTexture(const char* path);
 
 public:
 	uint texture = 0;
