@@ -39,6 +39,5 @@ public:
 	std::vector<GameObject*> game_objects;
 	GameObject* root = nullptr;
 	GameObject* selected = nullptr;
-	bool loadedAll = false;
 };
 #endif

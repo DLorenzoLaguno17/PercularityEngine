@@ -28,7 +28,6 @@ bool ModuleScene::Start()
 {
 	// Loading FBX
 	App->res_loader->LoadFBX("Assets/FBX/BakerHouse.fbx");
-	loadedAll = true;
 
 	if (!game_objects.empty())
 		selected = game_objects.back();

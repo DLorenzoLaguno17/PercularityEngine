@@ -88,8 +88,8 @@ bool ModuleResourceLoader::CleanUp()
 std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
 	std::string full_name;
 
-	if (App->scene->loadedAll) full_name = path.substr(path.find_last_of("\\") + 1);
-	else full_name = path.substr(path.find_last_of("//") + 1);
+	App->file_system->NormalizePath(path);
+	full_name = path.substr(path.find_last_of("//") + 1);
 
 	if (withExtension)
 		return full_name;

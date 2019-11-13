@@ -55,12 +55,7 @@ void ComponentMaterial::CreateTexture(const char* path) {
 		// Storing texture data
 		width = w;
 		height = h;
-
-		std::string p = path;
-		if (strstr(path, "Assets/Textures/"))
-			tex_name = p.substr(p.find_last_of("//") + 1);
-		else
-			tex_name = App->res_loader->getNameFromPath(p, true);
+		tex_name = App->res_loader->getNameFromPath(path, true);
 
 		texture = tex;
 	}
