@@ -31,21 +31,10 @@ void Tree::Draw()
 
 TreeNode::TreeNode()
 {
-	
-	if (treeType == TREE_TYPE::QUADTREE)
-		nodesAmount = 4;
-	else
-		nodesAmount = 8;
-	
 }
 
 TreeNode::TreeNode(AABB aabb, TREE_TYPE type): aabb(aabb),treeType(type)
 {
-
-	if (treeType == TREE_TYPE::QUADTREE)
-		nodesAmount = 4;
-	else
-		nodesAmount = 8;
 }
 
 TreeNode::~TreeNode()
@@ -57,8 +46,6 @@ void TreeNode::Split()
 
 	switch (treeType)
 	{
-	case TREE_TYPE::NONE:
-		break;
 	case TREE_TYPE::QUADTREE:
 		QuadSplit();
 		break;
@@ -114,7 +101,7 @@ void TreeNode::Draw()
 
 	glEnd();
 
-	if (!isLeave)
+	if (!this->isLeave)
 	{
 		for (int i = 0; i < nodesAmount ; ++i)
 			nodes[i].Draw();
@@ -162,8 +149,12 @@ void TreeNode::QuadSplit()
 
 	nodes = new TreeNode[4];
 
-	for (int i =0;i<4;++i)
+	this;
+
+	for (int i = 0; i < 4; ++i) 
 		nodes[i] = TreeNode(newAABBs[i], treeType);
+	
+	nodesAmount = 4;
 }
 
 void TreeNode::OctSplit()
@@ -183,7 +174,7 @@ void TreeNode::OctSplit()
 	*/
 	//NORTH-WEST-TOP subnode
 	maxPoint = { aabb.MaxX(), aabb.MaxY(), aabb.MaxZ() };
-	minPoint = { (aabb.MaxX() + aabb.MinX()) / 2 , (aabb.MinY()+aabb.MaxY())/2, (aabb.MaxZ() + aabb.MinZ()) / 2 };
+	minPoint = { (aabb.MaxX() + aabb.MinX()) / 2 , (aabb.MinY() + aabb.MaxY()) / 2, (aabb.MaxZ() + aabb.MinZ()) / 2 };
 	newAABBs[0].minPoint = minPoint;
 	newAABBs[0].maxPoint = maxPoint;
 
@@ -231,6 +222,9 @@ void TreeNode::OctSplit()
 
 	nodes = new TreeNode[8];
 
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i) 
 		nodes[i] = TreeNode(newAABBs[i], treeType);
+
+	nodesAmount = 8;
+	
 }

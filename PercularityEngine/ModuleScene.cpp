@@ -27,7 +27,7 @@ bool ModuleScene::Start()
 	selected_id = game_objects.size() - 1;
 
 	//test
-	testQuadTree = new Tree(TREE_TYPE::OCTREE, float3(50,50,50), float3(-50,-50,-50));
+	testQuadTree = new Tree(TREE_TYPE::QUADTREE, float3(10,10,10), float3(-10,-10,-10));
 	testQuadTree->rootNode->Split();
 	//test
 

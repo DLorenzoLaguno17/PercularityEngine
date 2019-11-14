@@ -24,9 +24,10 @@ public:
 	Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint);
 	~Tree();
 
-	//Methods
 	void Draw();
+	//bool Insert(GameObject* gameObject);
 
+	
 public:
 
 	TREE_TYPE type = TREE_TYPE::NONE;
