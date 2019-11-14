@@ -14,16 +14,16 @@ public:
 	ModuleScene(Application* app, bool start_enabled = true);
 	~ModuleScene();
 
+	bool Init();
 	bool Start();
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
-	
+
 	//Save & Load
-	void Load(const nlohmann::json &config) {}
-	void Save(nlohmann::json &config) {}
-	
+	void Load(const nlohmann::json &config);
+	void Save(nlohmann::json &config);
 
 	//Methods to create primitives
 	GameObject* CreateSphere(int slices, int stacks, float diameter);
@@ -31,7 +31,9 @@ public:
 	GameObject* CreatePlane(float length, float depth);
 	GameObject* CreateDonut(int slices, int stacks, float radius);
 
+
 	Tree* testQuadTree;
+	uint GenerateRandomUUID();
 
 private:
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
@@ -40,9 +42,6 @@ private:
 public:
 	std::vector<GameObject*> game_objects;
 	GameObject* root = nullptr;
-
 	GameObject* selected = nullptr;
-	int selected_id = -1;
-
 };
 #endif

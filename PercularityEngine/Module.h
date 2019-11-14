@@ -2,7 +2,6 @@
 #define _MODULE_H__
 
 #include "Globals.h"
-#include "Json Parser/nlohmann/json.hpp"
 
 class Application;
 struct PhysBody3D;

@@ -182,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="Tree.h">
       <Filter>Sources\Tools\Trees</Filter>
+</ClInclude>
+    <ClInclude Include="ModuleFileSystem.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -277,6 +280,12 @@
     </ClCompile>
     <ClCompile Include="Tree.cpp">
       <Filter>Sources\Tools\Trees</Filter>
+      </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\Modules\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

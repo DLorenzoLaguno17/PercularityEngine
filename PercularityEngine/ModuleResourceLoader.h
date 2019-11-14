@@ -8,17 +8,19 @@
 #define CHECKERS_HEIGHT 150
 
 class GameObject;
+class ComponentMesh;
+class ComponentMaterial;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
 {
 public:
-	ModuleResourceLoader(Application* app, bool start_enabled = true);
+	ModuleResourceLoader(Application* app, bool start_enabled = true) : Module(app, start_enabled) {}
 
 	// Destructor
-	virtual ~ModuleResourceLoader();
+	virtual ~ModuleResourceLoader() {}
 
-	// Called when before render is available
+	// Called before render is available
 	bool Init();
 
 	// Call before first frame
@@ -28,21 +30,29 @@ public:
 	bool CleanUp();
 
 	// Save & Load
-	void Load(const nlohmann::json &config);
-	void Save(nlohmann::json &config);
+	void Load(const nlohmann::json &config) {}
+	void Save(nlohmann::json &config) {}
 
-	// Methods to load
+	// Loading methods
 	void LoadFBX(const char* path, uint tex = 0);
+
+	// Own file format methods 
+	void ImportFile(const char* full_path);
+	bool ImportTexture(const char* path, std::string& output_file);
+	bool ImportMesh(ComponentMesh* mesh, std::string& output_file);
+	void LoadMesh(ComponentMesh* mesh, char* buffer);
+
 	void CreateDefaultTexture();
-	uint CreateTexture(const char* path, GameObject* parent = nullptr);
+	void CreateTexture(const char* path, bool importing = false, ComponentMaterial* material = nullptr);
+	
+	// Useful methods
 	std::string getNameFromPath(std::string path, bool withExtension = false);
+	bool CheckTextureExtension(const char* extension);
+	bool CheckMeshExtension(const char* extension);
 
 public:
-	uint icon_tex = 0;
+	ComponentMaterial* icon_tex = nullptr;
 	uint default_tex = 0;
-
-private:
-	bool loadedAll = false;
 };
 
 #endif // __ModuleResourceLoader_H__

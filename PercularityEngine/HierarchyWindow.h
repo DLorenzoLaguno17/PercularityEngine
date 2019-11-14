@@ -18,7 +18,7 @@ public:
 	void Update();
 
 private:
-	void RecursiveTree(GameObject* root);
+	void DrawHierarchy(GameObject* root);
 };
 
 #endif // __HierarchyWindow_H__

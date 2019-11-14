@@ -26,6 +26,7 @@ struct MeshData {
 	float* textures = nullptr;
 
 	// Normals
+	uint num_normals = 0;
 	float3* normals = nullptr;
 
 	// Colors

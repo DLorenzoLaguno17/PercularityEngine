@@ -6,11 +6,13 @@
 #include "ModuleGui.h"
 #include "ModuleScene.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleFileSystem.h"
 
 #include <fstream>
 #include <iomanip>
 
 #include "GLEW/include/glew.h"
+#include "mmgr/mmgr.h"
 
 Application::Application()
 {
@@ -21,6 +23,7 @@ Application::Application()
 	gui = new ModuleGui(this);
 	scene = new ModuleScene(this);
 	res_loader = new ModuleResourceLoader(this);
+	file_system = new ModuleFileSystem(this, ASSETS_FOLDER);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -31,6 +34,7 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(gui);
+	AddModule(file_system);
 	AddModule(res_loader);
 	
 	// Scenes

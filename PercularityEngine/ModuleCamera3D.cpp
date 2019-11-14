@@ -60,7 +60,7 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = 8.0f * dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-		FocusCameraOn(App->scene->selected);
+		if (App->scene->selected != App->scene->root) FocusCameraOn(App->scene->selected);
 
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {
 		if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT) newPos.y += speed;

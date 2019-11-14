@@ -1,7 +1,7 @@
 {
     "Application": {
         "Name": "Percularity",
-        "Version": "v0.1"
+        "Version": "v0.2"
     },
     "User Interface": {
         "Configuration": true,

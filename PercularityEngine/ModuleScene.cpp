@@ -13,18 +13,24 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
-ModuleScene::ModuleScene(Application* app, bool start_enabled):Module(app, start_enabled)
+ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {}
 
 ModuleScene::~ModuleScene()
 {}
 
+bool ModuleScene::Init() {
+	App->scene->root = new GameObject("World");
+	return true;
+}
+
 bool ModuleScene::Start()
 {
-	if (!game_objects.empty())
-		selected = game_objects.front();
+	// Loading FBX
+	App->res_loader->LoadFBX("Assets/FBX/BakerHouse.fbx");
 
-	selected_id = game_objects.size() - 1;
+	if (!game_objects.empty())
+		selected = game_objects.back();
 
 	//test
 	testQuadTree = new Tree(TREE_TYPE::QUADTREE, float3(10,10,10), float3(-10,-10,-10));
@@ -32,6 +38,16 @@ bool ModuleScene::Start()
 	//test
 
 	return true;
+}
+
+void ModuleScene::Load(const nlohmann::json &config) {
+	for (int i = 0; i < game_objects.size(); ++i)
+		game_objects[i]->OnLoad(config);
+}
+
+void ModuleScene::Save(nlohmann::json &config) {
+	for (int i = 0; i < game_objects.size(); ++i)
+		game_objects[i]->OnSave(config);
 }
 
 update_status ModuleScene::PreUpdate(float dt)
@@ -77,8 +93,15 @@ bool ModuleScene::CleanUp()
 	}
 
 	game_objects.clear();
+	delete root;
+
+	root = nullptr;
 
 	return true;
+}
+
+uint ModuleScene::GenerateRandomUUID() {
+	return 0;
 }
 
 void ModuleScene::DrawSimplePlane()const

@@ -4,7 +4,6 @@
 #include <vector>
 class UIElement;
 
-
 class MainMenuBar
 {
 public:

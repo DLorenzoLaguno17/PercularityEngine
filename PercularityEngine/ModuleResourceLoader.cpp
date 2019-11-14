@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleScene.h"
+#include "ModuleFileSystem.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
@@ -29,14 +30,6 @@
 #pragma comment (lib, "DevIL/lib86/ILUT.lib" )
 
 #include "mmgr/mmgr.h"
-
-ModuleResourceLoader::ModuleResourceLoader(Application* app, bool start_enabled) : Module(app, start_enabled)
-{
-}
-
-// Destructor
-ModuleResourceLoader::~ModuleResourceLoader()
-{}
 
 // Called before render is available
 bool ModuleResourceLoader::Init()
@@ -73,11 +66,8 @@ bool ModuleResourceLoader::Start()
 
 	// Load textures
 	CreateDefaultTexture();
-	//icon_tex = CreateTexture("Assets/Textures/icon.png"); MUST BE SOLVED
-
-	// Loading FBX
-	LoadFBX("Assets/FBX/BakerHouse.fbx");
-	loadedAll = true;
+	icon_tex = new ComponentMaterial(COMPONENT_TYPE::MATERIAL, nullptr, true);
+	CreateTexture("Assets/Textures/icon.png", true, icon_tex); 
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -91,23 +81,45 @@ bool ModuleResourceLoader::CleanUp()
 	LOG("Freeing mesh loader");
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
+	RELEASE(icon_tex);
 
 	return true;
 }
 
-std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
-	std::string full_name;
+void ModuleResourceLoader::ImportFile(const char* full_path) {
+	// We create the correct path
+	std::string final_path;
+	std::string extension;
 
-	if (loadedAll) full_name = path.substr(path.find_last_of("\\") + 1);
-	else full_name = path.substr(path.find_last_of("//") + 1);
+	App->file_system->SplitFilePath(full_path, nullptr, &final_path, &extension);
 
-	if (withExtension)
-		return full_name;
-	else {
-		std::string::size_type const p(full_name.find_last_of('.'));
-		std::string file_name = full_name.substr(0, p);
+	if (CheckTextureExtension(extension.c_str()))
+		final_path = ASSETS_TEXTURE_FOLDER + final_path;
+	if (CheckMeshExtension(extension.c_str()))
+		final_path = ASSETS_MODEL_FOLDER + final_path;
 
-		return file_name;
+	// We try to copy the file to its corresponding assets' folder
+	if (App->file_system->CopyFromOutsideFS(full_path, final_path.c_str()))
+	{
+		// If it has been copied, we import it to our own libraries
+		std::string written_file;
+		if (CheckTextureExtension(extension.c_str()))
+		{
+			ComponentMaterial* material = App->scene->selected->GetComponent<ComponentMaterial>();
+			if (!material) material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL, App->scene->selected);
+
+			CreateTexture(full_path, true, material);
+			material = nullptr;
+		}
+		else if (CheckMeshExtension(extension.c_str())) {
+			LoadFBX(full_path);
+			App->scene->selected = App->scene->game_objects.back();
+
+			//ComponentMesh* mesh = new ComponentMesh(COMPONENT_TYPE::MESH, nullptr, true);
+			//ImportMesh(mesh, written_file);
+		}
+		else
+			LOG("Importing of [%s] FAILED", final_path.c_str())
 	}
 }
 
@@ -122,14 +134,15 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 			
 			GameObject* fbx_mesh = new GameObject(scene->mMeshes[i]->mName.C_Str());
+			fbx_mesh->MakeParent(App->scene->root);
 			MeshData m;
 
 			// Copy vertices
 			m.num_vertices = scene->mMeshes[i]->mNumVertices;
 			m.vertices = new float3[m.num_vertices];
 			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float3) * m.num_vertices);
-			LOG("NEW MESH");
-			LOG("Vertices: %d", m.num_vertices);
+			LOG("NEW MESH")
+			LOG("Vertices: %d", m.num_vertices)
 
 			// Copy faces
 			if (scene->mMeshes[i]->HasFaces())
@@ -149,8 +162,9 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			// Copy normals
 			if (scene->mMeshes[i]->HasNormals())
 			{
-				m.normals = new float3[m.num_vertices];
-				memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float3) * m.num_vertices);
+				m.num_normals = scene->mMeshes[i]->mNumVertices;
+				m.normals = new float3[m.num_normals];
+				memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float3) * m.num_normals);
 			}
 
 			// Copy colors
@@ -206,20 +220,19 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			std::string file = "Assets/Textures/";
 			std::string name = getNameFromPath(p.C_Str(), true);
 			std::string full_path = file + name;
-
-			
+						
 			ComponentMesh* mesh = fbx_mesh->GetComponent<ComponentMesh>();
 			if (mesh == nullptr)
-				mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
+				mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH, fbx_mesh);
 			
 			mesh->mesh = m;
 			mesh->CreateBoundingBox();
 
 			ComponentMaterial* objectMaterial = fbx_mesh->GetComponent<ComponentMaterial>();
 			if (objectMaterial == nullptr)
-				objectMaterial = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
+				objectMaterial = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
 
-			objectMaterial->texture = CreateTexture(full_path.c_str(), fbx_mesh);
+			CreateTexture(full_path.c_str(), true, objectMaterial);
 			//m.CleanUp();
 
 			aiNode* node = scene->mRootNode;
@@ -234,62 +247,211 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 	else LOG("Error loading FBX: %s", path);
 }
 
-uint ModuleResourceLoader::CreateTexture(const char* path, GameObject* parent)
-{
-	ILuint image;
-	GLuint tex;
-	ilGenImages(1, &image);
-	ilBindImage(image);
+// -----------------------------------------------------------------------------------------------
+// MESH-RELATED METHODS
+// -----------------------------------------------------------------------------------------------
 
-	ComponentMaterial* material = parent->GetComponent<ComponentMaterial>();
-	if (material == nullptr)
-		material = (ComponentMaterial*)parent->CreateComponent(COMPONENT_TYPE::MATERIAL);
+bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_file) {
+	
+	LOG("Importing mesh")
+	bool ret = false; 
 
-	if (!ilLoadImage(path)) {
-		ilDeleteImages(1, &image);
-		material->tex_name = "Default texture";
-		LOG("The texture image could not be loaded")
-			return default_tex;
-	}
-	else {
-		tex = ilutGLBindTexImage();
-		LOG("Created texture from path: %s", path)
+	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
+	uint ranges[5] = { 
+		mesh->mesh.num_indices, 
+		mesh->mesh.num_vertices, 
+		mesh->mesh.num_colors, 
+		mesh->mesh.num_normals, 
+		mesh->mesh.num_tex 
+	};
 
-		long h, w, bpp, f;
-		ILubyte *texdata = 0;
+	uint size = sizeof(ranges) 
+		+ sizeof(uint) * mesh->mesh.num_indices * 3
+		+ sizeof(float3) * mesh->mesh.num_vertices
+		+ sizeof(uint) * mesh->mesh.num_colors * 4
+		+ sizeof(float3) * mesh->mesh.num_normals
+		+ sizeof(float) * mesh->mesh.num_tex * 2;
+	
+	// Allocate memory
+	char* data = new char[size]; 
+	char* cursor = data;
 
-		w = ilGetInteger(IL_IMAGE_WIDTH);
-		h = ilGetInteger(IL_IMAGE_HEIGHT);
-		bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
-		f = ilGetInteger(IL_IMAGE_FORMAT);
-		texdata = ilGetData();
+	// First store ranges
+	uint bytes = sizeof(ranges); 
+	memcpy(cursor, ranges, bytes);
 
-		glGenTextures(1, &tex);
-		glBindTexture(GL_TEXTURE_2D, tex);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
-		glBindTexture(GL_TEXTURE_2D, 0);
+	// Store indices
+	cursor += bytes; 
+	bytes = sizeof(uint) * mesh->mesh.num_indices * 3;
+	memcpy(cursor, mesh->mesh.indices, bytes);
 
-		ilBindImage(0);
-		ilDeleteImage(image);
+	// Store vertices
+	cursor += bytes;
+	bytes = sizeof(float3) * mesh->mesh.num_vertices;
+	memcpy(cursor, mesh->mesh.vertices, bytes);
 
-		if (parent) {
-			material->width = w;
-			material->height = h;
-			
-			std::string p = path;
-			if (strstr(path, "Assets/Textures/"))
-				material->tex_name = p.substr(p.find_last_of("//") + 1);
-			else 
-				material->tex_name = getNameFromPath(p, true);			
+	// Store colors
+	cursor += bytes;
+	bytes = sizeof(uint) * mesh->mesh.num_colors * 4;
+	memcpy(cursor, mesh->mesh.colors, bytes);
+
+	// Store normals
+	cursor += bytes;
+	bytes = sizeof(float3) * mesh->mesh.num_normals;
+	memcpy(cursor, mesh->mesh.normals, bytes);
+
+	// Store UVs
+	cursor += bytes;
+	bytes = sizeof(float) * mesh->mesh.num_tex * 2;
+	memcpy(cursor, mesh->mesh.textures, bytes);
+
+	ret = App->file_system->SaveUnique(output_file, cursor, size, LIBRARY_MESH_FOLDER, "mesh", "fbx");
+	RELEASE_ARRAY(cursor);
+
+	if (ret) LOG("Imported mesh: %s", output_file)
+	else LOG("Could not import mesh")
+
+	return ret;
+}
+
+void ModuleResourceLoader::LoadMesh(ComponentMesh* mesh, char* buffer) {
+	
+	LOG("Loading mesh")
+	char* cursor = buffer;
+
+	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
+	uint ranges[5];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+
+	mesh->mesh.num_indices = ranges[0];
+	mesh->mesh.num_vertices = ranges[1];
+	mesh->mesh.num_colors = ranges[2];
+	mesh->mesh.num_normals = ranges[3];
+	mesh->mesh.num_tex = ranges[4];
+
+	// Load indices
+	cursor += bytes;
+	bytes = sizeof(uint) * mesh->mesh.num_indices * 3;
+	mesh->mesh.indices = new uint[mesh->mesh.num_indices];
+	memcpy(mesh->mesh.indices, cursor, bytes);
+
+	// Load vertices
+	cursor += bytes;
+	bytes = sizeof(float3) * mesh->mesh.num_vertices;
+	mesh->mesh.vertices = new float3[mesh->mesh.num_vertices];
+	memcpy(mesh->mesh.vertices, cursor, bytes);
+
+	// Load colors
+	cursor += bytes;
+	bytes = sizeof(uint) * mesh->mesh.num_colors * 4;
+	mesh->mesh.colors = new uint[mesh->mesh.num_colors];
+	memcpy(mesh->mesh.colors, cursor, bytes);
+
+	// Load normals
+	cursor += bytes;
+	bytes = sizeof(float3) * mesh->mesh.num_normals;
+	mesh->mesh.normals = new float3[mesh->mesh.num_normals];
+	memcpy(mesh->mesh.normals, cursor, bytes);
+
+	// Load UVs
+	cursor += bytes;
+	bytes = sizeof(float) * mesh->mesh.num_tex;
+	mesh->mesh.textures = new float[mesh->mesh.num_tex];
+	memcpy(mesh->mesh.textures, cursor, bytes);
+	LOG("Loaded mesh")
+}
+
+// -----------------------------------------------------------------------------------------------
+// TEXTURE-RELATED METHODS
+// -----------------------------------------------------------------------------------------------
+
+void ModuleResourceLoader::CreateTexture(const char* path, bool importing, ComponentMaterial* material) {
+		ILuint image;
+		GLuint tex;
+		ilGenImages(1, &image);
+		ilBindImage(image);
+
+		if (!ilLoadImage(path)) {
+			ilDeleteImages(1, &image);
+			LOG("The texture image could not be loaded");
+
+			if (material) {
+				material->tex_name = "Default texture";
+				material->texture = default_tex;
+			}
 		}
+		else {
+			tex = ilutGLBindTexImage();
+			LOG("Created texture from path: %s", path);
+			LOG("");
 
-		return tex;
+			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+				LOG("Error converting image: %s", iluErrorString(ilGetError()));
+
+			long h, w, bpp, f;
+			ILubyte *texdata = 0;
+
+			w = ilGetInteger(IL_IMAGE_WIDTH);
+			h = ilGetInteger(IL_IMAGE_HEIGHT);
+			bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
+			f = ilGetInteger(IL_IMAGE_FORMAT);
+			texdata = ilGetData();
+
+			glGenTextures(1, &tex);
+			glBindTexture(GL_TEXTURE_2D, tex);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
+			gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			// We import the texture to our library
+			if (importing) {
+				std::string name;
+				ImportTexture(path, name);
+			}
+
+			// Storing texture data
+			if (material) {
+				material->width = w;
+				material->height = h;
+				material->tex_name = getNameFromPath(path, true);
+				material->texture = tex;
+			}
+
+			ilBindImage(0);
+			ilDeleteImage(image);
+		}
 	}
+
+// Stores a texture as a DDS in the library
+bool ModuleResourceLoader::ImportTexture(const char* path, std::string& output_file) {
+	bool ret = false;
+
+	ILuint size;
+	ILubyte* data;
+
+	// We pick a specific DXT compression use and get the size of the data buffer
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+	size = ilSaveL(IL_DDS, NULL, 0);
+
+	if (size > 0) {
+		// We allocate data buffer
+		data = new ILubyte[size];
+		// Save to buffer
+		if (ilSaveL(IL_DDS, data, size) > 0)
+			ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_TEXTURE_FOLDER, getNameFromPath(path).c_str(), "dds");
+		RELEASE_ARRAY(data);
+
+		LOG("Imported texture %s", output_file);		
+	}
+
+	if (!ret) LOG("Cannot import texture from path %s", path);
+
+	return ret;
 }
 
 void ModuleResourceLoader::CreateDefaultTexture() {
@@ -317,10 +479,27 @@ void ModuleResourceLoader::CreateDefaultTexture() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void ModuleResourceLoader::Load(const json &config)
-{
+std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
+	std::string full_name;
+
+	App->file_system->NormalizePath(path);
+	full_name = path.substr(path.find_last_of("//") + 1);
+
+	if (withExtension)
+		return full_name;
+	else {
+		std::string::size_type const p(full_name.find_last_of('.'));
+		std::string file_name = full_name.substr(0, p);
+
+		return file_name;
+	}
 }
 
-void ModuleResourceLoader::Save(json &config)
-{
+// Methods to check the extension of a file
+bool ModuleResourceLoader::CheckTextureExtension(const char* extension) {
+	return (strcmp(extension, "dds") == 0 || strcmp(extension, "png") == 0 || strcmp(extension, "jpg") == 0);
+}
+
+bool ModuleResourceLoader::CheckMeshExtension(const char* extension) {
+	return (strcmp(extension, "fbx") == 0 || strcmp(extension, "FBX") == 0);
 }

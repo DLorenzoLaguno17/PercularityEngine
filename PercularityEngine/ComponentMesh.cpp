@@ -55,7 +55,7 @@ void ComponentMesh::OnEditor() {
 
 		ImGui::Text("Polygons:");
 		ImGui::SameLine();
-		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", mesh.num_indices / 3);
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", mesh.num_indices);
 		
 		ImGui::NewLine();
 		ImGui::Text("Show normals");
