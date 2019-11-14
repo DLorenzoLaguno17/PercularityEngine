@@ -43,8 +43,12 @@ public:
 	void LoadMesh(ComponentMesh* mesh, char* buffer);
 
 	void CreateDefaultTexture();
-	void CreateTexture(const char* path, ComponentMaterial* material = nullptr);
+	void CreateTexture(const char* path, bool importing = false, ComponentMaterial* material = nullptr);
+	
+	// Useful methods
 	std::string getNameFromPath(std::string path, bool withExtension = false);
+	bool CheckTextureExtension(const char* extension);
+	bool CheckMeshExtension(const char* extension);
 
 public:
 	ComponentMaterial* icon_tex = nullptr;

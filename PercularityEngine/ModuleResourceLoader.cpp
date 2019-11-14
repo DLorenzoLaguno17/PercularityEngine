@@ -67,7 +67,7 @@ bool ModuleResourceLoader::Start()
 	// Load textures
 	CreateDefaultTexture();
 	icon_tex = new ComponentMaterial(COMPONENT_TYPE::MATERIAL, nullptr, true);
-	CreateTexture("Assets/Textures/icon.png", icon_tex); 
+	CreateTexture("Assets/Textures/icon.png", true, icon_tex); 
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -93,9 +93,9 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 
 	App->file_system->SplitFilePath(full_path, nullptr, &final_path, &extension);
 
-	if (strcmp(extension.c_str(), "dds") == 0 || strcmp(extension.c_str(), "png") == 0)
+	if (CheckTextureExtension(extension.c_str()))
 		final_path = ASSETS_TEXTURE_FOLDER + final_path;
-	if (strcmp(extension.c_str(), "fbx") == 0 || strcmp(extension.c_str(), "FBX") == 0)
+	if (CheckMeshExtension(extension.c_str()))
 		final_path = ASSETS_MODEL_FOLDER + final_path;
 
 	// We try to copy the file to its corresponding assets' folder
@@ -103,11 +103,18 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 	{
 		// If it has been copied, we import it to our own libraries
 		std::string written_file;
-		if (strcmp(extension.c_str(), "dds") == 0 || strcmp(extension.c_str(), "png") == 0)
+		if (CheckTextureExtension(extension.c_str()))
 		{
-			CreateTexture(full_path);
+			ComponentMaterial* material = App->scene->selected->GetComponent<ComponentMaterial>();
+			if (!material) material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL, App->scene->selected);
+
+			CreateTexture(full_path, true, material);
+			material = nullptr;
 		}
-		else if (strcmp(extension.c_str(), "fbx") == 0 || strcmp(extension.c_str(), "FBX") == 0) {
+		else if (CheckMeshExtension(extension.c_str())) {
+			LoadFBX(full_path);
+			App->scene->selected = App->scene->game_objects.back();
+
 			//ComponentMesh* mesh = new ComponentMesh(COMPONENT_TYPE::MESH, nullptr, true);
 			//ImportMesh(mesh, written_file);
 		}
@@ -225,7 +232,7 @@ void ModuleResourceLoader::LoadFBX(const char* path, uint tex) {
 			if (objectMaterial == nullptr)
 				objectMaterial = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
 
-			CreateTexture(full_path.c_str(), objectMaterial);
+			CreateTexture(full_path.c_str(), true, objectMaterial);
 			//m.CleanUp();
 
 			aiNode* node = scene->mRootNode;
@@ -369,7 +376,7 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* mesh, char* buffer) {
 // TEXTURE-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleResourceLoader::CreateTexture(const char* path, ComponentMaterial* material) {
+void ModuleResourceLoader::CreateTexture(const char* path, bool importing, ComponentMaterial* material) {
 		ILuint image;
 		GLuint tex;
 		ilGenImages(1, &image);
@@ -412,8 +419,10 @@ void ModuleResourceLoader::CreateTexture(const char* path, ComponentMaterial* ma
 			glBindTexture(GL_TEXTURE_2D, 0);
 
 			// We import the texture to our library
-			std::string name;
-			ImportTexture(path, name);
+			if (importing) {
+				std::string name;
+				ImportTexture(path, name);
+			}
 
 			// Storing texture data
 			if (material) {
@@ -494,4 +503,13 @@ std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExt
 
 		return file_name;
 	}
+}
+
+// Methods to check the extension of a file
+bool ModuleResourceLoader::CheckTextureExtension(const char* extension) {
+	return (strcmp(extension, "dds") == 0 || strcmp(extension, "png") == 0 || strcmp(extension, "jpg") == 0);
+}
+
+bool ModuleResourceLoader::CheckMeshExtension(const char* extension) {
+	return (strcmp(extension, "fbx") == 0 || strcmp(extension, "FBX") == 0);
 }

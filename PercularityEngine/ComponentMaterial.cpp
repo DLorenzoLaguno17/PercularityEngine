@@ -3,7 +3,7 @@
 #include "ModuleResourceLoader.h"
 #include "imgui.h"
 
-#include"OpenGL.h"
+#include "OpenGL.h"
 #include "DevIL/include/ilut.h":
 
 ComponentMaterial::ComponentMaterial(COMPONENT_TYPE type, GameObject* parent, bool active) : 

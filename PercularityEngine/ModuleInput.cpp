@@ -145,26 +145,10 @@ update_status ModuleInput::PreUpdate(float dt)
 					App->renderer3D->OnResize(e.window.data1, e.window.data2);
 			break;
 
-			case SDL_DROPFILE:
-
-			ComponentMaterial* material = App->scene->selected->GetComponent<ComponentMaterial>();
-			if (material == nullptr)
-				material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL, App->scene->selected);
-
-			// We check if its a .png (texture) or an FBX
-			if (strstr(e.drop.file, ".png") || strstr(e.drop.file, ".dds") || strstr(e.drop.file, ".DDS") || strstr(e.drop.file, ".jpg")) {
-				App->res_loader->ImportFile(e.drop.file);
-				if (App->scene->selected) App->res_loader->CreateTexture(e.drop.file, material);
-			}
-			else if (strstr(e.drop.file, ".fbx") || strstr(e.drop.file, ".FBX")) {
-				App->res_loader->ImportFile(e.drop.file);
-				App->res_loader->LoadFBX(e.drop.file);
-				App->scene->selected = App->scene->game_objects.back();
-			}
+			case SDL_DROPFILE:			
+			App->res_loader->ImportFile(e.drop.file);			
 			// Free dropped_filedir memory
 			SDL_free((void*)e.drop.file);   
-			
-			material = nullptr;
 			
 			break;			
 		}

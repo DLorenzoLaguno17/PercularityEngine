@@ -89,7 +89,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 		{
 			ImGui::Image((void*)App->res_loader->icon_tex->texture, ImVec2(20, 20));
 			ImGui::SameLine();
-			ImGui::Text("Percularity v0.1");
+			ImGui::Text("Percularity v0.2");
 			ImGui::Text("3D engine developed for student purposes");
 			ImGui::Text("By Joan Marin & Daniel Lorenzo");
 			if (ImGui::Button("Go to our GitHub"))
