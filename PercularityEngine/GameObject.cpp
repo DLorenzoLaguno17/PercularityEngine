@@ -75,11 +75,9 @@ void GameObject::OnSave(nlohmann::json &config) {
 // Cleans the memory of the GameObject
 void GameObject::CleanUp() {
 
-	for (int i = 0; i < components.size(); ++i) {
-		//c_mesh->CleanUp();
+	for (int i = 0; i < components.size(); ++i) {		
 		components[i]->CleanUp();
-		delete components[i];
-		components[i] = nullptr;
+		RELEASE(components[i]);
 	}
 }
 

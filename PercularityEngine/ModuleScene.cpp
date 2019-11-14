@@ -91,12 +91,9 @@ bool ModuleScene::CleanUp()
 		game_objects[i]->CleanUp();
 		delete game_objects[i];
 	}
-
 	game_objects.clear();
-	delete root;
 
-	root = nullptr;
-
+	RELEASE(root);
 	return true;
 }
 
@@ -179,7 +176,7 @@ void ModuleScene::DrawAxis() const {
 
 GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 {
-	GameObject* item=new GameObject();
+	GameObject* item = new GameObject();
 	item->name = "Sphere";
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);

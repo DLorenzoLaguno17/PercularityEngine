@@ -37,7 +37,7 @@ public:
 	// Loading methods
 	void LoadModel(const char* path);
 	void LoadTexture(const char* path, ComponentMaterial* material);
-	void LoadMesh(const char* path, ComponentMesh* c_mesh, aiMesh* currentMesh);
+	void LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh);
 
 	// Importing methods 
 	void ImportFile(const char* full_path);

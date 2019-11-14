@@ -31,7 +31,6 @@ public:
 	GameObject* CreatePlane(float length, float depth);
 	GameObject* CreateDonut(int slices, int stacks, float radius);
 
-
 	Tree* testQuadTree;
 	uint GenerateRandomUUID();
 

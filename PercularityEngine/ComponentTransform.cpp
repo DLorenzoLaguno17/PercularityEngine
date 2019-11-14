@@ -3,21 +3,7 @@
 #include "GameObject.h"
 
 ComponentTransform::ComponentTransform( GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::TRANSFORM, parent, active)
-{
-		
-}
-
-ComponentTransform::~ComponentTransform()
-{}
-
-void ComponentTransform::Update()
-{
-	UpdateTransform();
-}
-
-void ComponentTransform::CleanUp()
-{}
+	Component(COMPONENT_TYPE::TRANSFORM, parent, active) {}
 
 void ComponentTransform::OnEditor() {
 
@@ -32,46 +18,55 @@ void ComponentTransform::OnEditor() {
 		uiRotation /= 180 / pi;
 		rotation = Quat::FromEulerXYZ(uiRotation.x, uiRotation.y, uiRotation.z);
 
-		mustUpdate = true;
+		// We check if it must be updated
+		if (!lastRotation.Equals(rotation) || !lastTranslation.Equals(translation) || !lastScale.Equals(scale)) {
+			UpdateTransform();
+
+			lastRotation = rotation;
+			lastTranslation = translation;
+			lastScale = scale;
+		}
+
 		ImGui::NewLine();
 	}
 }
 
 void ComponentTransform::UpdateTransform()
 {
-	if (mustUpdate)
-	{
-		localTransform = float4x4::FromTRS(translation, rotation, scale);
-		
-		if (parent != nullptr)
-			globalTransform = parent->transform->globalTransform * localTransform;
-		
-		UpdateRenderTransform();
-		mustUpdate = false;
-	}
+	localTransform = float4x4::FromTRS(translation, rotation, scale);
+	
+	if (parent != nullptr)
+		globalTransform = parent->transform->globalTransform * localTransform;
+
+	UpdateRenderTransform();
+
+	for (int i = 0; i < parent->children.size(); ++i) {
+		parent->children[i]->transform->UpdateTransform();
+	}	
 }
 
 void ComponentTransform::UpdateRenderTransform()
 {
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j)
 			renderTransform.M[i * 4 + j] = localTransform[j][i];
+	}
 }
 
-void ComponentTransform::SetPosition(float3 newPosition)
+void ComponentTransform::SetPosition(float3 position)
 {
-	translation = newPosition;
-	mustUpdate = true;
+	translation = position;
+	UpdateTransform();
 }
 
 void ComponentTransform::Move(float3 positionIncrease)
 {
 	translation += positionIncrease;
-	mustUpdate = true;
+	UpdateTransform();
 }
 
-void ComponentTransform::Scale(float3 scale_)
+void ComponentTransform::Scale(float3 newScale)
 {
-	scale += scale_;
-	mustUpdate = true;
+	scale += newScale;
+	UpdateTransform();
 }

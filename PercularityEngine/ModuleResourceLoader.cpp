@@ -116,8 +116,8 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 			// If the path has texture extensions, it calls the LoadTexture() method
 			ComponentMesh* mesh = new ComponentMesh(COMPONENT_TYPE::MESH, nullptr, true);
 
-			//LoadMesh(full_path, mesh);
-			//App->scene->selected = App->scene->game_objects.back();
+			LoadModel(full_path);
+			App->scene->selected = App->scene->game_objects.back();
 		}
 		else
 			LOG("Importing of [%s] FAILED", final_path.c_str())
@@ -133,21 +133,21 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 	{
 		GameObject* parent_mesh = new GameObject(getNameFromPath(path));
 		parent_mesh->MakeChild(App->scene->root);
-		App->scene->game_objects.push_back(parent_mesh);
 
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 			
 			// Create the GameObject
-			GameObject* fbx_mesh = new GameObject(scene->mMeshes[i]->mName.C_Str());
-			fbx_mesh->MakeChild(parent_mesh);
+			GameObject* fbx_mesh = nullptr;
+			if (scene->mNumMeshes > 1) {
+				fbx_mesh = new GameObject(scene->mMeshes[i]->mName.C_Str());
+				fbx_mesh->MakeChild(parent_mesh);
+			}
+			else fbx_mesh = parent_mesh;
 
 			// Copy the mesh						
-			ComponentMesh* mesh = fbx_mesh->GetComponent<ComponentMesh>();
-			if (mesh == nullptr)
-				mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH, fbx_mesh);
-
-			LoadMesh(path, mesh, scene->mMeshes[i]);
+			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH, fbx_mesh);
+			LoadMesh(mesh, scene->mMeshes[i]);
 			
 			// Copy materials
 			aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
@@ -159,20 +159,15 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 			std::string name = getNameFromPath(p.C_Str(), true);
 			std::string full_path = file + name;
 
-			ComponentMaterial* material = fbx_mesh->GetComponent<ComponentMaterial>();
-			if (material == nullptr)
-				material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
-
+			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
 			LoadTexture(full_path.c_str(), material);
-			
-			aiNode* node = scene->mRootNode;
-
 
 			App->scene->game_objects.push_back(fbx_mesh);
 			LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh->name.c_str(), App->scene->game_objects.size());
 			LOG("_____________________");
 		}
 		aiReleaseImport(scene);
+		if (scene->mNumMeshes > 1) App->scene->game_objects.push_back(parent_mesh);
 	}
 	else LOG("Error loading FBX: %s", path);
 }
@@ -181,7 +176,7 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleResourceLoader::LoadMesh(const char* path, ComponentMesh* c_mesh, aiMesh* currentMesh) {
+void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) {
 	MeshData m;
 
 	// Copy vertices
@@ -280,51 +275,55 @@ bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_f
 		mesh->mesh.num_tex 
 	};
 
+	// We allocate data buffer
 	uint size = sizeof(ranges) 
 		+ sizeof(uint) * mesh->mesh.num_indices * 3
 		+ sizeof(float3) * mesh->mesh.num_vertices
 		+ sizeof(uint) * mesh->mesh.num_colors * 4
 		+ sizeof(float3) * mesh->mesh.num_normals
 		+ sizeof(float) * mesh->mesh.num_tex * 2;
-	
-	// Allocate memory
-	char* data = new char[size]; 
-	char* cursor = data;
 
-	// First store ranges
-	uint bytes = sizeof(ranges); 
-	memcpy(cursor, ranges, bytes);
+	if (size > 0) {
+		// Allocate memory
+		char* data = new char[size];
+		char* cursor = data;
 
-	// Store indices
-	cursor += bytes; 
-	bytes = sizeof(uint) * mesh->mesh.num_indices * 3;
-	memcpy(cursor, mesh->mesh.indices, bytes);
+		// First store ranges
+		uint bytes = sizeof(ranges);
+		memcpy(cursor, ranges, bytes);
 
-	// Store vertices
-	cursor += bytes;
-	bytes = sizeof(float3) * mesh->mesh.num_vertices;
-	memcpy(cursor, mesh->mesh.vertices, bytes);
+		// Store indices
+		cursor += bytes;
+		bytes = sizeof(uint) * mesh->mesh.num_indices * 3;
+		memcpy(cursor, mesh->mesh.indices, bytes);
 
-	// Store colors
-	cursor += bytes;
-	bytes = sizeof(uint) * mesh->mesh.num_colors * 4;
-	memcpy(cursor, mesh->mesh.colors, bytes);
+		// Store vertices
+		cursor += bytes;
+		bytes = sizeof(float3) * mesh->mesh.num_vertices;
+		memcpy(cursor, mesh->mesh.vertices, bytes);
 
-	// Store normals
-	cursor += bytes;
-	bytes = sizeof(float3) * mesh->mesh.num_normals;
-	memcpy(cursor, mesh->mesh.normals, bytes);
+		// Store colors
+		cursor += bytes;
+		bytes = sizeof(uint) * mesh->mesh.num_colors * 4;
+		memcpy(cursor, mesh->mesh.colors, bytes);
 
-	// Store UVs
-	cursor += bytes;
-	bytes = sizeof(float) * mesh->mesh.num_tex * 2;
-	memcpy(cursor, mesh->mesh.textures, bytes);
+		// Store normals
+		cursor += bytes;
+		bytes = sizeof(float3) * mesh->mesh.num_normals;
+		memcpy(cursor, mesh->mesh.normals, bytes);
 
-	ret = App->file_system->SaveUnique(output_file, cursor, size, LIBRARY_MESH_FOLDER, mesh->parent->name.c_str(), "fbx");
-	RELEASE_ARRAY(cursor);
+		// Store UVs
+		cursor += bytes;
+		bytes = sizeof(float) * mesh->mesh.num_tex * 2;
+		memcpy(cursor, mesh->mesh.textures, bytes);
 
-	if (ret) LOG("Imported mesh: %s", output_file)
-	else LOG("Could not import mesh");
+		ret = App->file_system->SaveUnique(output_file, cursor, size, LIBRARY_MESH_FOLDER, mesh->parent->name.c_str(), "fbx");		
+		RELEASE_ARRAY(data);
+
+		LOG("Imported mesh: %s", output_file.c_str());
+	}
+
+	if (!ret) LOG("Could not import mesh");
 
 	return ret;
 }
