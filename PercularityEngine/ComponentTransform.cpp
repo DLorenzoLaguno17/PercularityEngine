@@ -1,20 +1,20 @@
 #include "ComponentTransform.h"
+#include "imgui.h"
+#include "GameObject.h"
 
 ComponentTransform::ComponentTransform( GameObject* parent, bool active) :
 	Component(COMPONENT_TYPE::TRANSFORM, parent, active)
 {
-	transform = {	1.0f,	0.0f ,0.0f ,0.0f ,
-					0.0f,	1.0f ,0.0f ,0.0f,
-					0.0f,	0.0f ,1.0f ,0.0f,
-					0.0f,	0.0f ,0.0f ,1.0f };
-				
+		
 }
 
 ComponentTransform::~ComponentTransform()
 {}
 
 void ComponentTransform::Update()
-{}
+{
+	UpdateTransform();
+}
 
 void ComponentTransform::CleanUp()
 {}
@@ -23,24 +23,55 @@ void ComponentTransform::OnEditor() {
 
 	if (ImGui::CollapsingHeader("Transform")) {
 
-		//Scale
-		float3 auxScale = transform.GetScale();
-		float auxScale2[3] = { auxScale.x, auxScale.y,auxScale.z };
-		ImGui::InputFloat3("Scale", auxScale2);
+		ImGui::DragFloat3("Translation", &translation.x,0.05f);
+		ImGui::DragFloat3("Scale", &scale.x, 0.05f);
 
-		//Position
-		float3 auxTranslation = transform.TranslatePart();
-		float auxTranslation2[3] = { auxTranslation.x,auxTranslation.y,auxTranslation.z };
-		ImGui::InputFloat3("Position", auxTranslation2);
+		uiRotation = rotation.ToEulerXYZ();
+		uiRotation *= 180 / pi;
+		ImGui::DragFloat3("Rotation", &uiRotation.x, 0.5f);
+		uiRotation /= 180 / pi;
+		rotation = Quat::FromEulerXYZ(uiRotation.x, uiRotation.y, uiRotation.z);
 
-		//Angle
-		/*float3 xAxis = transform.WorldX();
-		float3 yAxis = transform.WorldY();
-		float3 zAxis = transform.WorldZ();*/
-		float3 auxRotation = transform.ToEulerXYZ();
-		float auxRotation2[3] = { auxRotation.x ,auxRotation.y ,auxRotation.z };
-		ImGui::InputFloat3("Rotation", auxRotation2);
-
+		mustUpdate = true;
 		ImGui::NewLine();
 	}
+}
+
+void ComponentTransform::UpdateTransform()
+{
+	if (mustUpdate)
+	{
+		localTransform = float4x4::FromTRS(translation, rotation, scale);
+		
+		if (parent != nullptr)
+			globalTransform = parent->transform->globalTransform * localTransform;
+		
+		UpdateRenderTransform();
+		mustUpdate = false;
+	}
+}
+
+void ComponentTransform::UpdateRenderTransform()
+{
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			renderTransform.M[i * 4 + j] = localTransform[j][i];
+}
+
+void ComponentTransform::SetPosition(float3 newPosition)
+{
+	translation = newPosition;
+	mustUpdate = true;
+}
+
+void ComponentTransform::Move(float3 positionIncrease)
+{
+	translation += positionIncrease;
+	mustUpdate = true;
+}
+
+void ComponentTransform::Scale(float3 scale_)
+{
+	scale += scale_;
+	mustUpdate = true;
 }

@@ -43,6 +43,9 @@
     <Filter Include="Sources\Modules\Resources">
       <UniqueIdentifier>{ec7df1a1-c2fc-495d-8d12-a04a8d3d9e70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Trees">
+      <UniqueIdentifier>{75e0972b-7459-4038-a9cb-60edd40c1476}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleCamera3D.h">
@@ -177,6 +180,9 @@
     <ClInclude Include="Par Shapes\par_shapes.h">
       <Filter>Sources\3rd party</Filter>
     </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>Sources\Tools\Trees</Filter>
+</ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -272,6 +278,9 @@
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>Sources\Modules\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>Sources\Tools\Trees</Filter>
+      </ClCompile>
     <ClCompile Include="ComponentMaterial.cpp">
       <Filter>Sources\Modules\Resources</Filter>
     </ClCompile>

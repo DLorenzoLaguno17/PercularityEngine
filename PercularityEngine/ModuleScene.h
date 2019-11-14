@@ -2,6 +2,8 @@
 #define _MODULE_SCENE_H__
 
 #include "Module.h"
+#include "Tree.h"
+
 
 class GameObject;
 
@@ -18,7 +20,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
-	
+
 	//Save & Load
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
@@ -29,6 +31,8 @@ public:
 	GameObject* CreatePlane(float length, float depth);
 	GameObject* CreateDonut(int slices, int stacks, float radius);
 
+
+	Tree* testQuadTree;
 	uint GenerateRandomUUID();
 
 private:

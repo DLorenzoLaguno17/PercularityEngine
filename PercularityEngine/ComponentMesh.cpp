@@ -6,7 +6,7 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleRenderer3D.h"
-
+#include "ComponentTransform.h"
 
 #include "Par Shapes/par_shapes.h"
 
@@ -36,6 +36,7 @@ void MeshData::CleanUp()
 
 colors = nullptr; }
 	
+
 }
 
 void ComponentMesh::Update() {
@@ -119,6 +120,9 @@ void ComponentMesh::RenderNormals() {
 
 void ComponentMesh::Render() const  {
 	
+	glPushMatrix();
+	glMultMatrixf(parent->transform->renderTransform.M);
+
 	// Render the texture
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	
@@ -147,6 +151,8 @@ void ComponentMesh::Render() const  {
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glPopMatrix();
 }
 
 void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)

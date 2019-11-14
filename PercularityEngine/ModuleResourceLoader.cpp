@@ -167,16 +167,6 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 			
 			aiNode* node = scene->mRootNode;
 
-			for (uint i = 0; i < node->mNumChildren; ++i) {			
-				aiVector3D translation, scale;
-				aiQuaternion rotation;
-				node->mTransformation.Decompose(scale, rotation, translation);
-
-				float3 t(translation.x, translation.y, translation.z);
-				Quat r(rotation.x, rotation.y, rotation.z, rotation.w);
-				float3 s(scale.x, scale.y, scale.z);
-				fbx_mesh->transform->transform = math::float4x4::FromTRS(t, r, s);
-			}
 
 			App->scene->game_objects.push_back(fbx_mesh);
 			LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh->name.c_str(), App->scene->game_objects.size());
