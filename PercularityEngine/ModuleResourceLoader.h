@@ -10,6 +10,7 @@
 class GameObject;
 class ComponentMesh;
 class ComponentMaterial;
+class aiMesh;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
@@ -34,18 +35,18 @@ public:
 	void Save(nlohmann::json &config) {}
 
 	// Loading methods
-	void LoadFBX(const char* path, uint tex = 0);
+	void LoadModel(const char* path);
+	void LoadTexture(const char* path, ComponentMaterial* material);
+	void LoadMesh(const char* path, ComponentMesh* c_mesh, aiMesh* currentMesh);
 
-	// Own file format methods 
+	// Importing methods 
 	void ImportFile(const char* full_path);
 	bool ImportTexture(const char* path, std::string& output_file);
 	bool ImportMesh(ComponentMesh* mesh, std::string& output_file);
-	void LoadMesh(ComponentMesh* mesh, char* buffer);
-
-	void CreateDefaultTexture();
-	void CreateTexture(const char* path, bool importing = false, ComponentMaterial* material = nullptr);
+	void LoadMeshFromLibrary(ComponentMesh* mesh, char* buffer);
 	
 	// Useful methods
+	void CreateDefaultTexture();
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 	bool CheckTextureExtension(const char* extension);
 	bool CheckMeshExtension(const char* extension);

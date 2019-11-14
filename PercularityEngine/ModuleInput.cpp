@@ -146,9 +146,8 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_DROPFILE:			
-			App->res_loader->ImportFile(e.drop.file);			
-			// Free dropped_filedir memory
-			SDL_free((void*)e.drop.file);   
+			App->res_loader->ImportFile(e.drop.file);				
+			SDL_free((void*)e.drop.file);
 			
 			break;			
 		}

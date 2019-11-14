@@ -56,7 +56,7 @@ void GameObject::OnEditor() {
 		components[i]->OnEditor();
 }
 
-void GameObject::MakeParent(GameObject* parent) {
+void GameObject::MakeChild(GameObject* parent) {
 	this->parent = parent;
 	parent->children.push_back(this);
 }

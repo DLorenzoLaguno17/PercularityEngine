@@ -41,7 +41,7 @@ public:
 	void OnSave(nlohmann::json &config);
 
 	// Makes a GameObject its parent
-	void MakeParent(GameObject* parent);
+	void MakeChild(GameObject* parent);
 
 	Component* CreateComponent(COMPONENT_TYPE type, bool active = true);
 	void OnEditor();
