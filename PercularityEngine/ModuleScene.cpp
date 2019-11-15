@@ -178,6 +178,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 {
 	GameObject* item = new GameObject();
 	item->name = "Sphere";
+	item->MakeChild(App->scene->root);
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -206,6 +207,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 {
 	GameObject* item = new GameObject();
 	item->name = "Cube";
+	item->MakeChild(App->scene->root);
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -264,6 +266,7 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 {
 	GameObject* item = new GameObject();
 	item->name = "Plane";
+	item->MakeChild(App->scene->root);
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -294,6 +297,7 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 {
 	GameObject* item = new GameObject();
 	item->name = "Donut";
+	item->MakeChild(App->scene->root);
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);

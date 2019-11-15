@@ -40,7 +40,7 @@ public:
 	void OnLoad(const nlohmann::json  &config);
 	void OnSave(nlohmann::json &config);
 
-	// Makes a GameObject its parent
+	// Makes a it child of another GameObject
 	void MakeChild(GameObject* parent);
 
 	Component* CreateComponent(COMPONENT_TYPE type, bool active = true);
