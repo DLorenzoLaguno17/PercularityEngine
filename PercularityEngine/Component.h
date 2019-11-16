@@ -31,6 +31,7 @@ public:
 	COMPONENT_TYPE GetType() const { return type; }
 
 public:
+	uint uuid; 
 	COMPONENT_TYPE type;
 	GameObject* parent;
 	bool active;

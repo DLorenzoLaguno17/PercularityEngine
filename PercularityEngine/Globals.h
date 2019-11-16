@@ -6,7 +6,7 @@
 
 #include <windows.h>
 #include <stdio.h>
-#include <list>
+#include <string>
 #include <vector>
 
 #include "Json Parser/nlohmann/json.hpp"
@@ -60,11 +60,8 @@ enum update_status
 };
 
 // Configuration -----------
-#define SCREEN_SIZE 1
-#define VSYNC true
 #define TITLE "Percularity v0.1"
 #define ORG "UPC - Tech Talent Center"
-
 #define ASSETS_FOLDER "/Assets/"
 #define ASSETS_MODEL_FOLDER "/Assets/FBX/"
 #define ASSETS_TEXTURE_FOLDER "/Assets/Textures/"

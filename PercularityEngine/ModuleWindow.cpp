@@ -35,8 +35,8 @@ bool ModuleWindow::Init()
 	else
 	{
 		//Create window
-		int width = winWidth* SCREEN_SIZE;
-		int height = winHeight* SCREEN_SIZE;
+		int width = winWidth* winSize;
+		int height = winHeight* winSize;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -144,6 +144,7 @@ void ModuleWindow::Load(const nlohmann::json &config) {
 	winFullscreenDesktop = config["Window"]["Full Screen Desktop"];
 	winWidth = config["Window"]["Width"];
 	winHeight = config["Window"]["Height"];
+	winSize = config["Window"]["Size"];
 }
 
 void ModuleWindow::Save(nlohmann::json &config) {
@@ -154,4 +155,5 @@ void ModuleWindow::Save(nlohmann::json &config) {
 	config["Window"]["Full Screen Desktop"] = winFullscreenDesktop;
 	config["Window"]["Width"] = winWidth;
 	config["Window"]["Height"] = winHeight;
+	config["Window"]["Size"] = winSize;
 }

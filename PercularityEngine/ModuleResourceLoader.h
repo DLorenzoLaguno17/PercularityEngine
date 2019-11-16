@@ -2,7 +2,6 @@
 #define __ModuleResourceLoader_H__
 
 #include "Module.h"
-#include <vector>
 
 #define CHECKERS_WIDTH 150
 #define CHECKERS_HEIGHT 150

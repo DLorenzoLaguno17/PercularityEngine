@@ -17,6 +17,7 @@
         "Full Screen Desktop": false,
         "Height": 720,
         "Resizable": false,
+        "Size": 1,
         "Width": 1280
     }
 }

@@ -17,6 +17,7 @@ class ModuleCamera3D;
 class ModuleGui;
 class ModuleScene;
 class ModuleResourceLoader;
+class ModuleResourceManager;
 class ModuleFileSystem;
 
 using json = nlohmann::json;
@@ -30,6 +31,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleGui* gui;
 	ModuleResourceLoader* res_loader;
+	ModuleResourceManager* res_manager;
 	ModuleFileSystem* file_system;
 	ModuleScene* scene;
 

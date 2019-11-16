@@ -5,9 +5,8 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
-#include "OpenGL.h"
 #include "GameObject.h"
-#include <string>
+#include "OpenGL.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -78,7 +77,7 @@ bool ModuleResourceLoader::Start()
 // Called before quitting
 bool ModuleResourceLoader::CleanUp()
 {
-	LOG("Freeing mesh loader");
+	LOG("Freeing resource loader");
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 	RELEASE(icon_tex);

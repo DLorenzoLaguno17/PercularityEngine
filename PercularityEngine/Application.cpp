@@ -6,6 +6,7 @@
 #include "ModuleGui.h"
 #include "ModuleScene.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
 
 #include <fstream>
@@ -23,6 +24,7 @@ Application::Application()
 	gui = new ModuleGui(this);
 	scene = new ModuleScene(this);
 	res_loader = new ModuleResourceLoader(this);
+	res_manager = new ModuleResourceManager(this);
 	file_system = new ModuleFileSystem(this, ASSETS_FOLDER);
 
 	// The order of calls is very important!
@@ -35,6 +37,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(gui);
 	AddModule(file_system);
+	AddModule(res_manager);
 	AddModule(res_loader);
 	
 	// Scenes

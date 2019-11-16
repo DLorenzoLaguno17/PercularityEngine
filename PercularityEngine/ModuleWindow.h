@@ -31,6 +31,7 @@ public:
 
 	uint GetWindowWidth() const { return winWidth; }
 	uint GetWindowHeight() const { return winHeight; }
+	uint GetWindowSize() const { return winSize; }
 
 public:
 	//The window we'll be rendering to
@@ -51,6 +52,7 @@ private:
 	//Window size
 	uint winWidth = 0;
 	uint winHeight = 0;
+	uint winSize = 1;
 
 };				 
 
