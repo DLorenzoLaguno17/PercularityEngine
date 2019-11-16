@@ -207,6 +207,10 @@
     <ClInclude Include="GameObject.h">
       <Filter>Sources\Modules\Scene elements</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Resource.h">
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
