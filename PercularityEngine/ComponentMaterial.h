@@ -5,6 +5,8 @@
 #include <string>
 #include "imgui.h"
 
+class ResourceTexture;
+
 class ComponentMaterial : public Component {
 public:
 	ComponentMaterial(COMPONENT_TYPE type, GameObject* parent, bool active);
@@ -24,6 +26,7 @@ public:
 	long width = 0;
 	long height = 0;
 	std::string tex_name;
+	ResourceTexture* resource_tex = nullptr;
 };
 
 #endif // _ComponentMaterial_H_

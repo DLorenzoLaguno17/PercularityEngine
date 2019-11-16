@@ -21,15 +21,15 @@ public:
 
 	//Update transform
 	void UpdateTransform();
-	void UpdateRenderTransform();//float4x4 -> mat4x4
+	void UpdateRenderTransform(); //float4x4 -> mat4x4
 	void SetPosition(float3 position);
 	void Move(float3 positionIncrease);
 	void Scale(float3 newScale);
 
 private:
 
-	float4x4 globalTransform	= float4x4::identity;
-	float4x4 localTransform		= float4x4::identity;
+	float4x4 globalTransform = float4x4::identity;
+	float4x4 localTransform	 = float4x4::identity;
 	
 	mat4x4 renderTransform;
 

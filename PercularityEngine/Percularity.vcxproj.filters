@@ -40,11 +40,17 @@
     <Filter Include="Sources\3rd party\MMGR">
       <UniqueIdentifier>{d210b81f-cb8c-44dd-a226-223eb804aa40}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Modules\Resources">
-      <UniqueIdentifier>{ec7df1a1-c2fc-495d-8d12-a04a8d3d9e70}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Tools\Trees">
       <UniqueIdentifier>{75e0972b-7459-4038-a9cb-60edd40c1476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Scene elements">
+      <UniqueIdentifier>{ec7df1a1-c2fc-495d-8d12-a04a8d3d9e70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Scene elements\Components">
+      <UniqueIdentifier>{6c7ba77f-d661-4703-899b-395b856582a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Scene elements\Resources">
+      <UniqueIdentifier>{367c8d5d-8ddd-4605-b96a-5ecf0c9d165a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,23 +156,8 @@
     <ClInclude Include="resource.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentMaterial.h">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentMesh.h">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleResourceLoader.h">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentTransform.h">
-      <Filter>Sources\Modules\Resources</Filter>
+      <Filter>Sources\Modules\Scene elements</Filter>
     </ClInclude>
     <ClInclude Include="InspectorWindow.h">
       <Filter>Sources\Modules\GUI</Filter>
@@ -187,10 +178,34 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleResourceManager.h">
-      <Filter>Sources\Modules\Resources</Filter>
+      <Filter>Sources\Modules\Scene elements</Filter>
     </ClInclude>
-    <ClInclude Include="Resources.h">
-      <Filter>Sources\Modules\Resources</Filter>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\Modules\Scene elements\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>Sources\Modules\Scene elements\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>Sources\Modules\Scene elements\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>Sources\Modules\Scene elements\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMesh.h">
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceScene.h">
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceTexture.h">
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Sources\Modules\Scene elements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,11 +281,8 @@
     <ClCompile Include="ConfigWindow.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleResourceLoader.cpp">
-      <Filter>Sources\Modules\Resources</Filter>
+      <Filter>Sources\Modules\Scene elements</Filter>
     </ClCompile>
     <ClCompile Include="InspectorWindow.cpp">
       <Filter>Sources\Modules\GUI</Filter>
@@ -278,23 +290,26 @@
     <ClCompile Include="HierarchyWindow.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentMesh.cpp">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentTransform.cpp">
-      <Filter>Sources\Modules\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="Tree.cpp">
       <Filter>Sources\Tools\Trees</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentMaterial.cpp">
-      <Filter>Sources\Modules\Resources</Filter>
     </ClCompile>
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleResourceManager.cpp">
-      <Filter>Sources\Modules\Resources</Filter>
+      <Filter>Sources\Modules\Scene elements</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\Modules\Scene elements\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>Sources\Modules\Scene elements\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>Sources\Modules\Scene elements\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Sources\Modules\Scene elements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

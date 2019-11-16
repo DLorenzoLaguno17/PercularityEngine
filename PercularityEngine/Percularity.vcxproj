@@ -110,7 +110,10 @@
     <ClInclude Include="ModuleResourceManager.h" />
     <ClInclude Include="ModuleScene.h" />
     <ClInclude Include="ModuleWindow.h" />
-    <ClInclude Include="Resources.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceScene.h" />
+    <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Tree.h" />
     <ClInclude Include="OpenGL.h" />
     <ClInclude Include="Par Shapes\par_shapes.h" />

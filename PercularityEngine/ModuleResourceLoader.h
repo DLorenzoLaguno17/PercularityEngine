@@ -46,9 +46,9 @@ public:
 	
 	// Useful methods
 	void CreateDefaultTexture();
-	std::string getNameFromPath(std::string path, bool withExtension = false);
 	bool CheckTextureExtension(const char* extension);
 	bool CheckMeshExtension(const char* extension);
+	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
 	ComponentMaterial* icon_tex = nullptr;

@@ -1,16 +1,38 @@
-//{{NO_DEPENDENCIES}}
-// Archivo de inclusión generado de Microsoft Visual C++.
-// Usado por Percularity Engine.rc
-//
-#define IDI_ICON1                       101
+#ifndef __Resource_H__
+#define __Resource_H__
 
-// Next default values for new objects
-// 
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        102
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1001
-#define _APS_NEXT_SYMED_VALUE           101
-#endif
-#endif
+#include "Globals.h"
+
+enum RESOURCE_TYPE {
+	TEXTURE,
+	MESH,
+	SCENE,
+	UNKNOWN
+};
+
+class Resource
+{
+public:
+	Resource(UID uid, RESOURCE_TYPE type) : uid(uid), type(type){}
+	virtual ~Resource() {}
+	RESOURCE_TYPE GetType() const;
+	UID GetUID() const { return uid; }
+	const char* GetFile() const;
+	const char* GetImportedFile() const;
+	bool IsLoadedToMemory() const;
+	bool LoadToMemory();
+	uint CountReferences() const;
+
+	virtual void Load(const nlohmann::json &config);
+	virtual void Save(nlohmann::json &config) const;
+	virtual bool LoadInMemory() = 0;
+
+protected:
+	UID uid = 0;
+	std::string file;
+	std::string imported_file;
+	RESOURCE_TYPE type = RESOURCE_TYPE::UNKNOWN;
+	uint loaded = 0;
+};
+
+#endif // __Resources_H__

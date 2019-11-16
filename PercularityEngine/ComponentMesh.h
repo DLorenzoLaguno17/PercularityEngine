@@ -7,6 +7,7 @@
 #define NORMALS_LENGTH 1.0f
 
 struct par_shapes_mesh_s;
+class ResourceMesh;
 
 struct MeshData {
 
@@ -63,6 +64,7 @@ public:
 
 public:
 	MeshData mesh;
+	class ResourceMesh* resource_mesh = nullptr;
 
 private:
 	bool showVertexNormals = false;
