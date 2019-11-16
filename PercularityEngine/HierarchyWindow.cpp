@@ -11,7 +11,7 @@ HierarchyWindow::HierarchyWindow(char* name, bool active) : UIElement(name, acti
 void HierarchyWindow::Update() {
 
 	ImGui::Begin("Hierarchy", &active);	
-	DrawHierarchy(App->scene->root);
+	DrawHierarchy(App->scene->GetRoot());
 	ImGui::End();
 }
 

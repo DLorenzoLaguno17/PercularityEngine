@@ -3,12 +3,10 @@
 #include "Globals.h"
 #include "Timer.h"
 #include "Module.h"
+#include <list>
 
 #include "Json Parser/nlohmann/json.hpp"
-
-#include <vector>
-#include <string>
-#include <list>
+#include "MathGeoLib/include/Algorithm/Random/LCG.h"
 
 class ModuleWindow;
 class ModuleInput;
@@ -46,7 +44,10 @@ private:
 
 	//Save & load
 	const char* settingsAdress;
-	json		settingsFile;	
+	json		settingsFile;
+
+	// Random number generator
+	math::LCG* rand = nullptr;
 	
 public:
 	Application();
@@ -56,6 +57,7 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void DisableVsync(bool mustDisable);
+	LCG& GetRandomGenerator();
 
 private:
 	void AddModule(Module* mod);

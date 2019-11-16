@@ -131,7 +131,7 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		GameObject* parent_mesh = new GameObject(getNameFromPath(path));
-		parent_mesh->MakeChild(App->scene->root);
+		parent_mesh->MakeChild(App->scene->GetRoot());
 
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {

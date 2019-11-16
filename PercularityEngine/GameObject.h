@@ -36,12 +36,10 @@ public:
 	// Removes the memory
 	void CleanUp();
 
-	// Save & Load
-	void OnLoad(const nlohmann::json  &config);
-	void OnSave(nlohmann::json &config);
-
 	// Makes a it child of another GameObject
 	void MakeChild(GameObject* parent);
+
+	uint GetUUID() const { return UUID; }
 
 	Component* CreateComponent(COMPONENT_TYPE type, bool active = true);
 	void OnEditor();
@@ -56,13 +54,16 @@ public:
 	ComponentTransform* transform = nullptr;
 
 	std::string name;
-	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	GameObject* parent;
-	uint UUID = 0;
 
 	BoundingBox boundingBox;
 	bool extended = true;
+
+private:
+	std::vector<Component*> components;
+	uint UUID = 0;
+
 };
 
 #endif // __GameObject_H__

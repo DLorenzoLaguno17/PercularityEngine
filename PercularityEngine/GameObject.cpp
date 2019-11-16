@@ -4,23 +4,23 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
-#include "ModuleScene.h"
+
 #include "OpenGL.h"
 #include "glmath.h"
-
 #include "mmgr/mmgr.h"
 
-GameObject::GameObject():name("Untitled"), parent(nullptr){
+GameObject::GameObject() : name("Untitled"), parent(nullptr){
 
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+	UUID = (uint)App->GetRandomGenerator().Int();
 }
 
 GameObject::GameObject(std::string name, GameObject* parent) :
 	name(name), parent(parent)
 {
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	/*if (!strcmp(name.c_str(), "World"))	
-		UUID = App->scene->GenerateRandomUUID();*/
+	if (strcmp("World", name.c_str()) != 0)
+		UUID = (uint)App->GetRandomGenerator().Int();
 }
 
 // Called every frame
@@ -59,17 +59,6 @@ void GameObject::OnEditor() {
 void GameObject::MakeChild(GameObject* parent) {
 	this->parent = parent;
 	parent->children.push_back(this);
-}
-
-//Save & Load
-void GameObject::OnLoad(const nlohmann::json &config){
-	for (int i = 0; i < components.size(); ++i)
-		components[i]->OnLoad(config);
-}
-
-void GameObject::OnSave(nlohmann::json &config) {
-	for (int i = 0; i < components.size(); ++i)
-		components[i]->OnSave(config);
 }
 
 // Cleans the memory of the GameObject

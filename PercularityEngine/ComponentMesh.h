@@ -40,8 +40,7 @@ struct MeshData {
 
 class ComponentMesh : public Component {
 public:
-	ComponentMesh(COMPONENT_TYPE type, GameObject* parent, bool active) :
-		Component(type, parent, active) {}
+	ComponentMesh(COMPONENT_TYPE type, GameObject* parent, bool active);
 
 	~ComponentMesh() {}
 
@@ -60,7 +59,7 @@ public:
 	//Create the bouding box
 	void CreateBoundingBox();
 
-	static COMPONENT_TYPE GetComponentType()  { return COMPONENT_TYPE::MESH; }
+	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MESH; }
 
 public:
 	MeshData mesh;

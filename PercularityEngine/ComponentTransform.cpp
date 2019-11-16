@@ -1,9 +1,10 @@
 #include "ComponentTransform.h"
 #include "imgui.h"
 #include "GameObject.h"
+#include "Application.h"
 
 ComponentTransform::ComponentTransform( GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::TRANSFORM, parent, active) {}
+	Component(COMPONENT_TYPE::TRANSFORM, parent, active) {	UUID = (uint)App->GetRandomGenerator().Int(); }
 
 void ComponentTransform::OnEditor() {
 

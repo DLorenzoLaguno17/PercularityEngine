@@ -25,9 +25,8 @@ public:
 	virtual void Update() {}
 	virtual void OnEditor() {}
 	virtual void CleanUp() {}
-	virtual void OnLoad(const nlohmann::json &config) {}
-	virtual void OnSave(nlohmann::json &config) {}
 
+	uint GetUUID() const { return UUID; }
 	COMPONENT_TYPE GetType() const { return type; }
 
 public:
@@ -35,6 +34,9 @@ public:
 	COMPONENT_TYPE type;
 	GameObject* parent;
 	bool active;
+
+protected:
+	uint UUID = 0;
 };
 
 #endif // __Component_H__

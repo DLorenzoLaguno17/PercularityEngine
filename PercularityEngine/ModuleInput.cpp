@@ -14,7 +14,6 @@
 #include "imgui_impl_sdl.h"
 
 #include "Brofiler/Lib/Brofiler.h"
-
 #include "mmgr/mmgr.h"
 
 #define MAX_KEYS 300

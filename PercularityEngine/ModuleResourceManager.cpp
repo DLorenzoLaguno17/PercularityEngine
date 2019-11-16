@@ -5,7 +5,6 @@
 #include <string>
 
 #include "Brofiler/Lib/Brofiler.h"
-
 #include "mmgr/mmgr.h"
 
 // Called before the first frame

@@ -17,6 +17,10 @@
 
 Application::Application()
 {
+	// Creating the random number generator
+	rand = new math::LCG();
+
+	// Creating the modules
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	renderer3D = new ModuleRenderer3D(this);
@@ -26,10 +30,6 @@ Application::Application()
 	res_loader = new ModuleResourceLoader(this);
 	res_manager = new ModuleResourceManager(this);
 	file_system = new ModuleFileSystem(this, ASSETS_FOLDER);
-
-	// The order of calls is very important!
-	// Modules will Init() Start() and Update in this order
-	// They will CleanUp() in reverse order
 
 	// Main Modules
 	AddModule(window);
@@ -57,6 +57,8 @@ Application::~Application()
 		delete(*item);
 
 	modules.clear();
+
+	if (rand) RELEASE(rand);
 }
 
 bool Application::Init()
@@ -222,4 +224,8 @@ void Application::DisableVsync(bool mustDisable) {
 		SDL_GL_SetSwapInterval(1);
 	else 
 		SDL_GL_SetSwapInterval(0);
+}
+
+LCG& Application::GetRandomGenerator() {
+	return *rand;
 }

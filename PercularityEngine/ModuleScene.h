@@ -22,8 +22,8 @@ public:
 	bool CleanUp();
 
 	//Save & Load
-	void Load(const nlohmann::json &config);
-	void Save(nlohmann::json &config);
+	void Load(const nlohmann::json &config) {}
+	void Save(nlohmann::json &config) {}
 
 	//Methods to create primitives
 	GameObject* CreateSphere(int slices, int stacks, float diameter);
@@ -31,8 +31,8 @@ public:
 	GameObject* CreatePlane(float length, float depth);
 	GameObject* CreateDonut(int slices, int stacks, float radius);
 
+	GameObject* GetRoot() const { return root; }
 	Tree* testQuadTree;
-	uint GenerateRandomUUID();
 
 private:
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
@@ -40,7 +40,9 @@ private:
 
 public:
 	std::vector<GameObject*> game_objects;
-	GameObject* root = nullptr;
 	GameObject* selected = nullptr;
+
+private:
+	GameObject* root = nullptr;
 };
 #endif

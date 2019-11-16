@@ -7,9 +7,7 @@
 #include "ModuleScene.h"
 
 #include "Par Shapes/par_shapes.h"
-
 #include "Brofiler/Lib/Brofiler.h"
-
 #include "mmgr/mmgr.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -60,7 +58,7 @@ update_status ModuleCamera3D::Update(float dt)
 		speed = 8.0f * dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-		if (App->scene->selected != App->scene->root) FocusCameraOn(App->scene->selected);
+		if (App->scene->selected != App->scene->GetRoot()) FocusCameraOn(App->scene->selected);
 
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {
 		if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT) newPos.y += speed;

@@ -9,35 +9,18 @@
 #include "ComponentTransform.h"
 
 #include "Par Shapes/par_shapes.h"
-
 #include "mmgr/mmgr.h"
+
+ComponentMesh::ComponentMesh(COMPONENT_TYPE type, GameObject* parent, bool active) :
+	Component(type, parent, active) { UUID = (uint)App->GetRandomGenerator().Int(); }
 
 void MeshData::CleanUp()
 {		
-	if (indices != nullptr) 
-		{ delete[] indices;
-		indices = nullptr; 
-	}
-		
-	if (vertices != nullptr) {
-		delete[] vertices;
-		vertices = nullptr; 
-	}
-	
-	if (textures != nullptr) {
-		delete[] textures;
-		textures = nullptr; 
-	}
-	
-	if (normals != nullptr) {
-		delete[] normals;
-		normals = nullptr; 
-	}
-	
-	if (colors != nullptr) { 
-		delete[] colors; 
-		colors = nullptr; 
-	}	
+	RELEASE_ARRAY(indices);
+	RELEASE_ARRAY(vertices);
+	RELEASE_ARRAY(normals);
+	RELEASE_ARRAY(colors);
+	RELEASE_ARRAY(textures);
 }
 
 void ComponentMesh::Update() 

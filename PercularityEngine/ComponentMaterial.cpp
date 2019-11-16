@@ -3,11 +3,8 @@
 #include "ModuleResourceLoader.h"
 #include "imgui.h"
 
-#include "OpenGL.h"
-#include "DevIL/include/ilut.h":
-
 ComponentMaterial::ComponentMaterial(COMPONENT_TYPE type, GameObject* parent, bool active) : 
-	Component(type, parent, active) {}
+	Component(type, parent, active) { UUID = (uint)App->GetRandomGenerator().Int(); }
 
 void ComponentMaterial::Update() {
 

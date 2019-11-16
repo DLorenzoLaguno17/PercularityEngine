@@ -110,7 +110,6 @@
     <ClInclude Include="ModuleResourceManager.h" />
     <ClInclude Include="ModuleScene.h" />
     <ClInclude Include="ModuleWindow.h" />
-    <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="ResourceScene.h" />
     <ClInclude Include="ResourceTexture.h" />
@@ -120,7 +119,6 @@
     <ClInclude Include="pcg_extras.hpp" />
     <ClInclude Include="pcg_random.hpp" />
     <ClInclude Include="pcg_uint128.hpp" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="SceneWindow.h" />
     <ClInclude Include="ConfigWindow.h" />
     <ClInclude Include="Timer.h" />
@@ -157,6 +155,7 @@
     <ClCompile Include="ModuleResourceManager.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="Resource.h" />
     <ClCompile Include="SceneWindow.cpp" />
     <ClCompile Include="ConfigWindow.cpp" />
     <ClCompile Include="Tree.cpp" />

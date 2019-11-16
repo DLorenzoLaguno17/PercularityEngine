@@ -65,7 +65,8 @@ bool ModuleWindow::Init()
 
 		window = SDL_CreateWindow(winTitle.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
-		LOG("%d %d", width, height);
+		LOG("Window width: %d", width);
+		LOG("Window height: %d", height);
 
 		if(window == NULL)
 		{
