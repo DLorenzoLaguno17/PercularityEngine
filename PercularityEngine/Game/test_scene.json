@@ -1,0 +1,43 @@
+{
+    "test": {
+        "Game Objects": {
+            "Components": {
+                "Material": {
+                    "Height": 1024,
+                    "Name": "baker_house.png",
+                    "Parent UUID": 873291464,
+                    "Texture": 7,
+                    "UUID": 1347124040,
+                    "Width": 1024
+                },
+                "Mesh": {
+                    "Parent UUID": 873291464,
+                    "UUID": 2015484927
+                },
+                "Transform": {
+                    "Parent UUID": 0,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 1366245335
+                }
+            },
+            "Name": "Untitled",
+            "Parent UUID": 0,
+            "UUID": 873291464
+        }
+    }
+}

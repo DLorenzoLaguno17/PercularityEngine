@@ -30,11 +30,12 @@ public:
 	// Destructor
 	virtual ~GameObject() {};
 
-	// Called every frame
 	void Update();
-
-	// Removes the memory
 	void CleanUp();
+
+	// Load & Save 
+	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
+	void OnSave(const char* scene_name, nlohmann::json &scene_file);
 
 	// Makes a it child of another GameObject
 	void MakeChild(GameObject* parent);
@@ -63,6 +64,7 @@ public:
 private:
 	std::vector<Component*> components;
 	uint UUID = 0;
+	uint parent_UUID = 0;
 
 };
 

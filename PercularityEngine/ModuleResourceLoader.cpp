@@ -65,7 +65,7 @@ bool ModuleResourceLoader::Start()
 
 	// Load textures
 	CreateDefaultTexture();
-	icon_tex = new ComponentMaterial(COMPONENT_TYPE::MATERIAL, nullptr, true);
+	icon_tex = new ComponentMaterial(nullptr, true);
 	LoadTexture("Assets/Textures/icon.png", icon_tex); 
 
 	// Enable textures
@@ -112,8 +112,8 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 			material = nullptr;
 		}
 		else if (CheckMeshExtension(extension.c_str())) {
-			// If the path has texture extensions, it calls the LoadTexture() method
-			ComponentMesh* mesh = new ComponentMesh(COMPONENT_TYPE::MESH, nullptr, true);
+			// If the path has texture extensions, it calls the LoadModel() method
+			ComponentMesh* mesh = new ComponentMesh(nullptr, true);
 
 			LoadModel(full_path);
 			App->scene->selected = App->scene->game_objects.back();

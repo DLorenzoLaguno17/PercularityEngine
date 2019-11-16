@@ -9,7 +9,7 @@ class ResourceTexture;
 
 class ComponentMaterial : public Component {
 public:
-	ComponentMaterial(COMPONENT_TYPE type, GameObject* parent, bool active);
+	ComponentMaterial(GameObject* parent, bool active);
 
 	// Destructor
 	~ComponentMaterial() {}
@@ -18,6 +18,10 @@ public:
 	void Update();
 	void OnEditor();
 	void CleanUp(){}
+
+	// Load & Save 
+	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
+	void OnSave(const char* scene_name, nlohmann::json &scene_file);
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MATERIAL; }
 

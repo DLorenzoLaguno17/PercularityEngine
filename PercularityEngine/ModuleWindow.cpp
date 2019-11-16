@@ -140,7 +140,7 @@ void ModuleWindow::SetFulldesktop(bool goingFulldesktop) {
 void ModuleWindow::Load(const nlohmann::json &config) {
 	
 	winResizable = config["Window"]["Resizable"];
-	winBorderless= config["Window"]["Borderless"];
+	winBorderless = config["Window"]["Borderless"];
 	winFullscreen = config["Window"]["Full Screen"];
 	winFullscreenDesktop = config["Window"]["Full Screen Desktop"];
 	winWidth = config["Window"]["Width"];

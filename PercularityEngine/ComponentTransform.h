@@ -19,6 +19,10 @@ public:
 	void CleanUp() {}
 	void OnEditor();
 
+	// Load & Save 
+	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
+	void OnSave(const char* scene_name, nlohmann::json &scene_file);
+
 	//Update transform
 	void UpdateTransform();
 	void UpdateRenderTransform(); //float4x4 -> mat4x4

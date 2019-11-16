@@ -3,8 +3,12 @@
 #include "GameObject.h"
 #include "Application.h"
 
-ComponentTransform::ComponentTransform( GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::TRANSFORM, parent, active) {	UUID = (uint)App->GetRandomGenerator().Int(); }
+ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
+	Component(COMPONENT_TYPE::TRANSFORM, parent, active)
+{
+	UUID = (uint)App->GetRandomGenerator().Int();
+	if (parent) parent_UUID = parent->GetUUID();
+}
 
 void ComponentTransform::OnEditor() {
 
@@ -70,4 +74,28 @@ void ComponentTransform::Scale(float3 newScale)
 {
 	scale += newScale;
 	UpdateTransform();
+}
+
+// Load & Save 
+void ComponentTransform::OnLoad(const char* scene_name, const nlohmann::json &scene_file) {
+	UUID = scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["UUID"];
+	parent_UUID = scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Parent UUID"];
+	/*rotation = scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Rotation"];
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Rotation"];
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Rotation"][rotation.z];
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Translation"][scale.x];
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Translation"][scale.y];
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Translation"][scale.z];
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Scale"][scale.x];
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Scale"][scale.y];
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Scale"][scale.z];*/
+
+}
+
+void ComponentTransform::OnSave(const char* scene_name, nlohmann::json &scene_file) {
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["UUID"] = UUID;
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Parent UUID"] = parent_UUID;
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Translation"] = { translation.x, translation.y, translation.z };
+	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Scale"] = { scale.x, scale.y, scale.y };
 }

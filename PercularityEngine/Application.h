@@ -43,7 +43,7 @@ private:
 	std::list<Module*> modules;
 
 	//Save & load
-	const char* settingsAdress;
+	const char* settingsAddress;
 	json		settingsFile;
 
 	// Random number generator

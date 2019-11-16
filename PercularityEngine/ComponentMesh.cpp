@@ -11,8 +11,12 @@
 #include "Par Shapes/par_shapes.h"
 #include "mmgr/mmgr.h"
 
-ComponentMesh::ComponentMesh(COMPONENT_TYPE type, GameObject* parent, bool active) :
-	Component(type, parent, active) { UUID = (uint)App->GetRandomGenerator().Int(); }
+ComponentMesh::ComponentMesh(GameObject* parent, bool active) :
+	Component(COMPONENT_TYPE::MESH, parent, active) 
+{
+	UUID = (uint)App->GetRandomGenerator().Int();
+	if (parent) parent_UUID = parent->GetUUID();
+}
 
 void MeshData::CleanUp()
 {		
@@ -245,4 +249,14 @@ void ComponentMesh::CreateBoundingBox()
 	parent->boundingBox.box[6] = { minX, minY, maxZ };
 	parent->boundingBox.box[7] = { minX, minY, minZ };
 
+}
+
+// Load & Save 
+void ComponentMesh::OnLoad(const char* scene_name, const nlohmann::json &scene_file) {
+
+}
+
+void ComponentMesh::OnSave(const char* scene_name, nlohmann::json &scene_file) {
+	scene_file[scene_name]["Game Objects"]["Components"]["Mesh"]["UUID"] = UUID;
+	scene_file[scene_name]["Game Objects"]["Components"]["Mesh"]["Parent UUID"] = parent_UUID;
 }

@@ -6,6 +6,10 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleInput.h"
+
+#include <fstream>
+#include <iomanip>
 
 #define PAR_SHAPES_IMPLEMENTATION
 
@@ -21,6 +25,8 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Init() {
 	App->scene->root = new GameObject("World");
+	sceneAddress = "_scene.json";
+
 	return true;
 }
 
@@ -59,10 +65,10 @@ update_status ModuleScene::Update(float dt)
 	//DrawSimplePlane();
 	DrawAxis();
 
-	// Draw all GameObjects
-	for (uint i = 0; i < game_objects.size(); ++i) {
-		game_objects[i]->Update();
-	}
+	// Update all GameObjects
+	UpdateGameObjects(root);
+
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_UP) SaveScene("test");
 	
 	return UPDATE_CONTINUE;
 }
@@ -72,6 +78,13 @@ update_status ModuleScene::PostUpdate(float dt)
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow)
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleScene::UpdateGameObjects(GameObject* root) {
+	root->Update();
+
+	for (int i = 0; i < root->children.size(); ++i)
+		UpdateGameObjects(root->children[i]);
 }
 
 bool ModuleScene::CleanUp()
@@ -87,13 +100,56 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
-void ModuleScene::DrawSimplePlane()const
+void ModuleScene::LoadScene(const std::string scene_name) {
+	json scene_file;
+
+	// If the adress of the settings file is null, create  an exception
+	assert(sceneAddress != nullptr);
+	std::string full_path = sceneAddress + scene_name;
+
+	// Create a stream and open the file
+	std::ifstream stream;
+	stream.open(full_path);
+
+	scene_file = json::parse(stream);
+
+	// Close the file
+	stream.close();
+}
+
+void ModuleScene::RecursiveLoad(const char* scene_name, GameObject* root, const nlohmann::json &scene_file) {
+
+}
+
+void ModuleScene::SaveScene(std::string scene_name) {
+
+	// Create auxiliar file
+	json scene_file;
+	std::string full_path = scene_name + sceneAddress;
+
+	RecursiveSave(scene_name.c_str(), root, scene_file);
+
+	// Create the stream and open the file
+	std::ofstream stream;
+	stream.open(full_path);
+	stream << std::setw(4) << scene_file << std::endl;
+	stream.close();
+}
+
+void ModuleScene::RecursiveSave(const char* scene_name, GameObject* root, nlohmann::json &scene_file) {
+	root->OnSave(scene_name, scene_file);
+
+	for (int i = 0; i < root->children.size(); ++i)
+		RecursiveSave(scene_name, root->children[i], scene_file);
+}
+
+void ModuleScene::DrawSimplePlane() const
 {
 	glLineWidth(2.0f);
 	glBegin(GL_LINES);
 	glColor3f(255, 255, 255);
 
-	//try to draw a plane
+	// Try to draw a plane
 	for (float i = -100.0f; i < 100; ++i)
 	{
 		glVertex3f(i, 0.0f, -100.0f);
@@ -164,7 +220,6 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 {
 	GameObject* item = new GameObject();
 	item->name = "Sphere";
-	item->MakeChild(App->scene->root);
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -193,7 +248,6 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 {
 	GameObject* item = new GameObject();
 	item->name = "Cube";
-	item->MakeChild(App->scene->root);
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -252,7 +306,6 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 {
 	GameObject* item = new GameObject();
 	item->name = "Plane";
-	item->MakeChild(App->scene->root);
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -283,7 +336,6 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 {
 	GameObject* item = new GameObject();
 	item->name = "Donut";
-	item->MakeChild(App->scene->root);
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);

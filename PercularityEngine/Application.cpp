@@ -47,7 +47,7 @@ Application::Application()
 	AddModule(renderer3D);
 
 	//Configuration adress
-	settingsAdress = "Configuration/.editorconfig.json";
+	settingsAddress = "Configuration/.editorconfig.json";
 }
 
 Application::~Application()
@@ -164,11 +164,11 @@ void Application::LoadSettings()
 	json config;
 
 	//If the adress of the settings file is null, create  an exception
-	assert(settingsAdress != nullptr);
+	assert(settingsAddress != nullptr);
 
 	//Create a stream and open the file
 	std::ifstream stream;
-	stream.open(settingsAdress);
+	stream.open(settingsAddress);
 
 	//Load configuration for all the modules
 	std::list<Module*>::iterator it = modules.begin();
@@ -199,6 +199,7 @@ void Application::SaveSettings()
 {
 	//Create auxiliar file
 	json config;
+	
 	config["Application"]["Name"] = engineName;
 	config["Application"]["Version"] = engineVersion;
 	config["Application"]["VSYNC"] = App->gui->settings->vsync;
@@ -214,7 +215,7 @@ void Application::SaveSettings()
 
 	//Create the stream and open the file
 	std::ofstream stream;
-	stream.open(settingsAdress);
+	stream.open(settingsAddress);
 	stream << std::setw(4) << config << std::endl;
 	stream.close();
 }

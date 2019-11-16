@@ -40,7 +40,7 @@ struct MeshData {
 
 class ComponentMesh : public Component {
 public:
-	ComponentMesh(COMPONENT_TYPE type, GameObject* parent, bool active);
+	ComponentMesh(GameObject* parent, bool active);
 
 	~ComponentMesh() {}
 
@@ -48,6 +48,10 @@ public:
 	void Update() override;
 	void OnEditor();
 	void CleanUp()override;
+
+	// Load & Save 
+	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
+	void OnSave(const char* scene_name, nlohmann::json &scene_file);
 
 	// Rendering methods
 	void Render() const ;
