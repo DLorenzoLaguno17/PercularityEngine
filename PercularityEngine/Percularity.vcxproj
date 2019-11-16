@@ -112,7 +112,6 @@
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceMesh.h" />
-    <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceScene.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="Tree.h" />
