@@ -60,12 +60,12 @@ void ConfigWindow::Update() {
 			fullscreen = false;
 		}
 
-		static int w = SCREEN_WIDTH;
-		static int h = SCREEN_HEIGHT;
+		static int w = App->window->GetWindowWidth();
+		static int h = App->window->GetWindowHeight();
 		static float b = 1.0f;
 		ImGui::NewLine();
-		ImGui::SliderInt("Width", &w, SCREEN_WIDTH, 1920);
-		ImGui::SliderInt("Height", &h, SCREEN_HEIGHT, 1080);
+		ImGui::SliderInt("Width", &w, 720, App->window->GetWindowWidth());
+		ImGui::SliderInt("Height", &h, 1280, App->window->GetWindowHeight());
 		ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f);
 		SDL_SetWindowBrightness(App->window->window, b);
 		SDL_SetWindowSize(App->window->window, w, h);

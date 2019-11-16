@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
 
 #include "mmgr/mmgr.h"
 
@@ -42,22 +43,22 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-		if(winFullscreen== true)
+		if(winFullscreen)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(winResizable == true)
+		if(winResizable)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(winBorderless== true)
+		if(winBorderless)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(winFullscreenDesktop== true)
+		if(winFullscreenDesktop)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
@@ -77,7 +78,6 @@ bool ModuleWindow::Init()
 			screen_surface = SDL_GetWindowSurface(window);
 		}
 	}
-
 
 	return ret;
 }
@@ -119,27 +119,39 @@ void ModuleWindow::SetBorderless(bool goingBorderless) {
 }
 
 void ModuleWindow::SetFulldesktop(bool goingFulldesktop) {
-	if (goingFulldesktop) SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	else SDL_SetWindowFullscreen(window, SDL_WINDOW_MINIMIZED);
+	if (goingFulldesktop) {
+		winWidth = 1920;
+		winHeight = 1080;
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		winFullscreenDesktop = true;
+	}
+	else {
+		winWidth = 1280;
+		winHeight = 720;
+		SDL_SetWindowFullscreen(window, 0);
+		winFullscreenDesktop = false;
+	}
+
+	SDL_SetWindowSize(window, winWidth, winHeight);
+	App->renderer3D->OnResize(winWidth, winHeight);
 }
 
 void ModuleWindow::Load(const nlohmann::json &config) {
 	
 	winResizable = config["Window"]["Resizable"];
 	winBorderless= config["Window"]["Borderless"];
-	winFullscreen=config["Window"]["Full Screen"];
+	winFullscreen = config["Window"]["Full Screen"];
 	winFullscreenDesktop = config["Window"]["Full Screen Desktop"];
 	winWidth = config["Window"]["Width"];
 	winHeight = config["Window"]["Height"];
-
 }
 
 void ModuleWindow::Save(nlohmann::json &config) {
 
 	config["Window"]["Resizable"] = winResizable;
-	config["Window"]["Borderless"]=winBorderless;
-	config["Window"]["Full Screen"]=winFullscreen;
-	config["Window"]["Full Screen Desktop"]=winFullscreenDesktop;
+	config["Window"]["Borderless"] = winBorderless;
+	config["Window"]["Full Screen"] = winFullscreen;
+	config["Window"]["Full Screen Desktop"] = winFullscreenDesktop;
 	config["Window"]["Width"] = winWidth;
-	config["Window"]["Height"]=winHeight;
+	config["Window"]["Height"] = winHeight;
 }

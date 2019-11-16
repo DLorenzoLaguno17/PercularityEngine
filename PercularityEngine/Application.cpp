@@ -177,13 +177,17 @@ void Application::LoadSettings()
 	engineName = name;
 
 	std::string version = config["Application"]["Version"];
-	engineVersion= version;
+	engineVersion = version;
 	
 	while (it != modules.end())
 	{
 		(*it)->Load(config);
 		it++;
 	}
+
+	App->gui->settings->vsync = config["Application"]["VSYNC"];
+	DisableVsync(!App->gui->settings->vsync);
+	App->gui->settings->fulldesktop = App->window->winFullscreenDesktop;
 }
 
 void Application::SaveSettings()
@@ -192,6 +196,7 @@ void Application::SaveSettings()
 	json config;
 	config["Application"]["Name"] = engineName;
 	config["Application"]["Version"] = engineVersion;
+	config["Application"]["VSYNC"] = App->gui->settings->vsync;
 
 	//Save configuration for all the modules
 	std::list<Module*>::iterator it = modules.begin();
@@ -210,6 +215,8 @@ void Application::SaveSettings()
 }
 
 void Application::DisableVsync(bool mustDisable) {
-	if (mustDisable) SDL_GL_SetSwapInterval(1);
-	else SDL_GL_SetSwapInterval(0);
+	if (mustDisable)
+		SDL_GL_SetSwapInterval(1);
+	else 
+		SDL_GL_SetSwapInterval(0);
 }

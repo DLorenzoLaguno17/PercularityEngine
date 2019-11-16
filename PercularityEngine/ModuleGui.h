@@ -32,7 +32,7 @@ public:
 	virtual ~ModuleGui();
 
 	// Called when before render is available
-	bool Awake();
+	bool Init();
 
 	// Call before first frame
 	bool Start();
@@ -47,7 +47,7 @@ public:
 	bool CleanUp();
 
 	//Save & Load
-	void Load(const nlohmann::json  &config);
+	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
 
 	void DrawImGui(float dt);
@@ -57,9 +57,9 @@ public:
 
 	ImGuiIO* io = nullptr;
 	SceneWindow* scene_window = nullptr;
+	ConfigWindow* settings = nullptr;
 
 private:
-	ConfigWindow* settings = nullptr;
 	MainMenuBar* main_menu_bar = nullptr;
 	ConsoleWindow* console = nullptr;
 	InspectorWindow* inspector = nullptr;

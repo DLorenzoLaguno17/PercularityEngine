@@ -58,8 +58,6 @@ public:
 
 	virtual void Save(nlohmann::json &config)
 	{}
-
-
 };
 
 #endif

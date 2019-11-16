@@ -1,6 +1,7 @@
 {
     "Application": {
         "Name": "Percularity",
+        "VSYNC": true,
         "Version": "v0.2"
     },
     "User Interface": {

@@ -33,12 +33,11 @@ public:
 	ModuleFileSystem* file_system;
 	ModuleScene* scene;
 
-	//Aditional data
+	// Aditional data
 	std::string engineName;
 	std::string engineVersion;
 
 private:
-
 	Timer	ms_timer;
 	float	dt;
 	std::list<Module*> modules;
@@ -48,7 +47,6 @@ private:
 	json		settingsFile;	
 	
 public:
-
 	Application();
 	~Application();
 
@@ -58,7 +56,6 @@ public:
 	void DisableVsync(bool mustDisable);
 
 private:
-
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();

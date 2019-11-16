@@ -13,16 +13,13 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
-ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled)
-{
-}
+ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled) {}
 
 // Destructor
-ModuleGui::~ModuleGui()
-{}
+ModuleGui::~ModuleGui() {}
 
 // Called before render is available
-bool ModuleGui::Awake()
+bool ModuleGui::Init()
 {
 	LOG("Loading GUI atlas");
 	bool ret = true;
@@ -70,8 +67,6 @@ bool ModuleGui::Start()
 		LOG("GLSL version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	}
 
-	//TEST
-
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -80,31 +75,11 @@ bool ModuleGui::Start()
 
 	ImGui_ImplOpenGL3_Init();
 
-	// Load Fonts
-	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-	// - Read 'misc/fonts/README.txt' for more instructions and details.
-	// - Remember that in C/C++ if you want to include a backslash \ in a string literal
-
 	io->Fonts->AddFontDefault();
 	io->Fonts->AddFontFromFileTTF("Fonts/Roboto-Medium.ttf", 13);
 	io->Fonts->AddFontFromFileTTF("Fonts/GOTHIC.TTF", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
-
-	settings = new ConfigWindow("Configuration", true); 
-	scene_window = new SceneWindow("Scene", true);
-	console = new ConsoleWindow("Console", true);
-	inspector = new InspectorWindow("Inspector", true);
-	hierarchy = new HierarchyWindow("Hierarchy", true);
-	ui_elements_list.push_back(settings);
-	ui_elements_list.push_back(scene_window);
-	ui_elements_list.push_back(console);
-	ui_elements_list.push_back(inspector);
-	ui_elements_list.push_back(hierarchy);
-
 	return true;
 }
 
@@ -209,6 +184,17 @@ void ModuleGui::DrawImGui(float dt) {
 
 void ModuleGui::Load(const json &config)
 {
+	settings = new ConfigWindow("Configuration", true);
+	scene_window = new SceneWindow("Scene", true);
+	console = new ConsoleWindow("Console", true);
+	inspector = new InspectorWindow("Inspector", true);
+	hierarchy = new HierarchyWindow("Hierarchy", true);
+	ui_elements_list.push_back(settings);
+	ui_elements_list.push_back(scene_window);
+	ui_elements_list.push_back(console);
+	ui_elements_list.push_back(inspector);
+	ui_elements_list.push_back(hierarchy);
+
 	for (int i = 0; i < ui_elements_list.size(); ++i)
 		ui_elements_list[i]->active = config["User Interface"][ui_elements_list[i]->name];
 }
