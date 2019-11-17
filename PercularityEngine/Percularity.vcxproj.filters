@@ -159,9 +159,6 @@
     <ClInclude Include="ComponentTransform.h">
       <Filter>Sources\Scene elements\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Sources\Modules\Scene elements\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceMesh.h">
       <Filter>Sources\Scene elements\Resources</Filter>
     </ClInclude>
@@ -310,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Sources\3rd party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\Scene elements\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

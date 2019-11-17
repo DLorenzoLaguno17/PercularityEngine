@@ -3,8 +3,6 @@
 
 #include "Globals.h"
 
-class GameObject;
-
 enum class COMPONENT_TYPE {
 	NONE,
 	TRANSFORM,
@@ -12,11 +10,12 @@ enum class COMPONENT_TYPE {
 	MESH
 };
 
+class GameObject;
+
 class Component {
 public:
 	//Constructors
-	Component(COMPONENT_TYPE type, GameObject* parent = nullptr, bool active = true) :
-		type(type), active(active), gameObject(parent) {}
+	Component(COMPONENT_TYPE type, GameObject* parent, bool active);
 
 	// Destructor
 	virtual ~Component() {}

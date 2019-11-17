@@ -1,10 +1,8 @@
 #ifndef __GameObject_H__
 #define __GameObject_H__
 
-#include "MathGeoLib/include/MathGeoLib.h"
 #include "Component.h"
-#include "Globals.h"
-#include <string>
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentMesh;
 class ComponentMaterial;
@@ -54,6 +52,7 @@ public:
 	T* GetComponent() { return reinterpret_cast<T*>(GetComponent(T::GetComponentType())); }
 	
 public:
+	std::vector<Component*> components;
 	ComponentTransform* transform = nullptr;
 
 	std::string name;
@@ -67,7 +66,6 @@ public:
 	OBB obb;
 
 private:
-	std::vector<Component*> components;
 	uint UUID = 0;
 	uint parent_UUID = 0;
 };

@@ -5,11 +5,7 @@
 #include "ImGui/ImGuizmo.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::TRANSFORM, parent, active)
-{
-	UUID = (uint)App->GetRandomGenerator().Int();
-	if (parent) parent_UUID = parent->GetUUID();
-}
+	Component(COMPONENT_TYPE::TRANSFORM, parent, active) {}
 
 void ComponentTransform::Update()
 {
@@ -51,9 +47,12 @@ void ComponentTransform::UpdateTransform()
 			globalTransform = gameObject->parent->transform->GetGlobalTransform() * localTransform;
 
 		UpdateRenderTransform();
-		mustUpdate = false;
-
 		gameObject->UpdateAABB();
+
+		for (int i = 0; i < gameObject->children.size(); ++i)
+			gameObject->children[i]->transform->UpdateTransform();
+
+		mustUpdate = false;
 	}
 }
 
@@ -121,25 +120,19 @@ void ComponentTransform::UpdateEulerRotation()
 
 // Load & Save 
 void ComponentTransform::OnLoad(const char* scene_name, const nlohmann::json &scene_file) {
-	UUID = scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["UUID"];
-	parent_UUID = scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Parent UUID"];
-	/*rotation = scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Rotation"];
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Rotation"];
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Rotation"][rotation.z];
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Translation"][scale.x];
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Translation"][scale.y];
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Translation"][scale.z];
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Scale"][scale.x];
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Scale"][scale.y];
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Scale"][scale.z];*/
-
+	UUID = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["UUID"];
+	parent_UUID = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Parent UUID"];
+	active = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Active"];
+	/*rotation = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Rotation"];
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Translation"][scale.z];
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Scale"][scale.x];*/
 }
 
 void ComponentTransform::OnSave(const char* scene_name, nlohmann::json &scene_file) {
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["UUID"] = UUID;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Parent UUID"] = parent_UUID;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Active"] = active;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Translation"] = { translation.x, translation.y, translation.z };
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Scale"] = { scale.x, scale.y, scale.y };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["UUID"] = UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Parent UUID"] = parent_UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Active"] = active;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Translation"] = { translation.x, translation.y, translation.z };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Transform"]["Scale"] = { scale.x, scale.y, scale.y };
 }

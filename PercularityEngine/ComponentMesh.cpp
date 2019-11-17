@@ -12,11 +12,7 @@
 #include "mmgr/mmgr.h"
 
 ComponentMesh::ComponentMesh(GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::MESH, parent, active) 
-{
-	UUID = (uint)App->GetRandomGenerator().Int();
-	if (parent) parent_UUID = parent->GetUUID();
-}
+	Component(COMPONENT_TYPE::MESH, parent, active) {}
 
 void MeshData::CleanUp()
 {		
@@ -199,10 +195,13 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 
 // Load & Save 
 void ComponentMesh::OnLoad(const char* scene_name, const nlohmann::json &scene_file) {
-
+	UUID = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["UUID"];
+	parent_UUID = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["Parent UUID"];
+	active = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["Active"];
 }
 
 void ComponentMesh::OnSave(const char* scene_name, nlohmann::json &scene_file) {
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Mesh"]["UUID"] = UUID;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Mesh"]["Parent UUID"] = parent_UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["UUID"] = UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["Parent UUID"] = parent_UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["Active"] = active;
 }

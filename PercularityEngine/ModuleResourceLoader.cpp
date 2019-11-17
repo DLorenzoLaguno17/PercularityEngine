@@ -106,7 +106,7 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 		{
 			// If the path has texture extensions, it calls the LoadTexture() method
 			ComponentMaterial* material = App->scene->selected->GetComponent<ComponentMaterial>();
-			if (!material) material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL, App->scene->selected);
+			if (!material) material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
 
 			LoadTexture(full_path, material);
 			material = nullptr;
@@ -142,7 +142,7 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 				fbx_mesh = parent_mesh;
 
 			// Copy the mesh						
-			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH, fbx_mesh);
+			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
 			LoadMesh(mesh, scene->mMeshes[i]);
 			
 			// Copy materials
@@ -155,7 +155,7 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 			std::string name = getNameFromPath(p.C_Str(), true);
 			std::string full_path = file + name;
 
-			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
+			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			LoadTexture(full_path.c_str(), material);
 
 			App->scene->selected = fbx_mesh;

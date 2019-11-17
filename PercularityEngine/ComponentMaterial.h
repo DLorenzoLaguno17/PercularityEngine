@@ -15,9 +15,9 @@ public:
 	~ComponentMaterial() {}
 
 	// Methods
-	void Update();
+	void Update() {}
 	void OnEditor();
-	void CleanUp(){}
+	void CleanUp() {}
 
 	// Load & Save 
 	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
