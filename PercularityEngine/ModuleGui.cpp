@@ -7,8 +7,8 @@
 #include "GameObject.h"
 
 #include "OpenGL.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl3.h"
+#include "ImGui/imgui_impl_sdl.h"
+#include "ImGui/imgui_impl_opengl3.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"

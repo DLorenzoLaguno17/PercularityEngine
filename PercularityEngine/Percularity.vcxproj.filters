@@ -72,35 +72,11 @@
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="imconfig.h">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui.h">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_internal.h">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_rectpack.h">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_textedit.h">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_truetype.h">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Sources\Core</Filter>
     </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>Sources\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_sdl.h">
-      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_opengl3.h">
-      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClInclude>
     <ClInclude Include="glcorearb.h">
       <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
@@ -153,9 +129,6 @@
     <ClInclude Include="ConfigWindow.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="InspectorWindow.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
@@ -207,6 +180,30 @@
     <ClInclude Include="ModuleResourceManager.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_opengl3.h">
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_sdl.h">
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -230,29 +227,11 @@
     <ClCompile Include="Light.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="imgui.cpp">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_demo.cpp">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_draw.cpp">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_widgets.cpp">
-      <Filter>Sources\3rd party\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_sdl.cpp">
-      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_opengl3.cpp">
-      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Sources\Helpers</Filter>
@@ -313,6 +292,24 @@
     </ClCompile>
     <ClCompile Include="Resource.h">
       <Filter>Sources\Scene elements\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_opengl3.cpp">
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_sdl.cpp">
+      <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>Sources\3rd party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>Sources\3rd party\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

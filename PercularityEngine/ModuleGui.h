@@ -10,7 +10,7 @@
 #include "HierarchyWindow.h"
 #include "MainMenuBar.h"
 
-#include "imgui.h"
+#include "ImGui/imgui.h"
 
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL_video.h"

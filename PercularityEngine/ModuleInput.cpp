@@ -10,8 +10,8 @@
 #include "ComponentMaterial.h"
 #include "UIElement.h"
 
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_impl_sdl.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"

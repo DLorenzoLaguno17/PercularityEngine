@@ -3,7 +3,7 @@
 
 #include "Component.h"
 #include <string>
-#include "imgui.h"
+#include "ImGui/imgui.h"
 
 class ResourceTexture;
 

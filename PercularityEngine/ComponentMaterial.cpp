@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "GameObject.h"
-#include "imgui.h"
+#include "ImGui/imgui.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* parent, bool active) : 
 	Component(COMPONENT_TYPE::MATERIAL, parent, active)
