@@ -9,7 +9,7 @@
 class GameObject;
 class ComponentMesh;
 class ComponentMaterial;
-class aiMesh;
+struct aiMesh;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module

@@ -78,7 +78,7 @@ update_status ModuleScene::PostUpdate(float dt)
 void ModuleScene::UpdateGameObjects(GameObject* root) {
 	root->Update();
 
-	for (int i = 0; i < root->children.size(); ++i)
+	for (uint i = 0; i < root->children.size(); ++i)
 		UpdateGameObjects(root->children[i]);
 }
 
@@ -217,7 +217,14 @@ void ModuleScene::DrawAxis() const {
 GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 {
 	GameObject* item = new GameObject();
-	item->name = "Sphere";
+
+	if (sphereCount > 0) {
+		char name[50];
+		sprintf_s(name, 250, "Sphere (%d)", sphereCount);
+		item->name = name;
+	}
+	else item->name = "Sphere";
+	sphereCount++;
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -235,6 +242,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
+	App->scene->selected = item;
 
 	return item;
 }
@@ -242,7 +250,14 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 {
 	GameObject* item = new GameObject();
-	item->name = "Cube";
+
+	if (cubeCount > 0) {
+		char name[50];
+		sprintf_s(name, 250, "Cube (%d)", cubeCount);
+		item->name = name;
+	}
+	else item->name = "Cube";
+	cubeCount++;
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -290,6 +305,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
+	App->scene->selected = item;
 
 	return item;
 }
@@ -297,7 +313,14 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 GameObject* ModuleScene::CreatePlane(float length, float depth)
 {
 	GameObject* item = new GameObject();
-	item->name = "Plane";
+
+	if (planeCount > 0) {
+		char name[50];
+		sprintf_s(name, 250, "Plane (%d)", planeCount);
+		item->name = name;
+	}
+	else item->name = "Plane";
+	planeCount++;
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -317,6 +340,7 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
+	App->scene->selected = item;
 
 	return item;
 }
@@ -324,7 +348,14 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 {
 	GameObject* item = new GameObject();
-	item->name = "Donut";
+
+	if (donutCount > 0) {
+		char name[50];
+		sprintf_s(name, 250, "Donut (%d)", donutCount);
+		item->name = name;
+	}
+	else item->name = "Donut";
+	donutCount++;
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
@@ -344,6 +375,7 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
+	App->scene->selected = item;
 
 	return item;
 }

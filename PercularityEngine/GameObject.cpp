@@ -12,30 +12,26 @@
 
 GameObject::GameObject() {
 	name = "Untitled";
-	this->MakeChild(App->scene->GetRoot());
+	MakeChild(App->scene->GetRoot());
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM, true);
 	UUID = (uint)App->GetRandomGenerator().Int();
-	parent_UUID = parent->GetUUID();
 }
 
-GameObject::GameObject(std::string name, GameObject* parent) :
-	name(name)
+GameObject::GameObject(std::string name, GameObject* parent) :	name(name)
 {
 	if (parent) MakeChild(parent);
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM, true);
 	
-	if (strcmp("World", name.c_str()) != 0) {
+	if (strcmp("World", name.c_str()) != 0)
 		UUID = (uint)App->GetRandomGenerator().Int();
-		parent_UUID = parent->GetUUID();
-	}
 }
 
 // Called every frame
 void GameObject::Update() {
 	DrawAABB();
 
-	for (int i = 0; i < components.size(); ++i)
-		if (components[i]->active) components[i]->Update();
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i]->IsActive()) components[i]->Update();
 }
 
 // Load & Save 
@@ -44,7 +40,7 @@ void GameObject::OnLoad(const char* scene_name, const nlohmann::json &scene_file
 	UUID = scene_file[scene_name]["Game Objects"]["UUID"];
 	parent_UUID = scene_file[scene_name]["Game Objects"]["Parent_UUID"];
 
-	for (int i = 0; i < components.size(); ++i)
+	for (uint i = 0; i < components.size(); ++i)
 		components[i]->OnLoad(scene_name, scene_file);
 }
 
@@ -53,7 +49,7 @@ void GameObject::OnSave(const char* scene_name, nlohmann::json &scene_file) {
 	scene_file[scene_name]["Game Objects"][name]["Parent UUID"] = parent_UUID;
 	scene_file[scene_name]["Game Objects"][name]["Name"] = name;
 
-	for (int i = 0; i < components.size(); ++i)
+	for (uint i = 0; i < components.size(); ++i)
 		components[i]->OnSave(scene_name, scene_file);
 }
 
@@ -80,13 +76,14 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 }
 
 void GameObject::OnEditor() {
-	for (int i = 0; i < components.size(); ++i)
+	for (uint i = 0; i < components.size(); ++i)
 		components[i]->OnEditor();
 }
 
 void GameObject::MakeChild(GameObject* parent) {
 	this->parent = parent;
 	parent->children.push_back(this);
+	parent_UUID = parent->GetUUID();
 
 	//TEST
 	parent->aabb.Enclose(this->aabb);
@@ -95,7 +92,7 @@ void GameObject::MakeChild(GameObject* parent) {
 // Cleans the memory of the GameObject
 void GameObject::CleanUp() {
 
-	for (int i = 0; i < components.size(); ++i) {		
+	for (uint i = 0; i < components.size(); ++i) {		
 		components[i]->CleanUp();
 		RELEASE(components[i]);
 	}
@@ -103,7 +100,7 @@ void GameObject::CleanUp() {
 
 Component* GameObject::GetComponent(COMPONENT_TYPE componentType)
 {
-	for (int i = 0; i < components.size(); ++i)
+	for (uint i = 0; i < components.size(); ++i)
 	{
 		if (components[i]->type == componentType)
 			return components[i];
@@ -114,7 +111,7 @@ Component* GameObject::GetComponent(COMPONENT_TYPE componentType)
 
 const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 {
-	for (int i = 0; i < components.size(); ++i)
+	for (uint i = 0; i < components.size(); ++i)
 	{
 		if (components[i]->type == componentType)
 			return components[i];

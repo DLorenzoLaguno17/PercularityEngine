@@ -116,7 +116,7 @@ void ComponentMesh::Render() const  {
 	
 	ComponentMaterial* texture = gameObject->GetComponent<ComponentMaterial>();
 	
-	if (texture->active) 
+	if (texture->IsActive()) 
 		glBindTexture(GL_TEXTURE_2D, texture->texture);
 
 	else glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
@@ -185,7 +185,7 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 	{
 		mesh.normals = new float3[parShape->npoints];
 
-		for (uint i = 0; i < parShape->npoints; ++i)
+		for (int i = 0; i < parShape->npoints; ++i)
 		{
 			mesh.normals[i].x =parShape->normals[3 * i];
 			mesh.normals[i].y = parShape->normals[(3 * i)+1];
@@ -193,6 +193,7 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 		}
 	}
 
+	gameObject->aabb.SetNegativeInfinity();
 	gameObject->aabb = AABB::MinimalEnclosingAABB(mesh.vertices, mesh.num_vertices);
 }
 

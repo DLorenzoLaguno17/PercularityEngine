@@ -32,15 +32,16 @@ public:
 
 	uint GetUUID() const { return UUID; }
 	COMPONENT_TYPE GetType() const { return type; }
+	bool IsActive() { return active; }
 
 public:
 	COMPONENT_TYPE type;
 	GameObject* gameObject = nullptr;
-	bool active;
 
 protected:
 	uint UUID = 0;
 	uint parent_UUID = 0;
+	bool active;
 };
 
 #endif // __Component_H__

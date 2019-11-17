@@ -52,5 +52,10 @@ public:
 private:
 	GameObject* root = nullptr;
 	const char* sceneAddress;
+
+	uint sphereCount = 0;
+	uint donutCount = 0;
+	uint planeCount = 0;
+	uint cubeCount = 0;
 };
 #endif

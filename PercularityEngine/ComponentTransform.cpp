@@ -136,9 +136,10 @@ void ComponentTransform::OnLoad(const char* scene_name, const nlohmann::json &sc
 }
 
 void ComponentTransform::OnSave(const char* scene_name, nlohmann::json &scene_file) {
-	scene_file[scene_name]["Game Objects"][gameObject->name]["UUID"] = UUID;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Parent UUID"] = parent_UUID;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Translation"] = { translation.x, translation.y, translation.z };
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Scale"] = { scale.x, scale.y, scale.y };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["UUID"] = UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Parent UUID"] = parent_UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Active"] = active;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Translation"] = { translation.x, translation.y, translation.z };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Transform"]["Scale"] = { scale.x, scale.y, scale.y };
 }
