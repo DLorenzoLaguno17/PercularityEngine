@@ -1,43 +1,114 @@
 {
     "test": {
         "Game Objects": {
-            "Components": {
+            "Untitled": {
                 "Material": {
                     "Height": 1024,
                     "Name": "baker_house.png",
-                    "Parent UUID": 873291464,
+                    "Parent UUID": 1245293824,
                     "Texture": 7,
-                    "UUID": 1347124040,
+                    "UUID": 283865049,
                     "Width": 1024
                 },
                 "Mesh": {
-                    "Parent UUID": 873291464,
-                    "UUID": 2015484927
+                    "Parent UUID": 1245293824,
+                    "UUID": 391524020
                 },
-                "Transform": {
-                    "Parent UUID": 0,
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "UUID": 1366245335
-                }
+                "Name": "Untitled",
+                "Parent UUID": 0,
+                "Rotation": [
+                    0.2764781713485718,
+                    0.0,
+                    0.0,
+                    0.9610266089439392
+                ],
+                "Scale": [
+                    1.899999976158142,
+                    5.800000190734863,
+                    5.800000190734863
+                ],
+                "Translation": [
+                    -1.5,
+                    -3.0,
+                    -17.399999618530273
+                ],
+                "UUID": 1654901401
             },
-            "Name": "Untitled",
-            "Parent UUID": 0,
-            "UUID": 873291464
+            "Untitled.001": {
+                "Material": {
+                    "Height": 1024,
+                    "Name": "baker_house.png",
+                    "Parent UUID": 977633802,
+                    "Texture": 5,
+                    "UUID": 414646875,
+                    "Width": 1024
+                },
+                "Mesh": {
+                    "Parent UUID": 977633802,
+                    "UUID": 1496221024
+                },
+                "Name": "Untitled.001",
+                "Parent UUID": 0,
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Translation": [
+                    2.0999999046325684,
+                    0.0,
+                    0.0
+                ],
+                "UUID": 879939151
+            },
+            "World": {
+                "Name": "World",
+                "Parent UUID": 0,
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "UUID": 1870392956
+            },
+            "bakerhouse": {
+                "Name": "bakerhouse",
+                "Parent UUID": 0,
+                "Rotation": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "Scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "Translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "UUID": 1117957529
+            }
         }
     }
 }

@@ -59,14 +59,14 @@ public:
 
 	//Create a primitive shape
 	void LoadParShape(par_shapes_mesh_s* parShape);
-
-	//Create the bouding box
-	void CreateBoundingBox();
+	
+	const AABB& GetAABB()const { return aabb; }
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MESH; }
 
 public:
 	MeshData mesh;
+	AABB aabb;
 	class ResourceMesh* resource_mesh = nullptr;
 
 private:

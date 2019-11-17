@@ -1,7 +1,8 @@
 #include "ComponentTransform.h"
+#include "Application.h"
 #include "ImGui/imgui.h"
 #include "GameObject.h"
-#include "Application.h"
+#include "ImGui/ImGuizmo.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
 	Component(COMPONENT_TYPE::TRANSFORM, parent, active)
@@ -10,70 +11,112 @@ ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
 	if (parent) parent_UUID = parent->GetUUID();
 }
 
+void ComponentTransform::Update()
+{
+	UpdateTransform();
+}
+
 void ComponentTransform::OnEditor() {
 
 	if (ImGui::CollapsingHeader("Transform")) {
 
-		ImGui::DragFloat3("Translation", &translation.x,0.05f);
-		ImGui::DragFloat3("Scale", &scale.x, 0.05f);
+		float4x4 model = gameObject->transform->GetLocalTransform();
+		model.Transpose();
 
-		uiRotation = rotation.ToEulerXYZ();
-		uiRotation *= 180 / pi;
-		ImGui::DragFloat3("Rotation", &uiRotation.x, 0.5f);
-		uiRotation /= 180 / pi;
-		rotation = Quat::FromEulerXYZ(uiRotation.x, uiRotation.y, uiRotation.z);
+		float3 translationM = GetTranslation();;
+		float3 rotationM = GetEulerRotation();
+		float3 scaleM = GetScale();
 
-		// We check if it must be updated
-		if (!lastRotation.Equals(rotation) || !lastTranslation.Equals(translation) || !lastScale.Equals(scale)) {
-			UpdateTransform();
+		if (ImGui::Button("Reset transform"))
+			SetToZero();
 
-			lastRotation = rotation;
-			lastTranslation = translation;
-			lastScale = scale;
-		}
+		if (ImGui::DragFloat3("Translation", (float*)&translationM, 0.3))
+			SetPosition(translationM);
 
-		ImGui::NewLine();
+		if (ImGui::DragFloat3("Rotation", (float*)&rotationM, 0.3))
+			SetEulerRotation(rotationM);
+
+		if (ImGui::DragFloat3("Scale", (float*)&scaleM, 0.3))
+			SetScale(scaleM);
 	}
 }
 
 void ComponentTransform::UpdateTransform()
 {
-	localTransform = float4x4::FromTRS(translation, rotation, scale);
-	
-	if (parent != nullptr)
-		globalTransform = parent->transform->globalTransform * localTransform;
+	if (mustUpdate)
+	{
+		localTransform = float4x4::FromTRS(translation, rotation, scale);
 
-	UpdateRenderTransform();
+		if (strcmp("World", gameObject->name.c_str()) != 0) 
+			globalTransform = gameObject->parent->transform->GetGlobalTransform() * localTransform;
 
-	for (int i = 0; i < parent->children.size(); ++i) {
-		parent->children[i]->transform->UpdateTransform();
-	}	
+		UpdateRenderTransform();
+		mustUpdate = false;
+
+		gameObject->UpdateAABB();
+	}
 }
 
 void ComponentTransform::UpdateRenderTransform()
 {
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < 4; ++i)
 		for (int j = 0; j < 4; ++j)
-			renderTransform.M[i * 4 + j] = localTransform[j][i];
-	}
+			renderTransform.M[i * 4 + j] = globalTransform[j][i];
 }
 
-void ComponentTransform::SetPosition(float3 position)
+void ComponentTransform::SetPosition(float3 newPosition)
 {
-	translation = position;
-	UpdateTransform();
+	translation = newPosition;
+	mustUpdate = true;
 }
 
 void ComponentTransform::Move(float3 positionIncrease)
 {
 	translation += positionIncrease;
-	UpdateTransform();
+	mustUpdate = true;
 }
 
-void ComponentTransform::Scale(float3 newScale)
+void ComponentTransform::Scale(float3 scale_)
 {
-	scale += newScale;
-	UpdateTransform();
+	scale += scale_;
+	mustUpdate = true;
+}
+
+void ComponentTransform::SetLocalTransform(float4x4 transform)
+{
+	transform.Decompose(translation, rotation, scale);
+	eulerRotation = rotation.ToEulerXYZ().Abs();
+	mustUpdate = true;
+}
+
+void ComponentTransform::SetEulerRotation(float3 eulerAngle)
+{
+	float3 angleIncrease = (eulerAngle - eulerRotation)*DEGTORAD;
+	Quat newRotation = Quat::FromEulerXYZ(angleIncrease.x, angleIncrease.y, angleIncrease.z);
+	rotation = rotation * newRotation;
+	eulerRotation = eulerAngle;
+	mustUpdate = true;
+}
+
+void ComponentTransform::SetScale(float3 newScale)
+{
+	scale = newScale;
+	mustUpdate = true;
+}
+
+void ComponentTransform::SetToZero()
+{
+	scale = { 1,1,1 };
+	translation = { 0,0,0 };
+	rotation = Quat::identity;
+	UpdateEulerRotation();
+
+	mustUpdate = true;
+}
+
+void ComponentTransform::UpdateEulerRotation()
+{
+	eulerRotation = rotation.ToEulerXYZ()*RADTODEG;
 }
 
 // Load & Save 
@@ -93,9 +136,9 @@ void ComponentTransform::OnLoad(const char* scene_name, const nlohmann::json &sc
 }
 
 void ComponentTransform::OnSave(const char* scene_name, nlohmann::json &scene_file) {
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["UUID"] = UUID;
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Parent UUID"] = parent_UUID;
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Translation"] = { translation.x, translation.y, translation.z };
-	scene_file[scene_name]["Game Objects"]["Components"]["Transform"]["Scale"] = { scale.x, scale.y, scale.y };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["UUID"] = UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Parent UUID"] = parent_UUID;
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Translation"] = { translation.x, translation.y, translation.z };
+	scene_file[scene_name]["Game Objects"][gameObject->name]["Scale"] = { scale.x, scale.y, scale.y };
 }

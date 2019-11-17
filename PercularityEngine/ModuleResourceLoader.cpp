@@ -116,7 +116,6 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 			ComponentMesh* mesh = new ComponentMesh(nullptr, true);
 
 			LoadModel(full_path);
-			App->scene->selected = App->scene->game_objects.back();
 		}
 		else
 			LOG("Importing of [%s] FAILED", final_path.c_str())
@@ -130,19 +129,17 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObject* parent_mesh = new GameObject(getNameFromPath(path));
-		parent_mesh->MakeChild(App->scene->GetRoot());
+		GameObject* parent_mesh = new GameObject(getNameFromPath(path), App->scene->GetRoot());
 
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 			
 			// Create the GameObject
 			GameObject* fbx_mesh = nullptr;
-			if (scene->mNumMeshes > 1) {
-				fbx_mesh = new GameObject(scene->mMeshes[i]->mName.C_Str());
-				fbx_mesh->MakeChild(parent_mesh);
-			}
-			else fbx_mesh = parent_mesh;
+			if (scene->mNumMeshes > 1) 
+				fbx_mesh = new GameObject(scene->mMeshes[i]->mName.C_Str(), parent_mesh);
+			else 
+				fbx_mesh = parent_mesh;
 
 			// Copy the mesh						
 			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH, fbx_mesh);
@@ -161,12 +158,12 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
 			LoadTexture(full_path.c_str(), material);
 
-			App->scene->game_objects.push_back(fbx_mesh);
-			LOG("Loaded new model %s. Current GameObjects on scene: %d", fbx_mesh->name.c_str(), App->scene->game_objects.size());
+			App->scene->selected = fbx_mesh;
+
+			LOG("Loaded new model %s.", fbx_mesh->name.c_str());
 			LOG("_____________________");
 		}
 		aiReleaseImport(scene);
-		if (scene->mNumMeshes > 1) App->scene->game_objects.push_back(parent_mesh);
 	}
 	else LOG("Error loading FBX: %s", path);
 }
@@ -253,7 +250,8 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);	
 
 	c_mesh->mesh = m;
-	c_mesh->CreateBoundingBox();
+	c_mesh->aabb.SetNegativeInfinity();
+	c_mesh->aabb = AABB::MinimalEnclosingAABB(m.vertices, m.num_vertices);
 	
 	// We import the mesh to our library
 	std::string name;
@@ -316,7 +314,7 @@ bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_f
 		bytes = sizeof(float) * mesh->mesh.num_tex * 2;
 		memcpy(cursor, mesh->mesh.textures, bytes);
 
-		ret = App->file_system->SaveUnique(output_file, cursor, size, LIBRARY_MESH_FOLDER, mesh->parent->name.c_str(), "fbx");		
+		ret = App->file_system->SaveUnique(output_file, cursor, size, LIBRARY_MESH_FOLDER, mesh->gameObject->name.c_str(), "fbx");		
 		RELEASE_ARRAY(data);
 
 		LOG("Imported mesh: %s", output_file.c_str());

@@ -39,6 +39,8 @@ public:
 
 	// Makes a it child of another GameObject
 	void MakeChild(GameObject* parent);
+	void UpdateAABB();
+	void DrawAABB();
 
 	uint GetUUID() const { return UUID; }
 
@@ -61,11 +63,13 @@ public:
 	BoundingBox boundingBox;
 	bool extended = true;
 
+	AABB aabb;
+	OBB obb;
+
 private:
 	std::vector<Component*> components;
 	uint UUID = 0;
 	uint parent_UUID = 0;
-
 };
 
 #endif // __GameObject_H__

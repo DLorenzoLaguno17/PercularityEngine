@@ -25,7 +25,7 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Init() {
 	App->scene->root = new GameObject("World");
-	sceneAddress = "_scene.json";
+	sceneAddress = "_Scene.json";
 
 	return true;
 }
@@ -34,9 +34,6 @@ bool ModuleScene::Start()
 {
 	// Loading FBX
 	App->res_loader->LoadModel("Assets/FBX/BakerHouse.fbx");
-
-	if (!game_objects.empty())
-		selected = game_objects.back();
 
 	//test
 	testQuadTree = new Tree(TREE_TYPE::QUADTREE, float3(10,10,10), float3(-10,-10,-10));
@@ -48,9 +45,7 @@ bool ModuleScene::Start()
 
 update_status ModuleScene::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange);
-
-	
+	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange);	
 
 	return UPDATE_CONTINUE;
 }
@@ -68,7 +63,7 @@ update_status ModuleScene::Update(float dt)
 	// Update all GameObjects
 	UpdateGameObjects(root);
 
-	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_UP) SaveScene("test");
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_UP) SaveScene("Test");
 	
 	return UPDATE_CONTINUE;
 }
@@ -87,17 +82,20 @@ void ModuleScene::UpdateGameObjects(GameObject* root) {
 		UpdateGameObjects(root->children[i]);
 }
 
+// Deletes all the allocated data
 bool ModuleScene::CleanUp()
 {
-	// Delete all the GameObjects
-	for (uint i = 0; i < game_objects.size(); ++i) {
-		game_objects[i]->CleanUp();
-		delete game_objects[i];
-	}
-	game_objects.clear();
+	LOG("Releasing all the GameObjects");
+	RecursiveCleanUp(root);
+
+	return true;
+}
+
+void ModuleScene::RecursiveCleanUp(GameObject* root) {
+	for (int i = 0; i < root->children.size(); ++i)
+		RecursiveCleanUp(root->children[i]);
 
 	RELEASE(root);
-	return true;
 }
 
 void ModuleScene::LoadScene(const std::string scene_name) {
@@ -238,9 +236,6 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
 
-	//Add the object to the list
-	App->scene->game_objects.push_back(item);
-
 	return item;
 }
 
@@ -296,9 +291,6 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
 
-	//Add the object to the list
-	App->scene->game_objects.push_back(item);
-
 	return item;
 }
 
@@ -326,9 +318,6 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
 
-	//Add the object to the list
-	App->scene->game_objects.push_back(item);
-
 	return item;
 }
 
@@ -355,9 +344,6 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
-
-	//Add the object to the list
-	App->scene->game_objects.push_back(item);
 
 	return item;
 }

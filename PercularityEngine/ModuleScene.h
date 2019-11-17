@@ -29,8 +29,6 @@ public:
 	void RecursiveLoad(const char* scene_name, GameObject* root, const nlohmann::json &scene_file);
 	void RecursiveSave(const char* scene_name, GameObject* root, nlohmann::json &scene_file);
 
-	void UpdateGameObjects(GameObject* root);
-
 	//Methods to create primitives
 	GameObject* CreateSphere(int slices, int stacks, float diameter);
 	GameObject* CreateCube(float sizeX, float sizeY, float sizeZ);
@@ -44,8 +42,11 @@ private:
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;	//Draw a plane with some lines
 
+	// Recursive methods
+	void RecursiveCleanUp(GameObject* root);
+	void UpdateGameObjects(GameObject* root);
+
 public:
-	std::vector<GameObject*> game_objects;
 	GameObject* selected = nullptr;
 
 private:

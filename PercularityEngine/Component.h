@@ -16,7 +16,7 @@ class Component {
 public:
 	//Constructors
 	Component(COMPONENT_TYPE type, GameObject* parent = nullptr, bool active = true) :
-		type(type), active(active), parent(parent) {}
+		type(type), active(active), gameObject(parent) {}
 
 	// Destructor
 	virtual ~Component() {}
@@ -35,7 +35,7 @@ public:
 
 public:
 	COMPONENT_TYPE type;
-	GameObject* parent;
+	GameObject* gameObject = nullptr;
 	bool active;
 
 protected:

@@ -13,23 +13,27 @@
 GameObject::GameObject() {
 	name = "Untitled";
 	this->MakeChild(App->scene->GetRoot());
-	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM, true);
 	UUID = (uint)App->GetRandomGenerator().Int();
 	parent_UUID = parent->GetUUID();
 }
 
 GameObject::GameObject(std::string name, GameObject* parent) :
-	name(name), parent(parent)
+	name(name)
 {
-	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-	if (strcmp("World", name.c_str()) != 0)
+	if (parent) MakeChild(parent);
+	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM, true);
+	
+	if (strcmp("World", name.c_str()) != 0) {
 		UUID = (uint)App->GetRandomGenerator().Int();
-
-	if (parent)	parent_UUID = parent->GetUUID();
+		parent_UUID = parent->GetUUID();
+	}
 }
 
 // Called every frame
 void GameObject::Update() {
+	DrawAABB();
+
 	for (int i = 0; i < components.size(); ++i)
 		if (components[i]->active) components[i]->Update();
 }
@@ -45,9 +49,9 @@ void GameObject::OnLoad(const char* scene_name, const nlohmann::json &scene_file
 }
 
 void GameObject::OnSave(const char* scene_name, nlohmann::json &scene_file) {
-	scene_file[scene_name]["Game Objects"]["UUID"] = UUID;
-	scene_file[scene_name]["Game Objects"]["Parent UUID"] = parent_UUID;
-	scene_file[scene_name]["Game Objects"]["Name"] = name;
+	scene_file[scene_name]["Game Objects"][name]["UUID"] = UUID;
+	scene_file[scene_name]["Game Objects"][name]["Parent UUID"] = parent_UUID;
+	scene_file[scene_name]["Game Objects"][name]["Name"] = name;
 
 	for (int i = 0; i < components.size(); ++i)
 		components[i]->OnSave(scene_name, scene_file);
@@ -83,6 +87,9 @@ void GameObject::OnEditor() {
 void GameObject::MakeChild(GameObject* parent) {
 	this->parent = parent;
 	parent->children.push_back(this);
+
+	//TEST
+	parent->aabb.Enclose(this->aabb);
 }
 
 // Cleans the memory of the GameObject
@@ -114,4 +121,66 @@ const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 	}
 
 	return nullptr;
+}
+
+void GameObject::DrawAABB()
+{
+	glLineWidth(2.0f);
+
+	glBegin(GL_LINES);
+
+	glColor3f(0.5, 1, 0.5); //Light green color
+
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
+
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
+
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+
+	glEnd();
+
+	glColor3f(1, 1, 1); //Blue color
+}
+
+void GameObject::UpdateAABB()
+{
+	ComponentMesh* mesh = GetComponent<ComponentMesh>();
+	if (mesh)
+	{
+		obb = mesh->GetAABB();
+		obb.Transform(transform->GetGlobalTransform());
+
+		aabb.SetNegativeInfinity();
+		aabb.Enclose(obb);
+	}
 }
