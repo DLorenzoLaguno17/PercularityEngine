@@ -106,6 +106,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			ImGui::BulletText("Glew 2.1");
 			ImGui::BulletText("Assimp 4.1");
 			ImGui::BulletText("DevIL 1.8");
+			ImGui::BulletText("PhysFS");
 			ImGui::NewLine();
 
 			ImGui::Separator();

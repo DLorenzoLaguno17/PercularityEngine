@@ -30,6 +30,7 @@ void ComponentMesh::Update()
 }
 
 void ComponentMesh::OnEditor() {
+
 	if (ImGui::CollapsingHeader("Mesh")) {
 		ImGui::Checkbox("Enabled", &active);
 
@@ -194,14 +195,18 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 }
 
 // Load & Save 
-void ComponentMesh::OnLoad(const char* scene_name, const nlohmann::json &scene_file) {
-	UUID = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["UUID"];
-	parent_UUID = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["Parent UUID"];
-	active = scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["Active"];
+void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
+	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"];
+	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"];
+	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"];
+	showFaceNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"];
+	showVertexNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"];
 }
 
-void ComponentMesh::OnSave(const char* scene_name, nlohmann::json &scene_file) {
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["UUID"] = UUID;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["Parent UUID"] = parent_UUID;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Components"]["Mesh"]["Active"] = active;
+void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"] = UUID;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"] = parent_UUID;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"] = active;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"] = showFaceNormals;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"] = showVertexNormals;
 }

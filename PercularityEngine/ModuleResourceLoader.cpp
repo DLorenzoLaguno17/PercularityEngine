@@ -159,6 +159,7 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 			LoadTexture(full_path.c_str(), material);
 
 			App->scene->selected = fbx_mesh;
+			App->scene->numGameObjectsInScene++;
 
 			LOG("Loaded new model %s.", fbx_mesh->name.c_str());
 			LOG("_____________________");

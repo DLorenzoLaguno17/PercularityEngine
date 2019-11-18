@@ -27,8 +27,8 @@ public:
 	const float3& GetScale() const { return scale; }
 
 	// Load & Save 
-	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
-	void OnSave(const char* scene_name, nlohmann::json &scene_file);
+	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
+	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
 private:
 	//Update transform

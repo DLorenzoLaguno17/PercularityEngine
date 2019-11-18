@@ -63,7 +63,13 @@ update_status ModuleScene::Update(float dt)
 	// Update all GameObjects
 	UpdateGameObjects(root);
 
-	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_UP) SaveScene("Test");
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
+		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) 
+		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
+		SaveScene("Test");
+
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		LoadScene("Test");
 	
 	return UPDATE_CONTINUE;
 }
@@ -99,24 +105,50 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 }
 
 void ModuleScene::LoadScene(const std::string scene_name) {
+	
+	// First we delete the current scene
+	CleanUp();
+	App->scene->root = new GameObject("World", nullptr, true);
+
 	json scene_file;
 
 	// If the adress of the settings file is null, create  an exception
 	assert(sceneAddress != nullptr);
-	std::string full_path = sceneAddress + scene_name;
+	std::string full_path = scene_name + sceneAddress;
 
 	// Create a stream and open the file
 	std::ifstream stream;
 	stream.open(full_path);
-
 	scene_file = json::parse(stream);
 
 	// Close the file
 	stream.close();
+
+	numGameObjectsInScene = scene_file["Game Objects"]["Count"];
+	RecursiveLoad(root, scene_file);
+	loaded_go = 0;
 }
 
-void ModuleScene::RecursiveLoad(const char* scene_name, GameObject* root, const nlohmann::json &scene_file) {
+void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) {
+	loaded_go++;
+	char name[50];
+	sprintf_s(name, 50, "GameObject %d", loaded_go);
+	root->OnLoad(name, scene_file);
 
+	for (int i = 1; i <= numGameObjectsInScene; ++i) {
+
+		char n[50];
+		sprintf_s(n, 50, "GameObject %d", i);
+		uint aux = scene_file["Game Objects"][n]["Parent UUID"];
+
+		if (aux == root->GetUUID() && i != 1) { //The first one is the World itself so we skip it
+			GameObject* newGo;
+			newGo = new GameObject("Temp", root, true);
+		}
+	}	
+
+	for (int i = 0; i < root->children.size(); ++i)
+		RecursiveLoad(root->children[i], scene_file);
 }
 
 void ModuleScene::SaveScene(std::string scene_name) {
@@ -125,7 +157,9 @@ void ModuleScene::SaveScene(std::string scene_name) {
 	json scene_file;
 	std::string full_path = scene_name + sceneAddress;
 
-	RecursiveSave(scene_name.c_str(), root, scene_file);
+	RecursiveSave(root, scene_file);
+	scene_file["Game Objects"]["Count"] = saved_go;
+	saved_go = 0;
 
 	// Create the stream and open the file
 	std::ofstream stream;
@@ -134,11 +168,14 @@ void ModuleScene::SaveScene(std::string scene_name) {
 	stream.close();
 }
 
-void ModuleScene::RecursiveSave(const char* scene_name, GameObject* root, nlohmann::json &scene_file) {
-	root->OnSave(scene_name, scene_file);
+void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) {
+	saved_go++;
+	char name[50];
+	sprintf_s(name, 50, "GameObject %d", saved_go);
+	root->OnSave(name, scene_file);
 
 	for (int i = 0; i < root->children.size(); ++i)
-		RecursiveSave(scene_name, root->children[i], scene_file);
+		RecursiveSave(root->children[i], scene_file);
 }
 
 void ModuleScene::DrawSimplePlane() const
@@ -220,7 +257,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 
 	if (sphereCount > 0) {
 		char name[50];
-		sprintf_s(name, 250, "Sphere (%d)", sphereCount);
+		sprintf_s(name, 50, "Sphere (%d)", sphereCount);
 		item->name = name;
 	}
 	else item->name = "Sphere";
@@ -243,6 +280,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
 	App->scene->selected = item;
+	numGameObjectsInScene++;
 
 	return item;
 }
@@ -253,7 +291,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 
 	if (cubeCount > 0) {
 		char name[50];
-		sprintf_s(name, 250, "Cube (%d)", cubeCount);
+		sprintf_s(name, 50, "Cube (%d)", cubeCount);
 		item->name = name;
 	}
 	else item->name = "Cube";
@@ -306,6 +344,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
 	App->scene->selected = item;
+	numGameObjectsInScene++;
 
 	return item;
 }
@@ -316,7 +355,7 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 
 	if (planeCount > 0) {
 		char name[50];
-		sprintf_s(name, 250, "Plane (%d)", planeCount);
+		sprintf_s(name, 50, "Plane (%d)", planeCount);
 		item->name = name;
 	}
 	else item->name = "Plane";
@@ -341,6 +380,7 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
 	App->scene->selected = item;
+	numGameObjectsInScene++;
 
 	return item;
 }
@@ -351,7 +391,7 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 
 	if (donutCount > 0) {
 		char name[50];
-		sprintf_s(name, 250, "Donut (%d)", donutCount);
+		sprintf_s(name, 50, "Donut (%d)", donutCount);
 		item->name = name;
 	}
 	else item->name = "Donut";
@@ -376,6 +416,7 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
 	App->scene->selected = item;
+	numGameObjectsInScene++;
 
 	return item;
 }
