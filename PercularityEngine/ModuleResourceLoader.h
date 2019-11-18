@@ -41,8 +41,8 @@ public:
 	// Importing methods 
 	void ImportFile(const char* full_path);
 	bool ImportTexture(const char* path, std::string& output_file);
-	bool ImportMesh(ComponentMesh* mesh, std::string& output_file);
-	void LoadMeshFromLibrary(ComponentMesh* mesh, char* buffer);
+	bool ImportMesh(const char* path, ComponentMesh* mesh);
+	void LoadMeshFromLibrary(const char* path, ComponentMesh* mesh);
 	
 	// Useful methods
 	void CreateDefaultTexture();

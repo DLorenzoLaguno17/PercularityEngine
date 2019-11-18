@@ -1,6 +1,6 @@
 {
     "Game Objects": {
-        "Count": 7,
+        "Count": 4,
         "GameObject 1": {
             "Components": {
                 "Transform": {
@@ -22,7 +22,7 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1206005015
+                    "UUID": 1709872791
                 }
             },
             "Name": "World",
@@ -33,7 +33,7 @@
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 892156260,
+                    "Parent UUID": 148937003,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -50,12 +50,12 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1141455279
+                    "UUID": 1092038147
                 }
             },
             "Name": "bakerhouse",
             "Parent UUID": 0,
-            "UUID": 892156260
+            "UUID": 148937003
         },
         "GameObject 3": {
             "Components": {
@@ -63,21 +63,21 @@
                     "Active": true,
                     "Height": 1024,
                     "Name": "baker_house.png",
-                    "Parent UUID": 1625622024,
+                    "Parent UUID": 1424277546,
                     "Texture": 5,
-                    "UUID": 1850002649,
+                    "UUID": 1161179543,
                     "Width": 1024
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1625622024,
-                    "UUID": 1106788336,
+                    "Parent UUID": 1424277546,
+                    "UUID": 1038486852,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1625622024,
+                    "Parent UUID": 1424277546,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -94,12 +94,12 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 747768710
+                    "UUID": 1717113488
                 }
             },
             "Name": "Untitled.001",
-            "Parent UUID": 892156260,
-            "UUID": 1625622024
+            "Parent UUID": 148937003,
+            "UUID": 1424277546
         },
         "GameObject 4": {
             "Components": {
@@ -107,26 +107,26 @@
                     "Active": true,
                     "Height": 1024,
                     "Name": "baker_house.png",
-                    "Parent UUID": 1555213557,
+                    "Parent UUID": 459071888,
                     "Texture": 7,
-                    "UUID": 1894628818,
+                    "UUID": 2062182718,
                     "Width": 1024
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1555213557,
-                    "UUID": 735010054,
+                    "Parent UUID": 459071888,
+                    "UUID": 606294843,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1555213557,
+                    "Parent UUID": 459071888,
                     "Rotation": [
-                        -37.5,
                         0.0,
                         0.0,
-                        0.9469307661056519
+                        0.0,
+                        1.0
                     ],
                     "Scale": [
                         1.0,
@@ -135,147 +135,15 @@
                     ],
                     "Translation": [
                         0.0,
-                        7.800000190734863,
+                        0.0,
                         0.0
                     ],
-                    "UUID": 1545053804
+                    "UUID": 44796147
                 }
             },
             "Name": "Untitled",
-            "Parent UUID": 892156260,
-            "UUID": 1555213557
-        },
-        "GameObject 5": {
-            "Components": {
-                "Material": {
-                    "Active": true,
-                    "Height": 0,
-                    "Name": "",
-                    "Parent UUID": 1064888297,
-                    "Texture": 1,
-                    "UUID": 757285461,
-                    "Width": 0
-                },
-                "Mesh": {
-                    "Active": true,
-                    "F_Normals on": false,
-                    "Parent UUID": 1064888297,
-                    "UUID": 1803723173,
-                    "V_Normals on": false
-                },
-                "Transform": {
-                    "Active": true,
-                    "Parent UUID": 1064888297,
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "UUID": 1010180056
-                }
-            },
-            "Name": "Cube",
-            "Parent UUID": 0,
-            "UUID": 1064888297
-        },
-        "GameObject 6": {
-            "Components": {
-                "Material": {
-                    "Active": true,
-                    "Height": 0,
-                    "Name": "",
-                    "Parent UUID": 100062784,
-                    "Texture": 1,
-                    "UUID": 798566131,
-                    "Width": 0
-                },
-                "Mesh": {
-                    "Active": true,
-                    "F_Normals on": false,
-                    "Parent UUID": 100062784,
-                    "UUID": 1326021934,
-                    "V_Normals on": false
-                },
-                "Transform": {
-                    "Active": true,
-                    "Parent UUID": 100062784,
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "UUID": 34133996
-                }
-            },
-            "Name": "Donut",
-            "Parent UUID": 0,
-            "UUID": 100062784
-        },
-        "GameObject 7": {
-            "Components": {
-                "Material": {
-                    "Active": true,
-                    "Height": 0,
-                    "Name": "",
-                    "Parent UUID": 768469168,
-                    "Texture": 1,
-                    "UUID": 1823372803,
-                    "Width": 0
-                },
-                "Mesh": {
-                    "Active": true,
-                    "F_Normals on": false,
-                    "Parent UUID": 768469168,
-                    "UUID": 514032991,
-                    "V_Normals on": false
-                },
-                "Transform": {
-                    "Active": true,
-                    "Parent UUID": 768469168,
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "UUID": 1331847617
-                }
-            },
-            "Name": "Cube (1)",
-            "Parent UUID": 0,
-            "UUID": 768469168
+            "Parent UUID": 148937003,
+            "UUID": 459071888
         }
     }
 }

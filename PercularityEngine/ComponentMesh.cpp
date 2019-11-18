@@ -41,7 +41,7 @@ void ComponentMesh::OnEditor() {
 
 		ImGui::Text("Polygons:");
 		ImGui::SameLine();
-		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", mesh.num_indices);
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", mesh.num_indices / 3);
 		
 		ImGui::NewLine();
 		ImGui::Text("Show normals");
@@ -204,8 +204,7 @@ void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scen
 	showVertexNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"];
 	
 	std::string path = LIBRARY_MESH_FOLDER + gameObject->name + ".mesh";
-	//App->res_loader->LoadMeshFromLibrary(mesh, path.c_str());
-
+	App->res_loader->LoadMeshFromLibrary(path.c_str(), this);
 }
 
 void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
