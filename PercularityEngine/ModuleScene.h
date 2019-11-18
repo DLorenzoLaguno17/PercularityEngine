@@ -54,6 +54,7 @@ private:
 	bool mustLoad = false;
 	GameObject* root = nullptr;
 	const char* sceneAddress;
+	const char* sceneExtension;
 
 	uint saved_go = 0;
 	uint loaded_go = 0;

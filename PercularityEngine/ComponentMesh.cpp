@@ -5,6 +5,7 @@
 #include "ComponentMaterial.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleFileSystem.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentTransform.h"
 
@@ -201,6 +202,13 @@ void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scen
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"];
 	showFaceNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"];
 	showVertexNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"];
+	
+	std::string path = gameObject->name + ".mesh";
+	char* buffer = nullptr;
+	if(App->file_system->Load(LIBRARY_MESH_FOLDER, path.c_str(), &buffer))
+		App->res_loader->LoadMeshFromLibrary(this, buffer);
+
+	RELEASE_ARRAY(buffer);
 }
 
 void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {

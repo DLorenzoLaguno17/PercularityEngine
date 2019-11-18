@@ -25,7 +25,8 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Init() {
 	root = new GameObject("World");
-	sceneAddress = "_Scene.json";
+	sceneAddress = "Assets/Scenes/";
+	sceneExtension = ".json";
 
 	return true;
 }
@@ -79,10 +80,10 @@ update_status ModuleScene::Update(float dt)
 		ImGui::NewLine();
 		ImGui::Separator();
 
-		if (ImGui::Button("Yes", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); mustLoad = true; }
+		if (ImGui::Button("Yes", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); mustLoad = true; }
 		ImGui::SetItemDefaultFocus();
 		ImGui::SameLine();
-		if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		if (ImGui::Button("Cancel", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); }
 		ImGui::EndPopup();
 	}
 
@@ -128,10 +129,10 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 	root = new GameObject("World", nullptr, true);
 
 	json scene_file;
+	std::string full_path = sceneAddress + scene_name + sceneExtension;
 
 	// If the adress of the settings file is null, create  an exception
-	assert(sceneAddress != nullptr);
-	std::string full_path = scene_name + sceneAddress;
+	assert(full_path.c_str() != nullptr);
 
 	// Create a stream and open the file
 	std::ifstream stream;
@@ -174,7 +175,7 @@ void ModuleScene::SaveScene(std::string scene_name) {
 
 	// Create auxiliar file
 	json scene_file;
-	std::string full_path = scene_name + sceneAddress;
+	std::string full_path = sceneAddress + scene_name + sceneExtension;
 
 	RecursiveSave(root, scene_file);
 	scene_file["Game Objects"]["Count"] = saved_go;

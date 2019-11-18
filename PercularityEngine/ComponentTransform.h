@@ -52,12 +52,15 @@ private:
 	float4x4 globalTransform = float4x4::identity;
 	float4x4 localTransform = float4x4::identity;
 
-
 	Quat rotation = Quat::identity;
 	float3 eulerRotation = float3::zero;
 
 	float3 translation = float3::zero;
 	float3 scale = float3::one;
+
+	float3 translationM;
+	float3 rotationM;
+	float3 scaleM;
 };
 
 #endif // _ComponentTransform_H_
