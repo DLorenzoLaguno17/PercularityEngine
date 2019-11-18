@@ -72,10 +72,18 @@ update_status ModuleCamera3D::Update(float dt)
 
 		Position += newPos;
 		Reference += newPos;
-	}
+	}	
 
 	// Mouse motion ----------------
 	if (App->input->IsMouseInsideWindow(App->gui->scene_window)) {
+		
+		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) {
+			newPos -= X * App->input->GetMouseXMotion() * speed;
+			newPos += Y * App->input->GetMouseYMotion() * speed;
+
+			Position += newPos;
+			Reference += newPos;
+		}
 
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{

@@ -279,7 +279,7 @@ bool ModuleResourceLoader::ImportMesh(const char* path, ComponentMesh* mesh) {
 		mesh->mesh.num_vertices, 
 		mesh->mesh.num_colors, 
 		mesh->mesh.num_normals, 
-		mesh->mesh.num_tex 
+		mesh->mesh.num_tex * 2
 	};
 
 	// We allocate data buffer
@@ -288,7 +288,7 @@ bool ModuleResourceLoader::ImportMesh(const char* path, ComponentMesh* mesh) {
 		+ sizeof(float3) * mesh->mesh.num_vertices
 		+ sizeof(uint) * mesh->mesh.num_colors
 		+ sizeof(float3) * mesh->mesh.num_normals
-		+ sizeof(float) * mesh->mesh.num_tex;
+		+ sizeof(float) * mesh->mesh.num_tex * 2;
 
 	if (size > 0) {
 		// Allocate memory
@@ -321,7 +321,7 @@ bool ModuleResourceLoader::ImportMesh(const char* path, ComponentMesh* mesh) {
 
 		// Store UVs
 		cursor += bytes;
-		bytes = sizeof(float) * mesh->mesh.num_tex;
+		bytes = sizeof(float) * mesh->mesh.num_tex * 2;
 		memcpy(cursor, mesh->mesh.textures, bytes);
 
 		ret = App->file_system->Save(path, data, size);		
@@ -400,8 +400,11 @@ void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* 
 
 		glGenBuffers(1, (GLuint*)&mesh->mesh.id_tex);
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh.id_tex);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * mesh->mesh.num_tex, mesh->mesh.textures, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mesh.num_tex, mesh->mesh.textures, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		mesh->aabb.SetNegativeInfinity();
+		mesh->aabb = AABB::MinimalEnclosingAABB(mesh->mesh.vertices, mesh->mesh.num_vertices);
 
 		RELEASE_ARRAY(buffer);
 		cursor = nullptr;
