@@ -128,7 +128,7 @@ void ComponentMesh::Render() const  {
 	glBindBuffer(GL_ARRAY_BUFFER,mesh.id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_index);
-	glDrawElements(GL_TRIANGLES, mesh.num_indices * 3, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, mesh.num_indices, GL_UNSIGNED_INT, NULL);
 
 	// Clean all buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -203,12 +203,9 @@ void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scen
 	showFaceNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"];
 	showVertexNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"];
 	
-	std::string path = gameObject->name + ".mesh";
-	char* buffer = nullptr;
-	if(App->file_system->Load(LIBRARY_MESH_FOLDER, path.c_str(), &buffer))
-		App->res_loader->LoadMeshFromLibrary(this, buffer);
+	std::string path = LIBRARY_MESH_FOLDER + gameObject->name + ".mesh";
+	//App->res_loader->LoadMeshFromLibrary(mesh, path.c_str());
 
-	RELEASE_ARRAY(buffer);
 }
 
 void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
