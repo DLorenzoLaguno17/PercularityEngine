@@ -55,6 +55,9 @@ void ComponentTransform::UpdateTransform()
 
 		gameObject->UpdateAABB();
 	}
+
+	for (int i = 0; i < gameObject->children.size(); ++i)
+		gameObject->children[i]->transform->mustUpdate = true;
 }
 
 void ComponentTransform::UpdateRenderTransform()
