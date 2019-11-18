@@ -73,7 +73,7 @@
                     "F_Normals on": false,
                     "Parent UUID": 1017480497,
                     "UUID": 2059745249,
-                    "V_Normals on": false
+                    "V_Normals on": true
                 },
                 "Transform": {
                     "Active": true,

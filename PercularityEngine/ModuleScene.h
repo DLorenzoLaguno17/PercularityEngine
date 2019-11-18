@@ -51,6 +51,7 @@ public:
 	uint numGameObjectsInScene = 0;
 
 private:
+	bool mustLoad = false;
 	GameObject* root = nullptr;
 	const char* sceneAddress;
 

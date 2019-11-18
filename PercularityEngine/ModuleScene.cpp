@@ -24,7 +24,7 @@ ModuleScene::~ModuleScene()
 {}
 
 bool ModuleScene::Init() {
-	App->scene->root = new GameObject("World");
+	root = new GameObject("World");
 	sceneAddress = "_Scene.json";
 
 	return true;
@@ -68,8 +68,25 @@ update_status ModuleScene::Update(float dt)
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
 		SaveScene("Test");
 
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		LoadScene("Test");
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+		ImGui::OpenPopup("Loading new scene");
+	}
+
+	if (ImGui::BeginPopupModal("Loading new scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Are you sure you want to load a new scene?");
+		ImGui::Text("The current scene will be discarded.");
+		ImGui::NewLine();
+		ImGui::Separator();
+
+		if (ImGui::Button("Yes", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); mustLoad = true; }
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		ImGui::EndPopup();
+	}
+
+	if (mustLoad) LoadScene("Test");
 	
 	return UPDATE_CONTINUE;
 }
@@ -108,7 +125,7 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 	
 	// First we delete the current scene
 	CleanUp();
-	App->scene->root = new GameObject("World", nullptr, true);
+	root = new GameObject("World", nullptr, true);
 
 	json scene_file;
 
@@ -126,7 +143,9 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 
 	numGameObjectsInScene = scene_file["Game Objects"]["Count"];
 	RecursiveLoad(root, scene_file);
+	selected = root;
 	loaded_go = 0;
+	mustLoad = false;
 }
 
 void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) {
