@@ -42,7 +42,7 @@ TreeNode::~TreeNode()
 
 void TreeNode::Split()
 {
-	isLeave = false;
+	isLeaf= false;
 
 	switch (treeType)
 	{
@@ -101,7 +101,7 @@ void TreeNode::Draw()
 
 	glEnd();
 
-	if (!this->isLeave)
+	if (!this->isLeaf)
 	{
 		for (int i = 0; i < nodesAmount ; ++i)
 			nodes[i].Draw();

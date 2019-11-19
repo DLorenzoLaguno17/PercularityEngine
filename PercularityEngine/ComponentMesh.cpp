@@ -191,8 +191,8 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 		}
 	}
 
-	gameObject->aabb.SetNegativeInfinity();
-	gameObject->aabb = AABB::MinimalEnclosingAABB(mesh.vertices, mesh.num_vertices);
+	aabb.SetNegativeInfinity();
+	aabb = AABB::MinimalEnclosingAABB(mesh.vertices, mesh.num_vertices);
 }
 
 // Load & Save 

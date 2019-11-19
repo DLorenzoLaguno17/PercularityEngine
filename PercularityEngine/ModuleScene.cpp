@@ -36,11 +36,6 @@ bool ModuleScene::Start()
 	// Loading FBX
 	App->res_loader->LoadModel("Assets/FBX/BakerHouse.fbx");
 
-	//test
-	testQuadTree = new Tree(TREE_TYPE::QUADTREE, float3(10,10,10), float3(-10,-10,-10));
-	testQuadTree->rootNode->Split();
-	//test
-
 	return true;
 }
 
@@ -55,10 +50,7 @@ update_status ModuleScene::Update(float dt)
 {
 	BROFILER_CATEGORY("SceneUpdate", Profiler::Color::LightSeaGreen);
 
-	//TEST
-	testQuadTree->Draw();
-
-	//DrawSimplePlane();
+	DrawSimplePlane();
 	DrawAxis();
 
 	// Update all GameObjects

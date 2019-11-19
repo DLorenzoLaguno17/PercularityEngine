@@ -59,6 +59,9 @@ void ComponentTransform::UpdateTransform()
 
 		mustUpdate = false;
 	}
+
+	for (int i = 0; i < gameObject->children.size(); ++i)
+		gameObject->children[i]->transform->mustUpdate = true;
 }
 
 void ComponentTransform::UpdateRenderTransform()
