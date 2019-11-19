@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentCamera.h"
 
 #include "mmgr/mmgr.h"
 
@@ -25,7 +26,7 @@ void SceneWindow::Update() {
 	}
 	
 	// Scene image
-	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.y),	ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x , windowSize.x*App->renderer3D->GetCamera()->GetAspectRatio()),ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::End();
 }

@@ -14,13 +14,21 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-
-	
-
 }
 
 ModuleCamera3D::~ModuleCamera3D()
 {}
+
+
+bool ModuleCamera3D::Init()
+{
+	LOG("ModuleCamera Init()");
+
+	camera = new ComponentCamera();
+	App->renderer3D->camera = camera;
+
+	return true;
+}
 
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
@@ -28,8 +36,7 @@ bool ModuleCamera3D::Start()
 	LOG("Setting up the camera");
 	bool ret = true;
 
-	camera = new ComponentCamera();
-	App->renderer3D->camera = camera;
+	
 
 	return ret;
 }
@@ -96,7 +103,8 @@ void ModuleCamera3D::FocusCameraOn(GameObject* object)
 
 void ModuleCamera3D::HandleUserInput(float dt)
 {
-	vec3 newPos(0, 0, 0);
+	
+	float3	newPos(0, 0, 0);
 	float speed = 4.0f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
@@ -109,69 +117,53 @@ void ModuleCamera3D::HandleUserInput(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT) newPos.y += speed;
 		if (App->input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT) newPos.y -= speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= camera->Z * speed;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += camera->Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += camera->frustum.front * speed;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= camera->frustum.front * speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= camera->X * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += camera->X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= camera->frustum.WorldRight() * speed;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += camera->frustum.WorldRight() * speed;
 
-		camera->Position += newPos;
-		camera->Reference += newPos;
+		camera->frustum.pos += newPos;
+		camera->update_projection=true;
 	}
 
-	// Mouse motion ----------------
-	if (App->input->IsMouseInsideWindow(App->gui->scene_window)) {
+	//// Mouse motion ----------------
+	//if (App->input->IsMouseInsideWindow(App->gui->scene_window)) {
 
-		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) {
-			newPos -= camera->X * App->input->GetMouseXMotion() * speed;
-			newPos += camera->Y * App->input->GetMouseYMotion() * speed;
+	//	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) {
+	//		newPos -= camera->frustum.WorldRight() * App->input->GetMouseXMotion() * speed;
+	//		newPos += camera->frustum.up * App->input->GetMouseYMotion() * speed;
 
-			camera->Position += newPos;
-			camera->Reference += newPos;
-		}
+	//		camera->frustum.pos += newPos;
+	//	}
 
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-		{
-			int dx = -App->input->GetMouseXMotion();
-			int dy = -App->input->GetMouseYMotion();
+	//	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	//	{
+	//		int dx = -App->input->GetMouseXMotion();
+	//		int dy = -App->input->GetMouseYMotion();
 
-			float Sensitivity = 0.25f;
+	//		float Sensitivity = 0.25f;
 
-			camera->Position -= camera->Reference;
+	//		camera->Position -= camera->Reference;
 
-			if (dx != 0)
-			{
-				float DeltaX = (float)dx * Sensitivity;
+	//		float3 vector = camera->frustum.pos - reference;
 
-				camera->X = rotate(camera->X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				camera->Y = rotate(camera->Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				camera->Z = rotate(camera->Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			}
+	//		Quat quat_y(camera->frustum.up, dx * 0.003);
+	//		Quat quat_x(camera->frustum.WorldRight(), dy * 0.003);
 
-			if (dy != 0)
-			{
-				float DeltaY = (float)dy * Sensitivity;
+	//		vector = quat_x.Transform(vector);
+	//		vector = quat_y.Transform(vector);
 
-				camera->Y = rotate(camera->Y, DeltaY, camera->X);
-				camera->Z = rotate(camera->Z, DeltaY, camera->X);
+	//		camera->frustum.pos=(vector + reference);
+	//		Look(reference);
+	//	}
 
-				if (camera->Y.y < 0.0f)
-				{
-					camera->Z = vec3(0.0f, camera->Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-					camera->Y = cross(camera->Z, camera->X);
-				}
-			}
-
-			camera->Position = camera->Reference + camera->Z * length(camera->Position);
-			camera->Position;
-		}
-
-		// Scroll to zoom in and out
-		if (App->input->GetMouseZ() > 0) {
-			camera->Position -= camera->Z * speed * 12;
-		}
-		else if (App->input->GetMouseZ() < 0) {
-			camera->Position += camera->Z * speed * 12;
-		}
-	}
+	//	// Scroll to zoom in and out
+	//	if (App->input->GetMouseZ() > 0) {
+	//		camera->Position -= camera->Z * speed * 12;
+	//	}
+	//	else if (App->input->GetMouseZ() < 0) {
+	//		camera->Position += camera->Z * speed * 12;
+	//	}
+	//}
 }

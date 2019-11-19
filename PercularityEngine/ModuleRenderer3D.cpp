@@ -97,7 +97,6 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_COLOR_MATERIAL);
 	}
 
-
 	// Projection matrix for
 	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
 
@@ -106,7 +105,6 @@ bool ModuleRenderer3D::Init()
 
 bool ModuleRenderer3D::Start()
 {
-
 	//Prepare scene
 	SetUpScene();
 
@@ -129,7 +127,12 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_MODELVIEW);
 	
-	glLoadMatrixf(camera->GetViewMatrix());
+	/*if (camera->update_projection) {
+		UpdateProjectionMatrix();
+		camera->update_projection = false;
+	}*/
+
+	glLoadMatrixf(camera->GetOpenGLViewMatrix());
 
 	// light 0 on cam pos
 	lights[0].SetPos(camera->Position.x, camera->Position.y, camera->Position.z);
@@ -171,8 +174,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
+
+	UpdateProjectionMatrix();
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -180,6 +183,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::SetUpScene()
 {
+	DeleteBuffers();
+
 	glGenFramebuffers(1, &frameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
@@ -217,4 +222,30 @@ uint ModuleRenderer3D::CreateBuffer(uint bufferType, uint size, void* data)
 	glBindBuffer(bufferType, 0);
 
 	return bufferID;
+}
+
+void ModuleRenderer3D::UpdateProjectionMatrix()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf((GLfloat*)camera->GetOpenGLProjectionMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+void ModuleRenderer3D::DeleteBuffers()
+{
+	if (frameBuffer != 0) {
+		glDeleteBuffers(1, &frameBuffer);
+		frameBuffer = 0;
+	}
+
+	if (renderBuffer!=0)
+		glDeleteBuffers(1, &renderBuffer);
+
+	if (texColorBuffer!=0)
+		glDeleteBuffers(1, &texColorBuffer);
+
 }

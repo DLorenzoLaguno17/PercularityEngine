@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class GameObject;
 class ComponentCamera;
@@ -14,6 +15,7 @@ public:
 	ModuleCamera3D(Application* app, bool start_enabled = true);
 	~ModuleCamera3D();
 
+	bool Init();
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
@@ -28,6 +30,7 @@ public:
 	void FocusCameraOn(GameObject* object);
 
 private:
+	float3 reference=float3(0,0,0);
 	ComponentCamera* camera;
 };
 

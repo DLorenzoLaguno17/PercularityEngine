@@ -10,7 +10,7 @@
 ComponentCamera::ComponentCamera():Component(COMPONENT_TYPE::CAMERA, nullptr, true)
 {
 	frustum.type = PerspectiveFrustum;
-	frustum.pos = float3(0,0,0);
+	frustum.pos = float3(0,0,-10.0f);
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 
@@ -18,7 +18,7 @@ ComponentCamera::ComponentCamera():Component(COMPONENT_TYPE::CAMERA, nullptr, tr
 	frustum.farPlaneDistance = 100.0f;
 
 	frustum.verticalFov = 60.f*DEGTORAD;
-	SetAspectRatio(1.5f);
+	SetAspectRatio(1.0f);
 
 	CalculateViewMatrix();
 
@@ -149,7 +149,28 @@ void ComponentCamera::SetFOV(float fov)
 
 void ComponentCamera::SetAspectRatio(float ar)
 {
-	frustum.horizontalFov = 2.0f*atan(tan(frustum.verticalFov*0.5f)/ar);
+	frustum.horizontalFov = 2.0f*atan((tan(frustum.verticalFov*0.5f))/ar);
 	update_projection = true;
+}
 
+float* ComponentCamera::GetOpenGLViewMatrix()
+{
+	static float4x4 m;
+
+	m = frustum.ViewMatrix();
+
+	m.Transpose();
+
+	return (float*)m.v;
+}
+
+float* ComponentCamera::GetOpenGLProjectionMatrix()
+{
+	static float4x4 m;
+
+	m = frustum.ProjectionMatrix();
+
+	m.Transpose();
+
+	return (float*)m.v;
 }

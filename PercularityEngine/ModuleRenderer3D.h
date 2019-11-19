@@ -26,6 +26,11 @@ public:
 	void OnResize(int width, int height);
 
 	void SetUpScene();
+	void DeleteBuffers();
+
+	void UpdateProjectionMatrix();
+
+	const ComponentCamera* GetCamera() const { return camera; }
 
 public:
 

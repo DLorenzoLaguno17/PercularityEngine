@@ -29,6 +29,8 @@ public:
 	void SetAspectRatio(float ar);
 	//~~~~~~~~~~~~~~~~~~~~~~
 
+	float* GetOpenGLViewMatrix();
+	float* GetOpenGLProjectionMatrix();
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
