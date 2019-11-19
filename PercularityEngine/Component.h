@@ -3,8 +3,6 @@
 
 #include "Globals.h"
 
-class GameObject;
-
 enum class COMPONENT_TYPE {
 	NONE,
 	TRANSFORM,
@@ -13,11 +11,12 @@ enum class COMPONENT_TYPE {
 	CAMERA
 };
 
+class GameObject;
+
 class Component {
 public:
 	//Constructors
-	Component(COMPONENT_TYPE type, GameObject* parent = nullptr, bool active = true) :
-		type(type), active(active), gameObject(parent) {}
+	Component(COMPONENT_TYPE type, GameObject* parent, bool active);
 
 	// Destructor
 	virtual ~Component() {}
@@ -28,8 +27,8 @@ public:
 	virtual void CleanUp() {}
 
 	// Load & Save 
-	virtual void OnLoad(const char* scene_name, const nlohmann::json &scene_file) {}
-	virtual void OnSave(const char* scene_name, nlohmann::json &scene_file) {}
+	virtual void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {}
+	virtual void OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {}
 
 	uint GetUUID() const { return UUID; }
 	COMPONENT_TYPE GetType() const { return type; }

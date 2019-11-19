@@ -7,11 +7,12 @@
 #include "glmath.h"
 
 class ComponentTransform : public Component {
-	friend class ComponentMesh;
+	
 public:
 
-	ComponentTransform(GameObject* parent, bool active = true);
+	ComponentTransform(GameObject* parent, bool active);
 
+	// Destructor
 	~ComponentTransform() {}
 
 	// Methods
@@ -19,6 +20,17 @@ public:
 	void OnEditor();
 	void CleanUp() {}
 
+	const float4x4& GetLocalTransform() const { return localTransform; }
+	const float4x4& GetGlobalTransform() const { return globalTransform; }
+	const float3& GetEulerRotation() const { return eulerRotation; }
+	const float3& GetTranslation() const { return translation; }
+	const float3& GetScale() const { return scale; }
+
+	// Load & Save 
+	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
+	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
+
+private:
 	//Update transform
 	void UpdateTransform();
 	void UpdateRenderTransform();//float4x4 -> mat4x4
@@ -31,15 +43,8 @@ public:
 	void SetToZero();
 	void UpdateEulerRotation();
 
-	const float4x4& GetLocalTransform() const { return localTransform; }
-	const float4x4& GetGlobalTransform() const { return globalTransform; }
-	const float3& GetEulerRotation() const { return eulerRotation; }
-	const float3& GetTranslation() const { return translation; }
-	const float3& GetScale() const { return scale; }
-
-	// Load & Save 
-	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
-	void OnSave(const char* scene_name, nlohmann::json &scene_file);
+public:
+	mat4x4 renderTransform;
 
 private:
 	bool mustUpdate = true;
@@ -47,13 +52,15 @@ private:
 	float4x4 globalTransform = float4x4::identity;
 	float4x4 localTransform = float4x4::identity;
 
-	mat4x4 renderTransform;
-
 	Quat rotation = Quat::identity;
 	float3 eulerRotation = float3::zero;
 
 	float3 translation = float3::zero;
 	float3 scale = float3::one;
+
+	float3 translationM;
+	float3 rotationM;
+	float3 scaleM;
 };
 
 #endif // _ComponentTransform_H_

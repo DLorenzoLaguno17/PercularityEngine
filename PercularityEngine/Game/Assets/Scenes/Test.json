@@ -1,0 +1,149 @@
+{
+    "Game Objects": {
+        "Count": 4,
+        "GameObject 1": {
+            "Components": {
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 0,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 1927038754
+                }
+            },
+            "Name": "World",
+            "Parent UUID": 0,
+            "UUID": 0
+        },
+        "GameObject 2": {
+            "Components": {
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 816004705,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 1531169067
+                }
+            },
+            "Name": "bakerhouse",
+            "Parent UUID": 0,
+            "UUID": 816004705
+        },
+        "GameObject 3": {
+            "Components": {
+                "Material": {
+                    "Active": true,
+                    "Height": 1024,
+                    "Name": "baker_house.png",
+                    "Parent UUID": 433376527,
+                    "Texture": 5,
+                    "UUID": 775667924,
+                    "Width": 1024
+                },
+                "Mesh": {
+                    "Active": true,
+                    "F_Normals on": false,
+                    "Parent UUID": 433376527,
+                    "UUID": 631507855,
+                    "V_Normals on": false
+                },
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 433376527,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 2109429564
+                }
+            },
+            "Name": "Untitled.001",
+            "Parent UUID": 816004705,
+            "UUID": 433376527
+        },
+        "GameObject 4": {
+            "Components": {
+                "Material": {
+                    "Active": true,
+                    "Height": 1024,
+                    "Name": "baker_house.png",
+                    "Parent UUID": 5265695,
+                    "Texture": 7,
+                    "UUID": 1821299987,
+                    "Width": 1024
+                },
+                "Mesh": {
+                    "Active": true,
+                    "F_Normals on": false,
+                    "Parent UUID": 5265695,
+                    "UUID": 41605683,
+                    "V_Normals on": false
+                },
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 5265695,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 1530731605
+                }
+            },
+            "Name": "Untitled",
+            "Parent UUID": 816004705,
+            "UUID": 5265695
+        }
+    }
+}

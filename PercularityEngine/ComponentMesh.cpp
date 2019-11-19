@@ -5,6 +5,7 @@
 #include "ComponentMaterial.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleFileSystem.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentTransform.h"
 
@@ -12,11 +13,7 @@
 #include "mmgr/mmgr.h"
 
 ComponentMesh::ComponentMesh(GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::MESH, parent, active) 
-{
-	UUID = (uint)App->GetRandomGenerator().Int();
-	if (parent) parent_UUID = parent->GetUUID();
-}
+	Component(COMPONENT_TYPE::MESH, parent, active) {}
 
 void MeshData::CleanUp()
 {		
@@ -34,6 +31,7 @@ void ComponentMesh::Update()
 }
 
 void ComponentMesh::OnEditor() {
+
 	if (ImGui::CollapsingHeader("Mesh")) {
 		ImGui::Checkbox("Enabled", &active);
 
@@ -43,7 +41,7 @@ void ComponentMesh::OnEditor() {
 
 		ImGui::Text("Polygons:");
 		ImGui::SameLine();
-		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", mesh.num_indices);
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", mesh.num_indices / 3);
 		
 		ImGui::NewLine();
 		ImGui::Text("Show normals");
@@ -130,7 +128,7 @@ void ComponentMesh::Render() const  {
 	glBindBuffer(GL_ARRAY_BUFFER,mesh.id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_index);
-	glDrawElements(GL_TRIANGLES, mesh.num_indices * 3, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, mesh.num_indices, GL_UNSIGNED_INT, NULL);
 
 	// Clean all buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -198,11 +196,21 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 }
 
 // Load & Save 
-void ComponentMesh::OnLoad(const char* scene_name, const nlohmann::json &scene_file) {
-
+void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
+	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"];
+	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"];
+	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"];
+	showFaceNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"];
+	showVertexNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"];
+	
+	std::string path = LIBRARY_MESH_FOLDER + gameObject->name + ".mesh";
+	App->res_loader->LoadMeshFromLibrary(path.c_str(), this);
 }
 
-void ComponentMesh::OnSave(const char* scene_name, nlohmann::json &scene_file) {
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Mesh"]["UUID"] = UUID;
-	scene_file[scene_name]["Game Objects"][gameObject->name]["Mesh"]["Parent UUID"] = parent_UUID;
+void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"] = UUID;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"] = parent_UUID;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"] = active;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"] = showFaceNormals;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"] = showVertexNormals;
 }

@@ -106,7 +106,7 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 		{
 			// If the path has texture extensions, it calls the LoadTexture() method
 			ComponentMaterial* material = App->scene->selected->GetComponent<ComponentMaterial>();
-			if (!material) material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL, App->scene->selected);
+			if (!material) material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
 
 			LoadTexture(full_path, material);
 			material = nullptr;
@@ -142,7 +142,7 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 				fbx_mesh = parent_mesh;
 
 			// Copy the mesh						
-			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH, fbx_mesh);
+			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
 			LoadMesh(mesh, scene->mMeshes[i]);
 			
 			// Copy materials
@@ -155,10 +155,11 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 			std::string name = getNameFromPath(p.C_Str(), true);
 			std::string full_path = file + name;
 
-			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL, fbx_mesh);
+			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			LoadTexture(full_path.c_str(), material);
 
 			App->scene->selected = fbx_mesh;
+			App->scene->numGameObjectsInScene++;
 
 			LOG("Loaded new model %s.", fbx_mesh->name.c_str());
 			LOG("_____________________");
@@ -185,14 +186,23 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) 
 	// Copy faces
 	if (currentMesh->HasFaces())
 	{
-		m.num_indices = currentMesh->mNumFaces;
-		m.indices = new uint[m.num_indices * 3]; // Assume each face is a triangle
-		for (uint j = 0; j < m.num_indices; ++j)
+		m.num_indices = currentMesh->mNumFaces * 3;
+		m.indices = new uint[m.num_indices];
+
+		for (unsigned j = 0; j < currentMesh->mNumFaces; ++j)
 		{
-			if (currentMesh->mFaces[j].mNumIndices != 3)
-				LOG("WARNING, geometry face with != 3 indices!")
-			else
-				memcpy(&m.indices[j * 3], currentMesh->mFaces[j].mIndices, sizeof(uint) * 3);
+			const aiFace& face = currentMesh->mFaces[j];
+
+			// Only triangles
+			if (face.mNumIndices > 3)
+			{
+				LOG("Importer Mesh found a quad in %s, ignoring it. ", currentMesh->mName);
+				continue;
+			}
+
+			m.indices[j * 3] = face.mIndices[0];
+			m.indices[j * 3 + 1] = face.mIndices[1];
+			m.indices[j * 3 + 2] = face.mIndices[2];
 		}
 		LOG("Faces: %d", m.num_indices / 3);
 	}
@@ -241,7 +251,7 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) 
 
 	glGenBuffers(1, (GLuint*)&m.id_index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 3 * m.num_indices, m.indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m.num_indices, m.indices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, (GLuint*)&m.id_tex);
@@ -254,11 +264,11 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) 
 	c_mesh->aabb = AABB::MinimalEnclosingAABB(m.vertices, m.num_vertices);
 	
 	// We import the mesh to our library
-	std::string name;
-	ImportMesh(c_mesh, name);
+	std::string path = LIBRARY_MESH_FOLDER + c_mesh->gameObject->name + ".mesh";
+	ImportMesh(path.c_str(), c_mesh);
 }
 
-bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_file) {
+bool ModuleResourceLoader::ImportMesh(const char* path, ComponentMesh* mesh) {
 	
 	LOG("Importing mesh");
 	bool ret = false; 
@@ -269,14 +279,14 @@ bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_f
 		mesh->mesh.num_vertices, 
 		mesh->mesh.num_colors, 
 		mesh->mesh.num_normals, 
-		mesh->mesh.num_tex 
+		mesh->mesh.num_tex * 2
 	};
 
 	// We allocate data buffer
 	uint size = sizeof(ranges) 
-		+ sizeof(uint) * mesh->mesh.num_indices * 3
+		+ sizeof(uint) * mesh->mesh.num_indices
 		+ sizeof(float3) * mesh->mesh.num_vertices
-		+ sizeof(uint) * mesh->mesh.num_colors * 4
+		+ sizeof(uint) * mesh->mesh.num_colors
 		+ sizeof(float3) * mesh->mesh.num_normals
 		+ sizeof(float) * mesh->mesh.num_tex * 2;
 
@@ -291,7 +301,7 @@ bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_f
 
 		// Store indices
 		cursor += bytes;
-		bytes = sizeof(uint) * mesh->mesh.num_indices * 3;
+		bytes = sizeof(uint) * mesh->mesh.num_indices;
 		memcpy(cursor, mesh->mesh.indices, bytes);
 
 		// Store vertices
@@ -301,7 +311,7 @@ bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_f
 
 		// Store colors
 		cursor += bytes;
-		bytes = sizeof(uint) * mesh->mesh.num_colors * 4;
+		bytes = sizeof(uint) * mesh->mesh.num_colors;
 		memcpy(cursor, mesh->mesh.colors, bytes);
 
 		// Store normals
@@ -314,10 +324,12 @@ bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_f
 		bytes = sizeof(float) * mesh->mesh.num_tex * 2;
 		memcpy(cursor, mesh->mesh.textures, bytes);
 
-		ret = App->file_system->SaveUnique(output_file, cursor, size, LIBRARY_MESH_FOLDER, mesh->gameObject->name.c_str(), "fbx");		
+		ret = App->file_system->Save(path, data, size);		
+		
 		RELEASE_ARRAY(data);
+		cursor = nullptr;
 
-		LOG("Imported mesh: %s", output_file.c_str());
+		LOG("Imported mesh: %s", getNameFromPath(path).c_str());
 	}
 
 	if (!ret) LOG("Could not import mesh");
@@ -325,51 +337,79 @@ bool ModuleResourceLoader::ImportMesh(ComponentMesh* mesh, std::string& output_f
 	return ret;
 }
 
-void ModuleResourceLoader::LoadMeshFromLibrary(ComponentMesh* mesh, char* buffer) {
+void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* mesh) {
 	
 	LOG("Loading mesh from library");
-	char* cursor = buffer;
+	char* buffer = nullptr;
+	App->file_system->Load(path, &buffer);
+	
+	if (buffer) {
+		char* cursor = buffer;
 
-	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
-	uint ranges[5];
-	uint bytes = sizeof(ranges);
-	memcpy(ranges, cursor, bytes);
+		// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
+		uint ranges[5];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
 
-	mesh->mesh.num_indices = ranges[0];
-	mesh->mesh.num_vertices = ranges[1];
-	mesh->mesh.num_colors = ranges[2];
-	mesh->mesh.num_normals = ranges[3];
-	mesh->mesh.num_tex = ranges[4];
+		mesh->mesh.num_indices = ranges[0];
+		mesh->mesh.num_vertices = ranges[1];
+		mesh->mesh.num_colors = ranges[2];
+		mesh->mesh.num_normals = ranges[3];
+		mesh->mesh.num_tex = ranges[4];
 
-	// Load indices
-	cursor += bytes;
-	bytes = sizeof(uint) * mesh->mesh.num_indices * 3;
-	mesh->mesh.indices = new uint[mesh->mesh.num_indices];
-	memcpy(mesh->mesh.indices, cursor, bytes);
+		// Load indices
+		cursor += bytes;
+		bytes = sizeof(uint) * mesh->mesh.num_indices;
+		mesh->mesh.indices = new uint[mesh->mesh.num_indices];
+		memcpy(mesh->mesh.indices, cursor, bytes);
 
-	// Load vertices
-	cursor += bytes;
-	bytes = sizeof(float3) * mesh->mesh.num_vertices;
-	mesh->mesh.vertices = new float3[mesh->mesh.num_vertices];
-	memcpy(mesh->mesh.vertices, cursor, bytes);
+		// Load vertices
+		cursor += bytes;
+		bytes = sizeof(float3) * mesh->mesh.num_vertices;
+		mesh->mesh.vertices = new float3[mesh->mesh.num_vertices];
+		memcpy(mesh->mesh.vertices, cursor, bytes);
 
-	// Load colors
-	cursor += bytes;
-	bytes = sizeof(uint) * mesh->mesh.num_colors * 4;
-	mesh->mesh.colors = new uint[mesh->mesh.num_colors];
-	memcpy(mesh->mesh.colors, cursor, bytes);
+		// Load colors
+		cursor += bytes;
+		bytes = sizeof(uint) * mesh->mesh.num_colors;
+		mesh->mesh.colors = new uint[mesh->mesh.num_colors];
+		memcpy(mesh->mesh.colors, cursor, bytes);
 
-	// Load normals
-	cursor += bytes;
-	bytes = sizeof(float3) * mesh->mesh.num_normals;
-	mesh->mesh.normals = new float3[mesh->mesh.num_normals];
-	memcpy(mesh->mesh.normals, cursor, bytes);
+		// Load normals
+		cursor += bytes;
+		bytes = sizeof(float3) * mesh->mesh.num_normals;
+		mesh->mesh.normals = new float3[mesh->mesh.num_normals];
+		memcpy(mesh->mesh.normals, cursor, bytes);
 
-	// Load UVs
-	cursor += bytes;
-	bytes = sizeof(float) * mesh->mesh.num_tex;
-	mesh->mesh.textures = new float[mesh->mesh.num_tex];
-	memcpy(mesh->mesh.textures, cursor, bytes);
+		// Load UVs
+		cursor += bytes;
+		bytes = sizeof(float) * mesh->mesh.num_tex;
+		mesh->mesh.textures = new float[mesh->mesh.num_tex];
+		memcpy(mesh->mesh.textures, cursor, bytes);
+
+		// Assigning the VRAM
+		glGenBuffers(1, (GLuint*)&mesh->mesh.id_vertex);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh.id_vertex);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * mesh->mesh.num_vertices, mesh->mesh.vertices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glGenBuffers(1, (GLuint*)&mesh->mesh.id_index);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh.id_index);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->mesh.num_indices, mesh->mesh.indices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glGenBuffers(1, (GLuint*)&mesh->mesh.id_tex);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh.id_tex);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mesh.num_tex, mesh->mesh.textures, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		mesh->aabb.SetNegativeInfinity();
+		mesh->aabb = AABB::MinimalEnclosingAABB(mesh->mesh.vertices, mesh->mesh.num_vertices);
+
+		RELEASE_ARRAY(buffer);
+		cursor = nullptr;
+	}
+
 	LOG("Loaded mesh from library");
 }
 

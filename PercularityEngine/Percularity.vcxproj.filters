@@ -40,17 +40,17 @@
     <Filter Include="Sources\Tools\Trees">
       <UniqueIdentifier>{75e0972b-7459-4038-a9cb-60edd40c1476}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Scene elements">
-      <UniqueIdentifier>{ec7df1a1-c2fc-495d-8d12-a04a8d3d9e70}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Scene elements\GameObjects">
-      <UniqueIdentifier>{6c7ba77f-d661-4703-899b-395b856582a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Scene elements\Resources">
-      <UniqueIdentifier>{367c8d5d-8ddd-4605-b96a-5ecf0c9d165a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\GUI">
       <UniqueIdentifier>{7f17079d-9c99-457d-9f9f-cf75952d3f85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Scene elements">
+      <UniqueIdentifier>{ec7df1a1-c2fc-495d-8d12-a04a8d3d9e70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Scene elements\GameObjects">
+      <UniqueIdentifier>{6c7ba77f-d661-4703-899b-395b856582a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Scene elements\Resources">
+      <UniqueIdentifier>{367c8d5d-8ddd-4605-b96a-5ecf0c9d165a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -148,28 +148,28 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ComponentMaterial.h">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ComponentMesh.h">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ComponentTransform.h">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ResourceMesh.h">
-      <Filter>Sources\Scene elements\Resources</Filter>
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
     </ClInclude>
     <ClInclude Include="ResourceScene.h">
-      <Filter>Sources\Scene elements\Resources</Filter>
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
     </ClInclude>
     <ClInclude Include="ResourceTexture.h">
-      <Filter>Sources\Scene elements\Resources</Filter>
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ModuleResourceLoader.h">
       <Filter>Sources\Modules</Filter>
@@ -273,16 +273,16 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ComponentMaterial.cpp">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="ComponentMesh.cpp">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="ComponentTransform.cpp">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="ModuleResourceLoader.cpp">
       <Filter>Sources\Modules</Filter>
@@ -291,7 +291,7 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Resource.h">
-      <Filter>Sources\Scene elements\Resources</Filter>
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_impl_opengl3.cpp">
       <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
@@ -313,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>Sources\Scene elements\GameObjects</Filter>
+      </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,8 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
-ComponentCamera::ComponentCamera():Component(COMPONENT_TYPE::CAMERA)
+
+ComponentCamera::ComponentCamera():Component(COMPONENT_TYPE::CAMERA, nullptr, true)
 {
 	CalculateViewMatrix();
 
@@ -28,7 +29,7 @@ ComponentCamera::~ComponentCamera()
 // -----------------------------------------------------------------
 void ComponentCamera::Update(float dt)
 {
-	BROFILER_CATEGORY("CameraUpdate", Profiler::Color::LightSeaGreen)
+	BROFILER_CATEGORY("CameraUpdate", Profiler::Color::LightSeaGreen);
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();

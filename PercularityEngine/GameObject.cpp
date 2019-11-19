@@ -13,17 +13,18 @@
 GameObject::GameObject() {
 	name = "Untitled";
 	MakeChild(App->scene->GetRoot());
-	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM, true);
 	UUID = (uint)App->GetRandomGenerator().Int();
+	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }
 
-GameObject::GameObject(std::string name, GameObject* parent) :	name(name)
+GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) : name(name)
 {
 	if (parent) MakeChild(parent);
-	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM, true);
 	
 	if (strcmp("World", name.c_str()) != 0)
 		UUID = (uint)App->GetRandomGenerator().Int();
+
+	if (!loadingScene) transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 }
 
 // Called every frame
@@ -35,22 +36,31 @@ void GameObject::Update() {
 }
 
 // Load & Save 
-void GameObject::OnLoad(const char* scene_name, const nlohmann::json &scene_file) {
+void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
+	json js = scene_file["Game Objects"][gameObjectNum]["Name"];
+	name = js.get<std::string>();
+	UUID = scene_file["Game Objects"][gameObjectNum]["UUID"];
+	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Parent UUID"];
+
+	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);	
 	
-	UUID = scene_file[scene_name]["Game Objects"]["UUID"];
-	parent_UUID = scene_file[scene_name]["Game Objects"]["Parent_UUID"];
+	int size = scene_file["Game Objects"][gameObjectNum]["Components"].size();	
+	if (size >= 2) 
+		CreateComponent(COMPONENT_TYPE::MESH);	
+	if (size == 3)
+		CreateComponent(COMPONENT_TYPE::MATERIAL);
 
 	for (uint i = 0; i < components.size(); ++i)
-		components[i]->OnLoad(scene_name, scene_file);
+		components[i]->OnLoad(gameObjectNum, scene_file);
 }
 
-void GameObject::OnSave(const char* scene_name, nlohmann::json &scene_file) {
-	scene_file[scene_name]["Game Objects"][name]["UUID"] = UUID;
-	scene_file[scene_name]["Game Objects"][name]["Parent UUID"] = parent_UUID;
-	scene_file[scene_name]["Game Objects"][name]["Name"] = name;
+void GameObject::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
+	scene_file["Game Objects"][gameObjectNum]["Name"] = name;
+	scene_file["Game Objects"][gameObjectNum]["UUID"] = UUID;
+	scene_file["Game Objects"][gameObjectNum]["Parent UUID"] = parent_UUID;
 
 	for (uint i = 0; i < components.size(); ++i)
-		components[i]->OnSave(scene_name, scene_file);
+		components[i]->OnSave(gameObjectNum, scene_file);
 }
 
 // Creates components for its GameObject

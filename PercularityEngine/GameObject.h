@@ -1,10 +1,8 @@
 #ifndef __GameObject_H__
 #define __GameObject_H__
 
-#include "MathGeoLib/include/MathGeoLib.h"
 #include "Component.h"
-#include "Globals.h"
-#include <string>
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentMesh;
 class ComponentMaterial;
@@ -25,7 +23,7 @@ class GameObject {
 public:
 	//Constructors
 	GameObject();
-	GameObject(std::string name, GameObject* parent = nullptr);
+	GameObject(std::string name, GameObject* parent = nullptr, bool loadingScene = false);
 
 	// Destructor
 	virtual ~GameObject() {};
@@ -34,8 +32,8 @@ public:
 	void CleanUp();
 
 	// Load & Save 
-	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
-	void OnSave(const char* scene_name, nlohmann::json &scene_file);
+	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
+	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
 	// Makes a it child of another GameObject
 	void MakeChild(GameObject* parent);
@@ -54,6 +52,7 @@ public:
 	T* GetComponent() { return reinterpret_cast<T*>(GetComponent(T::GetComponentType())); }
 	
 public:
+	std::vector<Component*> components;
 	ComponentTransform* transform = nullptr;
 
 	std::string name;
@@ -67,9 +66,9 @@ public:
 	OBB obb;
 
 private:
-	std::vector<Component*> components;
 	uint UUID = 0;
 	uint parent_UUID = 0;
+	uint maxComponents = 3;
 };
 
 #endif // __GameObject_H__

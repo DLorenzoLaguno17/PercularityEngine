@@ -15,7 +15,7 @@
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
-	camera = new ComponentCamera();
+	
 
 }
 
@@ -28,6 +28,7 @@ bool ModuleCamera3D::Start()
 	LOG("Setting up the camera");
 	bool ret = true;
 
+	camera = new ComponentCamera();
 	App->renderer3D->camera = camera;
 
 	return ret;
@@ -120,6 +121,14 @@ void ModuleCamera3D::HandleUserInput(float dt)
 
 	// Mouse motion ----------------
 	if (App->input->IsMouseInsideWindow(App->gui->scene_window)) {
+
+		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) {
+			newPos -= camera->X * App->input->GetMouseXMotion() * speed;
+			newPos += camera->Y * App->input->GetMouseYMotion() * speed;
+
+			camera->Position += newPos;
+			camera->Reference += newPos;
+		}
 
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{

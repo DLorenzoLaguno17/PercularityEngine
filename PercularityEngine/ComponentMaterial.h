@@ -15,13 +15,13 @@ public:
 	~ComponentMaterial() {}
 
 	// Methods
-	void Update();
+	void Update() {}
 	void OnEditor();
-	void CleanUp(){}
+	void CleanUp() {}
 
 	// Load & Save 
-	void OnLoad(const char* scene_name, const nlohmann::json &scene_file);
-	void OnSave(const char* scene_name, nlohmann::json &scene_file);
+	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
+	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MATERIAL; }
 
