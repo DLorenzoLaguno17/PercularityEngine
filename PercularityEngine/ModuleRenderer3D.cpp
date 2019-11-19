@@ -135,8 +135,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadMatrixf(camera->GetOpenGLViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(camera->Position.x, camera->Position.y, camera->Position.z);
-
+	lights[0].SetPos(camera->frustum.pos.x, camera->frustum.pos.y, camera->frustum.pos.z);
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
