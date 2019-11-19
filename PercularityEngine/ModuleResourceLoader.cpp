@@ -332,7 +332,6 @@ bool ModuleResourceLoader::ImportMeshToLibrary(const char* path, ComponentMesh* 
 
 void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* mesh) {
 	
-	LOG("Loading mesh from library");
 	char* buffer = nullptr;
 	App->file_system->Load(path, &buffer);
 	
@@ -401,9 +400,8 @@ void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* 
 
 		RELEASE_ARRAY(buffer);
 		cursor = nullptr;
+		LOG("Loaded mesh from library");
 	}
-
-	LOG("Loaded mesh from library");
 }
 
 // -----------------------------------------------------------------------------------------------

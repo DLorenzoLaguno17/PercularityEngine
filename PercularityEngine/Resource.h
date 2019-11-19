@@ -3,7 +3,7 @@
 
 #include "Globals.h"
 
-enum RESOURCE_TYPE {
+enum class RESOURCE_TYPE {
 	TEXTURE,
 	MESH,
 	SCENE,
@@ -13,26 +13,35 @@ enum RESOURCE_TYPE {
 class Resource
 {
 public:
-	Resource(UID uid, RESOURCE_TYPE type) : uid(uid), type(type) {}
-	virtual ~Resource() {}
-	RESOURCE_TYPE GetType() const;
-	UID GetUID() const { return uid; }
-	const char* GetFile() const;
-	const char* GetImportedFile() const;
-	bool IsLoadedToMemory() const;
-	bool LoadToMemory();
-	uint CountReferences() const;
+	Resource(UID uid, RESOURCE_TYPE type);
 
-	virtual void Load(const nlohmann::json &config);
-	virtual void Save(nlohmann::json &config) const;
+	virtual ~Resource() {}
+
+	// Getters
+	UID GetUID() const { return uid; }
+	const char* GetFile() const { return file.c_str(); }
+	const char* GetImportedFile() const { return imported_file.c_str(); }
+
+	bool IsLoadedToMemory() const { return usedAsReference > 0; } 
+	bool LoadToMemory();
+
+	virtual void Load(const nlohmann::json &config) {}
+	virtual void Save(nlohmann::json &config) const {}
+
+protected:
 	virtual bool LoadInMemory() = 0;
+	virtual void ReleaseFromMemory() = 0;
+
+public:
+	// Times this resurce is used
+	uint usedAsReference = 0;
+	RESOURCE_TYPE type = RESOURCE_TYPE::UNKNOWN;
 
 protected:
 	UID uid = 0;
-	std::string file;
-	std::string imported_file;
-	RESOURCE_TYPE type = RESOURCE_TYPE::UNKNOWN;
-	uint loaded = 0;
+	std::string file = "";
+	std::string imported_file = "";
+	std::string name = "";
 };
 
 #endif // __Resource_H__
