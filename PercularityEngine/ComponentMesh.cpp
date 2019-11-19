@@ -192,6 +192,8 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape, const char* primit
 
 	gameObject->aabb.SetNegativeInfinity();
 	gameObject->aabb = AABB::MinimalEnclosingAABB(mesh.vertices, mesh.num_vertices);
+	aabb.SetNegativeInfinity();
+	aabb = AABB::MinimalEnclosingAABB(mesh.vertices, mesh.num_vertices);
 	mesh_name = primitiveType;
 }
 
