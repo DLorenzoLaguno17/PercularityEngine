@@ -159,9 +159,6 @@
     <ClInclude Include="ComponentTransform.h">
       <Filter>Sources\Scene elements\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Sources\Modules\Scene elements\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceMesh.h">
       <Filter>Sources\Scene elements\Resources</Filter>
     </ClInclude>
@@ -203,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>Sources\3rd party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>Sources\Scene elements\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -310,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Sources\3rd party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>Sources\Scene elements\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

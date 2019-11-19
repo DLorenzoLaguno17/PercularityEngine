@@ -7,6 +7,7 @@
 #include <iostream>
 #include "OpenGL.h"
 #include "Brofiler/Lib/Brofiler.h"
+#include "ComponentCamera.h"
 
 #include "mmgr/mmgr.h"
 
@@ -127,10 +128,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	
+	glLoadMatrixf(camera->GetViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	lights[0].SetPos(camera->Position.x, camera->Position.y, camera->Position.z);
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();

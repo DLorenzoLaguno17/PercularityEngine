@@ -36,7 +36,6 @@ public:
 	GameObject* CreateDonut(int slices, int stacks, float radius);
 
 	GameObject* GetRoot() const { return root; }
-	Tree* testQuadTree;
 
 private:
 	void DrawAxis() const;			//Draw XYZ axis of coordinates

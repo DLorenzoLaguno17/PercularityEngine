@@ -55,7 +55,7 @@ private:
 
 public:
 
-	bool isLeave = true;
+	bool isLeaf = true;
 
 	TREE_TYPE treeType = TREE_TYPE::NONE;
 	AABB aabb;

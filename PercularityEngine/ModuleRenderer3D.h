@@ -8,8 +8,11 @@
 
 #define MAX_LIGHTS 8
 
+class ComponentCamera;
+
 class ModuleRenderer3D : public Module
 {
+	friend class ModuleCamera3D;
 public:
 	ModuleRenderer3D(Application* app, bool start_enabled = true);
 	~ModuleRenderer3D();
@@ -41,6 +44,8 @@ public:
 	update_status status = UPDATE_CONTINUE;
 
 private:
+
+	ComponentCamera* camera;
 
 	uint verticesBuffer		= 0;	//vertex buffer object
 	uint indicesBuffer		= 0;	//index
