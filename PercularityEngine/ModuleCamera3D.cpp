@@ -74,7 +74,7 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()
 {
-	return &ViewMatrix;
+	return camera->GetViewMatrix();
 }
 
 
@@ -146,7 +146,7 @@ void ModuleCamera3D::HandleUserInput(float dt)
 				camera->Y = rotate(camera->Y, DeltaY, camera->X);
 				camera->Z = rotate(camera->Z, DeltaY, camera->X);
 
-				if (Y.y < 0.0f)
+				if (camera->Y.y < 0.0f)
 				{
 					camera->Z = vec3(0.0f, camera->Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
 					camera->Y = cross(camera->Z, camera->X);
