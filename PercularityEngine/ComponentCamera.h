@@ -43,8 +43,8 @@ private:
 	void CalculateViewMatrix();
 
 public:
-	//Frustum
 
+	//Frustum
 	Frustum frustum;
 	bool update_projection = true;
 	//frustum
