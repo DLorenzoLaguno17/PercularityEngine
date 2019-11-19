@@ -26,7 +26,7 @@ public:
 	virtual void OnEditor() {}
 	virtual void CleanUp() {}
 
-	void OnUpdateTransform(){}
+	virtual void OnUpdateTransform(){}
 
 	// Load & Save 
 	virtual void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {}

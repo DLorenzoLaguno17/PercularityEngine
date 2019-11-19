@@ -1,5 +1,7 @@
 #include "ComponentCamera.h"
 
+#include "ComponentTransform.h"
+#include "GameObject.h"
 #include "ModuleScene.h"
 #include "Application.h"
 #include "ModuleInput.h"
@@ -251,4 +253,12 @@ void ComponentCamera::OnEditor()
 		if (ImGui::DragFloat("Aspect Ratio", &aspectRatio,0.1))
 			SetAspectRatio(aspectRatio);
 	}
+}
+
+void ComponentCamera::OnUpdateTransform()
+{
+	frustum.pos = gameObject->transform->GetTranslation();
+
+	frustum.front = gameObject->transform->GetGlobalTransform().WorldZ();
+	frustum.up = gameObject->transform->GetGlobalTransform().WorldY();
 }
