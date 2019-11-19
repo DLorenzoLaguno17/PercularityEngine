@@ -57,7 +57,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	HandleUserInput(dt);
 
-	camera->Update(dt);
+	camera->Update();
 
 	return UPDATE_CONTINUE;
 }
@@ -108,7 +108,7 @@ void ModuleCamera3D::HandleUserInput(float dt)
 	float3	newPos(0, 0, 0);
 	float speed = 10.0f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		speed = 28.0f * dt;
+		speed = 20.0f * dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		if (App->scene->selected != App->scene->GetRoot())

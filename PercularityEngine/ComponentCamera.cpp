@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "Brofiler/Lib/Brofiler.h"
+#include "ImGui/imgui.h"
 #include "mmgr/mmgr.h"
 #include "OpenGL.h"
 
@@ -39,12 +40,12 @@ ComponentCamera::~ComponentCamera()
 
 
 // -----------------------------------------------------------------
-void ComponentCamera::Update(float dt)
+void ComponentCamera::Update()
 {
 	BROFILER_CATEGORY("CameraUpdate", Profiler::Color::LightSeaGreen);
 
 	// Recalculate matrix -------------
-	CalculateViewMatrix();
+	//CalculateViewMatrix();
 
 	DrawFrustum();
 
@@ -181,16 +182,73 @@ float* ComponentCamera::GetOpenGLProjectionMatrix()
 void ComponentCamera::DrawFrustum()
 {
 	glLineWidth(2.0f);
+	this;
 
 	glBegin(GL_LINES);
 
-	glColor3f(0.5, 1, 0.5); //Light green color
+	glColor3f(1, 1, 1); //Light green color
 
+	//Frustum lines
 	glVertex3f(frustum.CornerPoint(0).x, frustum.CornerPoint(0).y, frustum.CornerPoint(0).z);
 	glVertex3f(frustum.CornerPoint(1).x, frustum.CornerPoint(1).y, frustum.CornerPoint(1).z);
 	
+	glVertex3f(frustum.CornerPoint(2).x, frustum.CornerPoint(2).y, frustum.CornerPoint(2).z);
+	glVertex3f(frustum.CornerPoint(3).x, frustum.CornerPoint(3).y, frustum.CornerPoint(3).z);
+
+	glVertex3f(frustum.CornerPoint(4).x, frustum.CornerPoint(4).y, frustum.CornerPoint(4).z);
+	glVertex3f(frustum.CornerPoint(5).x, frustum.CornerPoint(5).y, frustum.CornerPoint(5).z);
+
+	glVertex3f(frustum.CornerPoint(6).x, frustum.CornerPoint(6).y, frustum.CornerPoint(6).z);
+	glVertex3f(frustum.CornerPoint(7).x, frustum.CornerPoint(7).y, frustum.CornerPoint(7).z);
+
+	//near plane
+	glVertex3f(frustum.CornerPoint(0).x, frustum.CornerPoint(0).y, frustum.CornerPoint(0).z);
+	glVertex3f(frustum.CornerPoint(2).x, frustum.CornerPoint(2).y, frustum.CornerPoint(2).z);
+
+	glVertex3f(frustum.CornerPoint(2).x, frustum.CornerPoint(2).y, frustum.CornerPoint(2).z);
+	glVertex3f(frustum.CornerPoint(6).x, frustum.CornerPoint(6).y, frustum.CornerPoint(6).z);
+
+	glVertex3f(frustum.CornerPoint(4).x, frustum.CornerPoint(4).y, frustum.CornerPoint(4).z);
+	glVertex3f(frustum.CornerPoint(0).x, frustum.CornerPoint(0).y, frustum.CornerPoint(0).z);
+
+	glVertex3f(frustum.CornerPoint(6).x, frustum.CornerPoint(6).y, frustum.CornerPoint(6).z);
+	glVertex3f(frustum.CornerPoint(4).x, frustum.CornerPoint(4).y, frustum.CornerPoint(4).z);
+
+	//Far lines
+	glVertex3f(frustum.CornerPoint(3).x, frustum.CornerPoint(3).y, frustum.CornerPoint(3).z);
+	glVertex3f(frustum.CornerPoint(1).x, frustum.CornerPoint(1).y, frustum.CornerPoint(1).z);
+
+	glVertex3f(frustum.CornerPoint(7).x, frustum.CornerPoint(7).y, frustum.CornerPoint(7).z);
+	glVertex3f(frustum.CornerPoint(3).x, frustum.CornerPoint(3).y, frustum.CornerPoint(3).z);
+
+	glVertex3f(frustum.CornerPoint(1).x, frustum.CornerPoint(1).y, frustum.CornerPoint(1).z);
+	glVertex3f(frustum.CornerPoint(5).x, frustum.CornerPoint(5).y, frustum.CornerPoint(5).z);
+
+	glVertex3f(frustum.CornerPoint(5).x, frustum.CornerPoint(5).y, frustum.CornerPoint(5).z);
+	glVertex3f(frustum.CornerPoint(7).x, frustum.CornerPoint(7).y, frustum.CornerPoint(7).z);
 
 	glEnd();
 
 	glColor3f(1, 1, 1); //Blue color
+}
+
+void ComponentCamera::OnEditor()
+{
+	if (ImGui::CollapsingHeader("Camera")) {
+		
+		ImGui::DragFloat("Near plane distance", &frustum.nearPlaneDistance,1.0f,0.0f, frustum.farPlaneDistance);
+		ImGui::DragFloat("Far plane distance", &frustum.farPlaneDistance, 1.0f, frustum.nearPlaneDistance, 2000);
+		
+		float verticalFov = frustum.verticalFov*RADTODEG;
+		if (ImGui::DragFloat("FOV", &verticalFov))
+			frustum.verticalFov = verticalFov*DEGTORAD;
+
+		float horizontalFov = frustum.horizontalFov*RADTODEG;
+		if (ImGui::DragFloat("Horizontal FOV", &horizontalFov))
+			frustum.horizontalFov = horizontalFov * DEGTORAD;
+
+		float aspectRatio = frustum.verticalFov/frustum.horizontalFov;
+		if (ImGui::DragFloat("Aspect Ratio", &aspectRatio,0.1))
+			SetAspectRatio(aspectRatio);
+	}
 }

@@ -278,6 +278,8 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
 
+	item->CreateComponent(COMPONENT_TYPE::CAMERA,true);
+
 	//Create the mesh with Par_Shapes
 	par_shapes_mesh_s* newMesh;
 	newMesh = par_shapes_create_parametric_sphere(slices,stacks);

@@ -13,7 +13,8 @@ public:
 	ComponentCamera(GameObject* parent=nullptr, bool active=false);
 	~ComponentCamera();
 
-	void Update(float dt);
+	void Update();
+	void OnEditor();
 
 	//~~~~Frustum 
 	//Getters

@@ -127,10 +127,10 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	glMatrixMode(GL_MODELVIEW);
 	
-	/*if (camera->update_projection) {
+	if (camera->update_projection) {
 		UpdateProjectionMatrix();
 		camera->update_projection = false;
-	}*/
+	}
 
 	glLoadMatrixf(camera->GetOpenGLViewMatrix());
 

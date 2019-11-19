@@ -33,7 +33,8 @@ void GameObject::Update() {
 	DrawAABB();
 
 	for (uint i = 0; i < components.size(); ++i)
-		if (components[i]->IsActive()) components[i]->Update();
+		if (components[i]->IsActive()) 
+			components[i]->Update();
 }
 
 // Load & Save 
