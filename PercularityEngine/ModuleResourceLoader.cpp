@@ -1,7 +1,8 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
-#include "ModuleScene.h"
+#include "ModuleRenderer3D.h"
 #include "ModuleFileSystem.h"
+#include "ModuleScene.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
@@ -180,6 +181,7 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) 
 	m.num_vertices = currentMesh->mNumVertices;
 	m.vertices = new float3[m.num_vertices];
 	memcpy(m.vertices, currentMesh->mVertices, sizeof(float3) * m.num_vertices);
+	
 	LOG("NEW MESH");
 	LOG("Vertices: %d", m.num_vertices);
 
@@ -218,68 +220,59 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) 
 	// Copy colors
 	if (currentMesh->HasVertexColors(0))
 	{
-		m.num_colors = currentMesh->mNumVertices;
-		m.colors = new uint[m.num_colors * 4];
+		m.num_colors = currentMesh->mNumVertices * 4;
+		m.colors = new uint[m.num_colors];
 
-		for (uint j = 0; j < m.num_colors; ++j)
+		for (uint i = 0; i < currentMesh->mNumVertices; ++i)
 		{
-			m.colors[j * 4] = currentMesh->mColors[0][j].r;
-			m.colors[j * 4 + 1] = currentMesh->mColors[0][j].g;
-			m.colors[j * 4 + 2] = currentMesh->mColors[0][j].b;
-			m.colors[j * 4 + 3] = currentMesh->mColors[0][j].a;
+			m.colors[i * 4] = currentMesh->mColors[0][i].r;
+			m.colors[i * 4 + 1] = currentMesh->mColors[0][i].g;
+			m.colors[i * 4 + 2] = currentMesh->mColors[0][i].b;
+			m.colors[i * 4 + 3] = currentMesh->mColors[0][i].a;
 		}
 	}
 
 	// Copy texture UVs
 	if (currentMesh->HasTextureCoords(0))
 	{
-		m.num_tex = currentMesh->mNumVertices;
-		m.textures = new float[m.num_tex * 2];
+		m.num_UVs = currentMesh->mNumVertices * 2;
+		m.coords = new float[m.num_UVs]; 
 
-		for (uint j = 0; j < m.num_tex; ++j)
+		for (uint i = 0; i < currentMesh->mNumVertices; ++i)
 		{
-			m.textures[j * 2] = currentMesh->mTextureCoords[0][j].x;
-			m.textures[j * 2 + 1] = currentMesh->mTextureCoords[0][j].y;
+			m.coords[i * 2] = currentMesh->mTextureCoords[0][i].x;
+			m.coords[i * 2 + 1] = currentMesh->mTextureCoords[0][i].y;
 		}
 	}
 
 	// Assigning the VRAM
-	glGenBuffers(1, (GLuint*)&m.id_vertex);
-	glBindBuffer(GL_ARRAY_BUFFER, m.id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * m.num_vertices, m.vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	m.id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * m.num_vertices, m.vertices);
+	m.id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m.num_indices, m.indices);
+	m.id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * m.num_UVs, m.coords);
 
-	glGenBuffers(1, (GLuint*)&m.id_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m.num_indices, m.indices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glGenBuffers(1, (GLuint*)&m.id_tex);
-	glBindBuffer(GL_ARRAY_BUFFER, m.id_tex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * m.num_tex, m.textures, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);	
-
+	// Assigning the MeshData to the ComponentMesh and creating the AABB
 	c_mesh->mesh = m;
 	c_mesh->aabb.SetNegativeInfinity();
 	c_mesh->aabb = AABB::MinimalEnclosingAABB(m.vertices, m.num_vertices);
+	c_mesh->mesh_name = c_mesh->gameObject->name;
 	
 	// We import the mesh to our library
 	std::string path = LIBRARY_MESH_FOLDER + c_mesh->gameObject->name + ".mesh";
-	ImportMesh(path.c_str(), c_mesh);
+	ImportMeshToLibrary(path.c_str(), c_mesh);
 }
 
-bool ModuleResourceLoader::ImportMesh(const char* path, ComponentMesh* mesh) {
+bool ModuleResourceLoader::ImportMeshToLibrary(const char* path, ComponentMesh* mesh) {
 	
 	LOG("Importing mesh");
 	bool ret = false; 
 
-	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
+	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs
 	uint ranges[5] = { 
 		mesh->mesh.num_indices, 
 		mesh->mesh.num_vertices, 
 		mesh->mesh.num_colors, 
 		mesh->mesh.num_normals, 
-		mesh->mesh.num_tex * 2
+		mesh->mesh.num_UVs 
 	};
 
 	// We allocate data buffer
@@ -288,7 +281,7 @@ bool ModuleResourceLoader::ImportMesh(const char* path, ComponentMesh* mesh) {
 		+ sizeof(float3) * mesh->mesh.num_vertices
 		+ sizeof(uint) * mesh->mesh.num_colors
 		+ sizeof(float3) * mesh->mesh.num_normals
-		+ sizeof(float) * mesh->mesh.num_tex * 2;
+		+ sizeof(float) * mesh->mesh.num_UVs;
 
 	if (size > 0) {
 		// Allocate memory
@@ -321,8 +314,8 @@ bool ModuleResourceLoader::ImportMesh(const char* path, ComponentMesh* mesh) {
 
 		// Store UVs
 		cursor += bytes;
-		bytes = sizeof(float) * mesh->mesh.num_tex * 2;
-		memcpy(cursor, mesh->mesh.textures, bytes);
+		bytes = sizeof(float) * mesh->mesh.num_UVs;
+		memcpy(cursor, mesh->mesh.coords, bytes);
 
 		ret = App->file_system->Save(path, data, size);		
 		
@@ -346,7 +339,7 @@ void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* 
 	if (buffer) {
 		char* cursor = buffer;
 
-		// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs / 6.AABB
+		// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs
 		uint ranges[5];
 		uint bytes = sizeof(ranges);
 		memcpy(ranges, cursor, bytes);
@@ -355,7 +348,7 @@ void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* 
 		mesh->mesh.num_vertices = ranges[1];
 		mesh->mesh.num_colors = ranges[2];
 		mesh->mesh.num_normals = ranges[3];
-		mesh->mesh.num_tex = ranges[4];
+		mesh->mesh.num_UVs = ranges[4];
 
 		// Load indices
 		cursor += bytes;
@@ -383,9 +376,9 @@ void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* 
 
 		// Load UVs
 		cursor += bytes;
-		bytes = sizeof(float) * mesh->mesh.num_tex;
-		mesh->mesh.textures = new float[mesh->mesh.num_tex];
-		memcpy(mesh->mesh.textures, cursor, bytes);
+		bytes = sizeof(float) * mesh->mesh.num_UVs;
+		mesh->mesh.coords = new float[mesh->mesh.num_UVs];
+		memcpy(mesh->mesh.coords, cursor, bytes);
 
 		// Assigning the VRAM
 		glGenBuffers(1, (GLuint*)&mesh->mesh.id_vertex);
@@ -398,9 +391,9 @@ void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* 
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->mesh.num_indices, mesh->mesh.indices, GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		glGenBuffers(1, (GLuint*)&mesh->mesh.id_tex);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh.id_tex);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mesh.num_tex, mesh->mesh.textures, GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*)&mesh->mesh.id_UVs);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh.id_UVs);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mesh.num_UVs, mesh->mesh.coords, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		mesh->aabb.SetNegativeInfinity();
@@ -469,7 +462,7 @@ void ModuleResourceLoader::LoadTexture(const char* path, ComponentMaterial* mate
 		
 		// We import the texture to our library
 		std::string name;
-		ImportTexture(path, name);
+		ImportTextureToLibrary(path, name);
 
 		ilBindImage(0);
 		ilDeleteImage(image);
@@ -477,7 +470,7 @@ void ModuleResourceLoader::LoadTexture(const char* path, ComponentMaterial* mate
 }
 
 // Stores a texture as a DDS in the library
-bool ModuleResourceLoader::ImportTexture(const char* path, std::string& output_file) {
+bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string& output_file) {
 	bool ret = false;
 
 	ILuint size;
@@ -528,6 +521,9 @@ void ModuleResourceLoader::CreateDefaultTexture() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+// -----------------------------------------------------------------------------------------------
+// OTHER METHODS
+// -----------------------------------------------------------------------------------------------
 std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
 	std::string full_name;
 

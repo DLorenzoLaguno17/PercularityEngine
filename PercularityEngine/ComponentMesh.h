@@ -22,9 +22,9 @@ struct MeshData {
 	float3* vertices = nullptr;
 
 	// Texture coordinates
-	uint id_tex = 0;
-	uint num_tex = 0;
-	float* textures = nullptr;
+	uint id_UVs = 0;
+	uint num_UVs = 0;
+	float* coords = nullptr;
 
 	// Normals
 	uint num_normals = 0;
@@ -58,7 +58,7 @@ public:
 	void RenderNormals();
 
 	//Create a primitive shape
-	void LoadParShape(par_shapes_mesh_s* parShape);
+	void LoadParShape(par_shapes_mesh_s* parShape, const char* primitiveType);
 	
 	const AABB& GetAABB()const { return aabb; }
 
@@ -67,7 +67,9 @@ public:
 public:
 	MeshData mesh;
 	AABB aabb;
-	class ResourceMesh* resource_mesh = nullptr;
+	std::string mesh_name;
+
+	ResourceMesh* resource_mesh = nullptr;
 
 private:
 	bool showVertexNormals = false;

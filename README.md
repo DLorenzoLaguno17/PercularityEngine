@@ -17,6 +17,10 @@ Percularity is a game engine that has been developed in the Video Games degree i
 
 * F - Focus the camera on the selected GameObject
 
+* Hold right click - rotate the camera
+* Hold middle click - Move the camera at will
+* Mouse scroll - Zoom in & out
+
 While right clicking:
 * W - Move camera up
 * S - Move camera down
@@ -25,10 +29,7 @@ While right clicking:
 * T - Rise the camera
 * G - Descend the camera
 
-* Left shift - Duplicate camera speed
-
-* Hold right click - rotate the camera
-* Mouse scroll - Zoom in & out
+* Left shift - Duplicate camera movement speed
 
 ### Object movement
 

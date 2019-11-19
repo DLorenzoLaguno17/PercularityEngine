@@ -111,6 +111,7 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
 	RecursiveCleanUp(root);
+	numGameObjectsInScene = 0;
 
 	return true;
 }
@@ -161,8 +162,8 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 		sprintf_s(n, 50, "GameObject %d", i);
 		uint aux = scene_file["Game Objects"][n]["Parent UUID"];
 
-		if (aux == root->GetUUID() && i != 1) { //The first one is the World itself so we skip it
-			GameObject* newGo;
+		if (aux == root->GetUUID() && i != 1) { //The first one is the World so we skip it
+			GameObject* newGo;		
 			newGo = new GameObject("Temp", root, true);
 		}
 	}	
@@ -292,7 +293,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	par_shapes_scale(newMesh, diameter, diameter, diameter);
 
 	//Convert the par_Mesh into a regular mesh
-	mesh->LoadParShape(newMesh);
+	mesh->LoadParShape(newMesh, "Sphere");
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
@@ -301,6 +302,11 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	material->texture = App->res_loader->default_tex;
 	App->scene->selected = item;
 	numGameObjectsInScene++;
+
+	if (sphereCount == 1) {
+		std::string path = LIBRARY_MESH_FOLDER + mesh->mesh_name + ".mesh";
+		App->res_loader->ImportMeshToLibrary(path.c_str(), mesh);
+	}
 
 	return item;
 }
@@ -356,7 +362,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	par_shapes_scale(mesh_front, sizeX, sizeY, sizeZ);
 
 	//Convert the par_Mesh into a regular mesh
-	mesh->LoadParShape(mesh_front);
+	mesh->LoadParShape(mesh_front, "Cube");
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(mesh_front);
@@ -364,7 +370,12 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	//Set default texture
 	material->texture = App->res_loader->default_tex;
 	App->scene->selected = item;
-	numGameObjectsInScene++;
+	numGameObjectsInScene++; 
+	
+	if (cubeCount == 1) {
+		std::string path = LIBRARY_MESH_FOLDER + mesh->mesh_name + ".mesh";
+		App->res_loader->ImportMeshToLibrary(path.c_str(), mesh);
+	}
 
 	return item;
 }
@@ -392,7 +403,7 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	par_shapes_scale(plane,length,0.0f, depth);
 
 	//Convert the par_Mesh into a regular mesh
-	mesh->LoadParShape(plane);
+	mesh->LoadParShape(plane, "Plane");
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(plane);
@@ -401,6 +412,11 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	material->texture = App->res_loader->default_tex;
 	App->scene->selected = item;
 	numGameObjectsInScene++;
+
+	if (planeCount == 1) {
+		std::string path = LIBRARY_MESH_FOLDER + mesh->mesh_name + ".mesh";
+		App->res_loader->ImportMeshToLibrary(path.c_str(), mesh);
+	}
 
 	return item;
 }
@@ -428,7 +444,7 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	par_shapes_scale(newMesh, radius, radius, radius);
 
 	//Convert the par_Mesh into a regular mesh
-	mesh->LoadParShape(newMesh);
+	mesh->LoadParShape(newMesh, "Donut");
 
 	//Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
@@ -437,6 +453,11 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	material->texture = App->res_loader->default_tex;
 	App->scene->selected = item;
 	numGameObjectsInScene++;
+
+	if (donutCount == 1) {
+		std::string path = LIBRARY_MESH_FOLDER + mesh->mesh_name + ".mesh";
+		App->res_loader->ImportMeshToLibrary(path.c_str(), mesh);
+	}
 
 	return item;
 }

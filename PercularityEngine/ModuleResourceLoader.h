@@ -40,8 +40,8 @@ public:
 
 	// Importing methods 
 	void ImportFile(const char* full_path);
-	bool ImportTexture(const char* path, std::string& output_file);
-	bool ImportMesh(const char* path, ComponentMesh* mesh);
+	bool ImportTextureToLibrary(const char* path, std::string& output_file);
+	bool ImportMeshToLibrary(const char* path, ComponentMesh* mesh);
 	void LoadMeshFromLibrary(const char* path, ComponentMesh* mesh);
 	
 	// Useful methods

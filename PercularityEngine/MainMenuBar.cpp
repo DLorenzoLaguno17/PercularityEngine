@@ -54,7 +54,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 					App->scene->CreatePlane(20.0f, 20.0f);
 
 				if (ImGui::MenuItem("Sphere"))
-					App->scene->CreateSphere(10,10,5);
+					App->scene->CreateSphere(10, 10, 5);
 
 				if (ImGui::MenuItem("Cube"))
 					App->scene->CreateCube(10, 10, 10);

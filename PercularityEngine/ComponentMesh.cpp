@@ -21,7 +21,7 @@ void MeshData::CleanUp()
 	RELEASE_ARRAY(vertices);
 	RELEASE_ARRAY(normals);
 	RELEASE_ARRAY(colors);
-	RELEASE_ARRAY(textures);
+	RELEASE_ARRAY(coords);
 }
 
 void ComponentMesh::Update() 
@@ -120,7 +120,7 @@ void ComponentMesh::Render() const  {
 	else glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindBuffer(GL_ARRAY_BUFFER,mesh.id_tex);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh.id_UVs);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 	// Render the mesh
@@ -141,69 +141,72 @@ void ComponentMesh::Render() const  {
 	glPopMatrix();
 }
 
-void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
+void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape, const char* primitiveType)
 {	
-	mesh.num_indices = parShape->ntriangles * 3;
+	// Load the vertices
 	mesh.num_vertices = parShape->npoints;
-
-	//Load the vertices
 	mesh.vertices = new float3[mesh.num_vertices];
 
 	for (uint i = 0; i < mesh.num_vertices; ++i)
 	{
-		mesh.vertices[i].x = parShape->points[3 * i];
-		mesh.vertices[i].y = parShape->points[(3 * i)+1];
-		mesh.vertices[i].z = parShape->points[(3 * i)+2];
+		mesh.vertices[i].x = parShape->points[i * 3];
+		mesh.vertices[i].y = parShape->points[i * 3 + 1];
+		mesh.vertices[i].z = parShape->points[i * 3 + 2];
 	}
 
-	mesh.id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float)*mesh.num_vertices*3, mesh.vertices);
+	mesh.id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * mesh.num_vertices, mesh.vertices);
 
-	//Load the indices
+	// Load the indices
+	mesh.num_indices = parShape->ntriangles * 3;
 	mesh.indices = new uint[mesh.num_indices];
 
 	for (uint i = 0; i < mesh.num_indices; ++i)
 		mesh.indices[i] = parShape->triangles[i];
 
-	mesh.id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*mesh.num_indices , mesh.indices);
+	mesh.id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh.num_indices, mesh.indices);
 	
-	//Load texture coords
-	mesh.num_tex = mesh.num_vertices * 2;
-	mesh.textures = new float[mesh.num_tex];
+	// Load texture coords
+	mesh.num_UVs = mesh.num_vertices * 2;
+	mesh.coords = new float[mesh.num_UVs];
 
 	for (uint i = 0; i < mesh.num_vertices; ++i)
 	{
-		mesh.textures[2 * i] = parShape->tcoords[2 * i];
-		mesh.textures[(2 * i)+1] = parShape->tcoords[(2 * i) + 1];
+		mesh.coords[i * 2] = parShape->tcoords[i * 2];
+		mesh.coords[i * 2 + 1] = parShape->tcoords[i * 2 + 1];
 	}
 
-	mesh.id_tex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float)*mesh.num_tex, mesh.textures);
+	mesh.id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh.num_UVs, mesh.coords);
 
-	//Load normals
+	// Load normals
 	if (parShape->normals)
 	{
 		mesh.normals = new float3[parShape->npoints];
 
 		for (int i = 0; i < parShape->npoints; ++i)
 		{
-			mesh.normals[i].x =parShape->normals[3 * i];
-			mesh.normals[i].y = parShape->normals[(3 * i)+1];
-			mesh.normals[i].z = parShape->normals[(3 * i)+2];
+			mesh.normals[i].x = parShape->normals[i * 3];
+			mesh.normals[i].y = parShape->normals[i * 3 + 1];
+			mesh.normals[i].z = parShape->normals[i * 3 + 2];
 		}
 	}
 
 	gameObject->aabb.SetNegativeInfinity();
 	gameObject->aabb = AABB::MinimalEnclosingAABB(mesh.vertices, mesh.num_vertices);
+	mesh_name = primitiveType;
 }
 
 // Load & Save 
 void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
+	json js = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Name"];
+	mesh_name = js.get<std::string>();
+	
 	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"];
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"];
 	showFaceNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"];
 	showVertexNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"];
 	
-	std::string path = LIBRARY_MESH_FOLDER + gameObject->name + ".mesh";
+	std::string path = LIBRARY_MESH_FOLDER + mesh_name + ".mesh";
 	App->res_loader->LoadMeshFromLibrary(path.c_str(), this);
 }
 
@@ -211,6 +214,7 @@ void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"] = active;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Name"] = mesh_name;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"] = showFaceNormals;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"] = showVertexNormals;
 }

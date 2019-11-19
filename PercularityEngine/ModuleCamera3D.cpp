@@ -84,8 +84,7 @@ update_status ModuleCamera3D::Update(float dt)
 			Position += newPos;
 			Reference += newPos;
 		}
-
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+		else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
 			int dx = -App->input->GetMouseXMotion();
 			int dy = -App->input->GetMouseYMotion();
@@ -120,9 +119,8 @@ update_status ModuleCamera3D::Update(float dt)
 			Position = Reference + Z * length(Position);
 			Position;
 		}
-
 		// Scroll to zoom in and out
-		if (App->input->GetMouseZ() > 0) {
+		else if (App->input->GetMouseZ() > 0) {
 			Position -= Z * speed * 12;
 		}
 		else if (App->input->GetMouseZ() < 0) {
@@ -191,7 +189,7 @@ void ModuleCamera3D::CalculateViewMatrix()
 
 void ModuleCamera3D::FocusCameraOn(GameObject* object)
 {
-	vec3 boxCenter;//center of the bounding box
+	/*vec3 boxCenter;//center of the bounding box
 	vec3 vertexToCenter;//vector between the benter of the box and the vertices
 
 	boxCenter.x = (object->boundingBox.minX + object->boundingBox.maxX) / 2;
@@ -205,5 +203,5 @@ void ModuleCamera3D::FocusCameraOn(GameObject* object)
 	Position = boxCenter;
 	Reference = boxCenter;
 
-	Position += Z * length(vertexToCenter)*3.5f;
+	Position += Z * length(vertexToCenter)*3.5f;*/
 }
