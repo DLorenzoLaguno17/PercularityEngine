@@ -62,31 +62,6 @@ update_status ModuleCamera3D::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-// -----------------------------------------------------------------
-void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)
-{
-	camera->Look(Position, Reference, RotateAroundReference);
-}
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::LookAt( const vec3 &Spot)
-{
-	camera->LookAt(Spot);
-}
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::Move(const vec3 &Movement)
-{
-	camera->Move(Movement);
-}
-
-// -----------------------------------------------------------------
-float* ModuleCamera3D::GetViewMatrix()
-{
-	return camera->GetViewMatrix();
-}
-
-
 void ModuleCamera3D::FocusCameraOn(GameObject* object)
 {
 	float3 boxCenter;
