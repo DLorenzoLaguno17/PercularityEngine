@@ -6,6 +6,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleGui.h"
 #include "ModuleInput.h"
 
 #include <fstream>
@@ -18,10 +19,9 @@
 #include "mmgr/mmgr.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
-{}
-
-ModuleScene::~ModuleScene()
-{}
+{
+	loadingTime.Start();
+}
 
 bool ModuleScene::Init() {
 	root = new GameObject("World");
@@ -56,13 +56,16 @@ update_status ModuleScene::Update(float dt)
 	// Update all GameObjects
 	UpdateGameObjects(root);
 
+	// If the user wants to save the scene
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
 		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) 
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
 		SaveScene("Test");
 
+	// If the user wants to load another scene
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
 		ImGui::OpenPopup("Loading new scene");
+		//App->gui->LoadFile(ASSETS_TEXTURE_FOLDER, "png");
 	}
 
 	if (ImGui::BeginPopupModal("Loading new scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
@@ -117,9 +120,12 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 
 void ModuleScene::LoadScene(const std::string scene_name) {
 	
-	// First we delete the current scene
+	LOG("Loading scene: %s", scene_name.c_str());
+	uint startTime = loadingTime.Read();
+
+	// First we delete the current scene	
 	CleanUp();
-	root = new GameObject("World", nullptr, true);
+	root = new GameObject("World", nullptr, true);	
 
 	json scene_file;
 	std::string full_path = sceneAddress + scene_name + sceneExtension;
@@ -140,6 +146,9 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 	selected = root;
 	loaded_go = 0;
 	mustLoad = false;
+
+	uint fullTime = loadingTime.Read() - startTime;
+	LOG("Finished loading. Time spent: %d ms", fullTime);
 }
 
 void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) {

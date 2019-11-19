@@ -202,7 +202,10 @@
       <Filter>Sources\3rd party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ComponentCamera.h">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectWindow.h">
+      <Filter>Sources\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -311,11 +314,14 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Sources\3rd party\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentCamera.cpp">
-      <Filter>Sources\Scene elements\GameObjects</Filter>
-      </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectWindow.cpp">
+      <Filter>Sources\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

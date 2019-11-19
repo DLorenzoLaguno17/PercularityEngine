@@ -61,10 +61,8 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 				if (ImGui::MenuItem("Donut"))
 					App->scene->CreateDonut(10, 10, 5);
-
 				ImGui::EndMenu();
 			}
-
 			ImGui::EndMenu();
 		}
 
@@ -135,7 +133,6 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 			ImGui::EndMenu();
 		}
-
 		ImGui::EndMainMenuBar();
 	}
 }

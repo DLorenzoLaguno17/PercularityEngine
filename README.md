@@ -10,6 +10,7 @@ Percularity is a game engine that has been developed in the Video Games degree i
 * [Glew v2.1](http://glew.sourceforge.net/)
 * [Assimp 4.1](http://assimp.org/)
 * [DevIL v1.8](http://openil.sourceforge.net/)
+* [PhysFS v3.0.2](https://icculus.org/physfs/)
 
 ## Controls
 

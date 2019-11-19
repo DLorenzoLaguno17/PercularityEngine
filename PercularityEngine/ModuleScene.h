@@ -3,7 +3,7 @@
 
 #include "Module.h"
 #include "Tree.h"
-
+#include "Timer.h"
 
 class GameObject;
 
@@ -12,7 +12,7 @@ class ModuleScene : public Module
 public:
 
 	ModuleScene(Application* app, bool start_enabled = true);
-	~ModuleScene();
+	~ModuleScene() {}
 
 	bool Init();
 	bool Start();
@@ -55,6 +55,7 @@ private:
 	const char* sceneAddress;
 	const char* sceneExtension;
 
+	Timer loadingTime;
 	uint saved_go = 0;
 	uint loaded_go = 0;
 

@@ -1,7 +1,6 @@
 #ifndef __ConfigWindow_H__
 #define __ConfigWindow_H__
 
-#include <vector>
 #include "Timer.h"
 #include "UIElement.h"
 
@@ -47,7 +46,6 @@ private:
 	std::vector<float> fps;
 	std::vector<float> ms;
 
-	bool timerStarted = false;
 	Uint32 lastTime = 0;
 	Timer dblcTimer; 
 };

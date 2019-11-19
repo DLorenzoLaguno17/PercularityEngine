@@ -9,6 +9,7 @@
         "Console": true,
         "Hierarchy": true,
         "Inspector": true,
+        "Project": true,
         "Scene": true
     },
     "Window": {

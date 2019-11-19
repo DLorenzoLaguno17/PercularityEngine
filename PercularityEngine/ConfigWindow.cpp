@@ -9,15 +9,13 @@
 #include "DevIL/include/il.h"
 #include "SDL/include/SDL_opengl.h"
 
-ConfigWindow::ConfigWindow(char* name, bool active) : UIElement(name, active) {}
+ConfigWindow::ConfigWindow(char* name, bool active) : UIElement(name, active) 
+{
+	dblcTimer.Start();
+}
 
 // Show config window
 void ConfigWindow::Update() {
-	
-	if (!timerStarted) {
-		dblcTimer.Start();
-		timerStarted = true;
-	}
 
 	ImGui::Begin("Configuration", &active);
 
