@@ -3,7 +3,7 @@
 
 #include "Component.h"
 #include "glmath.h"
-
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentCamera : public Component{
 	
@@ -15,6 +15,21 @@ public:
 
 	void Update(float dt);
 
+	//~~~~Frustum 
+	//Getters
+	float GetNearPlane() const;
+	float GetFarPlane() const;
+	float GetFOV() const;
+	float GetAspectRatio() const;
+
+	//Setters
+	void SetNearPlane(float distance);
+	void SetFarPlane(float distance);
+	void SetFOV(float fov);
+	void SetAspectRatio(float ar);
+	//~~~~~~~~~~~~~~~~~~~~~~
+
+
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
@@ -24,7 +39,14 @@ private:
 	void CalculateViewMatrix();
 
 public:
+	//Frustum
+
+	Frustum frustum;
+	bool update_projection = true;
+	//frustum
+
 	vec3 X, Y, Z, Position, Reference;
+
 
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;
