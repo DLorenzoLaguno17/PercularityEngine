@@ -13,7 +13,6 @@ void SceneWindow::Update() {
 
 	ImGui::Begin("Scene", &active, ImGuiWindowFlags_NoScrollbar);
 
-
 	windowPosition.x = ImGui::GetWindowPos().x;
 	windowPosition.y = ImGui::GetWindowPos().y;
 	windowSize.x = ImGui::GetContentRegionAvail().x;

@@ -10,7 +10,7 @@ class ComponentCamera : public Component{
 	friend class ModuleCamera3D;
 
 public:
-	ComponentCamera();
+	ComponentCamera(GameObject* parent=nullptr, bool active=false);
 	~ComponentCamera();
 
 	void Update(float dt);
@@ -36,6 +36,8 @@ public:
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
+
+	void DrawFrustum();
 
 private:
 	void CalculateViewMatrix();

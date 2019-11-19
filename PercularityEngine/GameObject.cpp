@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "ComponentMaterial.h"
 #include "ComponentMesh.h"
+#include "ComponentCamera.h"
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
@@ -81,7 +82,12 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 	case COMPONENT_TYPE::TRANSFORM:
 		ret = new ComponentTransform(this, active);
 		if (ret != nullptr) components.push_back(ret); break;
+
+	case COMPONENT_TYPE::CAMERA:
+		ret = new ComponentCamera(this, active);
+		if (ret != nullptr) components.push_back(ret); break;
 	}
+
 	return ret;
 }
 

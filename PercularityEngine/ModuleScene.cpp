@@ -375,6 +375,7 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 
 	ComponentMesh* mesh = (ComponentMesh*)item->CreateComponent(COMPONENT_TYPE::MESH);
 	ComponentMaterial* material = (ComponentMaterial*)item->CreateComponent(COMPONENT_TYPE::MATERIAL);
+	item->CreateComponent(COMPONENT_TYPE::CAMERA,true);
 
 	//Convert the par_Mesh into a regular mesh
 	par_shapes_mesh_s* plane = par_shapes_create_plane(2,2);

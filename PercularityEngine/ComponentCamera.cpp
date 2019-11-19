@@ -5,9 +5,10 @@
 #include "ModuleInput.h"
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
+#include "OpenGL.h"
 
 
-ComponentCamera::ComponentCamera():Component(COMPONENT_TYPE::CAMERA, nullptr, true)
+ComponentCamera::ComponentCamera(GameObject* parent, bool active):Component(COMPONENT_TYPE::CAMERA, parent, active)
 {
 	frustum.type = PerspectiveFrustum;
 	frustum.pos = float3(0,0,-10.0f);
@@ -44,6 +45,8 @@ void ComponentCamera::Update(float dt)
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
+
+	DrawFrustum();
 
 }
 
@@ -173,4 +176,21 @@ float* ComponentCamera::GetOpenGLProjectionMatrix()
 	m.Transpose();
 
 	return (float*)m.v;
+}
+
+void ComponentCamera::DrawFrustum()
+{
+	glLineWidth(2.0f);
+
+	glBegin(GL_LINES);
+
+	glColor3f(0.5, 1, 0.5); //Light green color
+
+	glVertex3f(frustum.CornerPoint(0).x, frustum.CornerPoint(0).y, frustum.CornerPoint(0).z);
+	glVertex3f(frustum.CornerPoint(1).x, frustum.CornerPoint(1).y, frustum.CornerPoint(1).z);
+	
+
+	glEnd();
+
+	glColor3f(1, 1, 1); //Blue color
 }
