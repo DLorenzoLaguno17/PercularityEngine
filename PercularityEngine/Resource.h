@@ -39,6 +39,7 @@ public:
 		return usedAsReference > 0;
 	}
 
+protected:
 	virtual bool LoadInMemory() = 0;
 	virtual void ReleaseFromMemory() = 0;
 

@@ -35,7 +35,10 @@ void ComponentMesh::OnEditor() {
 		ImGui::Text("Polygons:");
 		ImGui::SameLine();
 		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", resource_mesh->num_indices / 3);
-		
+
+		ImGui::NewLine();
+		ImGui::Checkbox("Bounding box", &gameObject->showBondingBox);
+
 		ImGui::NewLine();
 		ImGui::Text("Show normals");
 		ImGui::Checkbox("Vertex normals", &showVertexNormals);
@@ -107,9 +110,7 @@ void ComponentMesh::Render() const  {
 	
 	ComponentMaterial* texture = gameObject->GetComponent<ComponentMaterial>();
 	
-	if (texture->IsActive()) 
-		glBindTexture(GL_TEXTURE_2D, texture->resource_tex->texture);
-
+	if (texture->IsActive()) glBindTexture(GL_TEXTURE_2D, texture->resource_tex->texture);
 	else glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
 
 	glActiveTexture(GL_TEXTURE0);

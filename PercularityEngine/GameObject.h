@@ -49,6 +49,7 @@ public:
 	GameObject* parent;
 
 	bool extended = true;
+	bool showBondingBox = true;
 
 	AABB aabb;
 	OBB obb;
@@ -56,9 +57,6 @@ public:
 private:
 	uint UUID = 0;
 	uint parent_UUID = 0;
-	uint maxComponents = 3;
-
-	bool showBondingBox = true;
 };
 
 #endif // __GameObject_H__

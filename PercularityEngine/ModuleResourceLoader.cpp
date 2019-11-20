@@ -91,41 +91,16 @@ bool ModuleResourceLoader::CleanUp()
 	return true;
 }
 
-void ModuleResourceLoader::ImportFile(const char* full_path) {
-	
-
-	// We try to copy the file to its corresponding assets' folder
-	/*if (App->file_system->CopyFromOutsideFS(full_path, final_path.c_str()))
-	{
-		// If it has been copied, we import it to our own libraries
-		std::string written_file;
-		if (CheckTextureExtension(extension.c_str()))
-		{
-			// If the path has texture extensions, it calls the LoadTexture() method
-			ComponentMaterial* material = App->scene->selected->GetComponent<ComponentMaterial>();
-			if (!material) material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
-
-			LoadTexture(full_path, material->resource_tex);
-			material = nullptr;
-		}
-		else if (CheckMeshExtension(extension.c_str())) {
-			// If the path has texture extensions, it calls the LoadModel() method
-			ComponentMesh* mesh = new ComponentMesh(nullptr, true);
-
-			LoadModel(full_path);
-		}
-		else
-			LOG("Importing of [%s] FAILED", final_path.c_str())
-	}*/
-}
-
 bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file) {
 	
 	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
 
 	bool ret = false;
+	
+	// We adapt the  path for Assimp
+	const char* adapted_path = strstr(path, "Assets");
 		
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(adapted_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		GameObject* parent_mesh = new GameObject(getNameFromPath(path), App->scene->GetRoot());
@@ -142,7 +117,13 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 
 			// Copy the mesh						
 			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
+			mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
 			ret = LoadMesh(mesh->resource_mesh, scene->mMeshes[i], output_file);
+
+			// Creating the AABB
+			mesh->aabb.SetNegativeInfinity();
+			mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+			///mesh->name = c_mesh->gameObject->name;
 			
 			// Copy materials
 			aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
@@ -251,13 +232,9 @@ bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std
 	mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
 	mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
 
-	// Creating the AABB
-	/*c_mesh->aabb.SetNegativeInfinity();
-	c_mesh->aabb = AABB::MinimalEnclosingAABB(m->vertices, m->num_vertices);
-	c_mesh->mesh_name = c_mesh->gameObject->name;*/
-	
-	// We import the mesh to our library
-	ret = ImportMeshToLibrary(mesh, output_file);
+	// We import the mesh to our library and we load it tou our resource
+	if(ImportMeshToLibrary(mesh, output_file))
+		ret = mesh->LoadToMemory();
 
 	return ret;
 }

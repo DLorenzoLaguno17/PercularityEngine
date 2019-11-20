@@ -41,7 +41,6 @@ public:
 	bool LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file);
 
 	// Importing methods 
-	void ImportFile(const char* full_path);
 	bool ImportTextureToLibrary(const char* path, std::string& output_file);
 	bool ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file);
 	bool LoadMeshFromLibrary(const char* path, ResourceMesh* mesh);
