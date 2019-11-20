@@ -60,27 +60,19 @@ void ConfigWindow::Update() {
 			fullscreen = false;
 		}
 
-		static int w = App->window->GetWindowWidth();
+		/*static int w = App->window->GetWindowWidth();
 		static int h = App->window->GetWindowHeight();
-		static float b = 1.0f;
-		ImGui::NewLine();
-		//ImGui::SliderInt("Width", &w, 720, App->window->GetWindowWidth());
-		//ImGui::SliderInt("Height", &h, 1280, App->window->GetWindowHeight());
-		ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f);
-		SDL_SetWindowBrightness(App->window->window, b);
-		//SDL_SetWindowSize(App->window->window, w, h);
 		
-		/*windowPosition.x = ImGui::GetWindowPos().x;
-		windowPosition.y = ImGui::GetWindowPos().y;
-		windowSize.x = ImGui::GetContentRegionAvail().x;
-		windowSize.y = ImGui::GetContentRegionAvail().y;
+		ImGui::NewLine();
+		if (ImGui::SliderInt("Width", &w,500,3000) ||
+			ImGui::SliderInt("Height", &h,500,3000))
+				SDL_SetWindowSize(App->window->window, w, h);*/
 
-		// Check if the scene window has been resized
-		if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
-		{
-			App->renderer3D->OnResize((int)windowSize.x, (int)windowSize.y);
-			last_windowSize = windowSize;
-		}*/
+		static float b = 1.0f;
+		if (ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f))
+			SDL_SetWindowBrightness(App->window->window, b);
+		
+		
 
 		ImGui::NewLine();
 	}
