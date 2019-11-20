@@ -1,11 +1,14 @@
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleResourceManager.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleFileSystem.h"
 #include "ModuleScene.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
+#include "ResourceMesh.h"
+#include "ResourceTexture.h"
 #include "GameObject.h"
 #include "OpenGL.h"
 
@@ -65,9 +68,9 @@ bool ModuleResourceLoader::Start()
 	aiAttachLogStream(&stream);
 
 	// Load textures
-	CreateDefaultTexture();
+	CreateDefaultMaterial();
 	icon_tex = new ComponentMaterial(nullptr, true);
-	LoadTexture("Assets/Textures/icon.png", icon_tex); 
+	//LoadTexture("Assets/Textures/icon.png", icon_tex->resource_tex); 
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -81,25 +84,18 @@ bool ModuleResourceLoader::CleanUp()
 	LOG("Freeing resource loader");
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
+
 	RELEASE(icon_tex);
+	//RELEASE(default_material);
 
 	return true;
 }
 
 void ModuleResourceLoader::ImportFile(const char* full_path) {
-	// We create the correct path
-	std::string final_path;
-	std::string extension;
-
-	App->file_system->SplitFilePath(full_path, nullptr, &final_path, &extension);
-
-	if (CheckTextureExtension(extension.c_str()))
-		final_path = ASSETS_TEXTURE_FOLDER + final_path;
-	if (CheckMeshExtension(extension.c_str()))
-		final_path = ASSETS_MODEL_FOLDER + final_path;
+	
 
 	// We try to copy the file to its corresponding assets' folder
-	if (App->file_system->CopyFromOutsideFS(full_path, final_path.c_str()))
+	/*if (App->file_system->CopyFromOutsideFS(full_path, final_path.c_str()))
 	{
 		// If it has been copied, we import it to our own libraries
 		std::string written_file;
@@ -109,7 +105,7 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 			ComponentMaterial* material = App->scene->selected->GetComponent<ComponentMaterial>();
 			if (!material) material = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
 
-			LoadTexture(full_path, material);
+			LoadTexture(full_path, material->resource_tex);
 			material = nullptr;
 		}
 		else if (CheckMeshExtension(extension.c_str())) {
@@ -120,12 +116,14 @@ void ModuleResourceLoader::ImportFile(const char* full_path) {
 		}
 		else
 			LOG("Importing of [%s] FAILED", final_path.c_str())
-	}
+	}*/
 }
 
-void ModuleResourceLoader::LoadModel(const char* path) {
+bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file) {
 	
 	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
+
+	bool ret = false;
 		
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
@@ -144,7 +142,7 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 
 			// Copy the mesh						
 			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
-			LoadMesh(mesh, scene->mMeshes[i]);
+			ret = LoadMesh(mesh->resource_mesh, scene->mMeshes[i], output_file);
 			
 			// Copy materials
 			aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
@@ -157,7 +155,7 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 			std::string full_path = file + name;
 
 			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			LoadTexture(full_path.c_str(), material);
+			//LoadTexture(full_path.c_str(), material->resource_tex);
 
 			App->scene->selected = fbx_mesh;
 			App->scene->numGameObjectsInScene++;
@@ -168,28 +166,31 @@ void ModuleResourceLoader::LoadModel(const char* path) {
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading FBX: %s", path);
+
+	return ret;
 }
 
 // -----------------------------------------------------------------------------------------------
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) {
-	MeshData m;
+bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file) {
+
+	bool ret = false;
 
 	// Copy vertices
-	m.num_vertices = currentMesh->mNumVertices;
-	m.vertices = new float3[m.num_vertices];
-	memcpy(m.vertices, currentMesh->mVertices, sizeof(float3) * m.num_vertices);
+	mesh->num_vertices = currentMesh->mNumVertices;
+	mesh->vertices = new float3[mesh->num_vertices];
+	memcpy(mesh->vertices, currentMesh->mVertices, sizeof(float3) * mesh->num_vertices);
 	
 	LOG("NEW MESH");
-	LOG("Vertices: %d", m.num_vertices);
+	LOG("Vertices: %d", mesh->num_vertices);
 
 	// Copy faces
 	if (currentMesh->HasFaces())
 	{
-		m.num_indices = currentMesh->mNumFaces * 3;
-		m.indices = new uint[m.num_indices];
+		mesh->num_indices = currentMesh->mNumFaces * 3;
+		mesh->indices = new uint[mesh->num_indices];
 
 		for (unsigned j = 0; j < currentMesh->mNumFaces; ++j)
 		{
@@ -202,86 +203,86 @@ void ModuleResourceLoader::LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh) 
 				continue;
 			}
 
-			m.indices[j * 3] = face.mIndices[0];
-			m.indices[j * 3 + 1] = face.mIndices[1];
-			m.indices[j * 3 + 2] = face.mIndices[2];
+			mesh->indices[j * 3] = face.mIndices[0];
+			mesh->indices[j * 3 + 1] = face.mIndices[1];
+			mesh->indices[j * 3 + 2] = face.mIndices[2];
 		}
-		LOG("Faces: %d", m.num_indices / 3);
+		LOG("Faces: %d", mesh->num_indices / 3);
 	}
 
 	// Copy normals
 	if (currentMesh->HasNormals())
 	{
-		m.num_normals = currentMesh->mNumVertices;
-		m.normals = new float3[m.num_normals];
-		memcpy(m.normals, currentMesh->mNormals, sizeof(float3) * m.num_normals);
+		mesh->num_normals = currentMesh->mNumVertices;
+		mesh->normals = new float3[mesh->num_normals];
+		memcpy(mesh->normals, currentMesh->mNormals, sizeof(float3) * mesh->num_normals);
 	}
 
 	// Copy colors
 	if (currentMesh->HasVertexColors(0))
 	{
-		m.num_colors = currentMesh->mNumVertices * 4;
-		m.colors = new uint[m.num_colors];
+		mesh->num_colors = currentMesh->mNumVertices * 4;
+		mesh->colors = new uint[mesh->num_colors];
 
 		for (uint i = 0; i < currentMesh->mNumVertices; ++i)
 		{
-			m.colors[i * 4] = currentMesh->mColors[0][i].r;
-			m.colors[i * 4 + 1] = currentMesh->mColors[0][i].g;
-			m.colors[i * 4 + 2] = currentMesh->mColors[0][i].b;
-			m.colors[i * 4 + 3] = currentMesh->mColors[0][i].a;
+			mesh->colors[i * 4] = currentMesh->mColors[0][i].r;
+			mesh->colors[i * 4 + 1] = currentMesh->mColors[0][i].g;
+			mesh->colors[i * 4 + 2] = currentMesh->mColors[0][i].b;
+			mesh->colors[i * 4 + 3] = currentMesh->mColors[0][i].a;
 		}
 	}
 
 	// Copy texture UVs
 	if (currentMesh->HasTextureCoords(0))
 	{
-		m.num_UVs = currentMesh->mNumVertices * 2;
-		m.coords = new float[m.num_UVs]; 
+		mesh->num_UVs = currentMesh->mNumVertices * 2;
+		mesh->coords = new float[mesh->num_UVs];
 
 		for (uint i = 0; i < currentMesh->mNumVertices; ++i)
 		{
-			m.coords[i * 2] = currentMesh->mTextureCoords[0][i].x;
-			m.coords[i * 2 + 1] = currentMesh->mTextureCoords[0][i].y;
+			mesh->coords[i * 2] = currentMesh->mTextureCoords[0][i].x;
+			mesh->coords[i * 2 + 1] = currentMesh->mTextureCoords[0][i].y;
 		}
 	}
 
 	// Assigning the VRAM
-	m.id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * m.num_vertices, m.vertices);
-	m.id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m.num_indices, m.indices);
-	m.id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * m.num_UVs, m.coords);
+	mesh->id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * mesh->num_vertices, mesh->vertices);
+	mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
+	mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
 
-	// Assigning the MeshData to the ComponentMesh and creating the AABB
-	c_mesh->mesh = m;
-	c_mesh->aabb.SetNegativeInfinity();
-	c_mesh->aabb = AABB::MinimalEnclosingAABB(m.vertices, m.num_vertices);
-	c_mesh->mesh_name = c_mesh->gameObject->name;
+	// Creating the AABB
+	/*c_mesh->aabb.SetNegativeInfinity();
+	c_mesh->aabb = AABB::MinimalEnclosingAABB(m->vertices, m->num_vertices);
+	c_mesh->mesh_name = c_mesh->gameObject->name;*/
 	
 	// We import the mesh to our library
-	std::string path = LIBRARY_MESH_FOLDER + c_mesh->gameObject->name + ".mesh";
-	ImportMeshToLibrary(path.c_str(), c_mesh);
+	ret = ImportMeshToLibrary(mesh, output_file);
+
+	return ret;
 }
 
-bool ModuleResourceLoader::ImportMeshToLibrary(const char* path, ComponentMesh* mesh) {
+bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file) {
 	
 	LOG("Importing mesh");
 	bool ret = false; 
 
 	// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs
 	uint ranges[5] = { 
-		mesh->mesh.num_indices, 
-		mesh->mesh.num_vertices, 
-		mesh->mesh.num_colors, 
-		mesh->mesh.num_normals, 
-		mesh->mesh.num_UVs 
+		mesh->num_indices, 
+		mesh->num_vertices, 
+		mesh->num_colors, 
+		mesh->num_normals, 
+		mesh->num_UVs 
 	};
 
 	// We allocate data buffer
 	uint size = sizeof(ranges) 
-		+ sizeof(uint) * mesh->mesh.num_indices
-		+ sizeof(float3) * mesh->mesh.num_vertices
-		+ sizeof(uint) * mesh->mesh.num_colors
-		+ sizeof(float3) * mesh->mesh.num_normals
-		+ sizeof(float) * mesh->mesh.num_UVs;
+		+ sizeof(uint) * mesh->num_indices
+		+ sizeof(float3) * mesh->num_vertices
+		+ sizeof(uint) * mesh->num_colors
+		+ sizeof(float3) * mesh->num_normals
+		+ sizeof(float) * mesh->num_UVs;
 
 	if (size > 0) {
 		// Allocate memory
@@ -294,35 +295,37 @@ bool ModuleResourceLoader::ImportMeshToLibrary(const char* path, ComponentMesh* 
 
 		// Store indices
 		cursor += bytes;
-		bytes = sizeof(uint) * mesh->mesh.num_indices;
-		memcpy(cursor, mesh->mesh.indices, bytes);
+		bytes = sizeof(uint) * mesh->num_indices;
+		memcpy(cursor, mesh->indices, bytes);
 
 		// Store vertices
 		cursor += bytes;
-		bytes = sizeof(float3) * mesh->mesh.num_vertices;
-		memcpy(cursor, mesh->mesh.vertices, bytes);
+		bytes = sizeof(float3) * mesh->num_vertices;
+		memcpy(cursor, mesh->vertices, bytes);
 
 		// Store colors
 		cursor += bytes;
-		bytes = sizeof(uint) * mesh->mesh.num_colors;
-		memcpy(cursor, mesh->mesh.colors, bytes);
+		bytes = sizeof(uint) * mesh->num_colors;
+		memcpy(cursor, mesh->colors, bytes);
 
 		// Store normals
 		cursor += bytes;
-		bytes = sizeof(float3) * mesh->mesh.num_normals;
-		memcpy(cursor, mesh->mesh.normals, bytes);
+		bytes = sizeof(float3) * mesh->num_normals;
+		memcpy(cursor, mesh->normals, bytes);
 
 		// Store UVs
 		cursor += bytes;
-		bytes = sizeof(float) * mesh->mesh.num_UVs;
-		memcpy(cursor, mesh->mesh.coords, bytes);
+		bytes = sizeof(float) * mesh->num_UVs;
+		memcpy(cursor, mesh->coords, bytes);
 
-		ret = App->file_system->Save(path, data, size);		
-		
+		// Save the file
+		//ret = App->file_system->Save(path, data, size);		
+		ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_MESH_FOLDER, mesh->name.c_str(), "mesh");
+
 		RELEASE_ARRAY(data);
 		cursor = nullptr;
 
-		LOG("Imported mesh: %s", getNameFromPath(path).c_str());
+		//LOG("Imported mesh: %s", getNameFromPath(path).c_str());
 	}
 
 	if (!ret) LOG("Could not import mesh");
@@ -330,11 +333,18 @@ bool ModuleResourceLoader::ImportMeshToLibrary(const char* path, ComponentMesh* 
 	return ret;
 }
 
-void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* mesh) {
+bool ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ResourceMesh* mesh) {	
 	
+	bool ret = false;
+	// We check if it is already loaded
+	/*for (std::map<UID, Resource*>::iterator item = App->res_manager->resources.begin(); item != resources.end(); ++item) {
+		if (mesh->GetUID() == item->second->GetUID())
+			mesh = item;
+	}*/
+
 	char* buffer = nullptr;
 	App->file_system->Load(path, &buffer);
-	
+
 	if (buffer) {
 		char* cursor = buffer;
 
@@ -343,89 +353,79 @@ void ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ComponentMesh* 
 		uint bytes = sizeof(ranges);
 		memcpy(ranges, cursor, bytes);
 
-		mesh->mesh.num_indices = ranges[0];
-		mesh->mesh.num_vertices = ranges[1];
-		mesh->mesh.num_colors = ranges[2];
-		mesh->mesh.num_normals = ranges[3];
-		mesh->mesh.num_UVs = ranges[4];
+		mesh->num_indices = ranges[0];
+		mesh->num_vertices = ranges[1];
+		mesh->num_colors = ranges[2];
+		mesh->num_normals = ranges[3];
+		mesh->num_UVs = ranges[4];
 
 		// Load indices
 		cursor += bytes;
-		bytes = sizeof(uint) * mesh->mesh.num_indices;
-		mesh->mesh.indices = new uint[mesh->mesh.num_indices];
-		memcpy(mesh->mesh.indices, cursor, bytes);
+		bytes = sizeof(uint) * mesh->num_indices;
+		mesh->indices = new uint[mesh->num_indices];
+		memcpy(mesh->indices, cursor, bytes);
 
 		// Load vertices
 		cursor += bytes;
-		bytes = sizeof(float3) * mesh->mesh.num_vertices;
-		mesh->mesh.vertices = new float3[mesh->mesh.num_vertices];
-		memcpy(mesh->mesh.vertices, cursor, bytes);
+		bytes = sizeof(float3) * mesh->num_vertices;
+		mesh->vertices = new float3[mesh->num_vertices];
+		memcpy(mesh->vertices, cursor, bytes);
 
 		// Load colors
 		cursor += bytes;
-		bytes = sizeof(uint) * mesh->mesh.num_colors;
-		mesh->mesh.colors = new uint[mesh->mesh.num_colors];
-		memcpy(mesh->mesh.colors, cursor, bytes);
+		bytes = sizeof(uint) * mesh->num_colors;
+		mesh->colors = new uint[mesh->num_colors];
+		memcpy(mesh->colors, cursor, bytes);
 
 		// Load normals
 		cursor += bytes;
-		bytes = sizeof(float3) * mesh->mesh.num_normals;
-		mesh->mesh.normals = new float3[mesh->mesh.num_normals];
-		memcpy(mesh->mesh.normals, cursor, bytes);
+		bytes = sizeof(float3) * mesh->num_normals;
+		mesh->normals = new float3[mesh->num_normals];
+		memcpy(mesh->normals, cursor, bytes);
 
 		// Load UVs
 		cursor += bytes;
-		bytes = sizeof(float) * mesh->mesh.num_UVs;
-		mesh->mesh.coords = new float[mesh->mesh.num_UVs];
-		memcpy(mesh->mesh.coords, cursor, bytes);
+		bytes = sizeof(float) * mesh->num_UVs;
+		mesh->coords = new float[mesh->num_UVs];
+		memcpy(mesh->coords, cursor, bytes);
 
 		// Assigning the VRAM
-		glGenBuffers(1, (GLuint*)&mesh->mesh.id_vertex);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh.id_vertex);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float3) * mesh->mesh.num_vertices, mesh->mesh.vertices, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		mesh->id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * mesh->num_vertices, mesh->vertices);
+		mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
+		mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
 
-		glGenBuffers(1, (GLuint*)&mesh->mesh.id_index);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh.id_index);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->mesh.num_indices, mesh->mesh.indices, GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-		glGenBuffers(1, (GLuint*)&mesh->mesh.id_UVs);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh.id_UVs);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mesh.num_UVs, mesh->mesh.coords, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		mesh->aabb.SetNegativeInfinity();
-		mesh->aabb = AABB::MinimalEnclosingAABB(mesh->mesh.vertices, mesh->mesh.num_vertices);
+		ret = true;
 
 		RELEASE_ARRAY(buffer);
 		cursor = nullptr;
 		LOG("Loaded mesh from library");
 	}
+
+	return ret;
 }
 
 // -----------------------------------------------------------------------------------------------
 // TEXTURE-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleResourceLoader::LoadTexture(const char* path, ComponentMaterial* material) {
+bool ModuleResourceLoader::LoadTexture(const char* path, std::string& output_file) {
+	bool ret = false;
+	
 	ILuint image;
 	GLuint tex;
 	ilGenImages(1, &image);
 	ilBindImage(image);
 
-	if (!ilLoadImage(path)) {
-		ilDeleteImages(1, &image);
-		LOG("The texture image could not be loaded");
+	// We adapt the  path for DevIL
+	const char* adapted_path = strstr(path, "Assets");
 
-		if (material) {
-			material->tex_name = "Default texture";
-			material->texture = default_tex;
-		}
+	if (!ilLoadImage(adapted_path)) {
+		ilDeleteImages(1, &image);
+		LOG("The texture image could not be loaded");		
 	}
 	else {
 		tex = ilutGLBindTexImage();
-		LOG("Created texture from path: %s", path);
+		LOG("Created texture from path: %s", adapted_path);
 		LOG("");
 
 		if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
@@ -449,22 +449,15 @@ void ModuleResourceLoader::LoadTexture(const char* path, ComponentMaterial* mate
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
 		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
 		glBindTexture(GL_TEXTURE_2D, 0);		
-
-		// Storing texture data
-		if (material) {
-			material->width = w;
-			material->height = h;
-			material->tex_name = getNameFromPath(path, true);
-			material->texture = tex;
-		}
 		
 		// We import the texture to our library
-		std::string name;
-		ImportTextureToLibrary(path, name);
+		ret = ImportTextureToLibrary(path, output_file);
 
 		ilBindImage(0);
 		ilDeleteImage(image);
 	}
+
+	return ret;
 }
 
 // Stores a texture as a DDS in the library
@@ -494,6 +487,32 @@ bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string&
 	return ret;
 }
 
+std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
+	std::string full_name;
+
+	App->file_system->NormalizePath(path);
+	full_name = path.substr(path.find_last_of("//") + 1);
+
+	if (withExtension)
+		return full_name;
+	else {
+		std::string::size_type const p(full_name.find_last_of('.'));
+		std::string file_name = full_name.substr(0, p);
+
+		return file_name;
+	}
+}
+
+void ModuleResourceLoader::CreateDefaultMaterial() {
+	CreateDefaultTexture();
+
+	default_material = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, defaultMat_UUID);
+	default_material->texture = default_tex;
+	default_material->name = "Default texture";
+	default_material->file = "None";
+	default_material->exported_file = "None";
+}
+
 void ModuleResourceLoader::CreateDefaultTexture() {
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
@@ -519,30 +538,11 @@ void ModuleResourceLoader::CreateDefaultTexture() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-// -----------------------------------------------------------------------------------------------
-// OTHER METHODS
-// -----------------------------------------------------------------------------------------------
-std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
-	std::string full_name;
-
-	App->file_system->NormalizePath(path);
-	full_name = path.substr(path.find_last_of("//") + 1);
-
-	if (withExtension)
-		return full_name;
-	else {
-		std::string::size_type const p(full_name.find_last_of('.'));
-		std::string file_name = full_name.substr(0, p);
-
-		return file_name;
-	}
+// Save & Load
+void ModuleResourceLoader::Load(const nlohmann::json &config) {
+	defaultMat_UUID = config["Resource loader"]["Default material UUID"];
 }
 
-// Methods to check the extension of a file
-bool ModuleResourceLoader::CheckTextureExtension(const char* extension) {
-	return (strcmp(extension, "dds") == 0 || strcmp(extension, "png") == 0 || strcmp(extension, "jpg") == 0);
-}
-
-bool ModuleResourceLoader::CheckMeshExtension(const char* extension) {
-	return (strcmp(extension, "fbx") == 0 || strcmp(extension, "FBX") == 0);
+void ModuleResourceLoader::Save(nlohmann::json &config) {
+	config["Resource loader"]["Default material UUID"] = defaultMat_UUID;
 }

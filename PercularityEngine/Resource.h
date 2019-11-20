@@ -13,22 +13,32 @@ enum class RESOURCE_TYPE {
 class Resource
 {
 public:
-	Resource(UID uid, RESOURCE_TYPE type);
+	Resource(uint uuid, RESOURCE_TYPE type) : UUID(uuid), type(type) {}
 
 	virtual ~Resource() {}
 
 	// Getters
-	UID GetUID() const { return uid; }
+	uint GetUUID() const { return UUID; }
+	void SetUUID( uint uuid) { UUID = uuid; }
 	const char* GetFile() const { return file.c_str(); }
-	const char* GetImportedFile() const { return imported_file.c_str(); }
-
-	bool IsLoadedToMemory() const { return usedAsReference > 0; } 
-	bool LoadToMemory();
+	const char* GetImportedFile() const { return exported_file.c_str(); }
 
 	virtual void Load(const nlohmann::json &config) {}
 	virtual void Save(nlohmann::json &config) const {}
 
-protected:
+	bool IsLoadedToMemory() const { return usedAsReference > 0; }
+	bool LoadToMemory() 
+	{
+		if (usedAsReference > 0)
+			usedAsReference++;
+		else if (LoadInMemory())
+			usedAsReference = 1;
+		else
+			usedAsReference = 0;
+
+		return usedAsReference > 0;
+	}
+
 	virtual bool LoadInMemory() = 0;
 	virtual void ReleaseFromMemory() = 0;
 
@@ -36,12 +46,12 @@ public:
 	// Times this resurce is used
 	uint usedAsReference = 0;
 	RESOURCE_TYPE type = RESOURCE_TYPE::UNKNOWN;
+	std::string file = "";
+	std::string exported_file = "";
+	std::string name = "";
 
 protected:
-	UID uid = 0;
-	std::string file = "";
-	std::string imported_file = "";
-	std::string name = "";
+	uint UUID = 0;
 };
 
 #endif // __Resource_H__

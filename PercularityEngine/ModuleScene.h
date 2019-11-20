@@ -22,8 +22,8 @@ public:
 	bool CleanUp();
 
 	//Save & Load
-	void Load(const nlohmann::json &config) {}
-	void Save(nlohmann::json &config) {}
+	void Load(const nlohmann::json &config);
+	void Save(nlohmann::json &config);
 	void LoadScene(const std::string scene_name);
 	void SaveScene(std::string scene_name);
 	void RecursiveLoad(GameObject* root, const nlohmann::json &scene_file);
@@ -63,5 +63,12 @@ private:
 	uint donutCount = 0;
 	uint planeCount = 0;
 	uint cubeCount = 0;
+
+	// Primitive's resources UUID
+	uint sphereMesh_UUID = 0;
+	uint cubeMesh_UUID = 0;
+	uint planeMesh_UUID = 0;
+	uint donutMesh_UUID = 0;
+
 };
 #endif

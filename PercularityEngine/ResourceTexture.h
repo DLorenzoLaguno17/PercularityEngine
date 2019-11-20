@@ -7,20 +7,20 @@
 class ResourceTexture : public Resource
 {
 public:
-	ResourceTexture(UID id);
-	virtual ~ResourceTexture();
-	bool LoadInMemory() override;
-	void Save(nlohmann::json &config) const override;
-	void Load(const nlohmann::json &config) override;
+	ResourceTexture(uint uuid) : Resource(uuid, RESOURCE_TYPE::TEXTURE) {}
+
+	virtual ~ResourceTexture() {}
+
+	bool LoadInMemory() { return true; }
+	void ReleaseFromMemory() {}
+
+	void Save(nlohmann::json &config) const {}
+	void Load(const nlohmann::json &config) {}
 
 public:
-	uint width = 0;
-	uint height = 0;
-	uint depth = 0;
-	uint mips = 0;
-	uint bytes = 0;
-	uint gpu_id = 0;
-	//Format format = unknown;
+	uint texture = 0;
+	long width = 0;
+	long height = 0;
 };
 
 #endif // __ResourceTexture_H__

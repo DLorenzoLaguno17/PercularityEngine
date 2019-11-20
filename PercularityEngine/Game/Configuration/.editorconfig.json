@@ -4,6 +4,15 @@
         "VSYNC": true,
         "Version": "v0.2"
     },
+    "Resource loader": {
+        "Default material UUID": 5
+    },
+    "Scene": {
+        "Cube resource UUID": 2,
+        "Donut resource UUID": 4,
+        "Plane resource UUID": 3,
+        "Sphere resource UUID": 1
+    },
     "User Interface": {
         "Configuration": true,
         "Console": true,

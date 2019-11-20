@@ -26,10 +26,6 @@ public:
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MATERIAL; }
 
 public:
-	uint texture = 0;
-	long width = 0;
-	long height = 0;
-	std::string tex_name;
 	ResourceTexture* resource_tex = nullptr;
 };
 

@@ -7,8 +7,10 @@
 #define CHECKERS_HEIGHT 150
 
 class GameObject;
-class ComponentMesh;
 class ComponentMaterial;
+
+class ResourceMesh;
+class ResourceTexture;
 struct aiMesh;
 
 // ---------------------------------------------------
@@ -30,29 +32,32 @@ public:
 	bool CleanUp();
 
 	// Save & Load
-	void Load(const nlohmann::json &config) {}
-	void Save(nlohmann::json &config) {}
+	void Load(const nlohmann::json &config);
+	void Save(nlohmann::json &config);
 
 	// Loading methods
-	void LoadModel(const char* path);
-	void LoadTexture(const char* path, ComponentMaterial* material);
-	void LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh);
+	bool LoadModel(const char* path, std::string& output_file);
+	bool LoadTexture(const char* path, std::string& output_file);
+	bool LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file);
 
 	// Importing methods 
 	void ImportFile(const char* full_path);
 	bool ImportTextureToLibrary(const char* path, std::string& output_file);
-	bool ImportMeshToLibrary(const char* path, ComponentMesh* mesh);
-	void LoadMeshFromLibrary(const char* path, ComponentMesh* mesh);
+	bool ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file);
+	bool LoadMeshFromLibrary(const char* path, ResourceMesh* mesh);
 	
 	// Useful methods
 	void CreateDefaultTexture();
-	bool CheckTextureExtension(const char* extension);
-	bool CheckMeshExtension(const char* extension);
+	void CreateDefaultMaterial();
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
 	ComponentMaterial* icon_tex = nullptr;
+	ResourceTexture* default_material = nullptr;
 	uint default_tex = 0;
+
+private:
+	uint defaultMat_UUID = 0;
 };
 
 #endif // __ModuleResourceLoader_H__

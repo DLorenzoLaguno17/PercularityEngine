@@ -323,7 +323,7 @@
     <ClCompile Include="ProjectWindow.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Resource.cpp">
+    <ClCompile Include="ResourceMesh.cpp">
       <Filter>Sources\Modules\Scene elements\Resources</Filter>
     </ClCompile>
   </ItemGroup>

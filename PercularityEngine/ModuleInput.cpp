@@ -3,7 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
-#include "ModuleResourceLoader.h"
+#include "ModuleResourceManager.h"
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
 #include "GameObject.h"
@@ -146,7 +146,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_DROPFILE:			
-			App->res_loader->ImportFile(e.drop.file);				
+			App->res_manager->ReceiveExternalFile(e.drop.file);
 			SDL_free((void*)e.drop.file);
 			
 			break;			

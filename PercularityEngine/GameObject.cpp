@@ -29,7 +29,7 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 
 // Called every frame
 void GameObject::Update() {
-	DrawAABB();
+	if (showBondingBox) DrawAABB();
 
 	for (uint i = 0; i < components.size(); ++i)
 		if (components[i]->IsActive()) components[i]->Update();

@@ -9,35 +9,6 @@
 struct par_shapes_mesh_s;
 class ResourceMesh;
 
-struct MeshData {
-
-	// Index 
-	uint id_index = 0;
-	uint num_indices = 0;
-	uint* indices = nullptr;
-
-	// Vertex
-	uint id_vertex = 0;
-	uint num_vertices = 0;
-	float3* vertices = nullptr;
-
-	// Texture coordinates
-	uint id_UVs = 0;
-	uint num_UVs = 0;
-	float* coords = nullptr;
-
-	// Normals
-	uint num_normals = 0;
-	float3* normals = nullptr;
-
-	// Colors
-	uint num_colors = 0;
-	uint* colors = nullptr;
-
-	// Delete the struct
-	void CleanUp();
-};
-
 class ComponentMesh : public Component {
 public:
 	ComponentMesh(GameObject* parent, bool active);
@@ -47,17 +18,17 @@ public:
 	// Methods
 	void Update() override;
 	void OnEditor();
-	void CleanUp()override;
+	void CleanUp() override;
+
+	// Rendering methods
+	void Render() const;
+	void RenderNormals();
 
 	// Load & Save 
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
-	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
+	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);	
 
-	// Rendering methods
-	void Render() const ;
-	void RenderNormals();
-
-	//Create a primitive shape
+	// Create a primitive shape
 	void LoadParShape(par_shapes_mesh_s* parShape, const char* primitiveType);
 	
 	const AABB& GetAABB()const { return aabb; }
@@ -65,10 +36,7 @@ public:
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MESH; }
 
 public:
-	MeshData mesh;
 	AABB aabb;
-	std::string mesh_name;
-
 	ResourceMesh* resource_mesh = nullptr;
 
 private:
