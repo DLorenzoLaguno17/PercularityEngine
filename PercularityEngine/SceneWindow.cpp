@@ -11,7 +11,7 @@ SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
 // Show scene window
 void SceneWindow::Update() {
 
-	ImGui::Begin("Scene", &active/* ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_NoScrollWithMouse*/);
+	ImGui::Begin("Scene", &active, ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_NoScrollWithMouse);
 
 	windowPosition.x = ImGui::GetWindowPos().x;
 	windowPosition.y = ImGui::GetWindowPos().y;

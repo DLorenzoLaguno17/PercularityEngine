@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleInput.h"
 
 #include "OpenGL.h"
 #include "DevIL/include/il.h"
@@ -60,15 +61,24 @@ void ConfigWindow::Update() {
 			fullscreen = false;
 		}
 
-		/*static int w = App->window->GetWindowWidth();
+		static int w = App->window->GetWindowWidth();
 		static int h = App->window->GetWindowHeight();
-		
+		static bool winChanged = false;
+
 		ImGui::NewLine();
-		if (ImGui::SliderInt("Width", &w,500,3000) ||
-			ImGui::SliderInt("Height", &h,500,3000))
-				SDL_SetWindowSize(App->window->window, w, h);*/
+		if (ImGui::SliderInt("Width", &w, 500, 3000))
+			winChanged = true;
+
+		if (ImGui::SliderInt("Height", &h, 500, 2000))
+			winChanged = true;
+
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && winChanged) {
+			SDL_SetWindowSize(App->window->window, w, h);
+			winChanged = false;
+		}
 
 		static float b = 1.0f;
+
 		if (ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f))
 			SDL_SetWindowBrightness(App->window->window, b);
 		
