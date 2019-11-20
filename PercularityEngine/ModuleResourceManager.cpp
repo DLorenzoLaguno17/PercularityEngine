@@ -120,7 +120,7 @@ void ModuleResourceManager::SaveResources(nlohmann::json &scene_file) {
 		saved_res++;
 		char name[50];
 		sprintf_s(name, 50, "Resource %d", saved_res);
-		if (it->second->IsLoadedToMemory())
+		//if (it->second->IsLoadedToMemory())
 			it->second->OnSave(name, scene_file);
 	}
 
@@ -180,9 +180,13 @@ void ModuleResourceManager::DrawProjectExplorer() {
 				switch (it->second->type) {
 				case RESOURCE_TYPE::MESH:
 					GameObject* test = new GameObject(it->second->name.c_str(), App->scene->GetRoot());
-					ComponentMesh* mesh = test->GetComponent<ComponentMesh>();
+					ComponentMesh* mesh = (ComponentMesh*)test->CreateComponent(COMPONENT_TYPE::MESH);
 					mesh->resource_mesh = (ResourceMesh*)it->second;
 					break;
+
+				//case RESOURCE_TYPE::TEXTURE:
+
+					//break;
 				}
 
 				it->second->UpdateReferenceCount();

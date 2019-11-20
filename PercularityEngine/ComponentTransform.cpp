@@ -39,6 +39,8 @@ void ComponentTransform::OnEditor() {
 
 		if (ImGui::DragFloat3("Scale", (float*)&scaleM, 0.3))
 			SetScale(scaleM);
+
+		ImGui::NewLine();
 	}
 }
 

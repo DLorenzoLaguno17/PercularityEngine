@@ -115,8 +115,9 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 				fbx_mesh = parent_mesh;*/
 
 			// Copy the mesh									
-			ResourceMesh* res_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
+			ResourceMesh* res_mesh = new ResourceMesh(App->GetRandomGenerator().Int());
 			ret = LoadMesh(res_mesh, scene->mMeshes[i], output_file, getNameFromPath(path).c_str());
+			RELEASE(res_mesh);
 			
 			// Copy materials
 			/*aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
@@ -288,7 +289,6 @@ bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& 
 		memcpy(cursor, mesh->coords, bytes);
 
 		// Save the file
-		//ret = App->file_system->Save(path, data, size);		
 		ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_MESH_FOLDER, name, "mesh");
 
 		RELEASE_ARRAY(data);
@@ -305,12 +305,6 @@ bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& 
 bool ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ResourceMesh* mesh) {	
 	
 	bool ret = false;
-	// We check if it is already loaded
-	/*for (std::map<UID, Resource*>::iterator item = App->res_manager->resources.begin(); item != resources.end(); ++item) {
-		if (mesh->GetUID() == item->second->GetUID())
-			mesh = item;
-	}*/
-
 	char* buffer = nullptr;
 	App->file_system->Load(path, &buffer);
 
@@ -371,6 +365,7 @@ bool ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ResourceMesh* m
 
 		RELEASE_ARRAY(buffer);
 		cursor = nullptr;
+		LOG("------------------------");
 		LOG("Loaded mesh from library");
 	}
 
