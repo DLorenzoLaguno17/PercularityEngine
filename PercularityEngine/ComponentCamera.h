@@ -35,8 +35,12 @@ public:
 	float* GetOpenGLProjectionMatrix();
 
 	void DrawFrustum();
+	void UpdatePlanes();
+
+	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::CAMERA; }
 
 public:
+	Plane planes[6];
 	Frustum frustum;
 	bool update_projection = true;
 

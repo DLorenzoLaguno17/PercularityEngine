@@ -52,6 +52,9 @@
     <Filter Include="Sources\Modules\Scene elements\Resources">
       <UniqueIdentifier>{367c8d5d-8ddd-4605-b96a-5ecf0c9d165a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Intersection">
+      <UniqueIdentifier>{37f69753-65bd-4768-a13d-d0f1ec6993da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleCamera3D.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="ComponentCamera.h">
       <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="Intersection.h">
+      <Filter>Sources\Tools\Intersection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -316,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>Sources\Modules\Scene elements\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Intersection.cpp">
+      <Filter>Sources\Tools\Intersection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

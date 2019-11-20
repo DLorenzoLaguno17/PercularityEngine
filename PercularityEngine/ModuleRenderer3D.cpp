@@ -9,6 +9,11 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "ComponentCamera.h"
 #include "ComponentMesh.h"
+#include "Intersection.h"
+#include "GameObject.h"
+
+//test
+#include"ModuleScene.h"
 
 #include "mmgr/mmgr.h"
 
@@ -148,7 +153,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow);
 
-	DrawAllMeshes();
+	DrawMeshes();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -253,8 +258,23 @@ void ModuleRenderer3D::DeleteBuffers()
 
 }
 
-void ModuleRenderer3D::DrawAllMeshes()
+void ModuleRenderer3D::DrawMeshes()
 {
-	for (int i = 0; i < meshes.size(); ++i)
-		meshes[i]->Render();
+	if (!frustumCullingActive)
+	{
+		for (int i = 0; i < meshes.size(); ++i)
+			meshes[i]->Render();
+		return;
+	}
+	else
+	{
+		if (!acceleratedCullingActive)
+		{
+			for (int i = 0; i < meshes.size(); ++i)
+			{
+				if (Intersect(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum, meshes[i]->gameObject->aabb))
+					meshes[i]->Render();
+			}
+		}
+	}
 }

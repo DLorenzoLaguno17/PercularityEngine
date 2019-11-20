@@ -64,6 +64,8 @@ void ComponentCamera::SetNearPlane(float distance)
 	if (distance > 0.0f && distance < frustum.farPlaneDistance) {
 		frustum.nearPlaneDistance = distance;
 		update_projection = true;
+
+		UpdatePlanes();
 	}
 }
 
@@ -72,6 +74,8 @@ void ComponentCamera::SetFarPlane(float distance)
 	if (distance >0.0f&&distance>frustum.nearPlaneDistance){
 		frustum.farPlaneDistance = distance;
 		update_projection = true;
+
+		UpdatePlanes();
 	}
 }
 
@@ -82,12 +86,15 @@ void ComponentCamera::SetFOV(float fov)
 	frustum.verticalFov = fov * DEGTORAD;
 	SetAspectRatio(aspectRatio);
 
+	UpdatePlanes();
 }
 
 void ComponentCamera::SetAspectRatio(float ar)
 {
 	frustum.horizontalFov = 2.0f*atanf((tanf(frustum.verticalFov*0.5f))/ar);
 	LOG("%f",frustum.AspectRatio());
+
+	UpdatePlanes();
 	update_projection = true;
 }
 
@@ -193,4 +200,11 @@ void ComponentCamera::OnUpdateTransform()
 
 	frustum.front = gameObject->transform->GetGlobalTransform().WorldZ();
 	frustum.up = gameObject->transform->GetGlobalTransform().WorldY();
+
+	UpdatePlanes();
+}
+
+void ComponentCamera::UpdatePlanes()
+{
+	frustum.GetPlanes(planes);
 }

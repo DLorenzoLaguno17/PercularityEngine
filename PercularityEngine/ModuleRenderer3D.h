@@ -30,7 +30,7 @@ public:
 	void DeleteBuffers();
 
 	void UpdateProjectionMatrix();
-	void DrawAllMeshes();
+	void DrawMeshes();
 
 	ComponentCamera* GetCamera() const { return camera; }
 
@@ -53,6 +53,9 @@ public:
 	update_status status = UPDATE_CONTINUE;
 
 private:
+
+	bool frustumCullingActive = true;
+	bool acceleratedCullingActive = false;
 
 	ComponentCamera* camera;
 

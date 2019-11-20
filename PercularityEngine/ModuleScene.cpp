@@ -8,6 +8,9 @@
 #include "ModuleResourceLoader.h"
 #include "ModuleInput.h"
 
+//test
+#include "ComponentCamera.h"
+
 #include <fstream>
 #include <iomanip>
 
@@ -28,6 +31,9 @@ bool ModuleScene::Init() {
 	sceneAddress = "Assets/Scenes/";
 	sceneExtension = ".json";
 
+	frustumTest = new GameObject();
+	frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
+
 	return true;
 }
 
@@ -35,6 +41,8 @@ bool ModuleScene::Start()
 {
 	// Loading FBX
 	App->res_loader->LoadModel("Assets/FBX/BakerHouse.fbx");
+
+
 
 	return true;
 }
@@ -87,6 +95,9 @@ update_status ModuleScene::Update(float dt)
 update_status ModuleScene::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow)
+
+		frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
+
 
 	return UPDATE_CONTINUE;
 }
