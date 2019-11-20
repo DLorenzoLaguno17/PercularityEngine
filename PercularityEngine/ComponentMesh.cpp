@@ -110,9 +110,8 @@ void ComponentMesh::Render() const  {
 	
 	ComponentMaterial* texture = gameObject->GetComponent<ComponentMaterial>();
 	
-	//if (texture->IsActive()) glBindTexture(GL_TEXTURE_2D, texture->resource_tex->texture);
-	//else 
-	glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
+	if (texture != nullptr && texture->IsActive()) glBindTexture(GL_TEXTURE_2D, texture->resource_tex->texture);
+	else glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_UVs);

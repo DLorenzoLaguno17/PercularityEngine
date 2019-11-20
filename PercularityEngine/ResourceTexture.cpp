@@ -4,11 +4,10 @@
 
 bool ResourceTexture::LoadInMemory()
 {
-	if (UUID != 5) {
-		App->res_loader->getNameFromPath(exported_file, true);
-	}
-	//else 
-		return true;
+	if (strcmp(file.c_str(), "None") != 0)		
+		return App->res_loader->LoadTextureFromLibrary(exported_file.c_str(), this);
+	else
+		return false;
 }
 
 void ResourceTexture::ReleaseFromMemory()

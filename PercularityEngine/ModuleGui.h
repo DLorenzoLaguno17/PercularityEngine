@@ -48,7 +48,7 @@ public:
 	void DrawDirectoryRecursive(const char* directory, const char* filter_extension);
 
 public:
-	//bool show_demo_window = true;
+	bool show_demo_window = true;
 	ImGuiIO* io = nullptr;
 	SceneWindow* scene_window = nullptr;
 	ConfigWindow* settings = nullptr;

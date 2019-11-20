@@ -72,13 +72,16 @@ bool ModuleResourceLoader::Start()
 	model_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, modelIcon_UUID);
 	scene_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, sceneIcon_UUID);
 	tex_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, texIcon_UUID);
+
+	LoadTextureFromLibrary("library/textures/icon.dds", icon_tex);
+	LoadTextureFromLibrary("library/textures/model_icon.dds", model_icon_tex);
+	LoadTextureFromLibrary("library/textures/scene_icon.dds", scene_icon_tex);
+	LoadTextureFromLibrary("library/textures/texture_icon.dds", tex_icon_tex);
+
 	icon_tex->file = "None";
 	model_icon_tex->file = "None";
 	scene_icon_tex->file = "None";
 	tex_icon_tex->file = "None";
-
-	std::string s;
-	LoadTexture("Assets/Textures/icon.png", s); 
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -425,10 +428,10 @@ bool ModuleResourceLoader::LoadTexture(const char* path, std::string& output_fil
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
 		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
-		glBindTexture(GL_TEXTURE_2D, 0);		
+		glBindTexture(GL_TEXTURE_2D, 0);	
 		
 		// We import the texture to our library
-		ret = ImportTextureToLibrary(path, output_file);
+		if(ImportTextureToLibrary(path, output_file)) ret = true;
 
 		ilBindImage(0);
 		ilDeleteImage(image);
@@ -460,6 +463,60 @@ bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string&
 	}
 
 	if (!ret) LOG("Cannot import texture from path %s", path);
+
+	return ret;
+}
+
+bool ModuleResourceLoader::LoadTextureFromLibrary(const char* path, ResourceTexture* tex) {
+	bool ret = false;
+
+	ILuint image;
+	ilGenImages(1, &image);
+	ilBindImage(image);
+
+	// We adapt the  path for DevIL
+	const char* adapted_path = strstr(path, "library");
+
+	if (!ilLoadImage(adapted_path)) {
+		ilDeleteImages(1, &image);
+		LOG("The texture image could not be loaded");
+	}
+	else {
+		tex->texture = ilutGLBindTexImage();
+		LOG("Created texture from path: %s", adapted_path);
+		LOG("");
+
+		if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+			LOG("Error converting image: %s", iluErrorString(ilGetError()));
+
+		long h, w, bpp, f;
+		ILubyte *texdata = 0;
+
+		w = ilGetInteger(IL_IMAGE_WIDTH);
+		h = ilGetInteger(IL_IMAGE_HEIGHT);
+		bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
+		f = ilGetInteger(IL_IMAGE_FORMAT);
+		texdata = ilGetData();
+
+		glGenTextures(1, &tex->texture);
+		glBindTexture(GL_TEXTURE_2D, tex->texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		tex->width = w;
+		tex->height = h;
+		tex->name = getNameFromPath(path, true);
+
+		ilBindImage(0);
+		ilDeleteImage(image);
+
+		ret = true;
+	}
 
 	return ret;
 }

@@ -174,25 +174,36 @@ bool ModuleResourceManager::CleanUp()
 void ModuleResourceManager::DrawProjectExplorer() {
 	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
-		if (it->second && !it->second->file.compare("None")) {
-			//if (ImGui::ImageButton(it->second->name.c_str())) 
-			//{
-				switch (it->second->type) {
-				case RESOURCE_TYPE::MESH:
-					if (ImGui::ImageButton(App->res_loader->model_icon_tex, ImVec2(30, 30))) {
-						GameObject* test = new GameObject(it->second->name.c_str(), App->scene->GetRoot());
-							ComponentMesh* mesh = (ComponentMesh*)test->CreateComponent(COMPONENT_TYPE::MESH);
-							mesh->resource_mesh = (ResourceMesh*)it->second;
-							break;
-					}
+		if (it->second && it->second->file.compare("None")) {
+			switch (it->second->type) {
+			case RESOURCE_TYPE::MESH:
+				if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
+					GameObject* go = new GameObject(it->second->name.c_str(), App->scene->GetRoot());
+					ComponentMesh* mesh = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
+					mesh->resource_mesh = (ResourceMesh*)it->second;
 
-				//case RESOURCE_TYPE::TEXTURE:
-
-					//break;
+					App->scene->selected = go;
+					it->second->UpdateReferenceCount();
 				}
+				break;
+			case RESOURCE_TYPE::TEXTURE:
+				if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
+					
+					ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
+					if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
+					mat->resource_tex = (ResourceTexture*)it->second;
 
-				it->second->UpdateReferenceCount();
-			//}
+					it->second->UpdateReferenceCount();
+				}
+				break;
+			case RESOURCE_TYPE::SCENE:
+				if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
+
+					App->scene->LoadScene(it->second->name);
+				}
+				break;
+			}
+
 		}
 	}
 }
