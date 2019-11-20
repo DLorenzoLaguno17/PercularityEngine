@@ -9,6 +9,7 @@
 #define MAX_LIGHTS 8
 
 class ComponentCamera;
+class ComponentMesh;
 
 class ModuleRenderer3D : public Module
 {
@@ -29,8 +30,9 @@ public:
 	void DeleteBuffers();
 
 	void UpdateProjectionMatrix();
+	void DrawAllMeshes();
 
-	const ComponentCamera* GetCamera() const { return camera; }
+	ComponentCamera* GetCamera() const { return camera; }
 
 public:
 
@@ -39,6 +41,8 @@ public:
 	uint GetTexColorBuffer() const	{ return texColorBuffer;}
 	uint GetFrameBuffer() const		{ return frameBuffer;	}
 	uint GetRenderBuffer() const	{ return renderBuffer;	}
+
+	std::vector<ComponentMesh*> meshes;
 
 public:
 

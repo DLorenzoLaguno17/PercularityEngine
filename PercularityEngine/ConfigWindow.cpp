@@ -64,11 +64,11 @@ void ConfigWindow::Update() {
 		static int h = App->window->GetWindowHeight();
 		static float b = 1.0f;
 		ImGui::NewLine();
-		ImGui::SliderInt("Width", &w, 720, App->window->GetWindowWidth());
-		ImGui::SliderInt("Height", &h, 1280, App->window->GetWindowHeight());
+		//ImGui::SliderInt("Width", &w, 720, App->window->GetWindowWidth());
+		//ImGui::SliderInt("Height", &h, 1280, App->window->GetWindowHeight());
 		ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f);
 		SDL_SetWindowBrightness(App->window->window, b);
-		SDL_SetWindowSize(App->window->window, w, h);
+		//SDL_SetWindowSize(App->window->window, w, h);
 		
 		/*windowPosition.x = ImGui::GetWindowPos().x;
 		windowPosition.y = ImGui::GetWindowPos().y;

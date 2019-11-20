@@ -8,6 +8,7 @@
 #include "OpenGL.h"
 #include "Brofiler/Lib/Brofiler.h"
 #include "ComponentCamera.h"
+#include "ComponentMesh.h"
 
 #include "mmgr/mmgr.h"
 
@@ -147,6 +148,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow);
 
+	DrawAllMeshes();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	App->gui->DrawImGui(dt);	/*Shouldn't really be here,
@@ -175,6 +178,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 
 	UpdateProjectionMatrix();
+	camera->SetAspectRatio(float(height)/ float(width));
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -247,4 +251,10 @@ void ModuleRenderer3D::DeleteBuffers()
 	if (texColorBuffer!=0)
 		glDeleteBuffers(1, &texColorBuffer);
 
+}
+
+void ModuleRenderer3D::DrawAllMeshes()
+{
+	for (int i = 0; i < meshes.size(); ++i)
+		meshes[i]->Render();
 }

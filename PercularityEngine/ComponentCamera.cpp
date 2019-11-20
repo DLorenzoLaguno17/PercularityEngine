@@ -35,9 +35,6 @@ void ComponentCamera::Update()
 {
 	BROFILER_CATEGORY("CameraUpdate", Profiler::Color::LightSeaGreen);
 
-	// Recalculate matrix -------------
-	//CalculateViewMatrix();
-
 }
 
 //------------------FRUSTUM-------------------
@@ -89,7 +86,8 @@ void ComponentCamera::SetFOV(float fov)
 
 void ComponentCamera::SetAspectRatio(float ar)
 {
-	frustum.horizontalFov = 2.0f*atan((tan(frustum.verticalFov*0.5f))/ar);
+	frustum.horizontalFov = 2.0f*atanf((tanf(frustum.verticalFov*0.5f))/ar);
+	LOG("%f",frustum.AspectRatio());
 	update_projection = true;
 }
 
