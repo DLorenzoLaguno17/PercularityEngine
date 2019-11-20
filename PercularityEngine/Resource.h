@@ -21,19 +21,19 @@ public:
 	uint GetUUID() const { return UUID; }
 	void SetUUID( uint uuid) { UUID = uuid; }
 	const char* GetFile() const { return file.c_str(); }
-	const char* GetImportedFile() const { return exported_file.c_str(); }
+	const char* GetExportedFile() const { return exported_file.c_str(); }
 
-	virtual void Load(const nlohmann::json &config) {}
-	virtual void Save(nlohmann::json &config) const {}
+	virtual void OnLoad(const char* resourceNum, const nlohmann::json &config) {}
+	virtual void OnSave(const char* resourceNum, nlohmann::json &config) const {}
 
 	bool IsLoadedToMemory() const { return usedAsReference > 0; }
-	bool LoadToMemory() 
+	bool UpdateReferenceCount() 
 	{
-		if (usedAsReference > 0)
+		if (usedAsReference > 0) 
 			usedAsReference++;
-		else if (LoadInMemory())
+		else if (LoadInMemory()) 
 			usedAsReference = 1;
-		else
+		else 
 			usedAsReference = 0;
 
 		return usedAsReference > 0;

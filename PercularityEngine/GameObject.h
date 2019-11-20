@@ -2,7 +2,6 @@
 #define __GameObject_H__
 
 #include "Component.h"
-#include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentMesh;
 class ComponentMaterial;

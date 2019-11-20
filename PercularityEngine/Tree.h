@@ -1,8 +1,8 @@
 #ifndef _TREE_H__
 #define _TREE_H__
 
-#include "MathGeoLib/include/MathGeoLib.h"
 #include <vector>
+#include "Globals.h"
 
 class GameObject;
 class TreeNode;
@@ -13,7 +13,6 @@ enum class TREE_TYPE {
 	OCTREE
 	//KDTREE  -> Might be implemented in the future
 };
-
 
 class Tree {
 

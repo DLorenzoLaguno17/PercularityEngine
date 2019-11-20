@@ -2,12 +2,17 @@
 #include "ModuleResourceManager.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleFileSystem.h"
+#include "ModuleScene.h"
+#include "ComponentMaterial.h"
+#include "ComponentMesh.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "GameObject.h"
 #include "OpenGL.h"
 #include <string>
 
 #include "Brofiler/Lib/Brofiler.h"
+#include "ImGui/imgui.h"
 #include "mmgr/mmgr.h"
 
 // Called before the first frame
@@ -25,12 +30,20 @@ Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint spec
 	else uuid = (uint)App->GetRandomGenerator().Int();
 
 	switch (type) {
-		case RESOURCE_TYPE::TEXTURE: ret = (Resource*) new ResourceTexture(uuid); break;
-		case RESOURCE_TYPE::MESH: ret = (Resource*) new ResourceMesh(uuid); break;
+		case RESOURCE_TYPE::TEXTURE: 
+			ret = (Resource*) new ResourceTexture(uuid); 
+			break;
+		case RESOURCE_TYPE::MESH: 
+			ret = (Resource*) new ResourceMesh(uuid); 
+			break;
 		//case RESOURCE_TYPE::SCENE: ret = (Resource*) new ResourceScene(uid); break;
 	}
 
-	if (ret != nullptr)	resources[uuid] = ret;
+	if (ret != nullptr) {
+		resources[uuid] = ret;
+		resourcesCount++;
+	}
+
 	return ret;
 }
 
@@ -91,8 +104,27 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 		res->file = new_file;
 		App->file_system->NormalizePath(res->file);
 		res->exported_file = written_file;
+		res->name = App->res_loader->getNameFromPath(res->file);
 		ret = res->GetUUID();
 	}
+}
+
+// Load & Save
+void ModuleResourceManager::LoadResources(const nlohmann::json &config) {
+	CleanUp();
+}
+
+void ModuleResourceManager::SaveResources(nlohmann::json &scene_file) {
+	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
+	{
+		saved_res++;
+		char name[50];
+		sprintf_s(name, 50, "Resource %d", saved_res);
+		if (it->second->IsLoadedToMemory())
+			it->second->OnSave(name, scene_file);
+	}
+
+	saved_res = 0;
 }
 
 // Checks if a file already exists in Assets folder, and returns the UUID of the resource if it does
@@ -130,12 +162,33 @@ Resource* ModuleResourceManager::GetResourceFromMap(uint uuid)
 bool ModuleResourceManager::CleanUp()
 {
 	LOG("Freeing resource manager");
-	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item)
-		RELEASE(item->second);
+	/*for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item)
+		RELEASE(item->second);*/
 
 	resources.clear();
+	resourcesCount = 0;
 
 	return true;
+}
+
+void ModuleResourceManager::DrawProjectExplorer() {
+	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
+	{
+		if (it->second) {
+			if (ImGui::Button(it->second->name.c_str())) 
+			{
+				switch (it->second->type) {
+				case RESOURCE_TYPE::MESH:
+					GameObject* test = new GameObject(it->second->name.c_str(), App->scene->GetRoot());
+					ComponentMesh* mesh = test->GetComponent<ComponentMesh>();
+					mesh->resource_mesh = (ResourceMesh*)it->second;
+					break;
+				}
+
+				it->second->UpdateReferenceCount();
+			}
+		}
+	}
 }
 
 // Methods to check the extension of a file

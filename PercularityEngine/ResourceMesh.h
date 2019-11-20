@@ -2,7 +2,6 @@
 #define __ResourceMesh_H__
 
 #include "Resource.h"
-#include "MathGeoLib/include/MathGeoLib.h"
 
 class ResourceMesh : public Resource 
 {
@@ -14,11 +13,10 @@ public:
 	bool LoadInMemory();
 	void ReleaseFromMemory();
 
-	void Save(nlohmann::json &config) const {}
-	void Load(const nlohmann::json &config) {}
+	void OnSave(const char* resourceNum, nlohmann::json &config) const;
+	void OnLoad(const char* resourceNum, const nlohmann::json &config);
 
-	// Releases all the data
-	void CleanUp();
+	const AABB& GetAABB()const { return aabb; }
 
 public:
 	// Index 
@@ -43,6 +41,9 @@ public:
 	// Colors
 	uint num_colors = 0;
 	uint* colors = nullptr;
+
+	// Bounding box
+	AABB aabb;
 };
 
 #endif // __ResourceMesh_H__

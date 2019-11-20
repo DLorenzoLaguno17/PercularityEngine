@@ -38,11 +38,11 @@ public:
 	// Loading methods
 	bool LoadModel(const char* path, std::string& output_file);
 	bool LoadTexture(const char* path, std::string& output_file);
-	bool LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file);
+	bool LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file, const char* name);
 
 	// Importing methods 
 	bool ImportTextureToLibrary(const char* path, std::string& output_file);
-	bool ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file);
+	bool ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file, const char* name);
 	bool LoadMeshFromLibrary(const char* path, ResourceMesh* mesh);
 	
 	// Useful methods

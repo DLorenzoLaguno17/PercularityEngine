@@ -22,26 +22,14 @@ void ComponentMaterial::OnEditor() {
 
 // Load & Save 
 void ComponentMaterial::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
-	json js = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Name"];
-	///tex_name = js.get<std::string>();
-
+	
 	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Parent UUID"];
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Active"];
-
-	uint texture = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Texture UID"];
-	//resource_tex->SetUID(texture);
-
-	///width = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Width"];
-	//height = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Height"];
 }
 
 void ComponentMaterial::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Active"] = active;
-	//scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Name"] = tex_name;
-	///scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Texture UID"] = resource_tex->GetUUID();
-	//scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Width"] = width;
-	///scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Height"] = height;
 }

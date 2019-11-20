@@ -326,6 +326,9 @@
     <ClCompile Include="ResourceMesh.cpp">
       <Filter>Sources\Modules\Scene elements\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceTexture.cpp">
+      <Filter>Sources\Modules\Scene elements\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Game\Icons\PercularityIcon7.ico">

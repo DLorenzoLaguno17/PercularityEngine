@@ -1,7 +1,6 @@
 #ifndef __ResourceTexture_H__
 #define __ResourceTexture_H__
 
-#include "Globals.h"
 #include "Resource.h"
 
 class ResourceTexture : public Resource
@@ -11,11 +10,11 @@ public:
 
 	virtual ~ResourceTexture() {}
 
-	bool LoadInMemory() { return true; }
-	void ReleaseFromMemory() {}
+	bool LoadInMemory();
+	void ReleaseFromMemory();
 
-	void Save(nlohmann::json &config) const {}
-	void Load(const nlohmann::json &config) {}
+	void OnSave(const char* resourceNum, nlohmann::json &config) const;
+	void OnLoad(const char* resourceNum, const nlohmann::json &config);
 
 public:
 	uint texture = 0;

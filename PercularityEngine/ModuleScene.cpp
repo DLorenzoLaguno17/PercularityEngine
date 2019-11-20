@@ -150,6 +150,9 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 	// Close the file
 	stream.close();
 
+	// First we load the resources
+	App->res_manager->LoadResources(scene_file);
+
 	numGameObjectsInScene = scene_file["Game Objects"]["Count"];
 	RecursiveLoad(root, scene_file);
 	selected = root;
@@ -187,6 +190,9 @@ void ModuleScene::SaveScene(std::string scene_name) {
 	// Create auxiliar file
 	json scene_file;
 	std::string full_path = sceneAddress + scene_name + sceneExtension;
+
+	// First we save the resources
+	App->res_manager->SaveResources(scene_file);
 
 	RecursiveSave(root, scene_file);
 	scene_file["Game Objects"]["Count"] = saved_go;
@@ -325,9 +331,9 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	// If it is the first time we create a Sphere, we save its mesh as a resource
 	if (sphereCount == 1) {
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, sphereMesh_UUID);
-		mesh->LoadParShape(newMesh, "Sphere");
+		mesh->LoadParShape(newMesh);
 		std::string file;
-		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file);
+		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Sphere");
 	}
 	else 
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(sphereMesh_UUID);
@@ -335,8 +341,8 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-	mesh->aabb.SetNegativeInfinity();
-	mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->resource_mesh->aabb.SetNegativeInfinity();
+	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
 
 	// Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
@@ -402,9 +408,9 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	// If it is the first time we create a Cube, we save its mesh as a resource
 	if (cubeCount == 1) {
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, cubeMesh_UUID);
-		mesh->LoadParShape(mesh_front, "Cube");
+		mesh->LoadParShape(mesh_front);
 		std::string file;
-		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file);
+		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Cube");
 	}
 	else
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(cubeMesh_UUID);
@@ -412,8 +418,8 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-	mesh->aabb.SetNegativeInfinity();
-	mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->resource_mesh->aabb.SetNegativeInfinity();
+	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
 
 	// Free the Par_mesh
 	par_shapes_free_mesh(mesh_front);
@@ -451,9 +457,9 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	// If it is the first time we create a Plane, we save its mesh as a resource
 	if (planeCount == 1) {
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, planeMesh_UUID);
-		mesh->LoadParShape(plane, "Plane");
+		mesh->LoadParShape(plane);
 		std::string file;
-		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file);
+		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Plane");
 	}
 	else		
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(planeMesh_UUID);
@@ -461,8 +467,8 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-	mesh->aabb.SetNegativeInfinity();
-	mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->resource_mesh->aabb.SetNegativeInfinity();
+	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
 
 	// Free the Par_mesh
 	par_shapes_free_mesh(plane);
@@ -500,9 +506,9 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	// If it is the first time we create a Sphere, we save its mesh as a resource
 	if (donutCount == 1) {
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, donutMesh_UUID);
-		mesh->LoadParShape(newMesh, "Donut");
+		mesh->LoadParShape(newMesh);
 		std::string file;
-		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file);
+		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Donut");
 	}
 	else
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(donutMesh_UUID);
@@ -510,8 +516,8 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-	mesh->aabb.SetNegativeInfinity();
-	mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->resource_mesh->aabb.SetNegativeInfinity();
+	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
 
 	// Free the Par_mesh
 	par_shapes_free_mesh(newMesh);

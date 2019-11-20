@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "ComponentMaterial.h"
+#include "ResourceMesh.h"
 #include "ComponentMesh.h"
 #include "ComponentTransform.h"
 #include "Application.h"
@@ -184,7 +185,7 @@ void GameObject::UpdateAABB()
 	ComponentMesh* mesh = GetComponent<ComponentMesh>();
 	if (mesh)
 	{
-		obb = mesh->GetAABB();
+		obb = mesh->resource_mesh->GetAABB();
 		obb.Transform(transform->GetGlobalTransform());
 
 		aabb.SetNegativeInfinity();

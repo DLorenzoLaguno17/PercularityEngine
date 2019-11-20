@@ -162,6 +162,7 @@
     <ClCompile Include="ProjectWindow.cpp" />
     <ClCompile Include="Resource.h" />
     <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="SceneWindow.cpp" />
     <ClCompile Include="ConfigWindow.cpp" />
     <ClCompile Include="Tree.cpp" />

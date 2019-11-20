@@ -20,7 +20,6 @@
 #include "DevIL/include/ilut.h"
 #include "Brofiler/Lib/Brofiler.h"
 
-#include "MathGeoLib/include/MathGeoLib.h"
 #ifdef _DEBUG
 #pragma comment( lib, "MathGeoLib/lib86/Debug/MathGeoLib.lib" )
 #else
@@ -103,30 +102,24 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 	const aiScene* scene = aiImportFile(adapted_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObject* parent_mesh = new GameObject(getNameFromPath(path), App->scene->GetRoot());
+		//GameObject* parent_mesh = new GameObject(getNameFromPath(path), App->scene->GetRoot());
 
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 			
 			// Create the GameObject
-			GameObject* fbx_mesh = nullptr;
+			/*GameObject* fbx_mesh = nullptr;
 			if (scene->mNumMeshes > 1) 
 				fbx_mesh = new GameObject(scene->mMeshes[i]->mName.C_Str(), parent_mesh);
 			else 
-				fbx_mesh = parent_mesh;
+				fbx_mesh = parent_mesh;*/
 
-			// Copy the mesh						
-			ComponentMesh* mesh = (ComponentMesh*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MESH);
-			mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
-			ret = LoadMesh(mesh->resource_mesh, scene->mMeshes[i], output_file);
-
-			// Creating the AABB
-			mesh->aabb.SetNegativeInfinity();
-			mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-			///mesh->name = c_mesh->gameObject->name;
+			// Copy the mesh									
+			ResourceMesh* res_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
+			ret = LoadMesh(res_mesh, scene->mMeshes[i], output_file, getNameFromPath(path).c_str());
 			
 			// Copy materials
-			aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+			/*aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 			uint totalTex = aux_mat->GetTextureCount(aiTextureType_DIFFUSE);
 			aiString p;
 			aux_mat->GetTexture(aiTextureType_DIFFUSE, 0, &p);
@@ -136,13 +129,13 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 			std::string full_path = file + name;
 
 			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			//LoadTexture(full_path.c_str(), material->resource_tex);
+			if() LoadTexture(full_path.c_str(), material->resource_tex);*/
 
-			App->scene->selected = fbx_mesh;
-			App->scene->numGameObjectsInScene++;
+			//App->scene->selected = fbx_mesh;
+			//App->scene->numGameObjectsInScene++;
 
-			LOG("Loaded new model %s.", fbx_mesh->name.c_str());
-			LOG("_____________________");
+			//LOG("Loaded new model %s.", fbx_mesh->name.c_str());
+			//LOG("--------------------------");
 		}
 		aiReleaseImport(scene);
 	}
@@ -155,7 +148,7 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file) {
+bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file, const char* name) {
 
 	bool ret = false;
 
@@ -163,8 +156,8 @@ bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std
 	mesh->num_vertices = currentMesh->mNumVertices;
 	mesh->vertices = new float3[mesh->num_vertices];
 	memcpy(mesh->vertices, currentMesh->mVertices, sizeof(float3) * mesh->num_vertices);
-	
-	LOG("NEW MESH");
+
+	LOG("\nNEW MESH");
 	LOG("Vertices: %d", mesh->num_vertices);
 
 	// Copy faces
@@ -232,14 +225,13 @@ bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std
 	mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
 	mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
 
-	// We import the mesh to our library and we load it tou our resource
-	if(ImportMeshToLibrary(mesh, output_file))
-		ret = mesh->LoadToMemory();
+	// We import the mesh to our library
+	ret = ImportMeshToLibrary(mesh, output_file, name);
 
 	return ret;
 }
 
-bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file) {
+bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file, const char* name) {
 	
 	LOG("Importing mesh");
 	bool ret = false; 
@@ -297,7 +289,7 @@ bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& 
 
 		// Save the file
 		//ret = App->file_system->Save(path, data, size);		
-		ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_MESH_FOLDER, mesh->name.c_str(), "mesh");
+		ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_MESH_FOLDER, name, "mesh");
 
 		RELEASE_ARRAY(data);
 		cursor = nullptr;
@@ -370,6 +362,10 @@ bool ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ResourceMesh* m
 		mesh->id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * mesh->num_vertices, mesh->vertices);
 		mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
 		mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
+
+		// Creating the AABB
+		mesh->aabb.SetNegativeInfinity();
+		mesh->aabb = AABB::MinimalEnclosingAABB(mesh->vertices, mesh->num_vertices);
 
 		ret = true;
 

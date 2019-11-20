@@ -22,6 +22,8 @@ public:
 	// Save & Load
 	void Load(const nlohmann::json &config) {}
 	void Save(nlohmann::json &config) {}
+	void LoadResources(const nlohmann::json &scene_file);
+	void SaveResources(nlohmann::json &scene_file);
 
 	uint ReceiveExternalFile(const char* new_file);
 	Resource* CreateNewResource(RESOURCE_TYPE type, uint specific_uid = 0);
@@ -37,8 +39,13 @@ public:
 	bool CheckMeshExtension(const char* extension);
 	RESOURCE_TYPE GetTypeFromExtension(const char* extension);
 
+	void DrawProjectExplorer();
+
 private:
 	std::map<uint, Resource*> resources;
+	uint resourcesCount = 0;
+	uint saved_res = 0;
+	uint loaded_res = 0;
 
 };
 

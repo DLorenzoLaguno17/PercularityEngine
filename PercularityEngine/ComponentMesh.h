@@ -2,7 +2,6 @@
 #define _ComponentMesh_H_
 
 #include "Component.h"
-#include "MathGeoLib/include/MathGeoLib.h"
 
 #define NORMALS_LENGTH 1.0f
 
@@ -29,14 +28,11 @@ public:
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);	
 
 	// Create a primitive shape
-	void LoadParShape(par_shapes_mesh_s* parShape, const char* primitiveType);
-	
-	const AABB& GetAABB()const { return aabb; }
+	void LoadParShape(par_shapes_mesh_s* parShape);
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MESH; }
 
 public:
-	AABB aabb;
 	ResourceMesh* resource_mesh = nullptr;
 
 private:

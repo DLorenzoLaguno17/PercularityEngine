@@ -1,13 +1,10 @@
 #ifndef _ComponentTransform_H_
 #define _ComponentTransform_H_
 
-#include "MathGeoLib/include/MathGeoLib.h"
 #include "Component.h"
-
 #include "glmath.h"
 
 class ComponentTransform : public Component {
-	
 public:
 
 	ComponentTransform(GameObject* parent, bool active);

@@ -50,7 +50,7 @@ void ComponentMesh::OnEditor() {
 
 void ComponentMesh::CleanUp()
 {
-	resource_mesh->CleanUp();
+	resource_mesh->ReleaseFromMemory();
 }
 
 // Method to render vertex normals
@@ -110,8 +110,9 @@ void ComponentMesh::Render() const  {
 	
 	ComponentMaterial* texture = gameObject->GetComponent<ComponentMaterial>();
 	
-	if (texture->IsActive()) glBindTexture(GL_TEXTURE_2D, texture->resource_tex->texture);
-	else glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
+	//if (texture->IsActive()) glBindTexture(GL_TEXTURE_2D, texture->resource_tex->texture);
+	//else 
+	glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_UVs);
@@ -135,7 +136,7 @@ void ComponentMesh::Render() const  {
 	glPopMatrix();
 }
 
-void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape, const char* primitiveType)
+void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 {	
 	// Load the vertices
 	resource_mesh->num_vertices = parShape->npoints;
@@ -183,15 +184,11 @@ void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape, const char* primit
 			resource_mesh->normals[i].z = parShape->normals[i * 3 + 2];
 		}
 	}
-
-	resource_mesh->name = primitiveType;
 }
 
 // Load & Save 
-void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
-	json js = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Name"];
-	///mesh_name = js.get<std::string>();
-	
+void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file)
+{	
 	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"];
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"];
@@ -200,15 +197,13 @@ void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scen
 	
 	///std::string path = LIBRARY_MESH_FOLDER + mesh_name + ".mesh";
 	///App->res_loader->LoadMeshFromLibrary(path.c_str(), resource_mesh);
-	aabb.SetNegativeInfinity();
-	aabb = AABB::MinimalEnclosingAABB(resource_mesh->vertices, resource_mesh->num_vertices);
 }
 
-void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
+void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 
+{
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"] = active;
-	///scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Name"] = mesh_name;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"] = showFaceNormals;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"] = showVertexNormals;
 }
