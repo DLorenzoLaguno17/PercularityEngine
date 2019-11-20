@@ -68,8 +68,17 @@ bool ModuleResourceLoader::Start()
 
 	// Load textures
 	CreateDefaultMaterial();
-	icon_tex = new ComponentMaterial(nullptr, true);
-	//LoadTexture("Assets/Textures/icon.png", icon_tex->resource_tex); 
+	icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, engineIcon_UUID);
+	model_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, modelIcon_UUID);
+	scene_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, sceneIcon_UUID);
+	tex_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, texIcon_UUID);
+	icon_tex->file = "None";
+	model_icon_tex->file = "None";
+	scene_icon_tex->file = "None";
+	tex_icon_tex->file = "None";
+
+	std::string s;
+	LoadTexture("Assets/Textures/icon.png", s); 
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -508,9 +517,17 @@ void ModuleResourceLoader::CreateDefaultTexture() {
 
 // Save & Load
 void ModuleResourceLoader::Load(const nlohmann::json &config) {
-	defaultMat_UUID = config["Resource loader"]["Default material UUID"];
+	/*defaultMat_UUID = config["Resource loader"]["Default material UUID"];
+	engineIcon_UUID = config["Resource loader"]["Engine icon UUID"];
+	modelIcon_UUID = config["Resource loader"]["Model icon UUID"];
+	texIcon_UUID = config["Resource loader"]["Texture icon UUID"];
+	sceneIcon_UUID = config["Resource loader"]["Scene icon UUID"];*/
 }
 
 void ModuleResourceLoader::Save(nlohmann::json &config) {
 	config["Resource loader"]["Default material UUID"] = defaultMat_UUID;
+	config["Resource loader"]["Engine icon UUID"] = engineIcon_UUID;
+	config["Resource loader"]["Model icon UUID"] = modelIcon_UUID;
+	config["Resource loader"]["Texture icon UUID"] = texIcon_UUID;
+	config["Resource loader"]["Scene icon UUID"] = sceneIcon_UUID;
 }

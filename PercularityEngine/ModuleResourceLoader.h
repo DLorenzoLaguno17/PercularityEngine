@@ -7,8 +7,6 @@
 #define CHECKERS_HEIGHT 150
 
 class GameObject;
-class ComponentMaterial;
-
 class ResourceMesh;
 class ResourceTexture;
 struct aiMesh;
@@ -51,12 +49,19 @@ public:
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
-	ComponentMaterial* icon_tex = nullptr;
+	ResourceTexture* icon_tex = nullptr;
+	ResourceTexture* model_icon_tex = nullptr;
+	ResourceTexture* scene_icon_tex = nullptr;
+	ResourceTexture* tex_icon_tex = nullptr;
 	ResourceTexture* default_material = nullptr;
 	uint default_tex = 0;
 
 private:
 	uint defaultMat_UUID = 0;
+	uint engineIcon_UUID = 0;
+	uint modelIcon_UUID = 0;
+	uint texIcon_UUID = 0;
+	uint sceneIcon_UUID = 0;
 };
 
 #endif // __ModuleResourceLoader_H__

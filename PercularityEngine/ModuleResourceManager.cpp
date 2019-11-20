@@ -174,15 +174,17 @@ bool ModuleResourceManager::CleanUp()
 void ModuleResourceManager::DrawProjectExplorer() {
 	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
-		if (it->second) {
-			if (ImGui::Button(it->second->name.c_str())) 
-			{
+		if (it->second && !it->second->file.compare("None")) {
+			//if (ImGui::ImageButton(it->second->name.c_str())) 
+			//{
 				switch (it->second->type) {
 				case RESOURCE_TYPE::MESH:
-					GameObject* test = new GameObject(it->second->name.c_str(), App->scene->GetRoot());
-					ComponentMesh* mesh = (ComponentMesh*)test->CreateComponent(COMPONENT_TYPE::MESH);
-					mesh->resource_mesh = (ResourceMesh*)it->second;
-					break;
+					if (ImGui::ImageButton(App->res_loader->model_icon_tex, ImVec2(30, 30))) {
+						GameObject* test = new GameObject(it->second->name.c_str(), App->scene->GetRoot());
+							ComponentMesh* mesh = (ComponentMesh*)test->CreateComponent(COMPONENT_TYPE::MESH);
+							mesh->resource_mesh = (ResourceMesh*)it->second;
+							break;
+					}
 
 				//case RESOURCE_TYPE::TEXTURE:
 
@@ -190,7 +192,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 				}
 
 				it->second->UpdateReferenceCount();
-			}
+			//}
 		}
 	}
 }
