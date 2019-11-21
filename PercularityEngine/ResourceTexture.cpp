@@ -14,7 +14,7 @@ void ResourceTexture::ReleaseFromMemory()
 {}
 
 // Save and Load
-void ResourceTexture::OnSave(const char* resourceNum, nlohmann::json &config) const
+void ResourceTexture::OnSave(const char* resourceNum, json &config) const
 {
 	config["Resources"]["Mesh resources"][resourceNum]["UUID"] = UUID;
 	config["Resources"]["Mesh resources"][resourceNum]["File"] = file;
@@ -25,7 +25,7 @@ void ResourceTexture::OnSave(const char* resourceNum, nlohmann::json &config) co
 	config["Resources"]["Mesh resources"][resourceNum]["Texture"] = texture;
 }
 
-void ResourceTexture::OnLoad(const char* resourceNum, const nlohmann::json &config)
+void ResourceTexture::OnLoad(const char* resourceNum, const json &config)
 {
 	UUID = config["Resources"]["Mesh resources"][resourceNum]["UUID"];
 	width = config["Resources"]["Mesh resources"][resourceNum]["Width"];

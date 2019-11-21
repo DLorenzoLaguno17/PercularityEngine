@@ -23,8 +23,8 @@ public:
 	const char* GetFile() const { return file.c_str(); }
 	const char* GetExportedFile() const { return exported_file.c_str(); }
 
-	virtual void OnLoad(const char* resourceNum, const nlohmann::json &config) {}
-	virtual void OnSave(const char* resourceNum, nlohmann::json &config) const {}
+	virtual void OnLoad(const char* resourceNum, const json &config) {}
+	virtual void OnSave(const char* resourceNum, json &config) const {}
 
 	bool IsLoadedToMemory() const { return usedAsReference > 0; }
 	bool UpdateReferenceCount() 

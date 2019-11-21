@@ -19,6 +19,7 @@
 
 #include "DevIL/include/ilut.h"
 #include "Brofiler/Lib/Brofiler.h"
+#include "mmgr/mmgr.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "MathGeoLib/lib86/Debug/MathGeoLib.lib" )
@@ -30,8 +31,6 @@
 #pragma comment (lib, "DevIL/lib86/DevIL.lib" )
 #pragma comment (lib, "DevIL/lib86/ILU.lib" )
 #pragma comment (lib, "DevIL/lib86/ILUT.lib" )
-
-#include "mmgr/mmgr.h"
 
 // Called before render is available
 bool ModuleResourceLoader::Init()
@@ -518,6 +517,12 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(const char* path, ResourceText
 		ret = true;
 	}
 
+	return ret;
+}
+
+bool ModuleResourceLoader::LoadSceneFile(const char* path, std::string& output_file) {
+	bool ret = false;
+	
 	return ret;
 }
 

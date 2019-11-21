@@ -47,13 +47,13 @@ private:
 
 public:
 	GameObject* selected = nullptr;
+	const char* sceneAddress;
+	const char* sceneExtension;
 	uint numGameObjectsInScene = 0;
 
 private:
 	bool mustLoad = false;
 	GameObject* root = nullptr;
-	const char* sceneAddress;
-	const char* sceneExtension;
 
 	Timer loadingTime;
 	uint saved_go = 0;

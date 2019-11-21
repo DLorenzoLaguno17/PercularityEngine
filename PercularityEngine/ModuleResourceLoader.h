@@ -35,7 +35,8 @@ public:
 
 	// Loading methods
 	bool LoadModel(const char* path, std::string& output_file);
-	bool LoadTexture(const char* path, std::string& output_file);
+	bool LoadTexture(const char* path, std::string& output_file); 
+	bool LoadSceneFile(const char* path, std::string& output_file);
 	bool LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file, const char* name);
 	
 	// Own flie format loaders

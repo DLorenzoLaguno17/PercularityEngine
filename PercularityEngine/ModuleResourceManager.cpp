@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "ResourceScene.h"
 #include "GameObject.h"
 #include "OpenGL.h"
 #include <string>
@@ -36,7 +37,9 @@ Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint spec
 		case RESOURCE_TYPE::MESH: 
 			ret = (Resource*) new ResourceMesh(uuid); 
 			break;
-		//case RESOURCE_TYPE::SCENE: ret = (Resource*) new ResourceScene(uid); break;
+		case RESOURCE_TYPE::SCENE: 
+			ret = (Resource*) new ResourceScene(uuid); 
+			break;
 	}
 
 	if (ret != nullptr) {
@@ -93,9 +96,9 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 	case RESOURCE_TYPE::MESH:
 		success = App->res_loader->LoadModel(new_file, written_file);
 		break;
-	/*case RESOURCE_TYPE::SCENE: 
-		success = App->scene->Import(new_file_in_assets, written_file); 
-		break;*/
+	case RESOURCE_TYPE::SCENE: 
+		success = App->res_loader->LoadSceneFile(new_file, written_file); 
+		break;
 	}
 
 	// If the import was successful, create a new resource
@@ -193,13 +196,14 @@ void ModuleResourceManager::DrawProjectExplorer() {
 					if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
 					mat->resource_tex = (ResourceTexture*)it->second;
 
-					it->second->UpdateReferenceCount();
+					
 				}
 				break;
 			case RESOURCE_TYPE::SCENE:
 				if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
 
-					App->scene->LoadScene(it->second->name);
+					it->second->UpdateReferenceCount();
+					//App->scene->LoadScene(it->second->exported_file);
 				}
 				break;
 			}

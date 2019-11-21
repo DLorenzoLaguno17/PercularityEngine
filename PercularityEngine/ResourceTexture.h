@@ -13,8 +13,8 @@ public:
 	bool LoadInMemory();
 	void ReleaseFromMemory();
 
-	void OnSave(const char* resourceNum, nlohmann::json &config) const;
-	void OnLoad(const char* resourceNum, const nlohmann::json &config);
+	void OnSave(const char* resourceNum, json &config) const;
+	void OnLoad(const char* resourceNum, const json &config);
 
 public:
 	uint texture = 0;
