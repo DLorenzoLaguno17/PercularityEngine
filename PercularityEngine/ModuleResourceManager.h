@@ -36,7 +36,7 @@ public:
 
 	// Extension checkers
 	bool CheckTextureExtension(const char* extension);
-	bool CheckMeshExtension(const char* extension);
+	bool CheckModelExtension(const char* extension);
 	RESOURCE_TYPE GetTypeFromExtension(const char* extension);
 
 	void DrawProjectExplorer();

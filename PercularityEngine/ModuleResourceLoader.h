@@ -9,6 +9,8 @@
 class GameObject;
 class ResourceMesh;
 class ResourceTexture;
+class ResourceModel;
+class ResourceScene;
 struct aiMesh;
 
 // ---------------------------------------------------
@@ -36,13 +38,14 @@ public:
 	// Loading methods
 	bool LoadModel(const char* path, std::string& output_file);
 	bool LoadTexture(const char* path, std::string& output_file);
+	bool LoadSceneFile(const char* path, std::string scene_file);
 	void ProcessTexture(uint& texture);
-	bool LoadSceneFile(const char* path, std::string& output_file);
 	bool LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file, const char* name);
 	
-	// Own flie format loaders
-	bool LoadMeshFromLibrary(const char* path, ResourceMesh* mesh);
-	bool LoadTextureFromLibrary(const char* path, ResourceTexture* tex);
+	// Own file format loaders
+	bool LoadMeshFromLibrary(ResourceMesh* mesh);
+	bool LoadTextureFromLibrary(ResourceTexture* tex);
+	bool LoadModelFromLibrary(ResourceModel* model);
 
 	// Importing methods 
 	bool ImportTextureToLibrary(const char* path, std::string& output_file);
@@ -51,6 +54,7 @@ public:
 	// Useful methods
 	void CreateDefaultTexture();
 	void CreateDefaultMaterial();
+	void LoadEngineUI();
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
@@ -62,6 +66,7 @@ public:
 	uint default_tex = 0;
 
 private:
+	const char* modelAddress;
 	uint defaultMat_UUID = 0;
 	uint engineIcon_UUID = 0;
 	uint modelIcon_UUID = 0;

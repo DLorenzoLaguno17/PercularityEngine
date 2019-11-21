@@ -9,6 +9,8 @@
 #include "ComponentTransform.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "ResourceScene.h"
+#include "ResourceModel.h"
 #include "GameObject.h"
 #include "OpenGL.h"
 
@@ -54,6 +56,8 @@ bool ModuleResourceLoader::Init()
 
 	ilutInit();
 
+	modelAddress = "Library/Models/";
+
 	return true;
 }
 
@@ -67,20 +71,7 @@ bool ModuleResourceLoader::Start()
 
 	// Load textures
 	CreateDefaultMaterial();
-	icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, engineIcon_UUID);
-	model_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, modelIcon_UUID);
-	scene_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, sceneIcon_UUID);
-	tex_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, texIcon_UUID);
-
-	LoadTextureFromLibrary("library/textures/icon.dds", icon_tex);
-	LoadTextureFromLibrary("library/textures/model_icon.dds", model_icon_tex);
-	LoadTextureFromLibrary("library/textures/scene_icon.dds", scene_icon_tex);
-	LoadTextureFromLibrary("library/textures/texture_icon.dds", tex_icon_tex);
-
-	icon_tex->file = "None";
-	model_icon_tex->file = "None";
-	scene_icon_tex->file = "None";
-	tex_icon_tex->file = "None";
+	LoadEngineUI();
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -106,6 +97,11 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
 
 	bool ret = false;
+
+	// Create the JSON file
+	json model_file;
+	std::string name = getNameFromPath(path);
+	std::string full_path = modelAddress + name + "_Model.json";
 	
 	// We adapt the  path for Assimp
 	const char* adapted_path = strstr(path, "Assets");
@@ -113,21 +109,17 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 	const aiScene* scene = aiImportFile(adapted_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		//GameObject* parent_mesh = new GameObject(getNameFromPath(path), App->scene->GetRoot());
+		model_file[name]["Children meshes"] = scene->mNumMeshes;
 
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+		// Use scene->mNumMeshes to iterate on scene->mMeshes array		
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
-			
-			// Create the GameObject
-			/*GameObject* fbx_mesh = nullptr;
-			if (scene->mNumMeshes > 1) 
-				fbx_mesh = new GameObject(scene->mMeshes[i]->mName.C_Str(), parent_mesh);
-			else 
-				fbx_mesh = parent_mesh;*/
+
+			char name[35];
+			sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), i);
 
 			// Copy the mesh									
 			ResourceMesh* res_mesh = new ResourceMesh(App->GetRandomGenerator().Int());
-			ret = LoadMesh(res_mesh, scene->mMeshes[i], output_file, getNameFromPath(path).c_str());
+			ret = LoadMesh(res_mesh, scene->mMeshes[i], output_file, name);
 			RELEASE(res_mesh);
 			
 			// Copy materials
@@ -142,16 +134,16 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 
 			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
 			if() LoadTexture(full_path.c_str(), material->resource_tex);*/
-
-			//App->scene->selected = fbx_mesh;
-			//App->scene->numGameObjectsInScene++;
-
-			//LOG("Loaded new model %s.", fbx_mesh->name.c_str());
-			//LOG("--------------------------");
 		}
 		aiReleaseImport(scene);
 	}
 	else LOG("Error loading FBX: %s", path);
+
+	// Create the stream and open the file
+	/*std::ofstream stream;
+	stream.open(full_path);
+	stream << std::setw(4) << scene_file << std::endl;
+	stream.close();*/
 
 	return ret;
 }
@@ -313,11 +305,11 @@ bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& 
 	return ret;
 }
 
-bool ModuleResourceLoader::LoadMeshFromLibrary(const char* path, ResourceMesh* mesh) {	
+bool ModuleResourceLoader::LoadMeshFromLibrary(ResourceMesh* mesh) {	
 	
 	bool ret = false;
 	char* buffer = nullptr;
-	App->file_system->Load(path, &buffer);
+	App->file_system->Load(mesh->exported_file.c_str(), &buffer);
 
 	if (buffer) {
 		char* cursor = buffer;
@@ -442,7 +434,7 @@ bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string&
 	return ret;
 }
 
-bool ModuleResourceLoader::LoadTextureFromLibrary(const char* path, ResourceTexture* tex) {
+bool ModuleResourceLoader::LoadTextureFromLibrary(ResourceTexture* tex) {
 	bool ret = false;
 
 	ILuint image;
@@ -450,7 +442,7 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(const char* path, ResourceText
 	ilBindImage(image);
 
 	// We adapt the  path for DevIL
-	const char* adapted_path = strstr(path, "library");
+	const char* adapted_path = strstr(tex->exported_file.c_str(), "library");
 
 	if (!ilLoadImage(adapted_path)) {
 		ilDeleteImages(1, &image);
@@ -459,7 +451,7 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(const char* path, ResourceText
 	else {
 		ProcessTexture(tex->texture);
 		LOG("");
-		LOG("Created texture from path: %s", path);
+		LOG("Created texture from path: %s", tex->exported_file.c_str());
 
 		uint h, w;
 		w = ilGetInteger(IL_IMAGE_WIDTH);
@@ -467,7 +459,7 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(const char* path, ResourceText
 
 		tex->width = w;
 		tex->height = h;
-		tex->name = getNameFromPath(path, true);
+		tex->name = getNameFromPath(tex->exported_file.c_str(), true);
 
 		ilBindImage(0);
 		ilDeleteImage(image);
@@ -503,10 +495,34 @@ void ModuleResourceLoader::ProcessTexture(uint& texture) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-bool ModuleResourceLoader::LoadSceneFile(const char* path, std::string& output_file) {
+bool ModuleResourceLoader::LoadSceneFile(const char* path, std::string scene_file) {
 	bool ret = false;
 	
+
 	ret = true;
+	return ret;
+}
+
+bool ModuleResourceLoader::LoadModelFromLibrary(ResourceModel* model) {
+	bool ret = false;
+
+	/*std::string full_path = modelAddress + model->name + "_Model.json";
+
+	// If the adress of the settings file is null, create  an exception
+	assert(full_path.c_str() != nullptr);
+	ret = true;
+
+	// Create a stream and open the file
+	json model_file;
+	std::ifstream stream;
+	stream.open(full_path);
+	model_file = json::parse(stream);
+
+	// Close the file
+	stream.close();*/
+
+	//model->children_meshes = model_file[model->name]["Children meshes"];
+
 	return ret;
 }
 
@@ -528,6 +544,28 @@ std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExt
 
 		return file_name;
 	}
+}
+
+void ModuleResourceLoader::LoadEngineUI() {
+	icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, engineIcon_UUID);
+	model_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, modelIcon_UUID);
+	scene_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, sceneIcon_UUID);
+	tex_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, texIcon_UUID);
+
+	icon_tex->file = "None";
+	model_icon_tex->file = "None";
+	scene_icon_tex->file = "None";
+	tex_icon_tex->file = "None";
+
+	icon_tex->exported_file = "library/textures/icon.dds";
+	model_icon_tex->exported_file = "library/textures/model_icon.dds";
+	scene_icon_tex->exported_file = "library/textures/scene_icon.dds";
+	tex_icon_tex->exported_file = "library/textures/texture_icon.dds";
+
+	LoadTextureFromLibrary(icon_tex);
+	LoadTextureFromLibrary(model_icon_tex);
+	LoadTextureFromLibrary(scene_icon_tex);
+	LoadTextureFromLibrary(tex_icon_tex);
 }
 
 void ModuleResourceLoader::CreateDefaultMaterial() {

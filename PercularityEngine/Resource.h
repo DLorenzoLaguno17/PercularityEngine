@@ -45,7 +45,7 @@ protected:
 	virtual void ReleaseFromMemory() = 0;
 
 public:
-	// Times this resurce is used
+	// Number of times this resurce is used
 	uint usedAsReference = 0;
 	RESOURCE_TYPE type = RESOURCE_TYPE::UNKNOWN;
 	std::string file = "";
@@ -54,6 +54,7 @@ public:
 
 protected:
 	uint UUID = 0;
+	uint sons = 0;
 };
 
 #endif // __Resource_H__

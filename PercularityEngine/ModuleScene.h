@@ -24,10 +24,11 @@ public:
 	//Save & Load
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
+	void LoadModel(const std::string model_name);
 	void LoadScene(const std::string scene_name);
 	void SaveScene(std::string scene_name);
-	void RecursiveLoad(GameObject* root, const nlohmann::json &scene_file);
-	void RecursiveSave(GameObject* root, nlohmann::json &scene_file);
+	void RecursiveLoad(GameObject* root, const json &scene_file);
+	void RecursiveSave(GameObject* root, json &scene_file);
 
 	//Methods to create primitives
 	GameObject* CreateSphere(int slices, int stacks, float diameter);
@@ -48,11 +49,9 @@ private:
 public:
 	GameObject* selected = nullptr;
 	const char* sceneAddress;
-	const char* sceneExtension;
 	uint numGameObjectsInScene = 0;
 
 private:
-	bool mustLoad = false;
 	GameObject* root = nullptr;
 
 	Timer loadingTime;

@@ -63,7 +63,7 @@ uint ModuleResourceManager::ReceiveExternalFile(const char* new_file)
 
 	if (CheckTextureExtension(extension.c_str()))
 		final_path = ASSETS_TEXTURE_FOLDER + final_path;
-	else if (CheckMeshExtension(extension.c_str()))
+	else if (CheckModelExtension(extension.c_str()))
 		final_path = ASSETS_MODEL_FOLDER + final_path;
 	else if (strcmp(extension.c_str(), "json") == 0)
 		final_path = ASSETS_SCENE_FOLDER + final_path;
@@ -220,7 +220,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 // Methods to check the extension of a file
 RESOURCE_TYPE ModuleResourceManager::GetTypeFromExtension(const char* extension) 
 {	
-	if (CheckMeshExtension(extension)) return RESOURCE_TYPE::MESH;
+	if (CheckModelExtension(extension)) return RESOURCE_TYPE::MESH;
 	else if (CheckTextureExtension(extension)) return RESOURCE_TYPE::TEXTURE;
 	else if (strcmp(extension, "json") == 0) return RESOURCE_TYPE::SCENE;
 	//else if () return RESOURCE_TYPE::MODEL;
@@ -231,6 +231,6 @@ bool ModuleResourceManager::CheckTextureExtension(const char* extension) {
 	return (strcmp(extension, "dds") == 0 || strcmp(extension, "png") == 0 || strcmp(extension, "jpg") == 0);
 }
 
-bool ModuleResourceManager::CheckMeshExtension(const char* extension) {
+bool ModuleResourceManager::CheckModelExtension(const char* extension) {
 	return (strcmp(extension, "fbx") == 0 || strcmp(extension, "FBX") == 0);
 }

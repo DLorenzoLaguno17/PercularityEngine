@@ -30,7 +30,6 @@ bool ModuleScene::Init() {
 	root = new GameObject("World");
 	selected = root;
 	sceneAddress = "Assets/Scenes/";
-	sceneExtension = ".json";
 
 	return true;
 }
@@ -81,14 +80,12 @@ update_status ModuleScene::Update(float dt)
 		ImGui::NewLine();
 		ImGui::Separator();
 
-		if (ImGui::Button("Yes", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); mustLoad = true; }
+		if (ImGui::Button("Yes", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); LoadScene("Test");	}
 		ImGui::SetItemDefaultFocus();
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); }
 		ImGui::EndPopup();
 	}
-
-	if (mustLoad) LoadScene("Test");
 	
 	return UPDATE_CONTINUE;
 }
@@ -138,7 +135,7 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 	root = new GameObject("World", nullptr, true);	
 
 	json scene_file;
-	std::string full_path = sceneAddress + scene_name + sceneExtension;
+	std::string full_path = sceneAddress + scene_name + ".json";
 
 	// If the adress of the settings file is null, create  an exception
 	assert(full_path.c_str() != nullptr);
@@ -158,7 +155,6 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 	RecursiveLoad(root, scene_file);
 	selected = root;
 	loaded_go = 0;
-	mustLoad = false;
 
 	uint fullTime = loadingTime.Read() - startTime;
 	LOG("Finished loading. Time spent: %d ms", fullTime);
@@ -190,7 +186,7 @@ void ModuleScene::SaveScene(std::string scene_name) {
 
 	// Create auxiliar file
 	json scene_file;
-	std::string full_path = sceneAddress + scene_name + sceneExtension;
+	std::string full_path = sceneAddress + scene_name + ".json";
 
 	// First we save the resources
 	App->res_manager->SaveResources(scene_file);

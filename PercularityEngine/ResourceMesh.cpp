@@ -4,7 +4,7 @@
 
 bool ResourceMesh::LoadInMemory() 
 { 
-	return App->res_loader->LoadMeshFromLibrary(exported_file.c_str(), this);
+	return App->res_loader->LoadMeshFromLibrary(this);
 }
 
 void ResourceMesh::ReleaseFromMemory() 
@@ -19,18 +19,18 @@ void ResourceMesh::ReleaseFromMemory()
 // Save and Load
 void ResourceMesh::OnSave(const char* resourceNum, json &config) const
 {
-	config["Resources"]["Texture resources"][resourceNum]["UUID"] = UUID;
-	config["Resources"]["Texture resources"][resourceNum]["File"] = file;
-	config["Resources"]["Texture resources"][resourceNum]["Exported file"] = exported_file;
-	config["Resources"]["Texture resources"][resourceNum]["Name"] = name;
+	config["Resources"]["Mesh resources"][resourceNum]["UUID"] = UUID;
+	config["Resources"]["Mesh resources"][resourceNum]["File"] = file;
+	config["Resources"]["Mesh resources"][resourceNum]["Exported file"] = exported_file;
+	config["Resources"]["Mesh resources"][resourceNum]["Name"] = name;
 }
 
 void ResourceMesh::OnLoad(const char* resourceNum, const json &config)
 {
-	UUID = config["Resources"]["Texture resources"][resourceNum]["UUID"];
-	json s1 = config["Resources"]["Texture resources"][resourceNum]["Name"];
-	json s2 = config["Resources"]["Texture resources"][resourceNum]["File"];
-	json s3 = config["Resources"]["Texture resources"][resourceNum]["Exported file"];
+	UUID = config["Resources"]["Mesh resources"][resourceNum]["UUID"];
+	json s1 = config["Resources"]["Mesh resources"][resourceNum]["Name"];
+	json s2 = config["Resources"]["Mesh resources"][resourceNum]["File"];
+	json s3 = config["Resources"]["Mesh resources"][resourceNum]["Exported file"];
 
 	name = s1.get<std::string>();
 	file = s2.get<std::string>();
