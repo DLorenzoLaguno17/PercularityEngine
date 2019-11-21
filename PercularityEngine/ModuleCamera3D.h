@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class GameObject;
 class ComponentCamera;
@@ -14,20 +15,19 @@ public:
 	ModuleCamera3D(Application* app, bool start_enabled = true);
 	~ModuleCamera3D();
 
+	bool Init();
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
 
-	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3 &Spot);
-	void Move(const vec3 &Movement);
-	float* GetViewMatrix();
+	void CameraLookAround(float speed, float3 reference);
 	void HandleUserInput(float dt);
 
 	//Focus camera on a gameObject
 	void FocusCameraOn(GameObject* object);
 
 private:
+	float3 reference=float3(0,0,0);
 	ComponentCamera* camera;
 };
 

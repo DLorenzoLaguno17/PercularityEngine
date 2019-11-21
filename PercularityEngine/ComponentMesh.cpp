@@ -20,7 +20,7 @@ ComponentMesh::ComponentMesh(GameObject* parent, bool active) :
 
 void ComponentMesh::Update() 
 {
-	Render();	
+	//Render();	
 	RenderNormals();
 }
 

@@ -47,6 +47,14 @@ private:
 	void UpdateGameObjects(GameObject* root);
 
 public:
+	//FRUSTUM TESTER
+
+	GameObject* frustumTest;
+
+	//FRUSTUM TEST
+
+	Tree* objectTree;
+
 	GameObject* selected = nullptr;
 	const char* sceneAddress;
 	uint numGameObjectsInScene = 0;

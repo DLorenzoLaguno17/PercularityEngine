@@ -2,10 +2,12 @@
 #include "ComponentMaterial.h"
 #include "ResourceMesh.h"
 #include "ComponentMesh.h"
+#include "ComponentCamera.h"
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleScene.h"
+#include "ModuleRenderer3D.h"
 
 #include "OpenGL.h"
 #include "glmath.h"
@@ -33,7 +35,8 @@ void GameObject::Update() {
 	if (showBondingBox) DrawAABB();
 
 	for (uint i = 0; i < components.size(); ++i)
-		if (components[i]->IsActive()) components[i]->Update();
+		if (components[i]->IsActive()) 
+			components[i]->Update();
 }
 
 // Load & Save 
@@ -73,16 +76,25 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 	{
 	case COMPONENT_TYPE::MATERIAL:
 		ret = new ComponentMaterial(this, active);
-		if (ret != nullptr) components.push_back(ret); break;
+		if (ret != nullptr) components.push_back(ret);
+		break;
 
 	case COMPONENT_TYPE::MESH:
 		ret = new ComponentMesh(this, active);
-		if (ret != nullptr) components.push_back(ret); break;
-
+		if (ret != nullptr) components.push_back(ret); 
+		App->renderer3D->meshes.push_back((ComponentMesh*)ret);
+		break;
 	case COMPONENT_TYPE::TRANSFORM:
 		ret = new ComponentTransform(this, active);
-		if (ret != nullptr) components.push_back(ret); break;
+		if (ret != nullptr) components.push_back(ret); 
+		break;
+
+	case COMPONENT_TYPE::CAMERA:
+		ret = new ComponentCamera(this, active);
+		if (ret != nullptr) components.push_back(ret); 
+		break;
 	}
+
 	return ret;
 }
 

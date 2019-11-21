@@ -3,32 +3,46 @@
 
 #include "Component.h"
 #include "glmath.h"
-
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentCamera : public Component{
 	
 	friend class ModuleCamera3D;
 
 public:
-	ComponentCamera();
+	ComponentCamera(GameObject* parent=nullptr, bool active=false);
 	~ComponentCamera();
 
-	void Update(float dt);
+	void Update();
+	void OnEditor();
+	void OnUpdateTransform();
 
-	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3 &Spot);
-	void Move(const vec3 &Movement);
-	float* GetViewMatrix();
+	//~~~~Frustum 
+	//Getters
+	float GetNearPlane() const;
+	float GetFarPlane() const;
+	float GetFOV() const;
+	float GetAspectRatio() const;
 
-private:
-	void CalculateViewMatrix();
+	//Setters
+	void SetNearPlane(float distance);
+	void SetFarPlane(float distance);
+	void SetFOV(float fov);
+	void SetAspectRatio(float ar);
+	//~~~~~~~~~~~~~~~~~~~~~~
+
+	float* GetOpenGLViewMatrix();
+	float* GetOpenGLProjectionMatrix();
+
+	void DrawFrustum();
+	void UpdatePlanes();
+
+	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::CAMERA; }
 
 public:
-	vec3 X, Y, Z, Position, Reference;
-
-private:
-	mat4x4 ViewMatrix, ViewMatrixInverse;
-
+	Plane planes[6];
+	Frustum frustum;
+	bool update_projection = true;
 
 };
 
