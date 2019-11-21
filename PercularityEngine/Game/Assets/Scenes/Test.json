@@ -22,7 +22,7 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1781282737
+                    "UUID": 1334807102
                 }
             },
             "Name": "World",
@@ -33,7 +33,7 @@
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1799785721,
+                    "Parent UUID": 397908064,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -50,32 +50,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1505846585
+                    "UUID": 218277444
                 }
             },
             "Name": "Untitled",
             "Parent UUID": 0,
-            "UUID": 1799785721
+            "UUID": 397908064
         },
         "GameObject 3": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1271492917,
-                    "Resource UUID": 1380952290,
-                    "UUID": 436505900
+                    "Parent UUID": 91053025,
+                    "Resource UUID": 890871615,
+                    "UUID": 1897498908
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1271492917,
-                    "Resource UUID": 22473673,
-                    "UUID": 470719718,
+                    "Parent UUID": 91053025,
+                    "Resource UUID": 665859734,
+                    "UUID": 1514469655,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1271492917,
+                    "Parent UUID": 91053025,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -83,57 +83,63 @@
                         1.0
                     ],
                     "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
+                        3.4000000953674316,
+                        1.899999976158142,
+                        1.899999976158142
                     ],
                     "Translation": [
                         0.0,
-                        -15.600000381469727,
+                        -9.600000381469727,
                         0.0
                     ],
-                    "UUID": 1184961470
+                    "UUID": 1978411228
                 }
             },
             "Name": "castle",
             "Parent UUID": 0,
-            "UUID": 1271492917
+            "UUID": 91053025
         },
         "GameObject 4": {
             "Components": {
+                "Material": {
+                    "Active": true,
+                    "Parent UUID": 1284681717,
+                    "Resource UUID": 1086259773,
+                    "UUID": 707543281
+                },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 936175203,
-                    "Resource UUID": 22473673,
-                    "UUID": 394343553,
+                    "Parent UUID": 1284681717,
+                    "Resource UUID": 665859734,
+                    "UUID": 573276308,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 936175203,
+                    "Parent UUID": 1284681717,
                     "Rotation": [
                         0.0,
-                        -44.400001525878906,
                         0.0,
-                        0.9258720278739929
+                        0.0,
+                        1.0
                     ],
                     "Scale": [
                         1.0,
-                        0.4000000059604645,
-                        0.4000000059604645
+                        1.0,
+                        1.0
                     ],
                     "Translation": [
-                        -0.6000000238418579,
-                        0.0,
-                        -12.0
+                        15.600000381469727,
+                        0.6000000238418579,
+                        -31.5
                     ],
-                    "UUID": 1325121613
+                    "UUID": 279405354
                 }
             },
             "Name": "castle",
             "Parent UUID": 0,
-            "UUID": 936175203
+            "UUID": 1284681717
         }
     },
     "Resources": {
@@ -143,31 +149,34 @@
             "File": "/assets/fbx/castle.fbx",
             "Name": "castle",
             "Type": "Mesh",
-            "UUID": 22473673
+            "UUID": 665859734
         },
         "Resource 2": {
             "Exported file": "/library/meshes/machinegun 0.mesh",
             "File": "/assets/fbx/machinegun.fbx",
             "Name": "machinegun",
             "Type": "Mesh",
-            "UUID": 347850597
+            "UUID": 786389635
         },
         "Resource 3": {
-            "Exported file": "/library/textures/machine_gun.dds",
-            "File": "/assets/textures/machine_gun.dds",
-            "Height": 526,
-            "Name": "machine_gun.dds",
-            "Texture": 15,
+            "Exported file": "/library/textures/icon.dds",
+            "File": "/assets/textures/icon.png",
+            "Height": 235,
+            "Name": "icon.dds",
+            "Texture": 19,
             "Type": "Texture",
-            "UUID": 1380952290,
-            "Width": 526
+            "UUID": 890871615,
+            "Width": 235
         },
         "Resource 4": {
-            "Exported file": "/library/meshes/bakerhouse 1.mesh",
-            "File": "/assets/fbx/bakerhouse.fbx",
-            "Name": "bakerhouse",
-            "Type": "Mesh",
-            "UUID": 1976681971
+            "Exported file": "/library/textures/baker_house.dds",
+            "File": "/assets/textures/baker_house.dds",
+            "Height": 1024,
+            "Name": "baker_house.dds",
+            "Texture": 15,
+            "Type": "Texture",
+            "UUID": 1086259773,
+            "Width": 1024
         }
     }
 }
