@@ -1,19 +1,22 @@
 #include "Tree.h"
 #include "OpenGL.h"
+#include "GameObject.h"
 
-Tree::Tree(TREE_TYPE type,AABB aabb) :type(type)
+Tree::Tree(TREE_TYPE type,AABB aabb,int capacity) :type(type)
 {
-	rootNode = new TreeNode();
+	rootNode = new TreeNode(aabb,type, NODE_TYPE::ROOT,capacity);
 
+	rootNode->capacity = capacity;
 	rootNode->treeType = type;
 	rootNode->aabb= aabb;
 
 }
 
-Tree::Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint) :type(type)
+Tree::Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint,int capacity) :type(type)
 {
 	rootNode = new TreeNode();
 
+	rootNode->capacity = capacity;
 	rootNode->treeType = type;
 	rootNode->aabb.minPoint = minPoint;
 	rootNode->aabb.maxPoint = maxPoint;
@@ -33,7 +36,7 @@ TreeNode::TreeNode()
 {
 }
 
-TreeNode::TreeNode(AABB aabb, TREE_TYPE type): aabb(aabb),treeType(type)
+TreeNode::TreeNode(AABB aabb, TREE_TYPE type, NODE_TYPE ntype,int capacity): aabb(aabb),treeType(type),nodeType(ntype),capacity(capacity)
 {
 }
 
@@ -61,7 +64,10 @@ void TreeNode::Draw()
 
 	glBegin(GL_LINES);
 
-	glColor3f(0, 0, 1); //Blue color
+	if (objects.empty())
+		glColor3f(0, 0, 1); //Blue color
+	else 
+		glColor3f(1, 0, 0); //red color
 
 	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
@@ -152,8 +158,11 @@ void TreeNode::QuadSplit()
 	this;
 
 	for (int i = 0; i < 4; ++i) 
-		nodes[i] = TreeNode(newAABBs[i], treeType);
+		nodes[i] = TreeNode(newAABBs[i], treeType, NODE_TYPE::LEAF,capacity);
 	
+	if (nodeType!=NODE_TYPE::ROOT)
+		nodeType = NODE_TYPE::BRANCH;
+
 	nodesAmount = 4;
 }
 
@@ -223,8 +232,149 @@ void TreeNode::OctSplit()
 	nodes = new TreeNode[8];
 
 	for (int i = 0; i < 8; ++i) 
-		nodes[i] = TreeNode(newAABBs[i], treeType);
+		nodes[i] = TreeNode(newAABBs[i], treeType,NODE_TYPE::LEAF,capacity);
 
+	if (nodeType != NODE_TYPE::ROOT)
+		nodeType = NODE_TYPE::BRANCH;
 	nodesAmount = 8;
 	
+}
+
+bool TreeNode::Insert(GameObject* gameObject)
+{
+	if (!aabb.Intersects(gameObject->aabb))
+		return false;
+
+	int nodesContaining = 0;
+	int container = 0;
+
+	switch (nodeType)
+	{
+	case NODE_TYPE::ROOT:
+		if (nodesAmount == 0) //Not dividied yet --> Behaves as a leaf node
+		{
+			objects.push_back(gameObject);
+
+			if (objects.size() > capacity)
+			{
+				Split();
+
+				std::vector<GameObject*> auxVector = objects;
+				objects.clear();
+
+				//If we split the node, we have to distribute the game objects contained
+				for (int a = 0; a < auxVector.size(); ++a)
+				{
+					for (int i = 0; i < nodesAmount; ++i)
+					{
+						if (nodes[i].aabb.Intersects(auxVector[a]->aabb))
+						{
+							nodesContaining++;
+							container = i;
+						}
+						if (nodesContaining > 1)
+							break;
+					}
+
+					//If the object only fits in one of the nodes, 
+					//put it inside it, and split the node if needed
+					if (nodesContaining == 1)
+						nodes[container].Insert(auxVector[a]);
+
+					else if (nodesContaining > 1)
+						objects.push_back(auxVector[a]);
+				}
+
+			}
+		}
+
+		else				//If divided, behaves as a branch node
+		{
+			//See how many subnodes intersect with this gameobject
+			for (int i = 0; i < nodesAmount; ++i)
+			{
+				if (nodes[i].aabb.Intersects(gameObject->aabb))
+				{
+					nodesContaining++;
+					container = i;
+				}
+				if (nodesContaining > 1)
+					break;
+			}
+
+			//If the object only fits in one of the nodes, 
+			//put it inside it, and split the node if needed
+			if (nodesContaining == 1)
+				nodes[container].Insert(gameObject);
+
+			else if (nodesContaining > 1)
+				objects.push_back(gameObject);
+		}
+
+		break;
+	case NODE_TYPE::BRANCH:
+
+		//See how many subnodes intersect with this gameobject
+		for (int i = 0; i < nodesAmount; ++i)
+		{
+			if (nodes[i].aabb.Intersects(gameObject->aabb))
+			{
+				nodesContaining++;
+				container = i;
+			}
+			if (nodesContaining > 1)
+				break;
+		}
+
+		//If the object only fits in one of the nodes, 
+		//put it inside it, and split the node if needed
+		if (nodesContaining == 1)
+			nodes[container].Insert(gameObject);
+
+		else if (nodesContaining > 1)
+			objects.push_back(gameObject);
+
+		break;
+
+	case NODE_TYPE::LEAF:
+		
+		objects.push_back(gameObject);
+		
+		if (objects.size() > capacity)
+		{
+			Split();
+
+			std::vector<GameObject*> auxVector = objects;
+			objects.clear();
+
+			//If we split the node, we have to distribute the game objects contained
+			for (int a = 0; a < auxVector.size(); ++a)
+			{
+				for (int i = 0; i < nodesAmount; ++i)
+				{
+					if (nodes[i].aabb.Intersects(auxVector[a]->aabb))
+					{
+						nodesContaining++;
+						container = i;
+					}
+					if (nodesContaining > 1)
+						break;
+				}
+
+				//If the object only fits in one of the nodes, 
+				//put it inside it, and split the node if needed
+				if (nodesContaining == 1)
+					nodes[container].Insert(auxVector[a]);
+
+				else if (nodesContaining > 1)
+					objects.push_back(auxVector[a]);
+			}
+			
+		}
+		
+
+		break;
+	}
+	
+
 }

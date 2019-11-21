@@ -49,6 +49,7 @@ public:
 	//FRUSTUM TESTER
 
 	GameObject* frustumTest;
+	Tree* treeTest;
 
 	//FRUSTUM TEST
 
