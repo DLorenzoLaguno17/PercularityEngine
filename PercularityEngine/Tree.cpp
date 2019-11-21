@@ -265,6 +265,8 @@ bool TreeNode::Insert(GameObject* gameObject)
 				//If we split the node, we have to distribute the game objects contained
 				for (int a = 0; a < auxVector.size(); ++a)
 				{
+					nodesContaining = 0;
+					container = 0;
 					for (int i = 0; i < nodesAmount; ++i)
 					{
 						if (nodes[i].aabb.Intersects(auxVector[a]->aabb))
@@ -350,6 +352,8 @@ bool TreeNode::Insert(GameObject* gameObject)
 			//If we split the node, we have to distribute the game objects contained
 			for (int a = 0; a < auxVector.size(); ++a)
 			{
+				nodesContaining = 0;
+				container = 0;
 				for (int i = 0; i < nodesAmount; ++i)
 				{
 					if (nodes[i].aabb.Intersects(auxVector[a]->aabb))
