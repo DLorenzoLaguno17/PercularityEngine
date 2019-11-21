@@ -26,7 +26,7 @@ void MeshData::CleanUp()
 
 void ComponentMesh::Update() 
 {
-	Render();	
+	//Render();	
 	RenderNormals();
 }
 

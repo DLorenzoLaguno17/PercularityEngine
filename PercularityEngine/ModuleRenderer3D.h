@@ -9,6 +9,7 @@
 #define MAX_LIGHTS 8
 
 class ComponentCamera;
+class ComponentMesh;
 
 class ModuleRenderer3D : public Module
 {
@@ -26,6 +27,12 @@ public:
 	void OnResize(int width, int height);
 
 	void SetUpScene();
+	void DeleteBuffers();
+
+	void UpdateProjectionMatrix();
+	void DrawMeshes();
+
+	ComponentCamera* GetCamera() const { return camera; }
 
 public:
 
@@ -34,6 +41,8 @@ public:
 	uint GetTexColorBuffer() const	{ return texColorBuffer;}
 	uint GetFrameBuffer() const		{ return frameBuffer;	}
 	uint GetRenderBuffer() const	{ return renderBuffer;	}
+
+	std::vector<ComponentMesh*> meshes;
 
 public:
 
@@ -44,6 +53,9 @@ public:
 	update_status status = UPDATE_CONTINUE;
 
 private:
+
+	bool frustumCullingActive = true;
+	bool acceleratedCullingActive = true;
 
 	ComponentCamera* camera;
 
