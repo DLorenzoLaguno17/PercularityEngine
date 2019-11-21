@@ -55,7 +55,7 @@ public:
 private:
 
 	bool frustumCullingActive = true;
-	bool acceleratedCullingActive = false;
+	bool acceleratedCullingActive = true;
 
 	ComponentCamera* camera;
 

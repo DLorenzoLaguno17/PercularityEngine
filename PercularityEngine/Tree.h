@@ -31,6 +31,12 @@ public:
 	~Tree();
 
 	void Draw();
+	void Clear();
+	
+	bool Insert(GameObject* gameObject);
+	
+	std::vector<GameObject*> CollectChilldren(Frustum frustum);
+	std::vector<GameObject*> CollectChilldren(AABB aabb_);
 	//bool Insert(GameObject* gameObject);
 
 	
@@ -51,10 +57,14 @@ public:
 	TreeNode(AABB aabb, TREE_TYPE type, NODE_TYPE ntype,int capacity);
 	~TreeNode();
 
+	void Clear();
 	void Split();
 
 	void Draw();
 	bool Insert(GameObject* gameObject);
+
+	std::vector<GameObject*> CollectChilldren(Frustum frustum);
+	std::vector<GameObject*> CollectChilldren(AABB aabb_);
 
 private:
 
@@ -69,7 +79,7 @@ public:
 	TREE_TYPE treeType = TREE_TYPE::NONE;
 	AABB aabb;
 
-	TreeNode *nodes;
+	TreeNode *nodes=nullptr;
 
 	std::vector<GameObject*> objects;
 

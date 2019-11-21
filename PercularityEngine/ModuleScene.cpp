@@ -34,7 +34,7 @@ bool ModuleScene::Init() {
 	frustumTest = new GameObject();
 	frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
 
-	treeTest = new Tree(TREE_TYPE::OCTREE, AABB({ -50,-50,-50 }, { 50,50,50 }),1);
+	objectTree = new Tree(TREE_TYPE::OCTREE, AABB({ -50,-50,-50 }, { 50,50,50 }),1);
 
 	return true;
 }
@@ -93,7 +93,7 @@ update_status ModuleScene::Update(float dt)
 	
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		for (int i = 0; i < root->children.size(); ++i)
-			treeTest->rootNode->Insert(root->children[i]);
+			objectTree->rootNode->Insert(root->children[i]);
 
 	return UPDATE_CONTINUE;
 }
@@ -102,7 +102,7 @@ update_status ModuleScene::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow);
 
-	treeTest->Draw();
+	objectTree->Draw();
 		frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
 
 
@@ -121,6 +121,7 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
 	RecursiveCleanUp(root);
+	objectTree->Clear();
 
 	return true;
 }

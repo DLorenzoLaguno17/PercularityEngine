@@ -49,10 +49,10 @@ public:
 	//FRUSTUM TESTER
 
 	GameObject* frustumTest;
-	Tree* treeTest;
 
 	//FRUSTUM TEST
 
+	Tree* objectTree;
 
 	GameObject* selected = nullptr;
 	uint numGameObjectsInScene = 0;

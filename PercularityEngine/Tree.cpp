@@ -1,6 +1,8 @@
 #include "Tree.h"
 #include "OpenGL.h"
 #include "GameObject.h"
+#include "Intersection.h"
+#include "mmgr/mmgr.h"
 
 Tree::Tree(TREE_TYPE type,AABB aabb,int capacity) :type(type)
 {
@@ -28,6 +30,26 @@ Tree::~Tree()
 void Tree::Draw()
 {
 	rootNode->Draw();
+}
+
+bool Tree::Insert(GameObject* gameObject)
+{
+	return rootNode->Insert(gameObject);
+}
+
+void Tree::Clear()
+{
+	rootNode->Clear();
+}
+
+std::vector<GameObject*> Tree::CollectChilldren(AABB aabb_)
+{
+	return rootNode->CollectChilldren(aabb_);
+}
+
+std::vector<GameObject*> Tree::CollectChilldren(Frustum frustum)
+{
+	return rootNode->CollectChilldren(frustum);
 }
 
 //~~~~~~~~NODE METHODS~~~~~~~~~~
@@ -379,6 +401,61 @@ bool TreeNode::Insert(GameObject* gameObject)
 
 		break;
 	}
-	
+	return true;
 
+}
+
+std::vector<GameObject*> TreeNode::CollectChilldren(AABB aabb_)
+{
+	std::vector<GameObject*> ret;
+	std::vector<GameObject*> auxVec;
+
+	if (!aabb.Intersects(aabb_))
+		return ret;
+
+	for (int i = 0; i < objects.size(); ++i)
+		ret.push_back(objects[i]);
+
+	for (int i = 0; i < nodesAmount; ++i)
+	{
+		auxVec = nodes[i].CollectChilldren(aabb_);
+		for (int j = 0; j < auxVec.size(); ++j)
+			ret.push_back(auxVec[j]);
+	}
+
+	return ret;
+}
+
+std::vector<GameObject*> TreeNode::CollectChilldren(Frustum frustum)
+{
+	std::vector<GameObject*> ret;
+	std::vector<GameObject*> auxVec;
+
+	if (!Intersect(frustum,aabb))
+		return ret;
+
+	for (int i = 0; i < objects.size(); ++i)
+		ret.push_back(objects[i]);
+
+	for (int i = 0; i < nodesAmount; ++i)
+	{
+		auxVec = nodes[i].CollectChilldren(frustum);
+		for (int j = 0; j < auxVec.size(); ++j)
+			ret.push_back(auxVec[j]);
+	}
+
+	return ret;
+}
+
+void TreeNode::Clear()
+{
+	for (int i = 0; i < nodesAmount; ++i)
+	{
+		nodes[i].Clear();
+	}
+	
+	if (nodes != NULL)
+		delete[] nodes;
+
+	objects.clear();
 }
