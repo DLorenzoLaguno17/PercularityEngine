@@ -184,6 +184,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	UpdateProjectionMatrix();
 	camera->SetAspectRatio(float(height)/ float(width));
+	LOG("Window resized: width: %d ,  height: %d ", width, height);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

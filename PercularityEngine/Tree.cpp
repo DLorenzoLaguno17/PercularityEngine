@@ -470,7 +470,7 @@ void TreeNode::Erase(GameObject* gameObject)
 	for (int i = 0; i < objects.size(); ++i)
 	{
 		if (objects[i] == gameObject) {
-			objects.erase[i];
+			objects.erase(objects.begin()+i);
 			return;
 		}
 	}

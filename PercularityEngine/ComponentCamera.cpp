@@ -92,7 +92,6 @@ void ComponentCamera::SetFOV(float fov)
 void ComponentCamera::SetAspectRatio(float ar)
 {
 	frustum.horizontalFov = 2.0f*atanf((tanf(frustum.verticalFov*0.5f))/ar);
-	LOG("%f",frustum.AspectRatio());
 
 	UpdatePlanes();
 	update_projection = true;
