@@ -5,6 +5,7 @@
 #include "ComponentMaterial.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentTransform.h"
@@ -193,9 +194,9 @@ void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scen
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"];
 	showFaceNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"];
 	showVertexNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"];
-	
-	///std::string path = LIBRARY_MESH_FOLDER + mesh_name + ".mesh";
-	///App->res_loader->LoadMeshFromLibrary(path.c_str(), resource_mesh);
+
+	uint uuid = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Resource UUID"];
+	resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(uuid);
 }
 
 void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 
@@ -205,4 +206,5 @@ void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"] = active;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"] = showFaceNormals;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"] = showVertexNormals;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Resource UUID"] = resource_mesh->GetUUID();
 }

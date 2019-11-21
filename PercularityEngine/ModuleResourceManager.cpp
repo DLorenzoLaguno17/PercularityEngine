@@ -22,12 +22,12 @@ bool ModuleResourceManager::Start()
 	return true;
 }
 
-Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint specific_uid) {
+Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint specific_uuid) {
 	
 	Resource* ret = nullptr;
 	uint uuid;
 	
-	if (specific_uid != 0 && GetResourceFromMap(specific_uid) == nullptr) uuid = specific_uid;
+	if (specific_uuid != 0 && GetResourceFromMap(specific_uuid) == nullptr) uuid = specific_uuid;
 	else uuid = (uint)App->GetRandomGenerator().Int();
 
 	switch (type) {
@@ -99,7 +99,7 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 		success = App->res_loader->LoadModel(new_file, written_file);
 		break;
 	case RESOURCE_TYPE::SCENE: 
-		success = App->res_loader->LoadSceneFile(new_file, written_file); 
+		success = true; 
 		break;
 	}
 
@@ -115,18 +115,44 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 }
 
 // Load & Save
-void ModuleResourceManager::LoadResources(const nlohmann::json &config) {
-	CleanUp();
+void ModuleResourceManager::LoadResources(const json &scene_file) 
+{
+	uint cnt = scene_file["Resources"]["Count"];
+	for (int i = 1; i < cnt; ++i) {
+		char name[50];
+		sprintf_s(name, 50, "Resource %d", i);
+		uint UUID = scene_file["Resources"][name]["UUID"];
+
+		if (GetResourceFromMap(UUID) == nullptr) {
+			json js = scene_file["Resources"][name]["Type"];
+			std::string type = js.get<std::string>();
+			
+			if (strcmp(type.c_str(), "Mesh") == 0) {
+				ResourceMesh* res = (ResourceMesh*)CreateNewResource(RESOURCE_TYPE::MESH, UUID);
+				res->OnLoad(name, scene_file);
+				res->UpdateReferenceCount();
+			}
+			if (strcmp(type.c_str(), "Texture") == 0) {
+				ResourceTexture* res = (ResourceTexture*)CreateNewResource(RESOURCE_TYPE::TEXTURE, UUID);
+				res->OnLoad(name, scene_file);
+				res->UpdateReferenceCount();
+			}
+		}
+	}
 }
 
-void ModuleResourceManager::SaveResources(nlohmann::json &scene_file) {
+void ModuleResourceManager::SaveResources(json &scene_file) 
+{
 	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
-		saved_res++;
-		char name[50];
-		sprintf_s(name, 50, "Resource %d", saved_res);
-		if (it->second->file.compare("None"))
+		if (it->second->file.compare("None")) {
+			saved_res++;
+			char name[50];
+			sprintf_s(name, 50, "Resource %d", saved_res);
 			it->second->OnSave(name, scene_file);
+		}
+
+		scene_file["Resources"]["Count"] = saved_res;
 	}
 
 	saved_res = 0;
@@ -157,6 +183,7 @@ const Resource* ModuleResourceManager::GetResourceFromMap(uint uuid) const
 Resource* ModuleResourceManager::GetResourceFromMap(uint uuid)
 {
 	std::map<uint, Resource*>::iterator it = resources.find(uuid);
+	uint i = uuid;
 	if (it != resources.end())
 		return it->second;
 
@@ -167,8 +194,8 @@ Resource* ModuleResourceManager::GetResourceFromMap(uint uuid)
 bool ModuleResourceManager::CleanUp()
 {
 	LOG("Freeing resource manager");
-	/*for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item)
-		RELEASE(item->second);*/
+	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item)
+		RELEASE(item->second);
 
 	resources.clear();
 	resourcesCount = 0;
@@ -212,7 +239,6 @@ void ModuleResourceManager::DrawProjectExplorer() {
 				ImGui::Text(it->second->name.c_str());
 				break;
 			}
-
 		}
 	}
 }

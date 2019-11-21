@@ -151,7 +151,8 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 	// First we load the resources
 	App->res_manager->LoadResources(scene_file);
 
-	numGameObjectsInScene = scene_file["Game Objects"]["Count"];
+	// Then we load all the GameObjects
+	go_counter = scene_file["Game Objects"]["Count"];
 	RecursiveLoad(root, scene_file);
 	selected = root;
 	loaded_go = 0;
@@ -166,17 +167,17 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 	sprintf_s(name, 50, "GameObject %d", loaded_go);
 	root->OnLoad(name, scene_file);
 
-	for (int i = 1; i <= numGameObjectsInScene; ++i) {
+	for (int i = 1; i <= go_counter; ++i) {
 
 		char n[50];
 		sprintf_s(n, 50, "GameObject %d", i);
 		uint aux = scene_file["Game Objects"][n]["Parent UUID"];
 
-		if (aux == root->GetUUID() && i != 1) { //The first one is the World so we skip it
-			GameObject* newGo;		
+		if (aux == root->GetUUID() && i != 1) { //The first one is the World itself so we skip it
+			GameObject* newGo;
 			newGo = new GameObject("Temp", root, true);
 		}
-	}	
+	}
 
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveLoad(root->children[i], scene_file);
@@ -331,6 +332,9 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 		mesh->LoadParShape(newMesh);
 		std::string file;
 		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Sphere");
+		mesh->resource_mesh->name = "Sphere";
+		mesh->resource_mesh->file = "Primitive";
+		mesh->resource_mesh->exported_file = file;
 	}
 	else 
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(sphereMesh_UUID);
@@ -408,6 +412,9 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 		mesh->LoadParShape(mesh_front);
 		std::string file;
 		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Cube");
+		mesh->resource_mesh->name = "Cube";
+		mesh->resource_mesh->file = "Primitive";
+		mesh->resource_mesh->exported_file = file;
 	}
 	else
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(cubeMesh_UUID);
@@ -457,6 +464,9 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 		mesh->LoadParShape(plane);
 		std::string file;
 		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Plane");
+		mesh->resource_mesh->name = "Plane";
+		mesh->resource_mesh->file = "Primitive";
+		mesh->resource_mesh->exported_file = file;
 	}
 	else		
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(planeMesh_UUID);
@@ -506,6 +516,9 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 		mesh->LoadParShape(newMesh);
 		std::string file;
 		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Donut");
+		mesh->resource_mesh->name = "Donut";
+		mesh->resource_mesh->file = "Primitive";
+		mesh->resource_mesh->exported_file = file;
 	}
 	else
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(donutMesh_UUID);

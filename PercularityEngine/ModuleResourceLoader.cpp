@@ -14,6 +14,9 @@
 #include "GameObject.h"
 #include "OpenGL.h"
 
+#include <fstream>
+#include <iomanip>
+
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
@@ -86,7 +89,7 @@ bool ModuleResourceLoader::CleanUp()
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 
-	RELEASE(icon_tex);
+	//RELEASE(icon_tex);
 	//RELEASE(default_material);
 
 	return true;
@@ -493,14 +496,6 @@ void ModuleResourceLoader::ProcessTexture(uint& texture) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
 	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-bool ModuleResourceLoader::LoadSceneFile(const char* path, std::string scene_file) {
-	bool ret = false;
-	
-
-	ret = true;
-	return ret;
 }
 
 bool ModuleResourceLoader::LoadModelFromLibrary(ResourceModel* model) {

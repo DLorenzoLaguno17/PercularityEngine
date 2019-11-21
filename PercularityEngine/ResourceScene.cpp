@@ -4,7 +4,7 @@
 
 bool ResourceScene::LoadInMemory()
 {
-	App->scene->LoadScene(exported_file);
+	App->scene->LoadScene(name);
 	return true;
 }
 

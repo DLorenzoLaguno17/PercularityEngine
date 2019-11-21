@@ -69,5 +69,6 @@ private:
 	uint planeMesh_UUID = 0;
 	uint donutMesh_UUID = 0;
 
+	uint go_counter = 0;
 };
 #endif

@@ -1,6 +1,7 @@
 #include "ComponentMaterial.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleResourceManager.h"
 #include "ResourceTexture.h"
 #include "GameObject.h"
 #include "ImGui/imgui.h"
@@ -26,10 +27,14 @@ void ComponentMaterial::OnLoad(const char* gameObjectNum, const nlohmann::json &
 	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Parent UUID"];
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Active"];
+
+	uint uuid = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Resource UUID"];
+	resource_tex = (ResourceTexture*)App->res_manager->GetResourceFromMap(uuid);
 }
 
 void ComponentMaterial::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Active"] = active;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Resource UUID"] = resource_tex->GetUUID();
 }

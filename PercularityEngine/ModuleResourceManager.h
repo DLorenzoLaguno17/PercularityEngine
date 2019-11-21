@@ -22,11 +22,11 @@ public:
 	// Save & Load
 	void Load(const nlohmann::json &config) {}
 	void Save(nlohmann::json &config) {}
-	void LoadResources(const nlohmann::json &scene_file);
-	void SaveResources(nlohmann::json &scene_file);
+	void LoadResources(const json &scene_file);
+	void SaveResources(json &scene_file);
 
 	uint ReceiveExternalFile(const char* new_file);
-	Resource* CreateNewResource(RESOURCE_TYPE type, uint specific_uid = 0);
+	Resource* CreateNewResource(RESOURCE_TYPE type, uint specific_uuid = 0);
 	uint ImportFile(const char* new_file, RESOURCE_TYPE type, bool force = false);
 
 	// Getters
@@ -45,7 +45,6 @@ private:
 	std::map<uint, Resource*> resources;
 	uint resourcesCount = 0;
 	uint saved_res = 0;
-	uint loaded_res = 0;
 
 };
 

@@ -38,10 +38,10 @@ void GameObject::Update() {
 
 // Load & Save 
 void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
-	json js = scene_file["Game Objects"][gameObjectNum]["Name"];
-	name = js.get<std::string>();
 	UUID = scene_file["Game Objects"][gameObjectNum]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Parent UUID"];
+	json js = scene_file["Game Objects"][gameObjectNum]["Name"];
+	name = js.get<std::string>();
 
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);	
 	
