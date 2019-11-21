@@ -34,7 +34,8 @@ public:
 	void Clear();
 	
 	bool Insert(GameObject* gameObject);
-	
+	void Erase(GameObject* gameObject);
+
 	std::vector<GameObject*> CollectChilldren(Frustum frustum);
 	std::vector<GameObject*> CollectChilldren(AABB aabb_);
 	//bool Insert(GameObject* gameObject);
@@ -62,6 +63,7 @@ public:
 
 	void Draw();
 	bool Insert(GameObject* gameObject);
+	void Erase(GameObject* gameObject);
 
 	std::vector<GameObject*> CollectChilldren(Frustum frustum);
 	std::vector<GameObject*> CollectChilldren(AABB aabb_);

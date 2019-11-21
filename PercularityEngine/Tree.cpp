@@ -37,6 +37,11 @@ bool Tree::Insert(GameObject* gameObject)
 	return rootNode->Insert(gameObject);
 }
 
+void Tree::Erase(GameObject* gameObject)
+{
+	rootNode->Erease(gameObject);
+}
+
 void Tree::Clear()
 {
 	rootNode->Clear();
@@ -458,4 +463,20 @@ void TreeNode::Clear()
 		delete[] nodes;
 
 	objects.clear();
+}
+
+void TreeNode::Erase(GameObject* gameObject)
+{
+	for (int i = 0; i < objects.size(); ++i)
+	{
+		if (objects[i] == gameObject) {
+			objects.erase[i];
+			return;
+		}
+	}
+
+	for (int i = 0; i < nodesAmount; ++i)
+	{
+		nodes[i].Erase(gameObject);
+	}
 }
