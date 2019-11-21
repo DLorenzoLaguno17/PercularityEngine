@@ -109,8 +109,7 @@ update_status ModuleScene::PostUpdate(float dt)
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow);
 
 	objectTree->Draw();
-		frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
-
+	frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
 
 	return UPDATE_CONTINUE;
 }
@@ -137,7 +136,8 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveCleanUp(root->children[i]);
 
-	RELEASE(root);
+	if(strcmp(root->name.c_str(), "Untitled") != 0)
+		RELEASE(root);
 }
 
 // -----------------------------------------------------------------------------------------------

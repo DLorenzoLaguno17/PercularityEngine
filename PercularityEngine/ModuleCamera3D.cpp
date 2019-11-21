@@ -78,8 +78,7 @@ void ModuleCamera3D::FocusCameraOn(GameObject* object)
 }
 
 void ModuleCamera3D::HandleUserInput(float dt)
-{
-	
+{	
 	float3	newPos(0, 0, 0);
 	float speed = 10.0f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)

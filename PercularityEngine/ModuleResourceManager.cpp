@@ -118,7 +118,7 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 void ModuleResourceManager::LoadResources(const json &scene_file) 
 {
 	uint cnt = scene_file["Resources"]["Count"];
-	for (int i = 1; i < cnt; ++i) {
+	for (int i = 1; i <= cnt; ++i) {
 		char name[50];
 		sprintf_s(name, 50, "Resource %d", i);
 		uint UUID = scene_file["Resources"][name]["UUID"];
