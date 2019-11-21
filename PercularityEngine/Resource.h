@@ -6,6 +6,7 @@
 enum class RESOURCE_TYPE {
 	TEXTURE,
 	MESH,
+	MODEL,
 	SCENE,
 	UNKNOWN
 };

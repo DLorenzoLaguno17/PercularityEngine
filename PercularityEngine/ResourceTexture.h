@@ -18,8 +18,8 @@ public:
 
 public:
 	uint texture = 0;
-	long width = 0;
-	long height = 0;
+	uint width = 0;
+	uint height = 0;
 };
 
 #endif // __ResourceTexture_H__

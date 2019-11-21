@@ -403,32 +403,8 @@ bool ModuleResourceLoader::LoadTexture(const char* path, std::string& output_fil
 		LOG("The texture image could not be loaded");		
 	}
 	else {
-		tex = ilutGLBindTexImage();
-		LOG("Created texture from path: %s", adapted_path);
-		LOG("");
+		ProcessTexture(tex);
 
-		if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
-			LOG("Error converting image: %s", iluErrorString(ilGetError()));
-
-		long h, w, bpp, f;
-		ILubyte *texdata = 0;
-
-		w = ilGetInteger(IL_IMAGE_WIDTH);
-		h = ilGetInteger(IL_IMAGE_HEIGHT);
-		bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
-		f = ilGetInteger(IL_IMAGE_FORMAT);
-		texdata = ilGetData();
-
-		glGenTextures(1, &tex);
-		glBindTexture(GL_TEXTURE_2D, tex);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
-		glBindTexture(GL_TEXTURE_2D, 0);	
-		
 		// We import the texture to our library
 		if(ImportTextureToLibrary(path, output_file)) ret = true;
 
@@ -481,31 +457,13 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(const char* path, ResourceText
 		LOG("The texture image could not be loaded");
 	}
 	else {
-		tex->texture = ilutGLBindTexImage();
-		LOG("Created texture from path: %s", adapted_path);
+		ProcessTexture(tex->texture);
 		LOG("");
+		LOG("Created texture from path: %s", path);
 
-		if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
-			LOG("Error converting image: %s", iluErrorString(ilGetError()));
-
-		long h, w, bpp, f;
-		ILubyte *texdata = 0;
-
+		uint h, w;
 		w = ilGetInteger(IL_IMAGE_WIDTH);
 		h = ilGetInteger(IL_IMAGE_HEIGHT);
-		bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
-		f = ilGetInteger(IL_IMAGE_FORMAT);
-		texdata = ilGetData();
-
-		glGenTextures(1, &tex->texture);
-		glBindTexture(GL_TEXTURE_2D, tex->texture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
-		glBindTexture(GL_TEXTURE_2D, 0);
 
 		tex->width = w;
 		tex->height = h;
@@ -513,18 +471,48 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(const char* path, ResourceText
 
 		ilBindImage(0);
 		ilDeleteImage(image);
-
 		ret = true;
 	}
 
 	return ret;
 }
 
+void ModuleResourceLoader::ProcessTexture(uint& texture) {	
+	texture = ilutGLBindTexImage();
+
+	if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+		LOG("Error converting image: %s", iluErrorString(ilGetError()));
+
+	long h, w, bpp, f;
+	ILubyte *texdata = 0;
+
+	w = ilGetInteger(IL_IMAGE_WIDTH);
+	h = ilGetInteger(IL_IMAGE_HEIGHT);
+	bpp = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
+	f = ilGetInteger(IL_IMAGE_FORMAT);
+	texdata = ilGetData();
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 bool ModuleResourceLoader::LoadSceneFile(const char* path, std::string& output_file) {
 	bool ret = false;
 	
+	ret = true;
 	return ret;
 }
+
+// -----------------------------------------------------------------------------------------------
+// OTHER METHODS
+// -----------------------------------------------------------------------------------------------
 
 std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
 	std::string full_name;
@@ -579,11 +567,11 @@ void ModuleResourceLoader::CreateDefaultTexture() {
 
 // Save & Load
 void ModuleResourceLoader::Load(const nlohmann::json &config) {
-	/*defaultMat_UUID = config["Resource loader"]["Default material UUID"];
+	defaultMat_UUID = config["Resource loader"]["Default material UUID"];
 	engineIcon_UUID = config["Resource loader"]["Engine icon UUID"];
 	modelIcon_UUID = config["Resource loader"]["Model icon UUID"];
 	texIcon_UUID = config["Resource loader"]["Texture icon UUID"];
-	sceneIcon_UUID = config["Resource loader"]["Scene icon UUID"];*/
+	sceneIcon_UUID = config["Resource loader"]["Scene icon UUID"];
 }
 
 void ModuleResourceLoader::Save(nlohmann::json &config) {

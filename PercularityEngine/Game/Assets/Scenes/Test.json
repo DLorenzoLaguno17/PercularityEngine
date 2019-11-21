@@ -1,6 +1,6 @@
 {
     "Game Objects": {
-        "Count": 3,
+        "Count": 1,
         "GameObject 1": {
             "Components": {
                 "Transform": {
@@ -22,118 +22,12 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 527009468
+                    "UUID": 1942228947
                 }
             },
             "Name": "World",
             "Parent UUID": 0,
             "UUID": 0
-        },
-        "GameObject 2": {
-            "Components": {
-                "Mesh": {
-                    "Active": true,
-                    "F_Normals on": false,
-                    "Parent UUID": 25143403,
-                    "UUID": 49508038,
-                    "V_Normals on": false
-                },
-                "Transform": {
-                    "Active": true,
-                    "Parent UUID": 25143403,
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "UUID": 309687958
-                }
-            },
-            "Name": "bakerhouse",
-            "Parent UUID": 0,
-            "UUID": 25143403
-        },
-        "GameObject 3": {
-            "Components": {
-                "Mesh": {
-                    "Active": true,
-                    "F_Normals on": false,
-                    "Parent UUID": 87860163,
-                    "UUID": 881671195,
-                    "V_Normals on": false
-                },
-                "Transform": {
-                    "Active": true,
-                    "Parent UUID": 87860163,
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "UUID": 878981567
-                }
-            },
-            "Name": "machinegun",
-            "Parent UUID": 0,
-            "UUID": 87860163
-        }
-    },
-    "Resources": {
-        "Mesh resources": {
-            "Resource 1": {
-                "Exported file": "None",
-                "File": "None",
-                "Height": 0,
-                "Name": "Default texture",
-                "Texture": 1,
-                "UUID": 5,
-                "Width": 0
-            },
-            "Resource 2": {
-                "Exported file": "/library/textures/lenna.dds",
-                "File": "/assets/textures/lenna.png",
-                "Height": 0,
-                "Name": "lenna",
-                "Texture": 0,
-                "UUID": 33042238,
-                "Width": 0
-            }
-        },
-        "Texture resources": {
-            "Resource 3": {
-                "Exported file": "/library/meshes/bakerhouse.mesh",
-                "File": "/assets/fbx/bakerhouse.fbx",
-                "Name": "bakerhouse",
-                "UUID": 201420453
-            },
-            "Resource 4": {
-                "Exported file": "/library/meshes/machinegun.mesh",
-                "File": "/assets/fbx/machinegun.fbx",
-                "Name": "machinegun",
-                "UUID": 544674535
-            }
         }
     }
 }

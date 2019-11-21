@@ -28,6 +28,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 
 bool ModuleScene::Init() {
 	root = new GameObject("World");
+	selected = root;
 	sceneAddress = "Assets/Scenes/";
 	sceneExtension = ".json";
 

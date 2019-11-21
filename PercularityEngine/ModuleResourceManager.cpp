@@ -63,8 +63,10 @@ uint ModuleResourceManager::ReceiveExternalFile(const char* new_file)
 
 	if (CheckTextureExtension(extension.c_str()))
 		final_path = ASSETS_TEXTURE_FOLDER + final_path;
-	if (CheckMeshExtension(extension.c_str()))
+	else if (CheckMeshExtension(extension.c_str()))
 		final_path = ASSETS_MODEL_FOLDER + final_path;
+	else if (strcmp(extension.c_str(), "json") == 0)
+		final_path = ASSETS_SCENE_FOLDER + final_path;
 
 	if (App->file_system->CopyFromOutsideFS(new_file, final_path.c_str())) {
 
@@ -101,7 +103,7 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 		break;
 	}
 
-	// If the import was successful, create a new resource
+	// If the import was successful, we create a new resource
 	if (success) {
 		Resource* res = CreateNewResource(type);
 		res->file = new_file;
@@ -123,7 +125,7 @@ void ModuleResourceManager::SaveResources(nlohmann::json &scene_file) {
 		saved_res++;
 		char name[50];
 		sprintf_s(name, 50, "Resource %d", saved_res);
-		//if (it->second->IsLoadedToMemory())
+		if (it->second->file.compare("None"))
 			it->second->OnSave(name, scene_file);
 	}
 
@@ -188,6 +190,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 					App->scene->selected = go;
 					it->second->UpdateReferenceCount();
 				}
+				ImGui::Text(it->second->name.c_str());
 				break;
 			case RESOURCE_TYPE::TEXTURE:
 				if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
@@ -196,8 +199,9 @@ void ModuleResourceManager::DrawProjectExplorer() {
 					if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
 					mat->resource_tex = (ResourceTexture*)it->second;
 
-					
+					it->second->UpdateReferenceCount();
 				}
+				ImGui::Text(it->second->name.c_str());
 				break;
 			case RESOURCE_TYPE::SCENE:
 				if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
@@ -205,6 +209,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 					it->second->UpdateReferenceCount();
 					//App->scene->LoadScene(it->second->exported_file);
 				}
+				ImGui::Text(it->second->name.c_str());
 				break;
 			}
 
@@ -217,7 +222,8 @@ RESOURCE_TYPE ModuleResourceManager::GetTypeFromExtension(const char* extension)
 {	
 	if (CheckMeshExtension(extension)) return RESOURCE_TYPE::MESH;
 	else if (CheckTextureExtension(extension)) return RESOURCE_TYPE::TEXTURE;
-	//else if () return RESOURCE_TYPE::SCENE;
+	else if (strcmp(extension, "json") == 0) return RESOURCE_TYPE::SCENE;
+	//else if () return RESOURCE_TYPE::MODEL;
 	else return RESOURCE_TYPE::UNKNOWN;
 }
 

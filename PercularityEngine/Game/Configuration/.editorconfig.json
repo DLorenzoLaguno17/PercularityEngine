@@ -5,11 +5,11 @@
         "Version": "v0.2"
     },
     "Resource loader": {
-        "Default material UUID": 0,
-        "Engine icon UUID": 0,
-        "Model icon UUID": 0,
-        "Scene icon UUID": 0,
-        "Texture icon UUID": 0
+        "Default material UUID": 5,
+        "Engine icon UUID": 6,
+        "Model icon UUID": 7,
+        "Scene icon UUID": 8,
+        "Texture icon UUID": 9
     },
     "Scene": {
         "Cube resource UUID": 2,
