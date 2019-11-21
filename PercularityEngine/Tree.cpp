@@ -39,7 +39,7 @@ bool Tree::Insert(GameObject* gameObject)
 
 void Tree::Erase(GameObject* gameObject)
 {
-	rootNode->Erease(gameObject);
+	rootNode->Erase(gameObject);
 }
 
 void Tree::Clear()
