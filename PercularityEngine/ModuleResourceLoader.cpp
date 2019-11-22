@@ -107,30 +107,16 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 	const aiScene* scene = aiImportFile(adapted_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		aiNode* root_node = scene->mRootNode;
+
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array		
-		for (uint i = 0; i < scene->mNumMeshes; ++i) {
-
-			char name[35];
-			sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), i);
-
-			// Create the resource mesh	
-			std::string output;
-			ResourceMesh* res_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
-			ret = LoadMesh(res_mesh, scene->mMeshes[i], output, name);
-			res_mesh->file = path;
-			res_mesh->exported_file = output;
-			res_mesh->name = scene->mMeshes[i]->mName.C_Str();
-			
-			// We check if the mesh has an assigned texture
-			aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-			aiString p;
-			aux_mat->GetTexture(aiTextureType_DIFFUSE, 0, &p);
-			std::string n = getNameFromPath(p.C_Str(), true);
-			res_mesh->assignedTex = n;
-
-			// We add it to the list of the meshes of the model resource
-			meshes.push_back(res_mesh);
+		if (root_node->mNumChildren > 0) {
+			for (uint i = 0; i < root_node->mNumChildren; ++i){
+				std::string output;
+				ret = LoadNode(scene, root_node->mChildren[i], output, meshes, path);
+			}
 		}
+		
 		aiReleaseImport(scene);
 		output_file = "Model";
 	}
@@ -143,89 +129,157 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file, const char* name) {
-
+bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path) {
+	
 	bool ret = false;
 
-	// Copy vertices
-	mesh->num_vertices = currentMesh->mNumVertices;
-	mesh->vertices = new float3[mesh->num_vertices];
-	memcpy(mesh->vertices, currentMesh->mVertices, sizeof(float3) * mesh->num_vertices);
+	aiVector3D translation;
+	aiVector3D scale;
+	aiQuaternion rotation;
 
-	LOG("\nNEW MESH");
-	LOG("Vertices: %d", mesh->num_vertices);
+	// We take the transform
+	node->mTransformation.Decompose(scale, rotation, translation);
+	float3 pos(translation.x, translation.y, translation.z);
+	float3 sca(1, 1, 1);
+	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	// Copy faces
-	bool correctFace = true;
-	if (currentMesh->HasFaces())
+	std::string nodeName = node->mName.C_Str();
+
+	bool found = true;
+	while (found) // Skipp all dummy modules. Assimp loads this fbx nodes to stack all transformations
 	{
-		mesh->num_indices = currentMesh->mNumFaces * 3;
-		mesh->indices = new uint[mesh->num_indices];
-
-		for (unsigned j = 0; j < currentMesh->mNumFaces; ++j)
+		// All dummy modules have one children (next dummy module or last module containing the mesh)
+		if (nodeName.find("_$AssimpFbx$_") != std::string::npos && node->mNumChildren == 1)
 		{
-			const aiFace& face = currentMesh->mFaces[j];
+			//Dummy module have only one child node, so we use that one as our next GameObject
+			node = node->mChildren[0];
 
-			// Only triangles
-			if (face.mNumIndices > 3)
+			// Accumulate transform 
+			node->mTransformation.Decompose(scale, rotation, translation);
+			pos += float3(translation.x, translation.y, translation.z);
+			sca = float3(sca.x * scale.x, sca.y * scale.y, sca.z * scale.z);
+			rot = rot * Quat(rotation.x, rotation.y, rotation.z, rotation.w);
+
+			nodeName = node->mName.C_Str();
+
+			/* If we find a dummy node we "change" our current node into the dummy one and search
+			for other dummy nodes inside that one.*/
+			found = true;
+		}
+		else found = false;
+	}
+	
+	// -----------------------------------------------------------------------------------------------
+	// WE START COPYING THE DATA
+	// -----------------------------------------------------------------------------------------------
+
+	for (int i = 0; i < node->mNumMeshes; ++i){
+		std::string output;
+		ResourceMesh* mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
+		mesh->file = path;
+		mesh->exported_file = output;
+		mesh->name = scene->mMeshes[i]->mName.C_Str();
+
+		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];		
+
+		// Check if it has any assigned texture
+		aiMaterial* mat = scene->mMaterials[currentMesh->mMaterialIndex];
+		aiString p;
+		mat->GetTexture(aiTextureType_DIFFUSE, 0, &p);
+		std::string n = getNameFromPath(p.C_Str(), true);
+		mesh->assignedTex = n;
+
+		// Copy vertices
+		mesh->num_vertices = currentMesh->mNumVertices;
+		mesh->vertices = new float3[mesh->num_vertices];
+		memcpy(mesh->vertices, currentMesh->mVertices, sizeof(float3) * mesh->num_vertices);
+
+		LOG("\nNEW MESH");
+		LOG("Vertices: %d", mesh->num_vertices);
+
+		// Copy faces
+		bool correctFace = true;
+		if (currentMesh->HasFaces())
+		{
+			mesh->num_indices = currentMesh->mNumFaces * 3;
+			mesh->indices = new uint[mesh->num_indices];
+
+			for (unsigned j = 0; j < currentMesh->mNumFaces; ++j)
 			{
-				LOG("Importer Mesh found a quad in %s, ignoring it. ", currentMesh->mName);
-				correctFace = false;
-				continue;
+				const aiFace& face = currentMesh->mFaces[j];
+
+				// Only triangles
+				if (face.mNumIndices > 3)
+				{
+					LOG("Importer Mesh found a quad in %s, ignoring it. ", currentMesh->mName);
+					correctFace = false;
+					continue;
+				}
+
+				mesh->indices[j * 3] = face.mIndices[0];
+				mesh->indices[j * 3 + 1] = face.mIndices[1];
+				mesh->indices[j * 3 + 2] = face.mIndices[2];
 			}
-
-			mesh->indices[j * 3] = face.mIndices[0];
-			mesh->indices[j * 3 + 1] = face.mIndices[1];
-			mesh->indices[j * 3 + 2] = face.mIndices[2];
+			LOG("Faces: %d", mesh->num_indices / 3);
 		}
-		LOG("Faces: %d", mesh->num_indices / 3);
-	}
 
-	// Copy normals
-	if (currentMesh->HasNormals() && correctFace)
-	{
-		mesh->num_normals = currentMesh->mNumVertices;
-		mesh->normals = new float3[mesh->num_normals];
-		memcpy(mesh->normals, currentMesh->mNormals, sizeof(float3) * mesh->num_normals);
-	}
-
-	// Copy colors
-	if (currentMesh->HasVertexColors(0))
-	{
-		mesh->num_colors = currentMesh->mNumVertices * 4;
-		mesh->colors = new uint[mesh->num_colors];
-
-		for (uint i = 0; i < currentMesh->mNumVertices; ++i)
+		// Copy normals
+		if (currentMesh->HasNormals() && correctFace)
 		{
-			mesh->colors[i * 4] = currentMesh->mColors[0][i].r;
-			mesh->colors[i * 4 + 1] = currentMesh->mColors[0][i].g;
-			mesh->colors[i * 4 + 2] = currentMesh->mColors[0][i].b;
-			mesh->colors[i * 4 + 3] = currentMesh->mColors[0][i].a;
+			mesh->num_normals = currentMesh->mNumVertices;
+			mesh->normals = new float3[mesh->num_normals];
+			memcpy(mesh->normals, currentMesh->mNormals, sizeof(float3) * mesh->num_normals);
 		}
-	}
 
-	// Copy texture UVs
-	if (currentMesh->HasTextureCoords(0))
-	{
-		mesh->num_UVs = currentMesh->mNumVertices * 2;
-		mesh->coords = new float[mesh->num_UVs];
-
-		for (uint i = 0; i < currentMesh->mNumVertices; ++i)
+		// Copy colors
+		if (currentMesh->HasVertexColors(0))
 		{
-			mesh->coords[i * 2] = currentMesh->mTextureCoords[0][i].x;
-			mesh->coords[i * 2 + 1] = currentMesh->mTextureCoords[0][i].y;
+			mesh->num_colors = currentMesh->mNumVertices * 4;
+			mesh->colors = new uint[mesh->num_colors];
+
+			for (uint i = 0; i < currentMesh->mNumVertices; ++i)
+			{
+				mesh->colors[i * 4] = currentMesh->mColors[0][i].r;
+				mesh->colors[i * 4 + 1] = currentMesh->mColors[0][i].g;
+				mesh->colors[i * 4 + 2] = currentMesh->mColors[0][i].b;
+				mesh->colors[i * 4 + 3] = currentMesh->mColors[0][i].a;
+			}
 		}
+
+		// Copy texture UVs
+		if (currentMesh->HasTextureCoords(0))
+		{
+			mesh->num_UVs = currentMesh->mNumVertices * 2;
+			mesh->coords = new float[mesh->num_UVs];
+
+			for (uint i = 0; i < currentMesh->mNumVertices; ++i)
+			{
+				mesh->coords[i * 2] = currentMesh->mTextureCoords[0][i].x;
+				mesh->coords[i * 2 + 1] = currentMesh->mTextureCoords[0][i].y;
+			}
+		}
+
+		// Assigning the VRAM
+		mesh->id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * mesh->num_vertices, mesh->vertices);
+		mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
+		mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
+
+		// We import the mesh to our library
+		char name[35];
+		sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), loaded_node);
+		ret = ImportMeshToLibrary(mesh, output_file, name);
+		loaded_node++;
+
+		// We add it to the list of the meshes of the model resource
+		if (ret) meshes.push_back(mesh);
 	}
 
-	// Assigning the VRAM
-	mesh->id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * mesh->num_vertices, mesh->vertices);
-	mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
-	mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
+	if (node->mNumChildren > 0) {
+		for (int i = 0; i < node->mNumChildren; ++i)
+			ret = LoadNode(scene, node->mChildren[i], output_file, meshes, path);
+	}
 
-	// We import the mesh to our library
-	ret = ImportMeshToLibrary(mesh, output_file, name);
-
-	return ret;
+	return true;
 }
 
 bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file, const char* name) {

@@ -11,7 +11,8 @@ class ResourceMesh;
 class ResourceTexture;
 class ResourceModel;
 class ResourceScene;
-struct aiMesh;
+struct aiScene;
+struct aiNode;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
@@ -39,7 +40,7 @@ public:
 	bool LoadModel(const char* path, std::string& output_file, std::vector<ResourceMesh*>& meshes);
 	bool LoadTexture(const char* path, std::string& output_file);
 	void ProcessTexture(uint& texture);
-	bool LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file, const char* name);
+	bool LoadNode(const aiScene* scene, aiNode* node, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path);
 	
 	// Own file format loaders
 	bool LoadMeshFromLibrary(ResourceMesh* mesh);
@@ -66,11 +67,14 @@ public:
 
 private:
 	const char* modelAddress;
+
 	uint defaultMat_UUID = 0;
 	uint engineIcon_UUID = 0;
 	uint modelIcon_UUID = 0;
 	uint texIcon_UUID = 0;
 	uint sceneIcon_UUID = 0;
+
+	uint loaded_node = 0;
 };
 
 #endif // __ModuleResourceLoader_H__
