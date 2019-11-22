@@ -54,7 +54,6 @@ public:
 
 protected:
 	uint UUID = 0;
-	uint sons = 0;
 };
 
 #endif // __Resource_H__

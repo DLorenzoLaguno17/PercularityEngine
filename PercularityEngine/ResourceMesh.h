@@ -44,6 +44,15 @@ public:
 
 	// Bounding box
 	AABB aabb;
+
+	// Data of other components
+	std::string assignedTex = "None";
+	float3 position = float3::zero;
+	float3 scale = float3::one;
+	Quat rotation = Quat::identity;
+
+	bool renderizable = false;
+
 };
 
 #endif // __ResourceMesh_H__

@@ -94,6 +94,11 @@ void ComponentTransform::Scale(float3 scale_)
 	mustUpdate = true;
 }
 
+void ComponentTransform::UpdateLocalTransform() {
+	localTransform = math::float4x4::FromTRS(translation, rotation, scale);
+	mustUpdate = true;
+}
+
 void ComponentTransform::SetLocalTransform(float4x4 transform)
 {
 	transform.Decompose(translation, rotation, scale);

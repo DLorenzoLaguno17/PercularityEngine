@@ -23,6 +23,11 @@ public:
 	const float3& GetTranslation() const { return translation; }
 	const float3& GetScale() const { return scale; }
 
+	void SetScale(float3 newScale);
+	void SetPosition(float3 newPosition);
+	void SetEulerRotation(float3 eulerAngles);
+	void UpdateLocalTransform();
+
 	// Load & Save 
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
@@ -31,12 +36,9 @@ private:
 	//Update transform
 	void UpdateTransform();
 	void UpdateRenderTransform();//float4x4 -> mat4x4
-	void SetPosition(float3 newPosition);
 	void Move(float3 positionIncrease);
 	void Scale(float3 scale_);
 	void SetLocalTransform(float4x4 tranform);
-	void SetEulerRotation(float3 eulerAngles);
-	void SetScale(float3 newScale);
 	void SetToZero();
 	void UpdateEulerRotation();
 

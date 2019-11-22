@@ -35,7 +35,6 @@ public:
 	ComponentCamera* GetCamera() const { return camera; }
 
 public:
-
 	uint CreateBuffer(uint bufferType, uint size, void* data);
 
 	uint GetTexColorBuffer() const	{ return texColorBuffer;}
@@ -45,7 +44,6 @@ public:
 	std::vector<ComponentMesh*> meshes;
 
 public:
-
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
@@ -53,7 +51,6 @@ public:
 	update_status status = UPDATE_CONTINUE;
 
 private:
-
 	bool frustumCullingActive = true;
 	bool acceleratedCullingActive = true;
 
