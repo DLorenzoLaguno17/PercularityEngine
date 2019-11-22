@@ -32,6 +32,10 @@ public:
 	virtual void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {}
 	virtual void OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {}
 
+	virtual void Pause() {}
+	virtual void Stop() {}
+	virtual void Update(float dt) {}
+
 	uint GetUUID() const { return UUID; }
 	COMPONENT_TYPE GetType() const { return type; }
 	bool IsActive() { return active; }

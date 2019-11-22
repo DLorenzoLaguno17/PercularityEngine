@@ -241,11 +241,19 @@ void ModuleResourceManager::DrawProjectExplorer() {
 						GameObject* go = nullptr;
 						if (mod->meshes.size() > 1)	go = new GameObject(mod->meshes[i]->name.c_str(), parent);
 						else go = parent;
+						
+						/*for (int i = 1; i <= mod->meshes.size(); ++i) {
+							if (aux == mod->meshes[i]) { //The first one is the World itself so we skip it
+								GameObject* newGo;
+								newGo = new GameObject("Temp", root, true);
+							}
+						}*/
 
-						ComponentTransform* tra = (ComponentTransform*)parent->GetComponent(COMPONENT_TYPE::TRANSFORM);
-						//tra->SetEulerRotation({ mod->meshes[i]->rotation.x, mod->meshes[i]->rotation.y, mod->meshes[i]->rotation.z });
-						//tra->SetPosition(mod->meshes[i]->position);
-						//tra->SetScale(mod->meshes[i]->scale);
+						ComponentTransform* tra = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
+						tra->SetEulerRotation({ mod->meshes[i]->rotation.x, mod->meshes[i]->rotation.y, mod->meshes[i]->rotation.z });
+						tra->SetPosition(mod->meshes[i]->position);
+						tra->SetScale(mod->meshes[i]->scale);
+						tra->UpdateLocalTransform();
 
 						// We only create its mesh if it must have one
 						if (mod->meshes[i]->renderizable && strstr(mod->meshes[i]->name.c_str(), "City")) {

@@ -103,8 +103,6 @@ void ComponentMesh::RenderNormals() {
 
 void ComponentMesh::Render() const  {
 	
-	static int i = 0;
-	
 	glPushMatrix();
 	glMultMatrixf(gameObject->transform->renderTransform.M);
 
@@ -135,7 +133,6 @@ void ComponentMesh::Render() const  {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	i++;
 	glPopMatrix();
 }
 

@@ -26,6 +26,7 @@ public:
 	void SetScale(float3 newScale);
 	void SetPosition(float3 newPosition);
 	void SetEulerRotation(float3 eulerAngles);
+	void UpdateLocalTransform();
 
 	// Load & Save 
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
