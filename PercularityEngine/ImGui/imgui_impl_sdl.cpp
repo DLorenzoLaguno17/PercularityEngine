@@ -594,16 +594,16 @@ static void ImGui_ImplSDL2_SwapBuffers(ImGuiViewport* viewport, void*)
 
 // Vulkan support (the Vulkan renderer needs to call a platform-side support function to create the surface)
 // SDL is graceful enough to _not_ need <vulkan/vulkan.h> so we can safely include this.
-#if SDL_HAS_VULKAN
-#include "../SDL/include/SDL_vulkan.h"
-static int ImGui_ImplSDL2_CreateVkSurface(ImGuiViewport* viewport, ImU64 vk_instance, const void* vk_allocator, ImU64* out_vk_surface)
-{
-    ImGuiViewportDataSDL2* data = (ImGuiViewportDataSDL2*)viewport->PlatformUserData;
-    (void)vk_allocator;
-    SDL_bool ret = SDL_Vulkan_CreateSurface(data->Window, (VkInstance)vk_instance, (VkSurfaceKHR*)out_vk_surface);
-    return ret ? 0 : 1; // ret ? VK_SUCCESS : VK_NOT_READY
-}
-#endif // SDL_HAS_VULKAN
+//#if SDL_HAS_VULKAN
+//#include <SDL_vulkan.h>
+//static int ImGui_ImplSDL2_CreateVkSurface(ImGuiViewport* viewport, ImU64 vk_instance, const void* vk_allocator, ImU64* out_vk_surface)
+//{
+//    ImGuiViewportDataSDL2* data = (ImGuiViewportDataSDL2*)viewport->PlatformUserData;
+//    (void)vk_allocator;
+//    SDL_bool ret = SDL_Vulkan_CreateSurface(data->Window, (VkInstance)vk_instance, (VkSurfaceKHR*)out_vk_surface);
+//    return ret ? 0 : 1; // ret ? VK_SUCCESS : VK_NOT_READY
+//}
+//#endif // SDL_HAS_VULKAN
 
 // FIXME-PLATFORM: SDL doesn't have an event to notify the application of display/monitor changes
 static void ImGui_ImplSDL2_UpdateMonitors()
@@ -653,9 +653,9 @@ static void ImGui_ImplSDL2_InitPlatformInterface(SDL_Window* window, void* sdl_g
 #if SDL_HAS_WINDOW_ALPHA
     platform_io.Platform_SetWindowAlpha = ImGui_ImplSDL2_SetWindowAlpha;
 #endif
-#if SDL_HAS_VULKAN
-    platform_io.Platform_CreateVkSurface = ImGui_ImplSDL2_CreateVkSurface;
-#endif
+//#if SDL_HAS_VULKAN
+//    platform_io.Platform_CreateVkSurface = ImGui_ImplSDL2_CreateVkSurface;
+//#endif
 
     // SDL2 by default doesn't pass mouse clicks to the application when the click focused a window. This is getting in the way of our interactions and we disable that behavior.
 #if SDL_HAS_MOUSE_FOCUS_CLICKTHROUGH
