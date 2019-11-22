@@ -95,16 +95,11 @@ bool ModuleResourceLoader::CleanUp()
 	return true;
 }
 
-bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file) {
+bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file, std::vector<ResourceMesh*>& meshes) {
 	
-	BROFILER_CATEGORY("ResourceLoaderLoadFBX", Profiler::Color::MediumVioletRed)
+	BROFILER_CATEGORY("ResourceLoaderLoadModel", Profiler::Color::MediumVioletRed)
 
 	bool ret = false;
-
-	// Create the JSON file
-	json model_file;
-	std::string name = getNameFromPath(path);
-	std::string full_path = modelAddress + name + "_Model.json";
 	
 	// We adapt the  path for Assimp
 	const char* adapted_path = strstr(path, "Assets");
@@ -112,41 +107,34 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 	const aiScene* scene = aiImportFile(adapted_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		model_file[name]["Children meshes"] = scene->mNumMeshes;
-
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array		
 		for (uint i = 0; i < scene->mNumMeshes; ++i) {
 
 			char name[35];
 			sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), i);
 
-			// Copy the mesh									
+			// Create the resource mesh	
+			std::string output;
 			ResourceMesh* res_mesh = new ResourceMesh(App->GetRandomGenerator().Int());
-			ret = LoadMesh(res_mesh, scene->mMeshes[i], output_file, name);
-			RELEASE(res_mesh);
+			ret = LoadMesh(res_mesh, scene->mMeshes[i], output, name);
+			res_mesh->file = path;
+			res_mesh->exported_file = output;
+			res_mesh->name = scene->mMeshes[i]->mName.C_Str();
 			
-			// Copy materials
-			/*aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-			uint totalTex = aux_mat->GetTextureCount(aiTextureType_DIFFUSE);
+			// We check if the mesh has an assigned texture
+			aiMaterial* aux_mat = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 			aiString p;
 			aux_mat->GetTexture(aiTextureType_DIFFUSE, 0, &p);
+			std::string n = getNameFromPath(p.C_Str(), true);
+			res_mesh->assignedTex = n;
 
-			std::string file = "Assets/Textures/";
-			std::string name = getNameFromPath(p.C_Str(), true);
-			std::string full_path = file + name;
-
-			ComponentMaterial* material = (ComponentMaterial*)fbx_mesh->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			if() LoadTexture(full_path.c_str(), material->resource_tex);*/
+			// We add it to the list of the meshes of the model resource
+			meshes.push_back(res_mesh);
 		}
 		aiReleaseImport(scene);
+		output_file = "Model";
 	}
 	else LOG("Error loading FBX: %s", path);
-
-	// Create the stream and open the file
-	/*std::ofstream stream;
-	stream.open(full_path);
-	stream << std::setw(4) << scene_file << std::endl;
-	stream.close();*/
 
 	return ret;
 }

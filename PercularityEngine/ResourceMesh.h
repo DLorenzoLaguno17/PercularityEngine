@@ -44,6 +44,8 @@ public:
 
 	// Bounding box
 	AABB aabb;
+
+	std::string assignedTex = "None";
 };
 
 #endif // __ResourceMesh_H__

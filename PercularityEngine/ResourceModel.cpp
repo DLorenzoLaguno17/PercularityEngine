@@ -6,12 +6,10 @@
 
 bool ResourceModel::LoadInMemory()
 {	
-	bool ret = App->res_loader->LoadModelFromLibrary(this);
+	bool ret = false;
 
-	for (int i = 0; i < children_meshes; ++i) {
-		ResourceMesh* rm = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
-		rm->UpdateReferenceCount();
-		meshes.push_back(rm);
+	for (int i = 0; i < meshes.size(); ++i) {
+		ret = meshes[i]->UpdateReferenceCount();
 	}
 
 	return ret;

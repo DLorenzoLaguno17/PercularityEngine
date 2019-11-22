@@ -36,7 +36,7 @@ public:
 	void Save(nlohmann::json &config);
 
 	// Loading methods
-	bool LoadModel(const char* path, std::string& output_file);
+	bool LoadModel(const char* path, std::string& output_file, std::vector<ResourceMesh*>& meshes);
 	bool LoadTexture(const char* path, std::string& output_file);
 	void ProcessTexture(uint& texture);
 	bool LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std::string& output_file, const char* name);

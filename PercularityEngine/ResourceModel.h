@@ -20,7 +20,6 @@ public:
 
 public:
 	std::vector<ResourceMesh*> meshes;
-	uint children_meshes;
 
 };
 
