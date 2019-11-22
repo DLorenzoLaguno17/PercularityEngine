@@ -20,6 +20,7 @@
 // Called before the first frame
 bool ModuleResourceManager::Start()
 {
+	
 	return true;
 }
 
@@ -251,7 +252,6 @@ void ModuleResourceManager::DrawProjectExplorer() {
 							tex->resource_tex->UpdateReferenceCount();
 						}
 					}
-
 					App->scene->selected = parent;
 				}
 				ImGui::Text(it->second->name.c_str());
@@ -273,7 +273,11 @@ void ModuleResourceManager::DrawProjectExplorer() {
 			case RESOURCE_TYPE::SCENE:
 				if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
 
-					it->second->UpdateReferenceCount();
+					ImGui::OpenPopup("Loading new scene");
+					if (App->scene->mustLoad) {
+						it->second->UpdateReferenceCount();
+						App->scene->mustLoad = false;
+					}
 				}
 				ImGui::Text(it->second->name.c_str());
 				break;

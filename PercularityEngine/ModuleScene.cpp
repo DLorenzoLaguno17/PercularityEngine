@@ -80,7 +80,6 @@ update_status ModuleScene::Update(float dt)
 	// If the user wants to load another scene
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
 		ImGui::OpenPopup("Loading new scene");
-		//App->gui->LoadFile(ASSETS_TEXTURE_FOLDER, "png");
 	}
 
 	if (ImGui::BeginPopupModal("Loading new scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
@@ -90,7 +89,7 @@ update_status ModuleScene::Update(float dt)
 		ImGui::NewLine();
 		ImGui::Separator();
 
-		if (ImGui::Button("Yes", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); LoadScene("Test");	}
+		if (ImGui::Button("Yes", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); mustLoad = true; }
 		ImGui::SetItemDefaultFocus();
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); }

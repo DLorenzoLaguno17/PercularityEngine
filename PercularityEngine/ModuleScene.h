@@ -47,6 +47,7 @@ private:
 	void UpdateGameObjects(GameObject* root);
 
 public:
+	bool mustLoad = false;
 	//FRUSTUM TESTER
 
 	GameObject* frustumTest;

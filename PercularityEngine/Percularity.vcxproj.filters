@@ -210,6 +210,9 @@
     <ClInclude Include="ResourceModel.h">
       <Filter>Sources\Scene elements\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Intersection.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -337,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="ResourceModel.cpp">
       <Filter>Sources\Scene elements\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Intersection.cpp">
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

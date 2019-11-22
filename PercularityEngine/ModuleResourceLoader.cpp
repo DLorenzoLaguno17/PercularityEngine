@@ -115,7 +115,7 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 
 			// Create the resource mesh	
 			std::string output;
-			ResourceMesh* res_mesh = new ResourceMesh(App->GetRandomGenerator().Int());
+			ResourceMesh* res_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
 			ret = LoadMesh(res_mesh, scene->mMeshes[i], output, name);
 			res_mesh->file = path;
 			res_mesh->exported_file = output;
@@ -156,6 +156,7 @@ bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std
 	LOG("Vertices: %d", mesh->num_vertices);
 
 	// Copy faces
+	bool correctFace = true;
 	if (currentMesh->HasFaces())
 	{
 		mesh->num_indices = currentMesh->mNumFaces * 3;
@@ -169,6 +170,7 @@ bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std
 			if (face.mNumIndices > 3)
 			{
 				LOG("Importer Mesh found a quad in %s, ignoring it. ", currentMesh->mName);
+				correctFace = false;
 				continue;
 			}
 
@@ -180,7 +182,7 @@ bool ModuleResourceLoader::LoadMesh(ResourceMesh* mesh, aiMesh* currentMesh, std
 	}
 
 	// Copy normals
-	if (currentMesh->HasNormals())
+	if (currentMesh->HasNormals() && correctFace)
 	{
 		mesh->num_normals = currentMesh->mNumVertices;
 		mesh->normals = new float3[mesh->num_normals];
