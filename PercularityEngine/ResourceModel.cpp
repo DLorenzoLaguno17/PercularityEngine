@@ -24,18 +24,19 @@ void ResourceModel::ReleaseFromMemory()
 // Save and Load
 void ResourceModel::OnSave(const char* resourceNum, json &config) const
 {
-	config["Resources"]["Model resources"][resourceNum]["UUID"] = UUID;
-	config["Resources"]["Model resources"][resourceNum]["File"] = file;
-	config["Resources"]["Model resources"][resourceNum]["Exported file"] = exported_file;
-	config["Resources"]["Model resources"][resourceNum]["Name"] = name;
+	config["Resources"][resourceNum]["UUID"] = UUID;
+	config["Resources"][resourceNum]["File"] = file;
+	config["Resources"][resourceNum]["Exported file"] = exported_file;
+	config["Resources"][resourceNum]["Name"] = name;
+	config["Resources"][resourceNum]["Type"] = "Model";
 }
 
 void ResourceModel::OnLoad(const char* resourceNum, const json &config)
 {
-	UUID = config["Resources"]["Model resources"][resourceNum]["UUID"];
-	json s1 = config["Resources"]["Model resources"][resourceNum]["File"];
-	json s2 = config["Resources"]["Model resources"][resourceNum]["Exported file"];
-	json s3 = config["Resources"]["Model resources"][resourceNum]["Name"];
+	UUID = config["Resources"][resourceNum]["UUID"];
+	json s1 = config["Resources"][resourceNum]["File"];
+	json s2 = config["Resources"][resourceNum]["Exported file"];
+	json s3 = config["Resources"][resourceNum]["Name"];
 
 	file = s1.get<std::string>();
 	exported_file = s2.get<std::string>();

@@ -104,6 +104,7 @@ void ComponentMesh::RenderNormals() {
 void ComponentMesh::Render() const  {
 	
 	static int i = 0;
+	
 	glPushMatrix();
 	glMultMatrixf(gameObject->transform->renderTransform.M);
 

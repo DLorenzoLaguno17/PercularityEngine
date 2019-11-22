@@ -45,7 +45,6 @@ public:
 	// Own file format loaders
 	bool LoadMeshFromLibrary(ResourceMesh* mesh);
 	bool LoadTextureFromLibrary(ResourceTexture* tex);
-	bool LoadModelFromLibrary(ResourceModel* model);
 
 	// Importing methods 
 	bool ImportTextureToLibrary(const char* path, std::string& output_file);
@@ -67,6 +66,7 @@ public:
 
 private:
 	const char* modelAddress;
+	bool firstTimeParent = true;
 
 	uint defaultMat_UUID = 0;
 	uint engineIcon_UUID = 0;

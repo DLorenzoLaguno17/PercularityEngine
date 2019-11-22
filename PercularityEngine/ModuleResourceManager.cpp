@@ -4,6 +4,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleScene.h"
 #include "ComponentMaterial.h"
+#include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
@@ -236,22 +237,30 @@ void ModuleResourceManager::DrawProjectExplorer() {
 					GameObject* parent = new GameObject(it->second->name.c_str(), App->scene->GetRoot());
 
 					for (int i = 0; i < mod->meshes.size(); ++i) {
-						// Create the children GameObjects
+					// Create the children GameObjects						
 						GameObject* go = nullptr;
 						if (mod->meshes.size() > 1)	go = new GameObject(mod->meshes[i]->name.c_str(), parent);
 						else go = parent;
 
-						ComponentMesh* mesh = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
-						mesh->resource_mesh = (ResourceMesh*)mod->meshes[i];
+						ComponentTransform* tra = (ComponentTransform*)parent->GetComponent(COMPONENT_TYPE::TRANSFORM);
+						//tra->SetEulerRotation({ mod->meshes[i]->rotation.x, mod->meshes[i]->rotation.y, mod->meshes[i]->rotation.z });
+						//tra->SetPosition(mod->meshes[i]->position);
+						//tra->SetScale(mod->meshes[i]->scale);
 
-						// Check if the assinged texture of the mesh can be loaded
-						std::string texturePath = ASSETS_TEXTURE_FOLDER + mod->meshes[i]->assignedTex;
-						if (FindFileInAssets(texturePath.c_str()) != 0) {
-							ComponentMaterial* tex = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
-							tex->resource_tex = (ResourceTexture*)GetResourceFromMap(FindFileInAssets(texturePath.c_str()));
-							tex->resource_tex->UpdateReferenceCount();
+						// We only create its mesh if it must have one
+						if (mod->meshes[i]->renderizable && strstr(mod->meshes[i]->name.c_str(), "City")) {
+							ComponentMesh* mesh = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
+							mesh->resource_mesh = (ResourceMesh*)mod->meshes[i];
+
+							// Check if the assinged texture of the mesh can be loaded
+							std::string texturePath = ASSETS_TEXTURE_FOLDER + mod->meshes[i]->assignedTex;
+							if (FindFileInAssets(texturePath.c_str()) != 0) {
+								ComponentMaterial* tex = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
+								tex->resource_tex = (ResourceTexture*)GetResourceFromMap(FindFileInAssets(texturePath.c_str()));
+								tex->resource_tex->UpdateReferenceCount();
+							}
 						}
-					}
+					}					
 					App->scene->selected = parent;
 				}
 				ImGui::Text(it->second->name.c_str());
@@ -292,7 +301,6 @@ RESOURCE_TYPE ModuleResourceManager::GetTypeFromExtension(const char* extension)
 	if (CheckModelExtension(extension)) return RESOURCE_TYPE::MODEL;
 	else if (CheckTextureExtension(extension)) return RESOURCE_TYPE::TEXTURE;
 	else if (strcmp(extension, "json") == 0) return RESOURCE_TYPE::SCENE;
-	//else if () return RESOURCE_TYPE::MODEL;
 	else return RESOURCE_TYPE::UNKNOWN;
 }
 

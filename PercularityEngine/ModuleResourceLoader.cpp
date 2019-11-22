@@ -114,10 +114,10 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 			for (uint i = 0; i < root_node->mNumChildren; ++i){
 				std::string output;
 				ret = LoadNode(scene, root_node->mChildren[i], output, meshes, path);
-				loaded_node = 0;
 			}
 		}
-		
+
+		loaded_node = 0;
 		aiReleaseImport(scene);
 		output_file = "Model";
 	}
@@ -130,8 +130,8 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path) {
-	
+bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path) {	
+
 	bool ret = false;
 
 	aiVector3D translation;
@@ -172,16 +172,36 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::str
 	
 	// -----------------------------------------------------------------------------------------------
 	// WE START COPYING THE DATA
-	// -----------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------	
+	std::string output;
+	ResourceMesh* parent_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
+	parent_mesh->file = path;
+	parent_mesh->name = nodeName;
+	parent_mesh->position = pos;
+	parent_mesh->scale = sca;
+	parent_mesh->rotation = rot;
 
-	for (int i = 0; i < node->mNumMeshes; ++i){
-		std::string output;
-		ResourceMesh* mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
-		mesh->file = path;
-		mesh->exported_file = output;
-		mesh->name = scene->mMeshes[i]->mName.C_Str();
+	bool hasMeshes = false;
 
-		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];		
+	for (int i = 0; i < node->mNumMeshes; ++i) {		
+
+		hasMeshes = true;
+
+		ResourceMesh* mesh = nullptr;
+		if (node->mNumMeshes > 1)
+		{
+			mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
+			mesh->file = path;
+			mesh->name = nodeName;
+			mesh->position = pos;
+			mesh->scale = sca;
+			mesh->rotation = rot;
+		}
+		else mesh = parent_mesh;
+
+		mesh->renderizable = true;
+
+		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];				
 
 		// Check if it has any assigned texture
 		aiMaterial* mat = scene->mMaterials[currentMesh->mMaterialIndex];
@@ -268,21 +288,34 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::str
 		// We import the mesh to our library
 		char name[35];
 		sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), loaded_node);
+		std::string asdf = nodeName;
 		ret = ImportMeshToLibrary(mesh, output_file, name);
+		mesh->exported_file = output_file;
 		loaded_node++;
 
 		// We add it to the list of the meshes of the model resource
-		if (ret) meshes.push_back(mesh);
+		meshes.push_back(mesh);
 	}
 
-	//if (loaded_node < 25) {
-		if (node->mNumChildren > 0) {
-			for (int i = 0; i < node->mNumChildren; ++i)
-				ret = LoadNode(scene, node->mChildren[i], output_file, meshes, path);
-		}
-	//}
+	if (!hasMeshes) {
+		char name[35];
+		sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), loaded_node);
+		std::string asdf = nodeName;
+		ret = ImportMeshToLibrary(parent_mesh, output_file, name);
+		parent_mesh->exported_file = output_file;
+		loaded_node++;
 
-	return true;
+		// We add it to the list of the meshes of the model resource
+		meshes.push_back(parent_mesh);
+	}
+
+	if (node->mNumChildren > 0) {
+		for (int i = 0; i < node->mNumChildren; ++i) {
+			LoadNode(scene, node->mChildren[i], output_file, meshes, path);
+		}
+	}
+
+	return ret;
 }
 
 bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file, const char* name) {
@@ -543,29 +576,6 @@ void ModuleResourceLoader::ProcessTexture(uint& texture) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, GL_MAX_TEXTURE_MAX_ANISOTROPY);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, bpp, w, h, f, GL_UNSIGNED_BYTE, texdata);
 	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-bool ModuleResourceLoader::LoadModelFromLibrary(ResourceModel* model) {
-	bool ret = false;
-
-	/*std::string full_path = modelAddress + model->name + "_Model.json";
-
-	// If the adress of the settings file is null, create  an exception
-	assert(full_path.c_str() != nullptr);
-	ret = true;
-
-	// Create a stream and open the file
-	json model_file;
-	std::ifstream stream;
-	stream.open(full_path);
-	model_file = json::parse(stream);
-
-	// Close the file
-	stream.close();*/
-
-	//model->children_meshes = model_file[model->name]["Children meshes"];
-
-	return ret;
 }
 
 // -----------------------------------------------------------------------------------------------
