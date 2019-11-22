@@ -301,5 +301,5 @@ bool ModuleResourceManager::CheckTextureExtension(const char* extension) {
 }
 
 bool ModuleResourceManager::CheckModelExtension(const char* extension) {
-	return (strcmp(extension, "fbx") == 0 || strcmp(extension, "FBX") == 0);
+	return (strcmp(extension, "fbx") == 0 || strcmp(extension, "FBX") == 0 || strcmp(extension, "obj") == 0);
 }

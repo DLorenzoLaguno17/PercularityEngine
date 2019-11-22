@@ -114,6 +114,7 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 			for (uint i = 0; i < root_node->mNumChildren; ++i){
 				std::string output;
 				ret = LoadNode(scene, root_node->mChildren[i], output, meshes, path);
+				loaded_node = 0;
 			}
 		}
 		
@@ -274,10 +275,12 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::str
 		if (ret) meshes.push_back(mesh);
 	}
 
-	if (node->mNumChildren > 0) {
-		for (int i = 0; i < node->mNumChildren; ++i)
-			ret = LoadNode(scene, node->mChildren[i], output_file, meshes, path);
-	}
+	//if (loaded_node < 25) {
+		if (node->mNumChildren > 0) {
+			for (int i = 0; i < node->mNumChildren; ++i)
+				ret = LoadNode(scene, node->mChildren[i], output_file, meshes, path);
+		}
+	//}
 
 	return true;
 }
