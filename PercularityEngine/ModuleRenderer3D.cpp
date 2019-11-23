@@ -286,14 +286,17 @@ void ModuleRenderer3D::DrawMeshes()
 		}
 		else
 		{
-			std::vector<GameObject*> treeObjects = App->scene->sceneTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum);
+			std::vector<const GameObject*> treeObjects;
+			App->scene->sceneTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum,treeObjects);
 
 			for (int i = 0; i < treeObjects.size(); ++i)
 			{
 				if (Intersect(*frustum, treeObjects[i]->aabb))
 				{
-					ComponentMesh* mesh = treeObjects[i]->GetComponent<ComponentMesh>();
-						if (mesh)
+					ComponentMesh* mesh = (ComponentMesh*)treeObjects[i]->GetComponent(COMPONENT_TYPE::MESH);
+					
+
+					if (mesh)
 							mesh->Render();
 				}
 			}

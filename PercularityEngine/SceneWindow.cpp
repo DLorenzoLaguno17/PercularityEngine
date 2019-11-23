@@ -9,7 +9,7 @@
 #include "ModuleCamera3D.h"
 #include "mmgr/mmgr.h"
 #include "ComponentTransform.h"
-
+#include "ComponentMesh.h"
 
 
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
@@ -64,16 +64,38 @@ GameObject* SceneWindow::SelectObject() const
 
 	LineSegment ray = *App->camera->GetLastRay();
 
-	std::vector<GameObject*> objects = App->scene->sceneTree->CollectChilldren(ray);
+	std::map<float,const GameObject*> objects;
+	App->scene->sceneTree->CollectChilldren(ray,objects);
 
-	for (int i = 0; i < objects.size(); i++)
+	std::map<float, const GameObject*>::iterator it;
+	for (it = objects.begin(); it != objects.end(); ++it)
 	{
-		if (ray.Intersects(objects[i]->aabb))
+		ComponentMesh* mesh = (ComponentMesh*)it->second->GetComponent(COMPONENT_TYPE::MESH);
+		if (mesh)
 		{
-			return objects[i];
+			LineSegment localRay = ray;
+			localRay.Transform(it->second->transform->GetGlobalTransform().Inverted());
+			for (uint v = 0; v < mesh->mesh.num_indices; v += 3)
+			{
+				uint indexA = mesh->mesh.indices[v] * 3;
+				float3 a(mesh->mesh.vertices[indexA]);
+
+				uint indexB = mesh->mesh.indices[v+1] * 3;
+				float3 b(mesh->mesh.vertices[indexB]);
+
+				uint indexC = mesh->mesh.indices[v+2] * 3;
+				float3 c(mesh->mesh.vertices[indexC]);
+
+				Triangle triangle(a, b, c);
+
+				if (localRay.Intersects(triangle, nullptr, nullptr))
+				{
+					return (GameObject*)it->second;
+				}
+			}
 		}
 	}
-
+	
 	return retItem;
 }
 

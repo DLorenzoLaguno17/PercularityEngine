@@ -135,13 +135,17 @@ Component* GameObject::GetComponent(COMPONENT_TYPE componentType)
 
 const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 {
-	for (uint i = 0; i < components.size(); ++i)
+
+	for (std::vector<Component*>::const_iterator it = components.begin(); it != components.end(); ++it)
 	{
-		if (components[i]->type == componentType)
-			return components[i];
+		if ((*it)->type == componentType)
+		{
+			return *it;
+		}
 	}
 
 	return nullptr;
+
 }
 
 void GameObject::DrawAABB()

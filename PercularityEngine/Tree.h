@@ -3,6 +3,7 @@
 
 #include "MathGeoLib/include/MathGeoLib.h"
 #include <vector>
+#include <map>
 
 class GameObject;
 class TreeNode;
@@ -37,12 +38,10 @@ public:
 	bool Insert(GameObject* gameObject);
 	void Erase(GameObject* gameObject);
 
-	std::vector<GameObject*> CollectChilldren(const Frustum& frustum);
-	std::vector<GameObject*> CollectChilldren(const AABB& aabb_);
-	std::vector<GameObject*> CollectChilldren(const LineSegment& ray);
-	//bool Insert(GameObject* gameObject);
+	void CollectChilldren(const Frustum& frustum, std::vector<const GameObject*>& vector);
+	void CollectChilldren(const AABB& aabb_, std::vector<const GameObject*>& vector);
+	void CollectChilldren(const LineSegment& ray, std::map<float, const GameObject*>& vector,bool nearest=true);
 
-	
 public:
 
 	TREE_TYPE type = TREE_TYPE::NONE;
@@ -67,9 +66,9 @@ public:
 	bool Insert(GameObject* gameObject);
 	void Erase(GameObject* gameObject);
 
-	std::vector<GameObject*> CollectChilldren(const Frustum& frustum);
-	std::vector<GameObject*> CollectChilldren(const AABB& aabb_);
-	std::vector<GameObject*> CollectChilldren(const LineSegment& ray);
+	void CollectChilldren(const Frustum& frustum, std::vector<const GameObject*>& vector);
+	void CollectChilldren(const AABB& aabb_, std::vector<const GameObject*>& vector);
+	void CollectChilldren(const LineSegment& ray, std::map<float ,const GameObject*>& container, float nearest=true);
 
 private:
 
