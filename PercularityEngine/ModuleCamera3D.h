@@ -22,6 +22,9 @@ public:
 
 	void CameraLookAround(float speed, float3 reference);
 	void HandleUserInput(float dt);
+	void OnClick(const vec2& normMousePos);
+
+	const LineSegment* GetLastRay()const { return &lastRay; }
 
 	//Focus camera on a gameObject
 	void FocusCameraOn(GameObject* object);
@@ -29,6 +32,7 @@ public:
 private:
 	float3 reference=float3(0,0,0);
 	ComponentCamera* camera;
+	LineSegment lastRay;
 };
 
 #endif

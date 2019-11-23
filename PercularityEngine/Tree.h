@@ -1,8 +1,11 @@
 #ifndef _TREE_H__
 #define _TREE_H__
 
+#include "MathGeoLib/include/MathGeoLib.h"
 #include <vector>
-#include "Globals.h"
+#include <map>
+
+
 
 class GameObject;
 class TreeNode;
@@ -16,7 +19,7 @@ enum class TREE_TYPE {
 
 enum class NODE_TYPE {
 	NONE=-1,
-	ROOT, 
+	ROOT,
 	BRANCH,
 	LEAF
 };
@@ -28,18 +31,19 @@ public:
 	//Constructor & destructor
 	Tree(TREE_TYPE type, AABB aabb, int capacity);
 	Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint,int capacity);
+
 	~Tree();
 
 	void Draw();
 	void Clear();
-	
-	bool Insert(GameObject* gameObject);
-	
-	std::vector<GameObject*> CollectChilldren(Frustum frustum);
-	std::vector<GameObject*> CollectChilldren(AABB aabb_);
-	//bool Insert(GameObject* gameObject);
 
-	
+	bool Insert(GameObject* gameObject);
+	void Erase(GameObject* gameObject);
+
+	void CollectChilldren(const Frustum& frustum, std::vector<const GameObject*>& vector);
+	void CollectChilldren(const AABB& aabb_, std::vector<const GameObject*>& vector);
+	void CollectChilldren(const LineSegment& ray, std::map<float, const GameObject*>& vector,bool nearest=true);
+
 public:
 
 	TREE_TYPE type = TREE_TYPE::NONE;
@@ -51,7 +55,7 @@ public:
 class TreeNode {
 	friend class Tree;
 public:
-	
+
 	//Constructor & destructor
 	TreeNode();
 	TreeNode(AABB aabb, TREE_TYPE type, NODE_TYPE ntype,int capacity);
@@ -62,9 +66,11 @@ public:
 
 	void Draw();
 	bool Insert(GameObject* gameObject);
+	void Erase(GameObject* gameObject);
 
-	std::vector<GameObject*> CollectChilldren(Frustum frustum);
-	std::vector<GameObject*> CollectChilldren(AABB aabb_);
+	void CollectChilldren(const Frustum& frustum, std::vector<const GameObject*>& vector);
+	void CollectChilldren(const AABB& aabb_, std::vector<const GameObject*>& vector);
+	void CollectChilldren(const LineSegment& ray, std::map<float ,const GameObject*>& container, float nearest=true);
 
 private:
 

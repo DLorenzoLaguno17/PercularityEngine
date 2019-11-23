@@ -131,7 +131,7 @@ void ModuleWindow::SetFulldesktop(bool goingFulldesktop) {
 		winFullscreenDesktop = true;
 	}
 	else {
-		winWidth = 1280;
+		winWidth =300;
 		winHeight = 720;
 		SDL_SetWindowFullscreen(window, 0);
 		winFullscreenDesktop = false;
@@ -161,4 +161,14 @@ void ModuleWindow::Save(nlohmann::json &config) {
 	config["Window"]["Width"] = winWidth;
 	config["Window"]["Height"] = winHeight;
 	config["Window"]["Size"] = winSize;
+}
+
+void ModuleWindow::SetWindowWidth(uint width)
+{
+	winWidth = width;
+}
+
+void ModuleWindow::SetWindowHeight(uint height)
+{
+	winHeight = height;
 }

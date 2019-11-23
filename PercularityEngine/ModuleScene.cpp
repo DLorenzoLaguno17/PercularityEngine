@@ -11,6 +11,7 @@
 #include "ModuleResourceManager.h"
 #include "ModuleGui.h"
 #include "ModuleInput.h"
+#include "ModuleCamera3D.h"
 
 //test
 #include "ComponentCamera.h"
@@ -37,7 +38,7 @@ bool ModuleScene::Init() {
 	frustumTest = new GameObject();
 	frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
 
-	objectTree = new Tree(TREE_TYPE::OCTREE, AABB({ -50,-50,-50 }, { 50,50,50 }),1);
+	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -50,-50,-50 }, { 50,50,50 }),1);
 
 	return true;
 }
@@ -47,14 +48,12 @@ bool ModuleScene::Start()
 	// Loading FBX
 	//App->res_loader->LoadModel("Assets/FBX/BakerHouse.fbx");
 
-
-
 	return true;
 }
 
 update_status ModuleScene::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange);	
+	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange);
 
 	return UPDATE_CONTINUE;
 }
@@ -73,7 +72,7 @@ update_status ModuleScene::Update(float dt)
 
 	// If the user wants to save the scene
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
-		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) 
+		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
 		SaveScene(root, "Test");
 
@@ -95,10 +94,10 @@ update_status ModuleScene::Update(float dt)
 		if (ImGui::Button("Cancel", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); }
 		ImGui::EndPopup();
 	}
-	
+
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		for (int i = 0; i < root->children.size(); ++i)
-			objectTree->rootNode->Insert(root->children[i]);
+			sceneTree->rootNode->Insert(root->children[i]);
 
 	return UPDATE_CONTINUE;
 }
@@ -107,8 +106,9 @@ update_status ModuleScene::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow);
 
-	objectTree->Draw();
-	frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
+	sceneTree->Draw();
+		frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
+
 
 	return UPDATE_CONTINUE;
 }
@@ -125,8 +125,10 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
 	RecursiveCleanUp(root);
+
+	sceneTree->Clear();
 	numGameObjectsInScene = 0;
-	objectTree->Clear();
+
 
 	return true;
 }
@@ -141,16 +143,16 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 
 // -----------------------------------------------------------------------------------------------
 // SAVE & LOAD METHODS
-// ----------------------------------------------------------------------------------------------- 
+// -----------------------------------------------------------------------------------------------
 
 void ModuleScene::LoadScene(GameObject* root, const std::string scene_name) {
-	
+
 	LOG("Loading scene: %s", scene_name.c_str());
 	uint startTime = loadingTime.Read();
 
-	// First we delete the current scene	
+	// First we delete the current scene
 	CleanUp();
-	root = new GameObject("World", nullptr, true);	
+	root = new GameObject("World", nullptr, true);
 
 	json scene_file;
 	std::string full_path = sceneAddress + scene_name + ".json";
@@ -231,15 +233,15 @@ void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) {
 		RecursiveSave(root->children[i], scene_file);
 }
 
-void ModuleScene::Load(const nlohmann::json &config) 
-{	
+void ModuleScene::Load(const nlohmann::json &config)
+{
 	sphereMesh_UUID = config["Scene"]["Sphere resource UUID"];
 	cubeMesh_UUID = config["Scene"]["Cube resource UUID"];
 	planeMesh_UUID = config["Scene"]["Plane resource UUID"];
 	donutMesh_UUID = config["Scene"]["Donut resource UUID"];
 }
 
-void ModuleScene::Save(nlohmann::json &config) 
+void ModuleScene::Save(nlohmann::json &config)
 {
 	config["Scene"]["Sphere resource UUID"] = sphereMesh_UUID;
 	config["Scene"]["Cube resource UUID"] = cubeMesh_UUID;
@@ -249,7 +251,7 @@ void ModuleScene::Save(nlohmann::json &config)
 
 // -----------------------------------------------------------------------------------------------
 // GEOMETRY DRAWING METHODS
-// ----------------------------------------------------------------------------------------------- 
+// -----------------------------------------------------------------------------------------------
 
 void ModuleScene::DrawSimplePlane() const
 {
@@ -299,7 +301,7 @@ void ModuleScene::DrawAxis() const {
 
 	///Draw an Y
 	glVertex3f(0.0f, 5.5f, 0.0f);
-	glVertex3f(0.0f, 6.0f, 0.0f); 
+	glVertex3f(0.0f, 6.0f, 0.0f);
 	glVertex3f(0.0f, 6.0f, 0.0f);
 	glVertex3f(-0.25f, 6.5f, 0.0f);
 	glVertex3f(0.0f, 6.0f, 0.0f);
@@ -342,7 +344,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	//Create the mesh with Par_Shapes
 	par_shapes_mesh_s* newMesh;
 	newMesh = par_shapes_create_parametric_sphere(slices,stacks);
-	par_shapes_scale(newMesh, diameter, diameter, diameter); 
+	par_shapes_scale(newMesh, diameter, diameter, diameter);
 
 	// If it is the first time we create a Sphere, we save its mesh as a resource
 	if (sphereCount == 1) {
@@ -354,9 +356,9 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 		mesh->resource_mesh->file = "Primitive";
 		mesh->resource_mesh->exported_file = file;
 	}
-	else 
+	else
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(sphereMesh_UUID);
-	
+
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
@@ -369,7 +371,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
-	numGameObjectsInScene++;	
+	numGameObjectsInScene++;
 
 	return item;
 }
@@ -412,7 +414,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 
 	par_shapes_rotate(bottom, PAR_PI / 2, (float*)&float3::unitX);
 	par_shapes_translate(bottom, -0.5f, -0.5f, -0.5f);
-	
+
 	par_shapes_rotate(top, -PAR_PI / 2, (float*)&float3::unitX);
 	par_shapes_translate(top, -0.5f, 0.5f, 0.5f);
 
@@ -421,9 +423,9 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	par_shapes_merge_and_free(mesh_front,right);
 	par_shapes_merge_and_free(mesh_front, bottom);
 	par_shapes_merge_and_free(mesh_front, top);
-	
+
 	par_shapes_scale(mesh_front, sizeX, sizeY, sizeZ);
-	
+
 	// If it is the first time we create a Cube, we save its mesh as a resource
 	if (cubeCount == 1) {
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, cubeMesh_UUID);
@@ -449,7 +451,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
-	numGameObjectsInScene++; 
+	numGameObjectsInScene++;
 
 	return item;
 }
@@ -486,7 +488,7 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 		mesh->resource_mesh->file = "Primitive";
 		mesh->resource_mesh->exported_file = file;
 	}
-	else		
+	else
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(planeMesh_UUID);
 
 	// Create the AABB

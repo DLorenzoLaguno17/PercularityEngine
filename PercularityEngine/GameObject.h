@@ -38,6 +38,9 @@ public:
 
 	template<class T>
 	T* GetComponent() { return reinterpret_cast<T*>(GetComponent(T::GetComponentType())); }
+
+	template<class T>
+	const T* GetComponent()const  { return reinterpret_cast<const T*>(GetComponent(T::GetComponentType())); }
 	
 public:
 	std::vector<Component*> components;
