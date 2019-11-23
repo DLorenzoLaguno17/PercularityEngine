@@ -5,6 +5,7 @@
 #include "ModuleGui.h"
 #include "UIElement.h"
 #include "ComponentMaterial.h"
+#include "ResourceTexture.h"
 #include "ModuleScene.h"
 
 #include "mmgr/mmgr.h"
@@ -54,17 +55,15 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 					App->scene->CreatePlane(20.0f, 20.0f);
 
 				if (ImGui::MenuItem("Sphere"))
-					App->scene->CreateSphere(10,10,5);
+					App->scene->CreateSphere(10, 10, 5);
 
 				if (ImGui::MenuItem("Cube"))
 					App->scene->CreateCube(10, 10, 10);
 
 				if (ImGui::MenuItem("Donut"))
 					App->scene->CreateDonut(10, 10, 5);
-
 				ImGui::EndMenu();
 			}
-
 			ImGui::EndMenu();
 		}
 
@@ -73,7 +72,6 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			for(uint i = 0; i < list.size(); ++i)
 				ImGui::MenuItem(list[i]->name, NULL, &list[i]->active);
 
-			//ImGui::MenuItem("Demo window", NULL, &App->gui->show_demo_window);
 			ImGui::EndMenu();
 		}
 
@@ -101,7 +99,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			ImGui::Text("3rd party libraries used:");
 			ImGui::BulletText("SDL 2.0.10");
 			ImGui::BulletText("STL 2.0");
-			ImGui::BulletText("Dear ImGui 1.72b");
+			ImGui::BulletText("Dear ImGui 1.74");
 			ImGui::BulletText("MathGeoLib 1.5");
 			ImGui::BulletText("Open GL 4.6");
 			ImGui::BulletText("Glew 2.1");
@@ -135,7 +133,6 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 			ImGui::EndMenu();
 		}
-
 		ImGui::EndMainMenuBar();
 	}
 }

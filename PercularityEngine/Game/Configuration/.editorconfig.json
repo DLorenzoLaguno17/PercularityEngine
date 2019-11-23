@@ -4,11 +4,25 @@
         "VSYNC": true,
         "Version": "v0.2"
     },
+    "Resource loader": {
+        "Default material UUID": 5,
+        "Engine icon UUID": 6,
+        "Model icon UUID": 7,
+        "Scene icon UUID": 8,
+        "Texture icon UUID": 9
+    },
+    "Scene": {
+        "Cube resource UUID": 2,
+        "Donut resource UUID": 4,
+        "Plane resource UUID": 3,
+        "Sphere resource UUID": 1
+    },
     "User Interface": {
         "Configuration": true,
         "Console": true,
         "Hierarchy": true,
         "Inspector": true,
+        "Project": true,
         "Scene": true
     },
     "Window": {

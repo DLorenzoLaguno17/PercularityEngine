@@ -93,7 +93,6 @@ void ModuleCamera3D::FocusCameraOn(GameObject* object)
 
 void ModuleCamera3D::HandleUserInput(float dt)
 {
-	
 	float3	newPos(0, 0, 0);
 	float speed = 10.0f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
@@ -129,7 +128,6 @@ void ModuleCamera3D::HandleUserInput(float dt)
 			camera->frustum.pos += newPos;
 			reference += newPos;
 		}
-
 		// Scroll to zoom in and out
 		if (App->input->GetMouseZ() > 0) {
 			camera->frustum.pos += camera->frustum.front * speed * 12;

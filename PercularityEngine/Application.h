@@ -18,8 +18,6 @@ class ModuleResourceLoader;
 class ModuleResourceManager;
 class ModuleFileSystem;
 
-using json = nlohmann::json;
-
 class Application
 {
 public:

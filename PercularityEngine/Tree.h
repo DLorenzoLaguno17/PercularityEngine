@@ -5,6 +5,8 @@
 #include <vector>
 #include <map>
 
+
+
 class GameObject;
 class TreeNode;
 
@@ -17,7 +19,7 @@ enum class TREE_TYPE {
 
 enum class NODE_TYPE {
 	NONE=-1,
-	ROOT, 
+	ROOT,
 	BRANCH,
 	LEAF
 };
@@ -34,7 +36,7 @@ public:
 
 	void Draw();
 	void Clear();
-	
+
 	bool Insert(GameObject* gameObject);
 	void Erase(GameObject* gameObject);
 
@@ -53,7 +55,7 @@ public:
 class TreeNode {
 	friend class Tree;
 public:
-	
+
 	//Constructor & destructor
 	TreeNode();
 	TreeNode(AABB aabb, TREE_TYPE type, NODE_TYPE ntype,int capacity);

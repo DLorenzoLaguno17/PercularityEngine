@@ -7,9 +7,12 @@
 #define CHECKERS_HEIGHT 150
 
 class GameObject;
-class ComponentMesh;
-class ComponentMaterial;
-struct aiMesh;
+class ResourceMesh;
+class ResourceTexture;
+class ResourceModel;
+class ResourceScene;
+struct aiScene;
+struct aiNode;
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
@@ -30,29 +33,48 @@ public:
 	bool CleanUp();
 
 	// Save & Load
-	void Load(const nlohmann::json &config) {}
-	void Save(nlohmann::json &config) {}
+	void Load(const nlohmann::json &config);
+	void Save(nlohmann::json &config);
 
 	// Loading methods
-	void LoadModel(const char* path);
-	void LoadTexture(const char* path, ComponentMaterial* material);
-	void LoadMesh(ComponentMesh* c_mesh, aiMesh* currentMesh);
+	bool LoadModel(const char* path, std::string& output_file, std::vector<ResourceMesh*>& meshes);
+	bool LoadTexture(const char* path, std::string& output_file);
+	void ProcessTexture(uint& texture);
+	bool LoadNode(const aiScene* scene, aiNode* node, GameObject* parent, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path);
+	
+	// Own file format loaders
+	bool LoadMeshFromLibrary(ResourceMesh* mesh);
+	bool LoadTextureFromLibrary(ResourceTexture* tex);
 
 	// Importing methods 
-	void ImportFile(const char* full_path);
-	bool ImportTexture(const char* path, std::string& output_file);
-	bool ImportMesh(const char* path, ComponentMesh* mesh);
-	void LoadMeshFromLibrary(const char* path, ComponentMesh* mesh);
+	bool ImportTextureToLibrary(const char* path, std::string& output_file);
+	bool ImportMeshToLibrary(ResourceMesh* mesh, std::string& output_file, const char* name);
 	
 	// Useful methods
 	void CreateDefaultTexture();
-	bool CheckTextureExtension(const char* extension);
-	bool CheckMeshExtension(const char* extension);
+	void CreateDefaultMaterial();
+	void LoadEngineUI();
 	std::string getNameFromPath(std::string path, bool withExtension = false);
 
 public:
-	ComponentMaterial* icon_tex = nullptr;
+	ResourceTexture* icon_tex = nullptr;
+	ResourceTexture* model_icon_tex = nullptr;
+	ResourceTexture* scene_icon_tex = nullptr;
+	ResourceTexture* tex_icon_tex = nullptr;
+	ResourceTexture* default_material = nullptr;
 	uint default_tex = 0;
+
+private:
+	const char* modelAddress;
+	bool firstTimeParent = true;
+
+	uint defaultMat_UUID = 0;
+	uint engineIcon_UUID = 0;
+	uint modelIcon_UUID = 0;
+	uint texIcon_UUID = 0;
+	uint sceneIcon_UUID = 0;
+
+	uint loaded_node = 0;
 };
 
 #endif // __ModuleResourceLoader_H__

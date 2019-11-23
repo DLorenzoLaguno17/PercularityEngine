@@ -2,22 +2,10 @@
 #define __GameObject_H__
 
 #include "Component.h"
-#include "MathGeoLib/include/MathGeoLib.h"
 
 class ComponentMesh;
 class ComponentMaterial;
 class ComponentTransform;
-
-struct BoundingBox {
-	BoundingBox() {
-		//Initialize the bounding box as this, in case there's no mesh
-		for (int i = 0; i < 8; ++i)
-			box[i] = { 0,0,0 };
-	}
-
-	float3 box[8];
-	float minX, maxX, minY, maxY, minZ, maxZ = 0.0f;
-};
 
 class GameObject {
 public:
@@ -62,8 +50,8 @@ public:
 	std::vector<GameObject*> children;
 	GameObject* parent;
 
-	BoundingBox boundingBox;
 	bool extended = true;
+	bool showBondingBox = true;
 
 	AABB aabb;
 	OBB obb;
@@ -71,7 +59,6 @@ public:
 private:
 	uint UUID = 0;
 	uint parent_UUID = 0;
-	uint maxComponents = 3;
 };
 
 #endif // __GameObject_H__

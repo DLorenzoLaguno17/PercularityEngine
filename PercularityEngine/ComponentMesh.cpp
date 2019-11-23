@@ -5,9 +5,12 @@
 #include "ComponentMaterial.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentTransform.h"
+#include "ResourceMesh.h"
+#include "ResourceTexture.h"
 
 #include "Par Shapes/par_shapes.h"
 #include "mmgr/mmgr.h"
@@ -15,18 +18,9 @@
 ComponentMesh::ComponentMesh(GameObject* parent, bool active) :
 	Component(COMPONENT_TYPE::MESH, parent, active) {}
 
-void MeshData::CleanUp()
-{		
-	RELEASE_ARRAY(indices);
-	RELEASE_ARRAY(vertices);
-	RELEASE_ARRAY(normals);
-	RELEASE_ARRAY(colors);
-	RELEASE_ARRAY(textures);
-}
-
 void ComponentMesh::Update() 
 {
-	//Render();	
+	Render();	
 	RenderNormals();
 }
 
@@ -37,12 +31,15 @@ void ComponentMesh::OnEditor() {
 
 		ImGui::Text("Vertices:");
 		ImGui::SameLine();
-		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", mesh.num_vertices);
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", resource_mesh->num_vertices);
 
 		ImGui::Text("Polygons:");
 		ImGui::SameLine();
-		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", mesh.num_indices / 3);
-		
+		ImGui::TextColored({ 255, 255, 0, 255 }, "%d", resource_mesh->num_indices / 3);
+
+		ImGui::NewLine();
+		ImGui::Checkbox("Bounding box", &gameObject->showBondingBox);
+
 		ImGui::NewLine();
 		ImGui::Text("Show normals");
 		ImGui::Checkbox("Vertex normals", &showVertexNormals);
@@ -54,17 +51,17 @@ void ComponentMesh::OnEditor() {
 
 void ComponentMesh::CleanUp()
 {
-	mesh.CleanUp();
+	resource_mesh->ReleaseFromMemory();
 }
 
 // Method to render vertex normals
 void ComponentMesh::RenderNormals() {
 
-	if (mesh.normals != nullptr && showVertexNormals) {
+	if (resource_mesh->normals != nullptr && showVertexNormals) {
 
-		for (uint i = 0; i < mesh.num_vertices; ++i) {
-			float3 point = mesh.vertices[i];
-			float3 vec = mesh.normals[i];
+		for (uint i = 0; i < resource_mesh->num_vertices; ++i) {
+			float3 point = resource_mesh->vertices[i];
+			float3 vec = resource_mesh->normals[i];
 
 			glLineWidth(1.0f);
 			glBegin(GL_LINES);
@@ -80,11 +77,11 @@ void ComponentMesh::RenderNormals() {
 	}
 
 	if (showFaceNormals) {
-		for (uint i = 0; i < mesh.num_vertices; i += 3)
+		for (uint i = 0; i < resource_mesh->num_vertices; i += 3)
 		{
-			float3 a = mesh.vertices[mesh.indices[i]];
-			float3 b = mesh.vertices[mesh.indices[i + 1]];
-			float3 c = mesh.vertices[mesh.indices[i + 2]];
+			float3 a = resource_mesh->vertices[resource_mesh->indices[i]];
+			float3 b = resource_mesh->vertices[resource_mesh->indices[i + 1]];
+			float3 c = resource_mesh->vertices[resource_mesh->indices[i + 2]];
 
 			float3 vec = Cross((b - a), (c - a));
 			vec.Normalize();
@@ -114,103 +111,98 @@ void ComponentMesh::Render() const  {
 	
 	ComponentMaterial* texture = gameObject->GetComponent<ComponentMaterial>();
 	
-	if (texture->IsActive()) 
-		glBindTexture(GL_TEXTURE_2D, texture->texture);
-
+	if (texture != nullptr && texture->IsActive()) glBindTexture(GL_TEXTURE_2D, texture->resource_tex->texture);
 	else glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindBuffer(GL_ARRAY_BUFFER,mesh.id_tex);
+	glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_UVs);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 	// Render the mesh
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER,mesh.id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_index);
-	glDrawElements(GL_TRIANGLES, mesh.num_indices, GL_UNSIGNED_INT, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
+	glDrawElements(GL_TRIANGLES, resource_mesh->num_indices, GL_UNSIGNED_INT, NULL);
 
 	// Clean all buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
 }
 
 void ComponentMesh::LoadParShape(par_shapes_mesh_s* parShape)
 {	
-	mesh.num_indices = parShape->ntriangles * 3;
-	mesh.num_vertices = parShape->npoints;
+	// Load the vertices
+	resource_mesh->num_vertices = parShape->npoints;
+	resource_mesh->vertices = new float3[resource_mesh->num_vertices];
 
-	//Load the vertices
-	mesh.vertices = new float3[mesh.num_vertices];
-
-	for (uint i = 0; i < mesh.num_vertices; ++i)
+	for (uint i = 0; i < resource_mesh->num_vertices; ++i)
 	{
-		mesh.vertices[i].x = parShape->points[3 * i];
-		mesh.vertices[i].y = parShape->points[(3 * i)+1];
-		mesh.vertices[i].z = parShape->points[(3 * i)+2];
+		resource_mesh->vertices[i].x = parShape->points[i * 3];
+		resource_mesh->vertices[i].y = parShape->points[i * 3 + 1];
+		resource_mesh->vertices[i].z = parShape->points[i * 3 + 2];
 	}
 
-	mesh.id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float)*mesh.num_vertices*3, mesh.vertices);
+	resource_mesh->id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * resource_mesh->num_vertices, resource_mesh->vertices);
 
-	//Load the indices
-	mesh.indices = new uint[mesh.num_indices];
+	// Load the indices
+	resource_mesh->num_indices = parShape->ntriangles * 3;
+	resource_mesh->indices = new uint[resource_mesh->num_indices];
 
-	for (uint i = 0; i < mesh.num_indices; ++i)
-		mesh.indices[i] = parShape->triangles[i];
+	for (uint i = 0; i < resource_mesh->num_indices; ++i)
+		resource_mesh->indices[i] = parShape->triangles[i];
 
-	mesh.id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*mesh.num_indices , mesh.indices);
+	resource_mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * resource_mesh->num_indices, resource_mesh->indices);
 	
-	//Load texture coords
-	mesh.num_tex = mesh.num_vertices * 2;
-	mesh.textures = new float[mesh.num_tex];
+	// Load texture coords
+	resource_mesh->num_UVs = resource_mesh->num_vertices * 2;
+	resource_mesh->coords = new float[resource_mesh->num_UVs];
 
-	for (uint i = 0; i < mesh.num_vertices; ++i)
+	for (uint i = 0; i < resource_mesh->num_vertices; ++i)
 	{
-		mesh.textures[2 * i] = parShape->tcoords[2 * i];
-		mesh.textures[(2 * i)+1] = parShape->tcoords[(2 * i) + 1];
+		resource_mesh->coords[i * 2] = parShape->tcoords[i * 2];
+		resource_mesh->coords[i * 2 + 1] = parShape->tcoords[i * 2 + 1];
 	}
 
-	mesh.id_tex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float)*mesh.num_tex, mesh.textures);
+	resource_mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * resource_mesh->num_UVs, resource_mesh->coords);
 
-	//Load normals
+	// Load normals
 	if (parShape->normals)
 	{
-		mesh.normals = new float3[parShape->npoints];
+		resource_mesh->normals = new float3[parShape->npoints];
 
 		for (int i = 0; i < parShape->npoints; ++i)
 		{
-			mesh.normals[i].x =parShape->normals[3 * i];
-			mesh.normals[i].y = parShape->normals[(3 * i)+1];
-			mesh.normals[i].z = parShape->normals[(3 * i)+2];
+			resource_mesh->normals[i].x = parShape->normals[i * 3];
+			resource_mesh->normals[i].y = parShape->normals[i * 3 + 1];
+			resource_mesh->normals[i].z = parShape->normals[i * 3 + 2];
 		}
 	}
-
-	aabb.SetNegativeInfinity();
-	aabb = AABB::MinimalEnclosingAABB(mesh.vertices, mesh.num_vertices);
 }
 
 // Load & Save 
-void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
+void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file)
+{	
 	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"];
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"];
 	showFaceNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"];
 	showVertexNormals = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"];
-	
-	std::string path = LIBRARY_MESH_FOLDER + gameObject->name + ".mesh";
-	App->res_loader->LoadMeshFromLibrary(path.c_str(), this);
+
+	uint uuid = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Resource UUID"];
+	resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(uuid);
 }
 
-void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
+void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 
+{
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Active"] = active;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["F_Normals on"] = showFaceNormals;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["V_Normals on"] = showVertexNormals;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Resource UUID"] = resource_mesh->GetUUID();
 }

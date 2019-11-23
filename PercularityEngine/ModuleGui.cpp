@@ -3,6 +3,7 @@
 #include "ModuleGui.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleFileSystem.h"
 #include "ModuleScene.h"
 #include "GameObject.h"
 
@@ -24,55 +25,18 @@ bool ModuleGui::Init()
 	LOG("Loading GUI atlas");
 	bool ret = true;
 
-	return ret;
-}
-
-// Called before the first frame
-bool ModuleGui::Start()
-{
 	IMGUI_CHECKVERSION();
 
 	// Setting context
-	ImGui::CreateContext();
 	SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
+	ImGui::CreateContext();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
 	// Setting GuiIO
 	io = &ImGui::GetIO(); (void)io;
+	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;  //Enable docking
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
-	// Create window with graphics context
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-	bool err = glewInit() != 0;
-#endif
-	if (err)
-	{
-		fprintf(stderr, "Failed to initialize OpenGL loader!\n");
-		return 1;
-	}
-	else {
-		LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Sould be 2.0
-
-		LOG("Vendor: %s", glGetString(GL_VENDOR));
-		LOG("Renderer: %s", glGetString(GL_RENDERER));
-		LOG("OpenGL version supported: %s", glGetString(GL_VERSION));
-		LOG("GLSL version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-	}
-
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;			//Enable docking
 	ImGui::StyleColorsDark();
-
 	ImGui_ImplOpenGL3_Init();
 
 	io->Fonts->AddFontDefault();
@@ -80,6 +44,13 @@ bool ModuleGui::Start()
 	io->Fonts->AddFontFromFileTTF("Fonts/GOTHIC.TTF", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
+
+	return ret;
+}
+
+// Called before the first frame
+bool ModuleGui::Start()
+{
 	return true;
 }
 
@@ -119,16 +90,10 @@ update_status ModuleGui::PostUpdate(float dt)
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 	}
 
-	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-	/*if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)*/
+	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background	
 	dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 	window_flags |= ImGuiWindowFlags_NoBackground;
 
-	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-	// all active windows docked into it will lose their parent and become undocked.
-	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("DockSpace Demo", &p_open, window_flags);
 	ImGui::PopStyleVar();
@@ -156,11 +121,13 @@ bool ModuleGui::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
-	delete hierarchy; hierarchy = nullptr;
-	delete inspector; inspector = nullptr;
-	delete console; console = nullptr;
-	delete scene_window; scene_window = nullptr;
-	delete settings; settings = nullptr;
+	RELEASE(project);
+	RELEASE(project);
+	RELEASE(hierarchy);
+	RELEASE(inspector);
+	RELEASE(console);
+	RELEASE(scene_window);
+	RELEASE(settings);
 
 	return true;
 }
@@ -178,7 +145,7 @@ void ModuleGui::DrawImGui(float dt) {
 
 	// Rendering
 	ImGui::Render();
-	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
+	//glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
@@ -189,11 +156,13 @@ void ModuleGui::Load(const json &config)
 	console = new ConsoleWindow("Console", true);
 	inspector = new InspectorWindow("Inspector", true);
 	hierarchy = new HierarchyWindow("Hierarchy", true);
+	project = new ProjectWindow("Project", true);
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
 	ui_elements_list.push_back(console);
 	ui_elements_list.push_back(inspector);
 	ui_elements_list.push_back(hierarchy);
+	ui_elements_list.push_back(project);
 
 	for (int i = 0; i < ui_elements_list.size(); ++i)
 		ui_elements_list[i]->active = config["User Interface"][ui_elements_list[i]->name];

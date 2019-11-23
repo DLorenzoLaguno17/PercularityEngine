@@ -6,9 +6,6 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
-#pragma comment( lib, "GLEW/lib86/glew32.lib" )
-#pragma comment( lib, "GLEW/lib86/glew32s.lib" )
-
 #include "Brofiler/Lib/Brofiler.h"
 #pragma comment ( lib, "Brofiler/Lib/ProfilerCore32.lib" )
 

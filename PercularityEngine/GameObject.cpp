@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "ComponentMaterial.h"
+#include "ResourceMesh.h"
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
 #include "ComponentTransform.h"
@@ -33,7 +34,7 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 
 // Called every frame
 void GameObject::Update() {
-	DrawAABB();
+	if (showBondingBox) DrawAABB();
 
 	for (uint i = 0; i < components.size(); ++i)
 		if (components[i]->IsActive()) 
@@ -42,10 +43,10 @@ void GameObject::Update() {
 
 // Load & Save 
 void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
-	json js = scene_file["Game Objects"][gameObjectNum]["Name"];
-	name = js.get<std::string>();
 	UUID = scene_file["Game Objects"][gameObjectNum]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Parent UUID"];
+	json js = scene_file["Game Objects"][gameObjectNum]["Name"];
+	name = js.get<std::string>();
 
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);	
 	
@@ -202,7 +203,7 @@ void GameObject::UpdateAABB()
 	ComponentMesh* mesh = GetComponent<ComponentMesh>();
 	if (mesh!=nullptr)
 	{
-		obb = mesh->GetAABB();
+		obb = mesh->resource_mesh->GetAABB();
 		obb.Transform(transform->GetGlobalTransform());
 
 		aabb.SetNegativeInfinity();

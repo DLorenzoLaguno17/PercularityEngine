@@ -2,25 +2,14 @@
 #define __ModuleGui_H__
 
 #include "Module.h"
-#include <string>
 #include "ConfigWindow.h"
 #include "SceneWindow.h"
 #include "ConsoleWindow.h"
 #include "InspectorWindow.h"
 #include "HierarchyWindow.h"
+#include "ProjectWindow.h"
 #include "MainMenuBar.h"
-
 #include "ImGui/imgui.h"
-
-#include "SDL/include/SDL_rect.h"
-#include "SDL/include/SDL_video.h"
-
-#define CURSOR_WIDTH 2
-
-struct SDL_Texture;
-struct _TTF_Font;
-struct SDL_Rect;
-struct SDL_Color; 
 
 // ---------------------------------------------------
 class ModuleGui : public Module
@@ -50,20 +39,22 @@ public:
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
 
+	// Draw all the GUI
 	void DrawImGui(float dt);
 
 public:
-	//bool show_demo_window = true;
-
+	bool show_demo_window = true;
 	ImGuiIO* io = nullptr;
 	SceneWindow* scene_window = nullptr;
 	ConfigWindow* settings = nullptr;
 
 private:
+
 	MainMenuBar* main_menu_bar = nullptr;
 	ConsoleWindow* console = nullptr;
 	InspectorWindow* inspector = nullptr;
 	HierarchyWindow* hierarchy = nullptr;
+	ProjectWindow* project = nullptr;
 
 	std::vector<UIElement*> ui_elements_list;
 

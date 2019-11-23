@@ -39,6 +39,8 @@ void ComponentTransform::OnEditor() {
 
 		if (ImGui::DragFloat3("Scale", (float*)&scaleM, 0.3))
 			SetScale(scaleM);
+
+		ImGui::NewLine();
 	}
 }
 
@@ -74,12 +76,6 @@ void ComponentTransform::UpdateRenderTransform()
 			renderTransform.M[i * 4 + j] = globalTransform[j][i];
 }
 
-void ComponentTransform::SetPosition(float3 newPosition)
-{
-	translation = newPosition;
-	mustUpdate = true;
-}
-
 void ComponentTransform::Move(float3 positionIncrease)
 {
 	translation += positionIncrease;
@@ -89,6 +85,11 @@ void ComponentTransform::Move(float3 positionIncrease)
 void ComponentTransform::Scale(float3 scale_)
 {
 	scale += scale_;
+	mustUpdate = true;
+}
+
+void ComponentTransform::UpdateLocalTransform() {
+	localTransform = math::float4x4::FromTRS(translation, rotation, scale);
 	mustUpdate = true;
 }
 
@@ -108,9 +109,20 @@ void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 	mustUpdate = true;
 }
 
+void ComponentTransform::SetPosition(float3 newPosition)
+{
+	translation = newPosition;
+	mustUpdate = true;
+}
+
 void ComponentTransform::SetScale(float3 newScale)
 {
 	scale = newScale;
+	mustUpdate = true;
+}
+
+void ComponentTransform::SetRotation(Quat newRotation) {
+	rotation = newRotation;
 	mustUpdate = true;
 }
 

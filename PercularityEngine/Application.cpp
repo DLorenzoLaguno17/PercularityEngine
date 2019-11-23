@@ -46,7 +46,7 @@ Application::Application()
 	// Renderer last!
 	AddModule(renderer3D);
 
-	//Configuration adress
+	// Configuration adress
 	settingsAddress = "Configuration/.editorconfig.json";
 }
 

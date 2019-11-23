@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "Json Parser/nlohmann/json.hpp"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
@@ -50,7 +51,7 @@ void log(const char file[], int line, const char* format, ...);
 typedef unsigned int uint;
 typedef unsigned char uchar;
 typedef unsigned long ulong;
-typedef unsigned long long UID;
+using json = nlohmann::json;
 
 enum update_status
 {
@@ -65,8 +66,8 @@ enum update_status
 #define ASSETS_FOLDER "/Assets/"
 #define ASSETS_MODEL_FOLDER "/Assets/FBX/"
 #define ASSETS_TEXTURE_FOLDER "/Assets/Textures/"
+#define ASSETS_SCENE_FOLDER "/Assets/Scenes/"
 #define LIBRARY_FOLDER "/Library/"
 #define LIBRARY_TEXTURE_FOLDER "/Library/Textures/"
 #define LIBRARY_MESH_FOLDER "/Library/Meshes/"
-#define LIBRARY_MODEL_FOLDER "/Library/Models/"
 #define LIBRARY_MATERIAL_FOLDER "/Library/Materials/"

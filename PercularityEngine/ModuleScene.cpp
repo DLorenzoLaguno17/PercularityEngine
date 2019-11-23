@@ -5,7 +5,11 @@
 #include "GameObject.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ResourceMesh.h"
+#include "ResourceTexture.h"
 #include "ModuleResourceLoader.h"
+#include "ModuleResourceManager.h"
+#include "ModuleGui.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
 
@@ -22,15 +26,14 @@
 #include "mmgr/mmgr.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
-{}
-
-ModuleScene::~ModuleScene()
-{}
+{
+	loadingTime.Start();
+}
 
 bool ModuleScene::Init() {
 	root = new GameObject("World");
+	selected = root;
 	sceneAddress = "Assets/Scenes/";
-	sceneExtension = ".json";
 
 	frustumTest = new GameObject();
 	frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
@@ -43,14 +46,14 @@ bool ModuleScene::Init() {
 bool ModuleScene::Start()
 {
 	// Loading FBX
-	App->res_loader->LoadModel("Assets/FBX/BakerHouse.fbx");
+	//App->res_loader->LoadModel("Assets/FBX/BakerHouse.fbx");
 
 	return true;
 }
 
 update_status ModuleScene::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange);	
+	BROFILER_CATEGORY("ScenePreUpdate", Profiler::Color::Orange);
 
 	return UPDATE_CONTINUE;
 }
@@ -62,14 +65,18 @@ update_status ModuleScene::Update(float dt)
 	DrawSimplePlane();
 	DrawAxis();
 
+	//if (sphereCount == 0) App->res_manager->GetResourceFromMap(sphereMesh_UUID)->ReleaseFromMemory();
+
 	// Update all GameObjects
 	UpdateGameObjects(root);
 
+	// If the user wants to save the scene
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
-		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) 
+		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
-		SaveScene("Test");
+		SaveScene(root, "Test");
 
+	// If the user wants to load another scene
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
 		ImGui::OpenPopup("Loading new scene");
 	}
@@ -88,8 +95,6 @@ update_status ModuleScene::Update(float dt)
 		ImGui::EndPopup();
 	}
 
-	if (mustLoad) LoadScene("Test");
-	
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		for (int i = 0; i < root->children.size(); ++i)
 			sceneTree->rootNode->Insert(root->children[i]);
@@ -120,7 +125,10 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
 	RecursiveCleanUp(root);
+
 	sceneTree->Clear();
+	numGameObjectsInScene = 0;
+
 
 	return true;
 }
@@ -129,17 +137,25 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveCleanUp(root->children[i]);
 
-	RELEASE(root);
+	if(strcmp(root->name.c_str(), "Untitled") != 0)
+		RELEASE(root);
 }
 
-void ModuleScene::LoadScene(const std::string scene_name) {
-	
+// -----------------------------------------------------------------------------------------------
+// SAVE & LOAD METHODS
+// -----------------------------------------------------------------------------------------------
+
+void ModuleScene::LoadScene(GameObject* root, const std::string scene_name) {
+
+	LOG("Loading scene: %s", scene_name.c_str());
+	uint startTime = loadingTime.Read();
+
 	// First we delete the current scene
 	CleanUp();
 	root = new GameObject("World", nullptr, true);
 
 	json scene_file;
-	std::string full_path = sceneAddress + scene_name + sceneExtension;
+	std::string full_path = sceneAddress + scene_name + ".json";
 
 	// If the adress of the settings file is null, create  an exception
 	assert(full_path.c_str() != nullptr);
@@ -152,11 +168,17 @@ void ModuleScene::LoadScene(const std::string scene_name) {
 	// Close the file
 	stream.close();
 
-	numGameObjectsInScene = scene_file["Game Objects"]["Count"];
+	// First we load the resources
+	App->res_manager->LoadResources(scene_file);
+
+	// Then we load all the GameObjects
+	go_counter = scene_file["Game Objects"]["Count"];
 	RecursiveLoad(root, scene_file);
 	selected = root;
 	loaded_go = 0;
-	mustLoad = false;
+
+	uint fullTime = loadingTime.Read() - startTime;
+	LOG("Finished loading. Time spent: %d ms", fullTime);
 }
 
 void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) {
@@ -165,7 +187,7 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 	sprintf_s(name, 50, "GameObject %d", loaded_go);
 	root->OnLoad(name, scene_file);
 
-	for (int i = 1; i <= numGameObjectsInScene; ++i) {
+	for (int i = 1; i <= go_counter; ++i) {
 
 		char n[50];
 		sprintf_s(n, 50, "GameObject %d", i);
@@ -175,17 +197,20 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 			GameObject* newGo;
 			newGo = new GameObject("Temp", root, true);
 		}
-	}	
+	}
 
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveLoad(root->children[i], scene_file);
 }
 
-void ModuleScene::SaveScene(std::string scene_name) {
+void ModuleScene::SaveScene(GameObject* root, std::string scene_name) {
 
 	// Create auxiliar file
 	json scene_file;
-	std::string full_path = sceneAddress + scene_name + sceneExtension;
+	std::string full_path = sceneAddress + scene_name + ".json";
+
+	// First we save the resources
+	App->res_manager->SaveResources(scene_file);
 
 	RecursiveSave(root, scene_file);
 	scene_file["Game Objects"]["Count"] = saved_go;
@@ -207,6 +232,26 @@ void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) {
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveSave(root->children[i], scene_file);
 }
+
+void ModuleScene::Load(const nlohmann::json &config)
+{
+	sphereMesh_UUID = config["Scene"]["Sphere resource UUID"];
+	cubeMesh_UUID = config["Scene"]["Cube resource UUID"];
+	planeMesh_UUID = config["Scene"]["Plane resource UUID"];
+	donutMesh_UUID = config["Scene"]["Donut resource UUID"];
+}
+
+void ModuleScene::Save(nlohmann::json &config)
+{
+	config["Scene"]["Sphere resource UUID"] = sphereMesh_UUID;
+	config["Scene"]["Cube resource UUID"] = cubeMesh_UUID;
+	config["Scene"]["Plane resource UUID"] = planeMesh_UUID;
+	config["Scene"]["Donut resource UUID"] = donutMesh_UUID;
+}
+
+// -----------------------------------------------------------------------------------------------
+// GEOMETRY DRAWING METHODS
+// -----------------------------------------------------------------------------------------------
 
 void ModuleScene::DrawSimplePlane() const
 {
@@ -256,7 +301,7 @@ void ModuleScene::DrawAxis() const {
 
 	///Draw an Y
 	glVertex3f(0.0f, 5.5f, 0.0f);
-	glVertex3f(0.0f, 6.0f, 0.0f); 
+	glVertex3f(0.0f, 6.0f, 0.0f);
 	glVertex3f(0.0f, 6.0f, 0.0f);
 	glVertex3f(-0.25f, 6.5f, 0.0f);
 	glVertex3f(0.0f, 6.0f, 0.0f);
@@ -301,14 +346,30 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	newMesh = par_shapes_create_parametric_sphere(slices,stacks);
 	par_shapes_scale(newMesh, diameter, diameter, diameter);
 
-	//Convert the par_Mesh into a regular mesh
-	mesh->LoadParShape(newMesh);
+	// If it is the first time we create a Sphere, we save its mesh as a resource
+	if (sphereCount == 1) {
+		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, sphereMesh_UUID);
+		mesh->LoadParShape(newMesh);
+		std::string file;
+		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Sphere");
+		mesh->resource_mesh->name = "Sphere";
+		mesh->resource_mesh->file = "Primitive";
+		mesh->resource_mesh->exported_file = file;
+	}
+	else
+		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(sphereMesh_UUID);
 
-	//Free the Par_mesh
+	// Create the AABB
+	mesh->gameObject->aabb.SetNegativeInfinity();
+	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->resource_mesh->aabb.SetNegativeInfinity();
+	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+
+	// Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
 
-	//Set default texture
-	material->texture = App->res_loader->default_tex;
+	// Set default texture
+	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
 	numGameObjectsInScene++;
 
@@ -353,7 +414,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 
 	par_shapes_rotate(bottom, PAR_PI / 2, (float*)&float3::unitX);
 	par_shapes_translate(bottom, -0.5f, -0.5f, -0.5f);
-	
+
 	par_shapes_rotate(top, -PAR_PI / 2, (float*)&float3::unitX);
 	par_shapes_translate(top, -0.5f, 0.5f, 0.5f);
 
@@ -362,17 +423,33 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	par_shapes_merge_and_free(mesh_front,right);
 	par_shapes_merge_and_free(mesh_front, bottom);
 	par_shapes_merge_and_free(mesh_front, top);
-	
+
 	par_shapes_scale(mesh_front, sizeX, sizeY, sizeZ);
 
-	//Convert the par_Mesh into a regular mesh
-	mesh->LoadParShape(mesh_front);
+	// If it is the first time we create a Cube, we save its mesh as a resource
+	if (cubeCount == 1) {
+		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, cubeMesh_UUID);
+		mesh->LoadParShape(mesh_front);
+		std::string file;
+		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Cube");
+		mesh->resource_mesh->name = "Cube";
+		mesh->resource_mesh->file = "Primitive";
+		mesh->resource_mesh->exported_file = file;
+	}
+	else
+		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(cubeMesh_UUID);
 
-	//Free the Par_mesh
+	// Create the AABB
+	mesh->gameObject->aabb.SetNegativeInfinity();
+	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->resource_mesh->aabb.SetNegativeInfinity();
+	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+
+	// Free the Par_mesh
 	par_shapes_free_mesh(mesh_front);
 
-	//Set default texture
-	material->texture = App->res_loader->default_tex;
+	// Set default texture
+	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
 	numGameObjectsInScene++;
 
@@ -401,14 +478,30 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 
 	par_shapes_scale(plane,length,0.0f, depth);
 
-	//Convert the par_Mesh into a regular mesh
-	mesh->LoadParShape(plane);
+	// If it is the first time we create a Plane, we save its mesh as a resource
+	if (planeCount == 1) {
+		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, planeMesh_UUID);
+		mesh->LoadParShape(plane);
+		std::string file;
+		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Plane");
+		mesh->resource_mesh->name = "Plane";
+		mesh->resource_mesh->file = "Primitive";
+		mesh->resource_mesh->exported_file = file;
+	}
+	else
+		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(planeMesh_UUID);
 
-	//Free the Par_mesh
+	// Create the AABB
+	mesh->gameObject->aabb.SetNegativeInfinity();
+	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->resource_mesh->aabb.SetNegativeInfinity();
+	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+
+	// Free the Par_mesh
 	par_shapes_free_mesh(plane);
 
-	//Set default texture
-	material->texture = App->res_loader->default_tex;
+	// Set default texture
+	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
 	numGameObjectsInScene++;
 
@@ -437,17 +530,32 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 
 	par_shapes_scale(newMesh, radius, radius, radius);
 
-	//Convert the par_Mesh into a regular mesh
-	mesh->LoadParShape(newMesh);
+	// If it is the first time we create a Sphere, we save its mesh as a resource
+	if (donutCount == 1) {
+		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, donutMesh_UUID);
+		mesh->LoadParShape(newMesh);
+		std::string file;
+		App->res_loader->ImportMeshToLibrary(mesh->resource_mesh, file, "Donut");
+		mesh->resource_mesh->name = "Donut";
+		mesh->resource_mesh->file = "Primitive";
+		mesh->resource_mesh->exported_file = file;
+	}
+	else
+		mesh->resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(donutMesh_UUID);
 
-	//Free the Par_mesh
+	// Create the AABB
+	mesh->gameObject->aabb.SetNegativeInfinity();
+	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->resource_mesh->aabb.SetNegativeInfinity();
+	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+
+	// Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
 
-	//Set default texture
-	material->texture = App->res_loader->default_tex;
+	// Set default texture
+	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
 	numGameObjectsInScene++;
 
 	return item;
 }
-

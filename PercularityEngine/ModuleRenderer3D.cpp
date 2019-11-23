@@ -19,13 +19,13 @@
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+#pragma comment (lib, "GLEW/lib86/glew32.lib")
+//#pragma comment( lib, "GLEW/lib86/glew32s.lib" )
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
-{}
+ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled) {}
 
 // Destructor
-ModuleRenderer3D::~ModuleRenderer3D()
-{}
+ModuleRenderer3D::~ModuleRenderer3D() {}
 
 // Called before render is available
 bool ModuleRenderer3D::Init()
@@ -43,17 +43,25 @@ bool ModuleRenderer3D::Init()
 
 	if (ret == true)
 	{
+		// Initialize glew
+		GLenum error = glewInit();
+		LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+
+		if (error != GL_NO_ERROR)
+		{
+			LOG("Error initializing glew! %s\n", glewGetErrorString(error));
+			ret = false;
+		}
+
+		//To detect our current hardware and driver capabilities
+		LOG("Vendor: %s", glGetString(GL_VENDOR));
+		LOG("Renderer: %s", glGetString(GL_RENDERER));
+		LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-
-		//Check for error
-		GLenum error = glGetError();
-		if (error != GL_NO_ERROR)
-		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
-			ret = false;
-		}
 
 		//Initialize Modelview Matrix
 		glMatrixMode(GL_MODELVIEW);
@@ -81,6 +89,16 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		//Check for error
+		error = glGetError();
+		if (error != GL_NO_ERROR)
+		{
+			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			ret = false;
+		}
+
 		GLfloat LightModelAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightModelAmbient);
 
@@ -96,15 +114,14 @@ bool ModuleRenderer3D::Init()
 		GLfloat MaterialDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
 
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
 		lights[0].Active(true);
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 	}
 
 	// Projection matrix for
-	
+
 	return ret;
 }
 
@@ -122,17 +139,13 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	
+
 	if (camera->update_projection) {
 		UpdateProjectionMatrix();
 		camera->update_projection = false;
@@ -156,11 +169,13 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	DrawMeshes();
 
+	// Reset the framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	App->gui->DrawImGui(dt);	/*Shouldn't really be here,
-								should find a better way to
-								order module drawing  Joan M*/
+	// Draw the Gui
+	App->gui->DrawImGui(dt);
 
 	SDL_GL_SwapWindow(App->window->window);
 
@@ -185,7 +200,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	LOG("Window resized: width: %d ,  height: %d ", width, height);
 	LOG("Window resized: width: %d ,  height: %d ", App->window->GetWindowWidth(), App->window->GetWindowHeight());
 	LOG("Camera aspect ratio: %f", camera->GetAspectRatio());
-	
+
 
 	SetUpScene();
 }
@@ -193,7 +208,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 void ModuleRenderer3D::SetUpScene()
 {
 	DeleteBuffers();
-	
+
 	glGenFramebuffers(1, &frameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
@@ -212,7 +227,6 @@ void ModuleRenderer3D::SetUpScene()
 	glGenRenderbuffers(1, &renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->GetWindowWidth(), App->window->GetWindowHeight());
-
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -258,7 +272,7 @@ void ModuleRenderer3D::DeleteBuffers()
 	}
 	if (texColorBuffer != 0)
 	{
-		
+
 		glDeleteTextures(1, &texColorBuffer);
 		texColorBuffer = 0;
 	}
@@ -294,7 +308,7 @@ void ModuleRenderer3D::DrawMeshes()
 				if (Intersect(*frustum, treeObjects[i]->aabb))
 				{
 					ComponentMesh* mesh = (ComponentMesh*)treeObjects[i]->GetComponent(COMPONENT_TYPE::MESH);
-					
+
 
 					if (mesh)
 							mesh->Render();
@@ -303,4 +317,3 @@ void ModuleRenderer3D::DrawMeshes()
 		}
 	}
 }
-
