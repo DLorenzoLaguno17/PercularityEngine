@@ -25,8 +25,8 @@ public:
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
 	void LoadModel(const std::string model_name);
-	void LoadScene(const std::string scene_name);
-	void SaveScene(std::string scene_name);
+	void LoadScene(GameObject* root, const std::string scene_name);
+	void SaveScene(GameObject* root, std::string scene_name);
 	void RecursiveLoad(GameObject* root, const json &scene_file);
 	void RecursiveSave(GameObject* root, json &scene_file);
 

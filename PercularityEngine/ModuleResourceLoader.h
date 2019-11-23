@@ -40,7 +40,7 @@ public:
 	bool LoadModel(const char* path, std::string& output_file, std::vector<ResourceMesh*>& meshes);
 	bool LoadTexture(const char* path, std::string& output_file);
 	void ProcessTexture(uint& texture);
-	bool LoadNode(const aiScene* scene, aiNode* node, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path);
+	bool LoadNode(const aiScene* scene, aiNode* node, GameObject* parent, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path);
 	
 	// Own file format loaders
 	bool LoadMeshFromLibrary(ResourceMesh* mesh);

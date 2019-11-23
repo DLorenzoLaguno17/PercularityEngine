@@ -14,10 +14,7 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
-ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled) 
-{
-	selected_file[0] = '\0';
-}
+ModuleGui::ModuleGui(Application* app, bool start_enabled) : Module(app, start_enabled) {}
 
 // Destructor
 ModuleGui::~ModuleGui() {}
@@ -28,55 +25,18 @@ bool ModuleGui::Init()
 	LOG("Loading GUI atlas");
 	bool ret = true;
 
-	return ret;
-}
-
-// Called before the first frame
-bool ModuleGui::Start()
-{
 	IMGUI_CHECKVERSION();
 
 	// Setting context
-	ImGui::CreateContext();
 	SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
+	ImGui::CreateContext();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
 	// Setting GuiIO
 	io = &ImGui::GetIO(); (void)io;
+	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;  //Enable docking
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
-	// Create window with graphics context
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-	bool err = glewInit() != 0;
-#endif
-	if (err)
-	{
-		fprintf(stderr, "Failed to initialize OpenGL loader!\n");
-		return 1;
-	}
-	else {
-		LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Sould be 2.0
-
-		LOG("Vendor: %s", glGetString(GL_VENDOR));
-		LOG("Renderer: %s", glGetString(GL_RENDERER));
-		LOG("OpenGL version supported: %s", glGetString(GL_VERSION));
-		LOG("GLSL version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-	}
-
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;			//Enable docking
 	ImGui::StyleColorsDark();
-
 	ImGui_ImplOpenGL3_Init();
 
 	io->Fonts->AddFontDefault();
@@ -84,6 +44,13 @@ bool ModuleGui::Start()
 	io->Fonts->AddFontFromFileTTF("Fonts/GOTHIC.TTF", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
+
+	return ret;
+}
+
+// Called before the first frame
+bool ModuleGui::Start()
+{
 	return true;
 }
 
@@ -123,16 +90,10 @@ update_status ModuleGui::PostUpdate(float dt)
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 	}
 
-	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-	/*if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)*/
+	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background	
 	dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 	window_flags |= ImGuiWindowFlags_NoBackground;
 
-	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-	// all active windows docked into it will lose their parent and become undocked.
-	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("DockSpace Demo", &p_open, window_flags);
 	ImGui::PopStyleVar();
@@ -184,82 +145,8 @@ void ModuleGui::DrawImGui(float dt) {
 
 	// Rendering
 	ImGui::Render();
-	glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
+	//glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void ModuleGui::LoadFile(const char* filter_extension, const char* from_dir) {
-	ImGui::OpenPopup("Load File");
-	if (ImGui::BeginPopupModal("Load File", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-	{
-		ImGui::PushStyleVar(ImGuiStyleVar_ChildWindowRounding, 5.0f);
-		ImGui::BeginChild("File Browser", ImVec2(0, 300), true);
-		DrawDirectoryRecursive(from_dir, filter_extension);
-		ImGui::EndChild();
-		ImGui::PopStyleVar();
-
-		ImGui::PushItemWidth(250.f);
-		if (ImGui::InputText("##file_selector", selected_file, FILE_MAX, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
-			file_dialog = READY_TO_CLOSE;
-
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-		if (ImGui::Button("Ok", ImVec2(50, 20)))
-			file_dialog = READY_TO_CLOSE;
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel", ImVec2(50, 20)))
-		{
-			file_dialog = READY_TO_CLOSE;
-			selected_file[0] = '\0';
-		}
-
-		ImGui::EndPopup();
-	}
-}
-
-void ModuleGui::DrawDirectoryRecursive(const char* directory, const char* filter_extension)
-{
-	std::vector<std::string> files;
-	std::vector<std::string> dirs;
-
-	std::string dir((directory) ? directory : "");
-	dir += "/";
-
-	App->file_system->DiscoverFiles(dir.c_str(), files, dirs);
-
-	for (std::vector<std::string>::const_iterator it = dirs.begin(); it != dirs.end(); ++it)
-	{
-		if (ImGui::TreeNodeEx((dir + (*it)).c_str(), 0, "%s/", (*it).c_str()))
-		{
-			DrawDirectoryRecursive((dir + (*it)).c_str(), filter_extension);
-			ImGui::TreePop();
-		}
-	}
-
-	std::sort(files.begin(), files.end());
-
-	for (std::vector<std::string>::const_iterator it = files.begin(); it != files.end(); ++it)
-	{
-		const std::string& str = *it;
-
-		bool ok = true;
-
-		if (filter_extension && str.substr(str.find_last_of(".") + 1) != filter_extension)
-			ok = false;
-
-		if (ok && ImGui::TreeNodeEx(str.c_str(), ImGuiTreeNodeFlags_Leaf))
-		{
-			if (ImGui::IsItemClicked()) {
-				sprintf_s(selected_file, FILE_MAX, "%s%s", dir.c_str(), str.c_str());
-
-				if (ImGui::IsMouseDoubleClicked(0))
-					file_dialog = READY_TO_CLOSE;
-			}
-
-			ImGui::TreePop();
-		}
-	}
 }
 
 void ModuleGui::Load(const json &config)

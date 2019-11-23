@@ -109,13 +109,17 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 	{
 		aiNode* root_node = scene->mRootNode;
 
+		GameObject* root = new GameObject(getNameFromPath(path).c_str(), App->scene->GetRoot());
+
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array		
 		if (root_node->mNumChildren > 0) {
 			for (uint i = 0; i < root_node->mNumChildren; ++i){
 				std::string output;
-				ret = LoadNode(scene, root_node->mChildren[i], output, meshes, path);
+				ret = LoadNode(scene, root_node->mChildren[i], root, output, meshes, path);
 			}
 		}
+
+		//App->scene->SaveScene(root, root->name);
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -130,7 +134,7 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path) {	
+bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, GameObject* parent, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path) {	
 
 	bool ret = false;
 
@@ -173,42 +177,70 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::str
 	// -----------------------------------------------------------------------------------------------
 	// WE START COPYING THE DATA
 	// -----------------------------------------------------------------------------------------------	
-	std::string output;
-	ResourceMesh* parent_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
-	parent_mesh->file = path;
-	parent_mesh->name = nodeName;
-	parent_mesh->position = pos;
-	parent_mesh->scale = sca;
-	parent_mesh->rotation = rot;
 
-	bool hasMeshes = false;
+	GameObject* newGo = new GameObject(nodeName, parent);
+	ComponentTransform* tra = newGo->transform;
+
+	tra->SetPosition(pos);
+	tra->SetScale(sca);
+	tra->SetRotation(rot);
+
+	tra->UpdateLocalTransform();
 
 	for (int i = 0; i < node->mNumMeshes; ++i) {		
 
-		hasMeshes = true;
+		//hasMeshes = true;
 
-		ResourceMesh* mesh = nullptr;
+		//ResourceMesh* mesh = nullptr;
+
+		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
+		GameObject* child = nullptr;
+
 		if (node->mNumMeshes > 1)
 		{
-			mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
+			/*mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
 			mesh->file = path;
 			mesh->name = nodeName;
 			mesh->position = pos;
 			mesh->scale = sca;
-			mesh->rotation = rot;
+			mesh->rotation = rot;*/
+
+			nodeName = currentMesh->mName.C_Str();
+			if (nodeName == "")
+				nodeName = newGo->name + "dummy";
+			if (i > 0)
+				nodeName = newGo->name + "_submesh";
+			child = new GameObject(nodeName, newGo);
 		}
-		else mesh = parent_mesh;
+		else 
+		{
+			//mesh = parent_mesh;
+			child = newGo;
+		}
 
-		mesh->renderizable = true;
+		//mesh->renderizable = true;
 
-		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];				
+		ComponentMesh* mesh_comp = (ComponentMesh*)child->CreateComponent(COMPONENT_TYPE::MESH, true);
+		//child->CreateComponent(COMPONENT_TYPE::MATERIAL, true);
 
 		// Check if it has any assigned texture
-		aiMaterial* mat = scene->mMaterials[currentMesh->mMaterialIndex];
+		/*aiMaterial* mat = scene->mMaterials[currentMesh->mMaterialIndex];
 		aiString p;
 		mat->GetTexture(aiTextureType_DIFFUSE, 0, &p);
 		std::string n = getNameFromPath(p.C_Str(), true);
-		mesh->assignedTex = n;
+		mesh->assignedTex = n;*/
+
+		mesh_comp->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
+
+		std::string output;
+		ResourceMesh* mesh = mesh_comp->resource_mesh;
+		mesh->file = path;
+		mesh->name = nodeName;
+		/*mesh->position = pos;
+		mesh->scale = sca;
+		mesh->rotation = rot;*/
+
+		//bool hasMeshes = false;
 
 		// Copy vertices
 		mesh->num_vertices = currentMesh->mNumVertices;
@@ -286,7 +318,7 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::str
 		mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
 
 		// We import the mesh to our library
-		char name[35];
+		/*char name[35];
 		sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), loaded_node);
 		std::string asdf = nodeName;
 		ret = ImportMeshToLibrary(mesh, output_file, name);
@@ -294,10 +326,10 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::str
 		loaded_node++;
 
 		// We add it to the list of the meshes of the model resource
-		meshes.push_back(mesh);
+		meshes.push_back(mesh);*/
 	}
 
-	if (!hasMeshes) {
+	/*if (!hasMeshes) {
 		char name[35];
 		sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), loaded_node);
 		std::string asdf = nodeName;
@@ -307,11 +339,11 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, std::str
 
 		// We add it to the list of the meshes of the model resource
 		meshes.push_back(parent_mesh);
-	}
+	}*/
 
 	if (node->mNumChildren > 0) {
 		for (int i = 0; i < node->mNumChildren; ++i) {
-			LoadNode(scene, node->mChildren[i], output_file, meshes, path);
+			LoadNode(scene, node->mChildren[i], newGo, output_file, meshes, path);
 		}
 	}
 

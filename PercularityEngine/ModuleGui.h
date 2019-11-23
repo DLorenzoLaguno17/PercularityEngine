@@ -11,8 +11,6 @@
 #include "MainMenuBar.h"
 #include "ImGui/imgui.h"
 
-#define FILE_MAX 250
-
 // ---------------------------------------------------
 class ModuleGui : public Module
 {
@@ -44,9 +42,6 @@ public:
 	// Draw all the GUI
 	void DrawImGui(float dt);
 
-	void LoadFile(const char* filter_extension = nullptr, const char* from_dir = nullptr);
-	void DrawDirectoryRecursive(const char* directory, const char* filter_extension);
-
 public:
 	bool show_demo_window = true;
 	ImGuiIO* io = nullptr;
@@ -54,12 +49,6 @@ public:
 	ConfigWindow* settings = nullptr;
 
 private:
-	enum
-	{
-		CLOSED,
-		OPENED,
-		READY_TO_CLOSE
-	} file_dialog = CLOSED;
 
 	MainMenuBar* main_menu_bar = nullptr;
 	ConsoleWindow* console = nullptr;
@@ -70,7 +59,6 @@ private:
 	std::vector<UIElement*> ui_elements_list;
 
 	bool p_open = true;
-	char selected_file[FILE_MAX];
 };
 
 #endif // __ModuleGui_H__

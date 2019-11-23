@@ -75,7 +75,7 @@ update_status ModuleScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
 		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT) 
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
-		SaveScene("Test");
+		SaveScene(root, "Test");
 
 	// If the user wants to load another scene
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
@@ -143,7 +143,7 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 // SAVE & LOAD METHODS
 // ----------------------------------------------------------------------------------------------- 
 
-void ModuleScene::LoadScene(const std::string scene_name) {
+void ModuleScene::LoadScene(GameObject* root, const std::string scene_name) {
 	
 	LOG("Loading scene: %s", scene_name.c_str());
 	uint startTime = loadingTime.Read();
@@ -201,7 +201,7 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 		RecursiveLoad(root->children[i], scene_file);
 }
 
-void ModuleScene::SaveScene(std::string scene_name) {
+void ModuleScene::SaveScene(GameObject* root, std::string scene_name) {
 
 	// Create auxiliar file
 	json scene_file;

@@ -25,7 +25,7 @@ public:
 
 	void SetScale(float3 newScale);
 	void SetPosition(float3 newPosition);
-	void SetEulerRotation(float3 eulerAngles);
+	void SetRotation(Quat newRotation);
 	void UpdateLocalTransform();
 
 	// Load & Save 
@@ -40,6 +40,7 @@ private:
 	void Scale(float3 scale_);
 	void SetLocalTransform(float4x4 tranform);
 	void SetToZero();
+	void SetEulerRotation(float3 eulerAngles);
 	void UpdateEulerRotation();
 
 public:
