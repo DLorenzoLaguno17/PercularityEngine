@@ -17,6 +17,8 @@ GameObject::GameObject() {
 	MakeChild(App->scene->GetRoot());
 	UUID = (uint)App->GetRandomGenerator().Int();
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+
+
 }
 
 GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) : name(name)
@@ -194,7 +196,7 @@ void GameObject::DrawAABB()
 void GameObject::UpdateAABB()
 {
 	ComponentMesh* mesh = GetComponent<ComponentMesh>();
-	if (mesh)
+	if (mesh!=nullptr)
 	{
 		obb = mesh->GetAABB();
 		obb.Transform(transform->GetGlobalTransform());

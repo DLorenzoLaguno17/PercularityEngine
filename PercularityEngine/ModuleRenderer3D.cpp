@@ -286,7 +286,7 @@ void ModuleRenderer3D::DrawMeshes()
 		}
 		else
 		{
-			std::vector<GameObject*> treeObjects = App->scene->objectTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum);
+			std::vector<GameObject*> treeObjects = App->scene->sceneTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum);
 
 			for (int i = 0; i < treeObjects.size(); ++i)
 			{

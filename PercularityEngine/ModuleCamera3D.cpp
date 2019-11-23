@@ -67,9 +67,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 	glColor3f(1, 1, 1); //Light green color
 
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-		OnClick(vec2(App->input->GetMouseX(), App->input->GetMouseY()));
-
 	//Frustum lines
 	glVertex3f(lastRay.a.x, lastRay.a.y, lastRay.a.z);
 	glVertex3f(lastRay.b.x, lastRay.b.y, lastRay.b.z);
@@ -164,14 +161,9 @@ void ModuleCamera3D::CameraLookAround(float speed, float3 reference)
 
 }
 
-void ModuleCamera3D::OnClick(const vec2& mousePos)
+void ModuleCamera3D::OnClick(const vec2& normMousePos)
 {
-	float normX = mousePos.x / (float)App->window->GetWindowWidth();
-	float normY = mousePos.y / (float)App->window->GetWindowHeight();
 
-	normX = 0;
-	normY = 0;
-
-	lastRay = App->renderer3D->GetCamera()->frustum.UnProjectLineSegment(normX, normY);
+	lastRay = App->renderer3D->GetCamera()->frustum.UnProjectLineSegment(normMousePos.x, normMousePos.y);
 
 }

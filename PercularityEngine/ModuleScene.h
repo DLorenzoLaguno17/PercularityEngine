@@ -6,9 +6,11 @@
 
 
 class GameObject;
+class SceneWindow;
 
 class ModuleScene : public Module
 {
+	friend class SceneWindow;
 public:
 
 	ModuleScene(Application* app, bool start_enabled = true);
@@ -37,6 +39,7 @@ public:
 
 	GameObject* GetRoot() const { return root; }
 
+
 private:
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;	//Draw a plane with some lines
@@ -52,7 +55,7 @@ public:
 
 	//FRUSTUM TEST
 
-	Tree* objectTree;
+	Tree* sceneTree;
 
 	GameObject* selected = nullptr;
 	uint numGameObjectsInScene = 0;

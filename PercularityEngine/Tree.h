@@ -28,6 +28,7 @@ public:
 	//Constructor & destructor
 	Tree(TREE_TYPE type, AABB aabb, int capacity);
 	Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint,int capacity);
+
 	~Tree();
 
 	void Draw();
@@ -36,8 +37,9 @@ public:
 	bool Insert(GameObject* gameObject);
 	void Erase(GameObject* gameObject);
 
-	std::vector<GameObject*> CollectChilldren(Frustum frustum);
-	std::vector<GameObject*> CollectChilldren(AABB aabb_);
+	std::vector<GameObject*> CollectChilldren(const Frustum& frustum);
+	std::vector<GameObject*> CollectChilldren(const AABB& aabb_);
+	std::vector<GameObject*> CollectChilldren(const LineSegment& ray);
 	//bool Insert(GameObject* gameObject);
 
 	
@@ -65,8 +67,9 @@ public:
 	bool Insert(GameObject* gameObject);
 	void Erase(GameObject* gameObject);
 
-	std::vector<GameObject*> CollectChilldren(Frustum frustum);
-	std::vector<GameObject*> CollectChilldren(AABB aabb_);
+	std::vector<GameObject*> CollectChilldren(const Frustum& frustum);
+	std::vector<GameObject*> CollectChilldren(const AABB& aabb_);
+	std::vector<GameObject*> CollectChilldren(const LineSegment& ray);
 
 private:
 

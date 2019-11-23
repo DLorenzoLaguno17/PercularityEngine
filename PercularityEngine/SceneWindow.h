@@ -4,6 +4,8 @@
 #include "UIElement.h"
 #include "Globals.h"
 
+class GameObject;
+
 // ---------------------------------------------------
 class SceneWindow : public UIElement
 {
@@ -15,6 +17,10 @@ public:
 
 	// Called every frame
 	void Update();
+
+	void OnClick();
+
+	GameObject* SelectObject()const;
 
 private:
 	ImVec2 last_windowSize = { 0,0 };

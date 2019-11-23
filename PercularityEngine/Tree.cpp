@@ -47,14 +47,19 @@ void Tree::Clear()
 	rootNode->Clear();
 }
 
-std::vector<GameObject*> Tree::CollectChilldren(AABB aabb_)
+std::vector<GameObject*> Tree::CollectChilldren(const AABB& aabb_)
 {
 	return rootNode->CollectChilldren(aabb_);
 }
 
-std::vector<GameObject*> Tree::CollectChilldren(Frustum frustum)
+std::vector<GameObject*> Tree::CollectChilldren(const Frustum& frustum)
 {
 	return rootNode->CollectChilldren(frustum);
+}
+
+std::vector<GameObject*> Tree::CollectChilldren(const LineSegment& ray)
+{
+	return rootNode->CollectChilldren(ray);
 }
 
 //~~~~~~~~NODE METHODS~~~~~~~~~~
@@ -410,7 +415,7 @@ bool TreeNode::Insert(GameObject* gameObject)
 
 }
 
-std::vector<GameObject*> TreeNode::CollectChilldren(AABB aabb_)
+std::vector<GameObject*> TreeNode::CollectChilldren(const AABB& aabb_)
 {
 	std::vector<GameObject*> ret;
 	std::vector<GameObject*> auxVec;
@@ -431,7 +436,7 @@ std::vector<GameObject*> TreeNode::CollectChilldren(AABB aabb_)
 	return ret;
 }
 
-std::vector<GameObject*> TreeNode::CollectChilldren(Frustum frustum)
+std::vector<GameObject*> TreeNode::CollectChilldren(const Frustum& frustum)
 {
 	std::vector<GameObject*> ret;
 	std::vector<GameObject*> auxVec;
@@ -445,6 +450,27 @@ std::vector<GameObject*> TreeNode::CollectChilldren(Frustum frustum)
 	for (int i = 0; i < nodesAmount; ++i)
 	{
 		auxVec = nodes[i].CollectChilldren(frustum);
+		for (int j = 0; j < auxVec.size(); ++j)
+			ret.push_back(auxVec[j]);
+	}
+
+	return ret;
+}
+
+std::vector<GameObject*> TreeNode::CollectChilldren(const LineSegment& ray)
+{
+	std::vector<GameObject*> ret;
+	std::vector<GameObject*> auxVec;
+
+	if (!ray.Intersects(aabb))
+		return ret;
+
+	for (int i = 0; i < objects.size(); ++i)
+		ret.push_back(objects[i]);
+
+	for (int i = 0; i < nodesAmount; ++i)
+	{
+		auxVec = nodes[i].CollectChilldren(ray);
 		for (int j = 0; j < auxVec.size(); ++j)
 			ret.push_back(auxVec[j]);
 	}
@@ -480,3 +506,4 @@ void TreeNode::Erase(GameObject* gameObject)
 		nodes[i].Erase(gameObject);
 	}
 }
+
