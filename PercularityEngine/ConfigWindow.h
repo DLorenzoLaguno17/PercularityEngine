@@ -26,7 +26,7 @@ public:
 	bool cullFace = false;
 	bool normals = false;
 	bool lighting = true;
-	bool depthTest = false;
+	bool depthTest = true;
 	bool colorMaterial = true;
 	bool texture2D = true;
 	bool wireframe = false;
