@@ -76,12 +76,6 @@ void ComponentTransform::UpdateRenderTransform()
 			renderTransform.M[i * 4 + j] = globalTransform[j][i];
 }
 
-void ComponentTransform::SetPosition(float3 newPosition)
-{
-	translation = newPosition;
-	mustUpdate = true;
-}
-
 void ComponentTransform::Move(float3 positionIncrease)
 {
 	translation += positionIncrease;
@@ -115,9 +109,20 @@ void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 	mustUpdate = true;
 }
 
+void ComponentTransform::SetPosition(float3 newPosition)
+{
+	translation = newPosition;
+	mustUpdate = true;
+}
+
 void ComponentTransform::SetScale(float3 newScale)
 {
 	scale = newScale;
+	mustUpdate = true;
+}
+
+void ComponentTransform::SetRotation(Quat newRotation) {
+	rotation = newRotation;
 	mustUpdate = true;
 }
 

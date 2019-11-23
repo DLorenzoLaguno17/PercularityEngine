@@ -23,10 +23,10 @@ public:
 	bool fulldesktop = true;
 	bool vsync = true;
 
-	bool cullFace = true;
+	bool cullFace = false;
 	bool normals = false;
 	bool lighting = true;
-	bool depthTest = true;
+	bool depthTest = false;
 	bool colorMaterial = true;
 	bool texture2D = true;
 	bool wireframe = false;

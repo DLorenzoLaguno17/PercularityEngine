@@ -114,7 +114,6 @@ void ComponentMesh::Render() const  {
 	if (texture != nullptr && texture->IsActive()) glBindTexture(GL_TEXTURE_2D, texture->resource_tex->texture);
 	else glBindTexture(GL_TEXTURE_2D, App->res_loader->default_tex);
 
-	glActiveTexture(GL_TEXTURE0);
 	glBindBuffer(GL_ARRAY_BUFFER, resource_mesh->id_UVs);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
@@ -128,10 +127,9 @@ void ComponentMesh::Render() const  {
 	// Clean all buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
 }

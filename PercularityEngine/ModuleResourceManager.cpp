@@ -250,7 +250,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 						}*/
 
 						ComponentTransform* tra = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-						tra->SetEulerRotation({ mod->meshes[i]->rotation.x, mod->meshes[i]->rotation.y, mod->meshes[i]->rotation.z });
+						tra->SetRotation(mod->meshes[i]->rotation);
 						tra->SetPosition(mod->meshes[i]->position);
 						tra->SetScale(mod->meshes[i]->scale);
 						tra->UpdateLocalTransform();
