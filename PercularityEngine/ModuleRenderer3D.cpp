@@ -104,13 +104,13 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
-
+	
 	return ret;
 }
 
 bool ModuleRenderer3D::Start()
 {
+	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
 	//Prepare scene
 	SetUpScene();
 
@@ -144,6 +144,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	lights[0].SetPos(camera->frustum.pos.x, camera->frustum.pos.y, camera->frustum.pos.z);
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
+
 
 	return UPDATE_CONTINUE;
 }
@@ -179,30 +180,30 @@ void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
+	camera->SetAspectRatio( float(width)/ float(height));
 	UpdateProjectionMatrix();
-	camera->SetAspectRatio(float(height)/ float(width));
 	LOG("Window resized: width: %d ,  height: %d ", width, height);
+	LOG("Window resized: width: %d ,  height: %d ", App->window->GetWindowWidth(), App->window->GetWindowHeight());
+	LOG("Camera aspect ratio: %f", camera->GetAspectRatio());
+	
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	SetUpScene();
 }
 
 void ModuleRenderer3D::SetUpScene()
 {
 	DeleteBuffers();
-
+	
 	glGenFramebuffers(1, &frameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
 	// Generate texture
 	glGenTextures(1, &texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, App->window->GetWindowWidth(), App->window->GetWindowHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, App->window->GetWindowWidth(), App->window->GetWindowHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Attach it to currently bound framebuffer object
@@ -217,7 +218,7 @@ void ModuleRenderer3D::SetUpScene()
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		LOG("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -247,16 +248,20 @@ void ModuleRenderer3D::UpdateProjectionMatrix()
 void ModuleRenderer3D::DeleteBuffers()
 {
 	if (frameBuffer != 0) {
-		glDeleteBuffers(1, &frameBuffer);
+		glDeleteFramebuffers(1, &frameBuffer);
 		frameBuffer = 0;
 	}
 
-	if (renderBuffer!=0)
-		glDeleteBuffers(1, &renderBuffer);
-
-	if (texColorBuffer!=0)
-		glDeleteBuffers(1, &texColorBuffer);
-
+	if (renderBuffer != 0) {
+		glDeleteRenderbuffers(1, &renderBuffer);
+		renderBuffer = 0;
+	}
+	if (texColorBuffer != 0)
+	{
+		
+		glDeleteTextures(1, &texColorBuffer);
+		texColorBuffer = 0;
+	}
 }
 
 void ModuleRenderer3D::DrawMeshes()

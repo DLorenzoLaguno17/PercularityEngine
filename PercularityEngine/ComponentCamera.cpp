@@ -56,7 +56,9 @@ float ComponentCamera::GetFOV() const
 
 float ComponentCamera::GetAspectRatio() const
 {
-	return frustum.AspectRatio();
+	//return frustum.AspectRatio();
+
+	return tanf(frustum.horizontalFov / 2) / tanf(frustum.verticalFov / 2);
 }
 
 void ComponentCamera::SetNearPlane(float distance)
@@ -91,7 +93,7 @@ void ComponentCamera::SetFOV(float fov)
 
 void ComponentCamera::SetAspectRatio(float ar)
 {
-	frustum.horizontalFov = 2.0f*atanf((tanf(frustum.verticalFov*0.5f))/ar);
+	frustum.horizontalFov = 2.0f * atanf( tanf(frustum.verticalFov*0.5f)*ar);
 
 	UpdatePlanes();
 	update_projection = true;

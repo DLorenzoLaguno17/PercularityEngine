@@ -1,13 +1,17 @@
-#include "Globals.h"
 #include "Application.h"
+
+#include "ModuleInput.h"
+#include "ModuleScene.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGui.h"
-#include "ModuleInput.h"
-#include "GameObject.h"
-#include "ModuleScene.h"
-#include "ComponentCamera.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleWindow.h"
 
+#include "Globals.h"
+#include "GameObject.h"
+#include "ComponentCamera.h"
+
+#include "OpenGL.h"
 #include "Par Shapes/par_shapes.h"
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
@@ -22,6 +26,7 @@ ModuleCamera3D::~ModuleCamera3D()
 
 bool ModuleCamera3D::Init()
 {
+
 	LOG("ModuleCamera Init()");
 
 	camera = new ComponentCamera();
@@ -37,7 +42,6 @@ bool ModuleCamera3D::Start()
 	LOG("Setting up the camera");
 	bool ret = true;
 
-	
 
 	return ret;
 }
@@ -58,6 +62,19 @@ update_status ModuleCamera3D::Update(float dt)
 	HandleUserInput(dt);
 
 	camera->Update();
+
+	glBegin(GL_LINES);
+
+	glColor3f(1, 1, 1); //Light green color
+
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+		OnClick(vec2(App->input->GetMouseX(), App->input->GetMouseY()));
+
+	//Frustum lines
+	glVertex3f(lastRay.a.x, lastRay.a.y, lastRay.a.z);
+	glVertex3f(lastRay.b.x, lastRay.b.y, lastRay.b.z);
+
+	glEnd();
 
 	return UPDATE_CONTINUE;
 }
@@ -144,5 +161,17 @@ void ModuleCamera3D::CameraLookAround(float speed, float3 reference)
 	if (!reference.Equals(this->reference))
 		this->reference = camera->frustum.pos + camera->frustum.front * (camera->frustum.pos).Length();
 
+
+}
+
+void ModuleCamera3D::OnClick(const vec2& mousePos)
+{
+	float normX = mousePos.x / (float)App->window->GetWindowWidth();
+	float normY = mousePos.y / (float)App->window->GetWindowHeight();
+
+	normX = 0;
+	normY = 0;
+
+	lastRay = App->renderer3D->GetCamera()->frustum.UnProjectLineSegment(normX, normY);
 
 }

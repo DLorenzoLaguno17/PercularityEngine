@@ -29,6 +29,9 @@ public:
 	void SetResizable(bool goingResizable);
 	void SetFulldesktop(bool goingFulldesktop);
 
+	void SetWindowWidth(uint width);
+	void SetWindowHeight(uint height); 
+
 	uint GetWindowWidth() const { return winWidth; }
 	uint GetWindowHeight() const { return winHeight; }
 	uint GetWindowSize() const { return winSize; }

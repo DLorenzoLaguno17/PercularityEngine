@@ -20,8 +20,6 @@ void SceneWindow::Update() {
 	windowSize.x = ImGui::GetContentRegionAvail().x;
 	windowSize.y = ImGui::GetContentRegionAvail().y;
 
-	float ratio = App->window->GetWindowWidth()/ windowSize.x;
-
 	// Check if the scene window has been resized
 	if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
 	{
@@ -29,10 +27,7 @@ void SceneWindow::Update() {
 		
 	}
 	
-	//ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x ,windowSize.x/App->renderer3D->GetCamera()->GetAspectRatio()),ImVec2(0, 1), ImVec2(1, 0));
-	
-
-	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(App->window->GetWindowWidth()/ratio, App->window->GetWindowHeight() / ratio), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.x/App->renderer3D->GetCamera()->GetAspectRatio()), ImVec2(0, 1), ImVec2(1, 0));
 		
 	ImGui::End();
 }
