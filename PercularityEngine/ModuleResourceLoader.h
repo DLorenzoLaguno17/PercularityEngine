@@ -66,7 +66,6 @@ public:
 
 private:
 	const char* modelAddress;
-	bool firstTimeParent = true;
 
 	uint defaultMat_UUID = 0;
 	uint engineIcon_UUID = 0;

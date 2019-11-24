@@ -89,8 +89,11 @@ bool ModuleResourceLoader::CleanUp()
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 
-	//RELEASE(icon_tex);
-	//RELEASE(default_material);
+	icon_tex = nullptr;
+	model_icon_tex = nullptr;
+	scene_icon_tex = nullptr;
+	tex_icon_tex = nullptr;
+	default_material = nullptr;
 
 	return true;
 }
@@ -211,13 +214,19 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		// Check for assigned textures
 		if (p.C_Str() != nullptr)
 		{
-			ComponentMaterial* mat = (ComponentMaterial*)child->CreateComponent(COMPONENT_TYPE::MATERIAL, true);
-			ResourceTexture* tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE);
-			std::string texPath = "Assets/Textures/" + getNameFromPath(p.C_Str(), true);
-			std::string exportedPath;
+			ComponentMaterial* mat = (ComponentMaterial*)child->CreateComponent(COMPONENT_TYPE::MATERIAL, true);			
+			std::string texPath = ASSETS_TEXTURE_FOLDER + getNameFromPath(p.C_Str(), true);
+			std::string exportedPath; 
+
+			// We make sure the texture has not been already loaded
+			uint a = App->res_manager->FindFileInAssets(texPath.c_str());
+			ResourceTexture* tex = (ResourceTexture*)App->res_manager->GetResourceFromMap(App->res_manager->FindFileInAssets(texPath.c_str()));
+			if (tex == nullptr) {
+				tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE);
+				LoadTexture(texPath.c_str(), exportedPath);
+			}
 
 			// We load the texture in our own file format
-			LoadTexture(texPath.c_str(), exportedPath);
 			tex->name = getNameFromPath(p.C_Str());
 			tex->file = texPath;
 			tex->exported_file = exportedPath;
@@ -232,9 +241,6 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		ResourceMesh* mesh = mesh_comp->resource_mesh;
 		mesh->file = path;
 		mesh->name = nodeName;
-		/*mesh->position = pos;
-		mesh->scale = sca;
-		mesh->rotation = rot;*/
 
 		// Copy vertices
 		mesh->num_vertices = currentMesh->mNumVertices;
@@ -463,7 +469,6 @@ bool ModuleResourceLoader::LoadMeshFromLibrary(ResourceMesh* mesh) {
 
 		RELEASE_ARRAY(buffer);
 		cursor = nullptr;
-		LOG("------------------------");
 		LOG("Loaded mesh from library");
 	}
 
@@ -545,7 +550,6 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(ResourceTexture* tex) {
 	}
 	else {
 		ProcessTexture(tex->texture);
-		LOG("");
 		LOG("Created texture from path: %s", tex->exported_file.c_str());
 
 		uint h, w;

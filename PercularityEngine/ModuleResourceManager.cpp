@@ -21,7 +21,7 @@
 // Called before the first frame
 bool ModuleResourceManager::Start()
 {
-	
+
 	return true;
 }
 
@@ -123,6 +123,8 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 // Load & Save
 void ModuleResourceManager::LoadResources(const json &scene_file) 
 {
+	//CleanUp();
+
 	uint cnt = scene_file["Resources"]["Count"];
 	for (int i = 1; i <= cnt; ++i) {
 		char name[50];
@@ -171,7 +173,6 @@ uint ModuleResourceManager::FindFileInAssets(const char* existing_file) const {
 
 	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
-		std::string s = it->second->file;
 		if (it->second->file.compare(file) == 0)
 			return it->first;
 	}

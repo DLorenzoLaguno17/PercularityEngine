@@ -187,9 +187,7 @@ void ComponentCamera::OnEditor()
 
 		float horizontalFov = frustum.horizontalFov*RADTODEG;
 		if (ImGui::DragFloat("Horizontal FOV", &horizontalFov))
-			frustum.horizontalFov = horizontalFov * DEGTORAD;
-
-		
+			frustum.horizontalFov = horizontalFov * DEGTORAD;		
 	}
 }
 

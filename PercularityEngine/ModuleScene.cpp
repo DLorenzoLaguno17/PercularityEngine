@@ -74,7 +74,7 @@ update_status ModuleScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
 		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
-		SaveScene(root, "Test", sceneAddress);
+		SaveScene(root, "Scene", sceneAddress);
 
 	// If the user wants to load another scene
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
@@ -98,6 +98,11 @@ update_status ModuleScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		for (int i = 0; i < root->children.size(); ++i)
 			sceneTree->rootNode->Insert(root->children[i]);
+
+	if (mustLoad) {
+		LoadScene(root, "Scene", sceneAddress);
+		mustLoad = false;
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -124,7 +129,7 @@ void ModuleScene::UpdateGameObjects(GameObject* root) {
 bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
-	RecursiveCleanUp(root);
+	//RecursiveCleanUp(root);
 
 	sceneTree->Clear();
 	numGameObjectsInScene = 0;
@@ -146,6 +151,7 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 
 void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, const char* address, bool loadingModel) {
 
+	LOG("");
 	LOG("Loading scene: %s", scene_name.c_str());
 	uint startTime = loadingTime.Read();
 
@@ -179,7 +185,7 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	loaded_go = 0;
 
 	uint fullTime = loadingTime.Read() - startTime;
-	LOG("Finished loading. Time spent: %d ms", fullTime);
+	LOG("Finished loading the scene. Time spent: %d ms", fullTime);
 }
 
 void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) {

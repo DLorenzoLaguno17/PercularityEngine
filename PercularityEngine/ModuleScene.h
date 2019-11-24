@@ -54,11 +54,10 @@ private:
 public:
 
 	std::vector<GameObject*> nonStaticObjects;
-
 	bool mustLoad = false;
 	//FRUSTUM TESTER
 
-	GameObject* frustumTest;
+	GameObject* frustumTest = nullptr;
 
 	//FRUSTUM TEST
 
