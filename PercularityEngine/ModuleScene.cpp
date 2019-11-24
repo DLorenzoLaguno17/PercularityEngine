@@ -135,6 +135,8 @@ bool ModuleScene::CleanUp()
 	RecursiveCleanUp(root);
 	numGameObjectsInScene = 0;
 
+	if (App->closingEngine) RELEASE(root);
+
 	return true;
 }
 
@@ -161,7 +163,6 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	// First we delete the current scene unless we are loading a model and not a scene
 	if (!loadingModel) {
 		CleanUp();
-		//root = new GameObject("World", nullptr, true);
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 	}
 
@@ -183,12 +184,9 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	if (!loadingModel) App->res_manager->LoadResources(scene_file);
 
 	// Then we load all the GameObjects
-	go_counter = scene_file["Game Objects"]["Count"];
-	
+	go_counter = scene_file["Game Objects"]["Count"];	
 	RecursiveLoad(root, scene_file);
-
 	selected = root;
-	int a = numGameObjectsInScene;
 	loaded_go = 0;
 
 	uint fullTime = loadingTime.Read() - startTime;

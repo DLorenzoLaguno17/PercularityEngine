@@ -89,11 +89,11 @@ bool ModuleResourceLoader::CleanUp()
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 
-	icon_tex = nullptr;
-	model_icon_tex = nullptr;
-	scene_icon_tex = nullptr;
-	tex_icon_tex = nullptr;
-	default_material = nullptr;
+	RELEASE(icon_tex);
+	RELEASE(model_icon_tex);
+	RELEASE(scene_icon_tex);
+	RELEASE(tex_icon_tex);
+	RELEASE(default_material);
 
 	return true;
 }

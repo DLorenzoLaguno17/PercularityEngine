@@ -51,6 +51,7 @@ bool ModuleCamera3D::Start()
 bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
+	RELEASE(camera);
 
 	return true;
 }
@@ -156,8 +157,6 @@ void ModuleCamera3D::CameraLookAround(float speed, float3 reference)
 
 	if (!reference.Equals(this->reference))
 		this->reference = camera->frustum.pos + camera->frustum.front * (camera->frustum.pos).Length();
-
-
 }
 
 void ModuleCamera3D::OnClick(const vec2& normMousePos)
