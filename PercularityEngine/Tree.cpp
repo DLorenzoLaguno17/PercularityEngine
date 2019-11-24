@@ -135,7 +135,8 @@ void TreeNode::Draw()
 
 	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
 	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
-
+	
+	glColor3f(1, 1, 1); //red color
 	glEnd();
 
 	if (nodeType!=NODE_TYPE::LEAF)

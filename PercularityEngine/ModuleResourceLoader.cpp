@@ -329,8 +329,6 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		ret = ImportMeshToLibrary(mesh, output, name);
 		mesh->exported_file = output;
 		loaded_node++;
-		
-		//App->renderer3D->meshes.push_back(mesh_comp);
 	}
 
 	if (node->mNumChildren > 0) {

@@ -35,8 +35,8 @@ bool ModuleScene::Init() {
 	selected = root;
 	sceneAddress = "Assets/Scenes/";
 
-	frustumTest = new GameObject("Camera", root);
-	frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
+	//frustumTest = new GameObject("Camera", root);
+	//frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
 
 	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }),5);
 
@@ -112,7 +112,7 @@ update_status ModuleScene::PostUpdate(float dt)
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow);
 
 	sceneTree->Draw();
-	frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
+	//frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
 
 	return UPDATE_CONTINUE;
 }
@@ -130,10 +130,9 @@ bool ModuleScene::CleanUp()
 	LOG("Releasing all the GameObjects");
 	//RecursiveCleanUp(root);
 	
-	//frustumTest->CleanUp();
-	//RELEASE(frustumTest);
 	nonStaticObjects.clear();
-	//sceneTree->Clear();
+	sceneTree->Clear();
+	RELEASE(sceneTree);
 	numGameObjectsInScene = 0;
 
 	return true;
@@ -143,8 +142,7 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveCleanUp(root->children[i]);
 
-	if(strcmp(root->name.c_str(), "Untitled") != 0)
-		RELEASE(root);
+	RELEASE(root);
 }
 
 // -----------------------------------------------------------------------------------------------
@@ -161,11 +159,7 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	if (!loadingModel) {
 		CleanUp();
 		root = new GameObject("World", nullptr, true);
-
-		//frustumTest = new GameObject("Camera", root, true);
-		//frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
-
-		//sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
+		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 	}
 
 	json scene_file;
@@ -187,7 +181,18 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 
 	// Then we load all the GameObjects
 	go_counter = scene_file["Game Objects"]["Count"];
-	RecursiveLoad(root, scene_file);
+
+	for (int i = 1; i <= go_counter; ++i) {
+
+		GameObject* go;
+		go = new GameObject("Temp", GetRoot(), true);
+
+		loaded_go++;
+		char name[50];
+		sprintf_s(name, 50, "GameObject %d", loaded_go);
+		go->OnLoad(name, scene_file);
+	}
+	//RecursiveLoad(root, scene_file);
 	selected = root;
 	int a = numGameObjectsInScene;
 	loaded_go = 0;
@@ -381,8 +386,8 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-	mesh->resource_mesh->aabb.SetNegativeInfinity();
-	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->aabb.SetNegativeInfinity();
+	mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
 
 	// Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
@@ -460,8 +465,8 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-	mesh->resource_mesh->aabb.SetNegativeInfinity();
-	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->aabb.SetNegativeInfinity();
+	mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
 
 	// Free the Par_mesh
 	par_shapes_free_mesh(mesh_front);
@@ -511,8 +516,8 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-	mesh->resource_mesh->aabb.SetNegativeInfinity();
-	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->aabb.SetNegativeInfinity();
+	mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
 
 	// Free the Par_mesh
 	par_shapes_free_mesh(plane);
@@ -562,8 +567,8 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	// Create the AABB
 	mesh->gameObject->aabb.SetNegativeInfinity();
 	mesh->gameObject->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
-	mesh->resource_mesh->aabb.SetNegativeInfinity();
-	mesh->resource_mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
+	mesh->aabb.SetNegativeInfinity();
+	mesh->aabb = AABB::MinimalEnclosingAABB(mesh->resource_mesh->vertices, mesh->resource_mesh->num_vertices);
 
 	// Free the Par_mesh
 	par_shapes_free_mesh(newMesh);
