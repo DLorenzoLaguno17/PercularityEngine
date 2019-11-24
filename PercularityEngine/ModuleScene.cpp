@@ -75,9 +75,11 @@ update_status ModuleScene::Update(float dt)
 		SaveScene(root, "Scene", sceneAddress);
 
 	// If the user wants to load another scene
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN
+		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
 		ImGui::OpenPopup("Loading new scene");
-	}
+	
 
 	if (ImGui::BeginPopupModal("Loading new scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{

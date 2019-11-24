@@ -41,7 +41,8 @@ bool ModuleGui::Init()
 
 	io->Fonts->AddFontDefault();
 	io->Fonts->AddFontFromFileTTF("Fonts/Roboto-Medium.ttf", 13);
-	io->Fonts->AddFontFromFileTTF("Fonts/GOTHIC.TTF", 16);
+	io->Fonts->AddFontFromFileTTF("Fonts/Karla-Regular.ttf", 16);
+	io->Fonts->AddFontFromFileTTF("Fonts/GOTHIC.ttf", 16);
 
 	io->FontDefault = ImGui::GetIO().Fonts->Fonts[2];
 

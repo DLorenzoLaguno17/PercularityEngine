@@ -40,9 +40,10 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 void GameObject::Update() {
 	if (showBondingBox) DrawAABB();
 
-	for (uint i = 0; i < components.size(); ++i)
-		if (components[i]->IsActive()) 
+	for (uint i = 0; i < components.size(); ++i) {
+		if (components[i]->IsActive())
 			components[i]->Update();
+	}
 }
 
 // Load & Save 
@@ -125,6 +126,9 @@ void GameObject::CleanUp() {
 		components[i]->CleanUp();
 		RELEASE(components[i]);
 	}
+
+	components.clear();
+	children.clear();
 }
 
 Component* GameObject::GetComponent(COMPONENT_TYPE componentType)

@@ -54,9 +54,7 @@ void SceneWindow::Update() {
 		(App->input->GetMouseX() > windowPosition.x && App->input->GetMouseX() < windowPosition.x + windowSize.x) &&
 		(App->input->GetMouseY() > windowPosition.y && App->input->GetMouseY() < windowPosition.y + windowSize.y))
 	{
-		OnClick();
-
-		
+		OnClick();		
 	}
 }
 

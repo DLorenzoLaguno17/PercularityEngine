@@ -1,5 +1,5 @@
 # Percularity Engine
-Percularity is a game engine that has been developed in the Video Games degree in Universitat Polit√®cnica de Catalunya for student purposes.
+Percularity is a game engine that has been developed in the Video Games degree in Universitat PolitËcnica de Catalunya for student purposes.
 
 ## Libraries used
 * [SDL v2.0.6](https://www.libsdl.org/)
@@ -32,8 +32,29 @@ While right clicking:
 
 * Left shift - Duplicate camera movement speed
 
-### Object movement
+### Save & Load
+
+* CTRL + S - Save the scene
+* CTRL + L - Load the scene
+
+Note: for the moment, each time a scene is saved, it is placed at Assets/Scenes/ and it's always called Scene.json, and only scenes named like that can be loaded by now.
+
+## Tasks delivered by each member
+
+### Joan MarÌn
+* Camera component.
+* Frustum culling.
+* Mousepicking.
+* GameObject transformations.
+* Quadtrees and octrees.
+
+
+### Daniel Lorenzo
+* Import and export of files.
+* Own file format.
+* Serialization of the scene.
+* Resource manager.
 
 ## License
-This game engine has been created by third course students [Joan Mar√≠n](https://github.com/X0KA) and [Daniel Lorenzo](https://github.com/DLorenzoLaguno17).
+This game engine has been created by third course students [Joan Mar√Ìn](https://github.com/X0KA) and [Daniel Lorenzo](https://github.com/DLorenzoLaguno17).
 Licensed under the [MIT License](LICENSE).

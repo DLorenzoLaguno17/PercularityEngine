@@ -76,10 +76,9 @@ bool ModuleResourceLoader::Start()
 	CreateDefaultMaterial();
 	LoadEngineUI();
 
-	// Load FBX
-	/*std::string output;
-	App->res_loader->LoadModel("Assets/FBX/Street environment_V01.FBX", output);
-	sceneloaded = true;*/
+	// Load scene
+	std::string output;
+	App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -127,10 +126,13 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 			}
 		}
 
-		// We save the model like an scene
+		// We save the model as a scene
 		App->scene->SaveScene(root, root->name, modelAddress, true);
 		DeleteModel(root); 
 		App->scene->nonStaticObjects.clear();
+		/*GameObject* root =
+		App->scene->nonStaticObjects.
+		//App->scene->sceneTree->Clear();*/
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -171,7 +173,9 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 	std::string nodeName = node->mName.C_Str();
 
 	bool found = true;
-	while (found) // Skipp all dummy modules. Assimp loads this fbx nodes to stack all transformations
+
+	// Assimp loads dummy fbx nodes to stack all transformations
+	while (found) 
 	{
 		// All dummy modules have one children (next dummy module or last module containing the mesh)
 		if (nodeName.find("_$AssimpFbx$_") != std::string::npos && node->mNumChildren == 1)
@@ -186,9 +190,6 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 			rot = rot * Quat(rotation.x, rotation.y, rotation.z, rotation.w);
 
 			nodeName = node->mName.C_Str();
-
-			/* If we find a dummy node we "change" our current node into the dummy one and search
-			for other dummy nodes inside that one.*/
 			found = true;
 		}
 		else found = false;
@@ -222,7 +223,6 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		else child = newGo;
 
 		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
-
 		aiString p;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &p);
 
@@ -346,7 +346,7 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		mesh->exported_file = output;
 		loaded_node++;
 
-		//mesh->ReleaseFromMemory();
+		mesh->ReleaseFromMemory();
 	}
 
 	if (node->mNumChildren > 0) {

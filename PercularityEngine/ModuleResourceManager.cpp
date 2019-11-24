@@ -274,43 +274,6 @@ void ModuleResourceManager::DrawProjectExplorer() {
 		ImGui::Text(sce_files[i].c_str());
 		break;
 	}
-
-	/*for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
-	{
-		if (it->second != nullptr && it->second->file.compare("None")) {
-
-			switch (it->second->type) {
-			case RESOURCE_TYPE::MODEL:
-				if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) 
-				{					
-					it->second->UpdateReferenceCount();		
-				}
-				ImGui::Text(it->second->name.c_str());
-				break;
-
-			case RESOURCE_TYPE::TEXTURE:
-				if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
-
-					it->second->UpdateReferenceCount();
-					
-					ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
-					if (mat) mat->resource_tex->usedAsReference--;
-					if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
-					mat->resource_tex = (ResourceTexture*)it->second;
-				}
-				ImGui::Text(it->second->name.c_str());
-				break;
-
-			case RESOURCE_TYPE::SCENE:
-				if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
-					
-					it->second->UpdateReferenceCount();
-				}
-				ImGui::Text(it->second->name.c_str());
-				break;
-			}
-		}
-	}*/
 }
 
 // Methods to check the extension of a file

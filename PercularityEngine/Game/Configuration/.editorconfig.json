@@ -28,7 +28,7 @@
     "Window": {
         "Borderless": false,
         "Full Screen": false,
-        "Full Screen Desktop": false,
+        "Full Screen Desktop": true,
         "Height": 720,
         "Resizable": false,
         "Size": 1,
