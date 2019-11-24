@@ -19,7 +19,7 @@ GameObject::GameObject() {
 	UUID = (uint)App->GetRandomGenerator().Int();
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 
-
+	App->scene->nonStaticObjects.push_back(this);
 }
 
 GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) : name(name)
@@ -30,6 +30,9 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 		UUID = (uint)App->GetRandomGenerator().Int();
 
 	if (!loadingScene) transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
+
+
+	App->scene->nonStaticObjects.push_back(this);
 }
 
 // Called every frame
@@ -208,5 +211,27 @@ void GameObject::UpdateAABB()
 
 		aabb.SetNegativeInfinity();
 		aabb.Enclose(obb);
+	}
+}
+
+void GameObject::MakeStatic(bool isStatic)
+{
+	if (isStatic)
+	{
+		
+		for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
+		{
+			if (App->scene->nonStaticObjects[i] == this)
+			{
+				App->scene->nonStaticObjects.erase(App->scene->nonStaticObjects.begin()+i);
+			}
+		}
+
+		App->scene->sceneTree->Insert(this);
+	}
+	else
+	{
+		App->scene->sceneTree->Erase(this);
+		App->scene->nonStaticObjects.push_back(this);
 	}
 }

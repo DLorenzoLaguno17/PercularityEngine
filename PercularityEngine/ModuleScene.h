@@ -23,6 +23,10 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void Play();
+	void Pause();
+	void ExitGame();
+
 	//Save & Load
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
@@ -42,6 +46,7 @@ public:
 
 
 private:
+
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;	//Draw a plane with some lines
 
@@ -50,6 +55,9 @@ private:
 	void UpdateGameObjects(GameObject* root);
 
 public:
+
+	std::vector<GameObject*> nonStaticObjects;
+
 	bool mustLoad = false;
 	//FRUSTUM TESTER
 

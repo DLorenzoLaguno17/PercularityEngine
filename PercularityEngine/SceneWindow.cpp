@@ -1,16 +1,18 @@
-#include "SceneWindow.h"
 #include "Application.h"
-#include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
-#include "ComponentCamera.h"
-#include "GameObject.h"
+#include "ModuleScene.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
+
+#include "SceneWindow.h"
+#include "ComponentCamera.h"
+#include "GameObject.h"
 #include "mmgr/mmgr.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
-
+#include "ResourceMesh.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
 
@@ -24,15 +26,29 @@ void SceneWindow::Update() {
 	windowPosition.y = ImGui::GetWindowPos().y;
 	windowSize.x = ImGui::GetContentRegionAvail().x;
 	windowSize.y = ImGui::GetContentRegionAvail().y;
+	
+	ImGui::SameLine( windowSize.x/2 - 60.0f);
+	if (ImGui::Button("Play"))
+		App->scene->Play();
+	
+	ImGui::SameLine();
+	if (ImGui::Button("Pause"))
+		App->scene->Pause();
+	
+	ImGui::SameLine();
+	if (ImGui::Button("Exit Game"))
+		App->scene->ExitGame();
 
 	// Check if the scene window has been resized
 	if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
 	{
 		last_windowSize = windowSize;
-		
 	}
 	
 	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.x/App->renderer3D->GetCamera()->GetAspectRatio()), ImVec2(0, 1), ImVec2(1, 0));
+	
+	
+	
 	ImGui::End();
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN &&
@@ -67,6 +83,13 @@ GameObject* SceneWindow::SelectObject() const
 	std::map<float,const GameObject*> objects;
 	App->scene->sceneTree->CollectChilldren(ray,objects);
 
+	float hit;
+	for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
+		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray, hit,hit))
+			objects[hit] = App->scene->nonStaticObjects[i];
+
+
+
 	std::map<float, const GameObject*>::iterator it;
 	for (it = objects.begin(); it != objects.end(); ++it)
 	{
@@ -75,16 +98,16 @@ GameObject* SceneWindow::SelectObject() const
 		{
 			LineSegment localRay = ray;
 			localRay.Transform(it->second->transform->GetGlobalTransform().Inverted());
-			for (uint v = 0; v < mesh->mesh.num_indices; v += 3)
+			for (uint v = 0; v < mesh->resource_mesh->num_indices; v += 3)
 			{
-				uint indexA = mesh->mesh.indices[v] * 3;
-				float3 a(mesh->mesh.vertices[indexA]);
+				uint indexA = mesh->resource_mesh->indices[v] * 3;
+				float3 a(mesh->resource_mesh->vertices[indexA]);
 
-				uint indexB = mesh->mesh.indices[v+1] * 3;
-				float3 b(mesh->mesh.vertices[indexB]);
+				uint indexB = mesh->resource_mesh->indices[v+1] * 3;
+				float3 b(mesh->resource_mesh->vertices[indexB]);
 
-				uint indexC = mesh->mesh.indices[v+2] * 3;
-				float3 c(mesh->mesh.vertices[indexC]);
+				uint indexC = mesh->resource_mesh->indices[v+2] * 3;
+				float3 c(mesh->resource_mesh->vertices[indexC]);
 
 				Triangle triangle(a, b, c);
 

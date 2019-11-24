@@ -77,8 +77,7 @@ TreeNode::~TreeNode()
 
 void TreeNode::Split()
 {
-	isLeaf= false;
-
+	
 	switch (treeType)
 	{
 	case TREE_TYPE::QUADTREE:
@@ -139,7 +138,7 @@ void TreeNode::Draw()
 
 	glEnd();
 
-	if (!this->isLeaf)
+	if (nodeType!=NODE_TYPE::LEAF)
 	{
 		for (int i = 0; i < nodesAmount ; ++i)
 			nodes[i].Draw();
@@ -462,23 +461,6 @@ void TreeNode::CollectChilldren(const LineSegment& ray, std::map<float, const Ga
 
 	}
 
-	/*std::vector<GameObject*> ret;
-	std::vector<GameObject*> auxVec;
-
-	if (!ray.Intersects(aabb))
-		return ret;
-
-	for (int i = 0; i < objects.size(); ++i)
-		ret.push_back(objects[i]);
-
-	for (int i = 0; i < nodesAmount; ++i)
-	{
-		auxVec = nodes[i].CollectChilldren(ray);
-		for (int j = 0; j < auxVec.size(); ++j)
-			ret.push_back(auxVec[j]);
-	}
-
-	return ret;*/
 }
 
 void TreeNode::Clear()
@@ -488,10 +470,23 @@ void TreeNode::Clear()
 		nodes[i].Clear();
 	}
 	
-	if (nodes != NULL)
+	if (nodes != nullptr)
 		delete[] nodes;
 
 	objects.clear();
+}
+
+void TreeNode::ClearSubNodes()
+{
+	for (int i = 0; i < nodesAmount; ++i)
+		nodes[i].Clear();
+
+	if (nodes != NULL)
+		delete[] nodes;
+
+	nodesAmount = 0;
+	if (nodeType != NODE_TYPE::ROOT)
+		nodeType = NODE_TYPE::LEAF;
 }
 
 void TreeNode::Erase(GameObject* gameObject)
@@ -504,9 +499,28 @@ void TreeNode::Erase(GameObject* gameObject)
 		}
 	}
 
-	for (int i = 0; i < nodesAmount; ++i)
+	if (nodesAmount > 0)
 	{
-		nodes[i].Erase(gameObject);
+		for (int i = 0; i < nodesAmount; ++i)
+		{
+			nodes[i].Erase(gameObject);
+		}
+
+		//In case the subnodes are the leaves, and become empty
+		//after erasing the object, clear them
+		if (nodes[0].nodeType == NODE_TYPE::LEAF)
+		{
+			bool nodesEmpty=true;
+			for (int i = 0; i < nodesAmount; ++i)
+			{
+				if (!nodes[i].objects.empty()) {
+					nodesEmpty = false;
+					break;
+				}
+			}
+			if (nodesEmpty)
+				ClearSubNodes();
+		}
 	}
 }
 

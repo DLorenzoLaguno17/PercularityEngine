@@ -1,19 +1,19 @@
-#include "ModuleScene.h"
 #include "Application.h"
+#include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
-#include "OpenGL.h"
-#include "GameObject.h"
-#include "ComponentMesh.h"
-#include "ComponentMaterial.h"
-#include "ResourceMesh.h"
-#include "ResourceTexture.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleResourceManager.h"
 #include "ModuleGui.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
 
-//test
+#include "Time.h"
+#include "OpenGL.h"
+#include "GameObject.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
+#include "ResourceMesh.h"
+#include "ResourceTexture.h"
 #include "ComponentCamera.h"
 
 #include <fstream>
@@ -38,7 +38,7 @@ bool ModuleScene::Init() {
 	frustumTest = new GameObject();
 	frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
 
-	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -50,-50,-50 }, { 50,50,50 }),1);
+	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }),5);
 
 	return true;
 }
@@ -558,4 +558,30 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	numGameObjectsInScene++;
 
 	return item;
+}
+
+void ModuleScene::Play()
+{
+	if (Time::running)
+		return;
+
+	if (Time::paused)
+		Time::Resume();
+
+	else
+	{
+		Time::Start();
+		//To do: Save auxiliar scene
+	}
+}
+
+void ModuleScene::Pause()
+{
+	Time::Pause();
+}
+
+void ModuleScene::ExitGame()
+{
+	Time::Stop();
+	//To do: load auxiliar scene
 }

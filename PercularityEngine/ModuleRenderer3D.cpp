@@ -300,14 +300,19 @@ void ModuleRenderer3D::DrawMeshes()
 		}
 		else
 		{
-			std::vector<const GameObject*> treeObjects;
-			App->scene->sceneTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum,treeObjects);
+			//Get objects from the sceneTree
+			std::vector<const GameObject*> objects;
+			App->scene->sceneTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum,objects);
 
-			for (int i = 0; i < treeObjects.size(); ++i)
+			//Get non static objects
+			for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
+				objects.push_back(App->scene->nonStaticObjects[i]);
+
+			for (int i = 0; i < objects.size(); ++i)
 			{
-				if (Intersect(*frustum, treeObjects[i]->aabb))
+				if (Intersect(*frustum, objects[i]->aabb))
 				{
-					ComponentMesh* mesh = (ComponentMesh*)treeObjects[i]->GetComponent(COMPONENT_TYPE::MESH);
+					ComponentMesh* mesh = (ComponentMesh*)objects[i]->GetComponent(COMPONENT_TYPE::MESH);
 
 
 					if (mesh)

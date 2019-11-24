@@ -8,6 +8,7 @@
 #include "ModuleResourceLoader.h"
 #include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
+#include "Time.h"
 
 #include <fstream>
 #include <iomanip>
@@ -98,11 +99,13 @@ void Application::PrepareUpdate()
 {
 	dt = (float)ms_timer.Read() / 1000.0f;
 	ms_timer.Start();
+	Time::PreUpdate(dt);
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	Time::Update();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules

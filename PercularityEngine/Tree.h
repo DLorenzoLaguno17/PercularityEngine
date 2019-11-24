@@ -62,6 +62,7 @@ public:
 	~TreeNode();
 
 	void Clear();
+	void ClearSubNodes();
 	void Split();
 
 	void Draw();
@@ -78,8 +79,6 @@ private:
 	void OctSplit();
 
 public:
-
-	bool isLeaf = true;
 
 	NODE_TYPE nodeType = NODE_TYPE::NONE;
 	TREE_TYPE treeType = TREE_TYPE::NONE;

@@ -19,7 +19,7 @@ ComponentCamera::ComponentCamera(GameObject* parent, bool active):Component(COMP
 	frustum.up = float3::unitY;
 
 	frustum.nearPlaneDistance = 0.5f;
-	frustum.farPlaneDistance = 100.0f;
+	frustum.farPlaneDistance = 200.0f;
 
 	frustum.verticalFov = 60.f*DEGTORAD;
 	SetAspectRatio(1.0f);
@@ -189,9 +189,7 @@ void ComponentCamera::OnEditor()
 		if (ImGui::DragFloat("Horizontal FOV", &horizontalFov))
 			frustum.horizontalFov = horizontalFov * DEGTORAD;
 
-		float aspectRatio = frustum.verticalFov/frustum.horizontalFov;
-		if (ImGui::DragFloat("Aspect Ratio", &aspectRatio,0.1))
-			SetAspectRatio(aspectRatio);
+		
 	}
 }
 

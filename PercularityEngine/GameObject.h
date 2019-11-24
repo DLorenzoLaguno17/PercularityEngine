@@ -30,6 +30,8 @@ public:
 
 	uint GetUUID() const { return UUID; }
 
+	void MakeStatic(bool isStatic);
+
 	Component* CreateComponent(COMPONENT_TYPE type, bool active = true);
 	void OnEditor();
 
@@ -55,6 +57,8 @@ public:
 
 	AABB aabb;
 	OBB obb;
+
+	bool isStatic = false;
 
 private:
 	uint UUID = 0;

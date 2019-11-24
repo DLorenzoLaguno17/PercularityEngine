@@ -1,5 +1,7 @@
-#include "ComponentTransform.h"
 #include "Application.h"
+#include "ModuleScene.h"
+
+#include "ComponentTransform.h"
 #include "ImGui/imgui.h"
 #include "GameObject.h"
 #include "ImGui/ImGuizmo.h"
@@ -37,7 +39,7 @@ void ComponentTransform::OnEditor() {
 		if (ImGui::DragFloat3("Rotation", (float*)&rotationM, 0.3))
 			SetEulerRotation(rotationM);
 
-		if (ImGui::DragFloat3("Scale", (float*)&scaleM, 0.3))
+		if (ImGui::DragFloat3("Scale", (float*)&scaleM, 0.05))
 			SetScale(scaleM);
 
 		ImGui::NewLine();
@@ -62,11 +64,17 @@ void ComponentTransform::UpdateTransform()
 		for (int i = 0; i < gameObject->components.size(); ++i)
 			gameObject->components[i]->OnUpdateTransform();
 
+		if (gameObject->isStatic) {
+			App->scene->sceneTree->Erase(gameObject);
+			App->scene->sceneTree->Insert(gameObject);
+		}
+
 		mustUpdate = false;
+	
+		for (int i = 0; i < gameObject->children.size(); ++i)
+			gameObject->children[i]->transform->mustUpdate = true;
 	}
 
-	for (int i = 0; i < gameObject->children.size(); ++i)
-		gameObject->children[i]->transform->mustUpdate = true;
 }
 
 void ComponentTransform::UpdateRenderTransform()
