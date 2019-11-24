@@ -38,7 +38,7 @@ bool ModuleScene::Init() {
 	frustumTest = new GameObject();
 	frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
 
-	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -50,-50,-50 }, { 50,50,50 }),1);
+	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }),5);
 
 	return true;
 }

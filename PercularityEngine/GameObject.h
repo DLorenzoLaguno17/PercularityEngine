@@ -56,6 +56,8 @@ public:
 	AABB aabb;
 	OBB obb;
 
+	bool isStatic = false;
+
 private:
 	uint UUID = 0;
 	uint parent_UUID = 0;

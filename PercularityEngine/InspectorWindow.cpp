@@ -16,7 +16,7 @@ void InspectorWindow::Update() {
 
 	if (App->scene->selected != nullptr) {
 		ImGui::InputText("GameObject", (char*)App->scene->selected->name.c_str(), 20);
-
+		ImGui::Checkbox("Static",&App->scene->selected->isStatic);
 		ImGui::NewLine();
 		App->scene->selected->OnEditor();
 	}
