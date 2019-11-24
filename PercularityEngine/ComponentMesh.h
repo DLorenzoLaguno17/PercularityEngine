@@ -29,10 +29,14 @@ public:
 
 	// Create a primitive shape
 	void LoadParShape(par_shapes_mesh_s* parShape);
+	const AABB& GetAABB()const { return aabb; }
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::MESH; }
 
 public:
+	// Bounding box
+	AABB aabb;
+
 	ResourceMesh* resource_mesh = nullptr;
 
 private:

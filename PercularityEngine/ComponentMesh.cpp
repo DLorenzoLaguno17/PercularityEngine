@@ -194,6 +194,9 @@ void ComponentMesh::OnLoad(const char* gameObjectNum, const nlohmann::json &scen
 
 	uint uuid = scene_file["Game Objects"][gameObjectNum]["Components"]["Mesh"]["Resource UUID"];
 	resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(uuid);
+
+	aabb.SetNegativeInfinity();
+	aabb = AABB::MinimalEnclosingAABB(resource_mesh->vertices, resource_mesh->num_vertices);
 }
 
 void ComponentMesh::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 

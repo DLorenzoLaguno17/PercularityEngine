@@ -16,8 +16,6 @@ public:
 	void OnSave(const char* resourceNum, json &config) const;
 	void OnLoad(const char* resourceNum, const json &config);
 
-	const AABB& GetAABB()const { return aabb; }
-
 public:
 	// Index 
 	uint id_index = 0;
@@ -41,9 +39,6 @@ public:
 	// Colors
 	uint num_colors = 0;
 	uint* colors = nullptr;
-
-	// Bounding box
-	AABB aabb;
 
 	// Data of other components
 	std::string assignedTex = "None";

@@ -36,7 +36,4 @@ void ResourceMesh::OnLoad(const char* resourceNum, const json &config)
 	name = s1.get<std::string>();
 	file = s2.get<std::string>();
 	exported_file = s3.get<std::string>();
-
-	aabb.SetNegativeInfinity();
-	aabb = AABB::MinimalEnclosingAABB(vertices, num_vertices);
 }

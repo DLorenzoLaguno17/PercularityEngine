@@ -20,7 +20,6 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "GLEW/lib86/glew32.lib")
-//#pragma comment( lib, "GLEW/lib86/glew32s.lib" )
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled) {}
 
@@ -299,7 +298,7 @@ void ModuleRenderer3D::DrawMeshes()
 		{
 			// Get objects from the sceneTree
 			std::vector<const GameObject*> objects;
-			App->scene->sceneTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum, objects);
+			App->scene->sceneTree->CollectChilldren(camera->frustum, objects);
 			int a = objects.size();
 
 			// Get non static objects

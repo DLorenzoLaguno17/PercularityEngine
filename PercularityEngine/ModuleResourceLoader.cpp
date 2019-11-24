@@ -317,6 +317,10 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
 		mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
 
+		// Create the abb
+		mesh_comp->aabb.SetNegativeInfinity();
+		mesh_comp->aabb.Enclose((float3*)mesh->vertices, mesh->num_vertices);
+
 		// We import the mesh to our library
 		char name[35];
 		sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), loaded_node);
@@ -325,6 +329,8 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		ret = ImportMeshToLibrary(mesh, output, name);
 		mesh->exported_file = output;
 		loaded_node++;
+		
+		//App->renderer3D->meshes.push_back(mesh_comp);
 	}
 
 	if (node->mNumChildren > 0) {
@@ -460,10 +466,6 @@ bool ModuleResourceLoader::LoadMeshFromLibrary(ResourceMesh* mesh) {
 		mesh->id_vertex = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float3) * mesh->num_vertices, mesh->vertices);
 		mesh->id_index = App->renderer3D->CreateBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, mesh->indices);
 		mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
-
-		// Creating the AABB
-		mesh->aabb.SetNegativeInfinity();
-		mesh->aabb = AABB::MinimalEnclosingAABB(mesh->vertices, mesh->num_vertices);
 
 		ret = true;
 

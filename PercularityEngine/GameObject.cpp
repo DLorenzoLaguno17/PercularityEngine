@@ -207,7 +207,7 @@ void GameObject::UpdateAABB()
 	ComponentMesh* mesh = GetComponent<ComponentMesh>();
 	if (mesh!=nullptr)
 	{
-		obb = mesh->resource_mesh->GetAABB();
+		obb = mesh->GetAABB();
 		obb.Transform(transform->GetGlobalTransform());
 
 		aabb.SetNegativeInfinity();
