@@ -15,6 +15,7 @@
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "ComponentCamera.h"
+#include "Debug.h"
 
 #include <fstream>
 #include <iomanip>
@@ -62,8 +63,11 @@ update_status ModuleScene::Update(float dt)
 {
 	BROFILER_CATEGORY("SceneUpdate", Profiler::Color::LightSeaGreen);
 
-	DrawSimplePlane();
-	DrawAxis();
+	if (Debug::drawScenePlane)
+		DrawSimplePlane();
+
+	if(Debug::drawSceneAxis)
+		DrawAxis();
 
 	//if (sphereCount == 0) App->res_manager->GetResourceFromMap(sphereMesh_UUID)->ReleaseFromMemory();
 
@@ -111,7 +115,9 @@ update_status ModuleScene::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow);
 
-	sceneTree->Draw();
+	if (Debug::drawSceneTree)
+		sceneTree->Draw();
+
 	//frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
 
 	return UPDATE_CONTINUE;

@@ -55,6 +55,9 @@
     <Filter Include="Sources\Tools\Time Management">
       <UniqueIdentifier>{e0501123-45a1-48cf-a6be-e4460ce7b12b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Debug">
+      <UniqueIdentifier>{15c4c9d4-9df2-4597-a6fd-46fe8491f647}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleCamera3D.h">
@@ -219,6 +222,12 @@
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools\Time Management</Filter>
     </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Sources\Tools\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugWindow.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -352,6 +361,12 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Sources\Tools\Time Management</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Sources\Tools\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugWindow.cpp">
+      <Filter>Sources\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

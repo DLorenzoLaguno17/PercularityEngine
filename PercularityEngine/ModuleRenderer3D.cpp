@@ -11,6 +11,7 @@
 #include "ComponentMesh.h"
 #include "Intersection.h"
 #include "GameObject.h"
+#include "Debug.h"
 
 //test
 #include"ModuleScene.h"
@@ -278,7 +279,7 @@ void ModuleRenderer3D::DeleteBuffers()
 
 void ModuleRenderer3D::DrawMeshes()
 {
-	if (!frustumCullingActive)
+	if (!Debug::frustumCullingActive)
 	{
 		for (int i = 0; i < meshes.size(); ++i)
 			meshes[i]->Render();
@@ -286,7 +287,7 @@ void ModuleRenderer3D::DrawMeshes()
 	}
 	else
 	{
-		if (!acceleratedCullingActive)
+		if (!Debug::frustumAccelerated)
 		{
 			for (int i = 0; i < meshes.size(); ++i)
 			{

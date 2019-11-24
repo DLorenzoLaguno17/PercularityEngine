@@ -11,6 +11,8 @@
 #include "MainMenuBar.h"
 #include "ImGui/imgui.h"
 
+class DebugWindow;
+
 // ---------------------------------------------------
 class ModuleGui : public Module
 {
@@ -55,6 +57,7 @@ private:
 	InspectorWindow* inspector = nullptr;
 	HierarchyWindow* hierarchy = nullptr;
 	ProjectWindow* project = nullptr;
+	DebugWindow* debugWindow = nullptr;
 
 	std::vector<UIElement*> ui_elements_list;
 

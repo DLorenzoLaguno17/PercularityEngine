@@ -53,7 +53,7 @@ public:
 	GameObject* parent;
 
 	bool extended = true;
-	bool showBondingBox = true;
+	bool showBondingBox =false;
 
 	AABB aabb;
 	OBB obb;
