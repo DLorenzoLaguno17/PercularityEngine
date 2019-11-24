@@ -54,7 +54,7 @@ void Tree::CollectChilldren(const AABB& aabb_, std::vector<const GameObject*>& v
 
 void Tree::CollectChilldren(const Frustum& frustum, std::vector<const GameObject*>& vector)
 {
-	rootNode->CollectChilldren(frustum,vector);
+	rootNode->CollectChilldren(frustum, vector);
 }
 
 void Tree::CollectChilldren(const LineSegment& ray, std::map<float,const GameObject*>& container,bool nearest)

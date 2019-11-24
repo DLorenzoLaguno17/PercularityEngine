@@ -22,8 +22,8 @@ void ComponentMaterial::OnEditor() {
 }
 
 // Load & Save 
-void ComponentMaterial::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
-	
+void ComponentMaterial::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) 
+{	
 	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Parent UUID"];
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Active"];

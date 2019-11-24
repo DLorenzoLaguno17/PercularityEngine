@@ -19,6 +19,7 @@ GameObject::GameObject() {
 	UUID = (uint)App->GetRandomGenerator().Int();
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 
+	App->scene->numGameObjectsInScene++;
 	App->scene->nonStaticObjects.push_back(this);
 }
 
@@ -31,7 +32,7 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 
 	if (!loadingScene) transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 
-
+	App->scene->numGameObjectsInScene++;
 	App->scene->nonStaticObjects.push_back(this);
 }
 

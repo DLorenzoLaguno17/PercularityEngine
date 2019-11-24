@@ -17,6 +17,10 @@ public:
 	void OnEditor();
 	void OnUpdateTransform();
 
+	// Load & Save 
+	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
+	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
+
 	//~~~~Frustum 
 	//Getters
 	float GetNearPlane() const;

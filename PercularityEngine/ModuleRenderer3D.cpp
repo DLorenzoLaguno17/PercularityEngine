@@ -272,7 +272,6 @@ void ModuleRenderer3D::DeleteBuffers()
 	}
 	if (texColorBuffer != 0)
 	{
-
 		glDeleteTextures(1, &texColorBuffer);
 		texColorBuffer = 0;
 	}
@@ -300,11 +299,12 @@ void ModuleRenderer3D::DrawMeshes()
 		}
 		else
 		{
-			//Get objects from the sceneTree
+			// Get objects from the sceneTree
 			std::vector<const GameObject*> objects;
-			App->scene->sceneTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum,objects);
+			App->scene->sceneTree->CollectChilldren(App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum, objects);
+			int a = objects.size();
 
-			//Get non static objects
+			// Get non static objects
 			for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
 				objects.push_back(App->scene->nonStaticObjects[i]);
 
@@ -313,10 +313,7 @@ void ModuleRenderer3D::DrawMeshes()
 				if (Intersect(*frustum, objects[i]->aabb))
 				{
 					ComponentMesh* mesh = (ComponentMesh*)objects[i]->GetComponent(COMPONENT_TYPE::MESH);
-
-
-					if (mesh)
-							mesh->Render();
+					if (mesh) mesh->Render();
 				}
 			}
 		}

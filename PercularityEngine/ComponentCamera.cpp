@@ -205,3 +205,18 @@ void ComponentCamera::UpdatePlanes()
 {
 	frustum.GetPlanes(planes);
 }
+
+// Load & Save 
+void ComponentCamera::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) 
+{
+	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Camera"]["UUID"];
+	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Camera"]["Parent UUID"];
+	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Camera"]["Active"];
+}
+
+void ComponentCamera::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 
+{
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Camera"]["UUID"] = UUID;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Camera"]["Parent UUID"] = parent_UUID;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Camera"]["Active"] = active;
+}

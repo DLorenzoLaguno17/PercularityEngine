@@ -35,7 +35,7 @@ bool ModuleScene::Init() {
 	selected = root;
 	sceneAddress = "Assets/Scenes/";
 
-	frustumTest = new GameObject();
+	frustumTest = new GameObject("Camera", root);
 	frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
 
 	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }),5);
@@ -112,8 +112,7 @@ update_status ModuleScene::PostUpdate(float dt)
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow);
 
 	sceneTree->Draw();
-		frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
-
+	frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
 
 	return UPDATE_CONTINUE;
 }
@@ -130,8 +129,11 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
 	//RecursiveCleanUp(root);
-
-	sceneTree->Clear();
+	
+	//frustumTest->CleanUp();
+	//RELEASE(frustumTest);
+	nonStaticObjects.clear();
+	//sceneTree->Clear();
 	numGameObjectsInScene = 0;
 
 	return true;
@@ -159,6 +161,11 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	if (!loadingModel) {
 		CleanUp();
 		root = new GameObject("World", nullptr, true);
+
+		//frustumTest = new GameObject("Camera", root, true);
+		//frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
+
+		//sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 	}
 
 	json scene_file;
@@ -182,6 +189,7 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	go_counter = scene_file["Game Objects"]["Count"];
 	RecursiveLoad(root, scene_file);
 	selected = root;
+	int a = numGameObjectsInScene;
 	loaded_go = 0;
 
 	uint fullTime = loadingTime.Read() - startTime;
@@ -230,11 +238,15 @@ void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char
 	stream.close();
 }
 
-void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) {
-	saved_go++;
-	char name[50];
-	sprintf_s(name, 50, "GameObject %d", saved_go);
-	root->OnSave(name, scene_file);
+void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) 
+{
+	if (strcmp(root->name.c_str(), "Camera") != 0) 
+	{
+		saved_go++;
+		char name[50];
+		sprintf_s(name, 50, "GameObject %d", saved_go);
+		root->OnSave(name, scene_file);
+	}
 
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveSave(root->children[i], scene_file);
@@ -378,7 +390,6 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
-	numGameObjectsInScene++;
 
 	return item;
 }
@@ -458,7 +469,6 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
-	numGameObjectsInScene++;
 
 	return item;
 }
@@ -510,7 +520,6 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
-	numGameObjectsInScene++;
 
 	return item;
 }
@@ -562,7 +571,6 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
-	numGameObjectsInScene++;
 
 	return item;
 }
