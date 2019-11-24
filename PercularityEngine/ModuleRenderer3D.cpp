@@ -279,8 +279,6 @@ void ModuleRenderer3D::DeleteBuffers()
 
 void ModuleRenderer3D::DrawMeshes()
 {
-	static Frustum* frustum = &App->scene->frustumTest->GetComponent<ComponentCamera>()->frustum;
-
 	if (!frustumCullingActive)
 	{
 		for (int i = 0; i < meshes.size(); ++i)
@@ -293,7 +291,7 @@ void ModuleRenderer3D::DrawMeshes()
 		{
 			for (int i = 0; i < meshes.size(); ++i)
 			{
-				if (Intersect(*frustum, meshes[i]->gameObject->aabb))
+				if (Intersect(camera->frustum, meshes[i]->gameObject->aabb))
 					meshes[i]->Render();
 			}
 		}
@@ -310,7 +308,7 @@ void ModuleRenderer3D::DrawMeshes()
 
 			for (int i = 0; i < objects.size(); ++i)
 			{
-				if (Intersect(*frustum, objects[i]->aabb))
+				if (Intersect(camera->frustum, objects[i]->aabb))
 				{
 					ComponentMesh* mesh = (ComponentMesh*)objects[i]->GetComponent(COMPONENT_TYPE::MESH);
 					if (mesh) mesh->Render();
