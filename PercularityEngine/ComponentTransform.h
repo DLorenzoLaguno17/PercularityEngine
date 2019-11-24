@@ -17,16 +17,17 @@ public:
 	void OnEditor();
 	void CleanUp() {}
 
+	// Getters
 	const float4x4& GetLocalTransform() const { return localTransform; }
 	const float4x4& GetGlobalTransform() const { return globalTransform; }
 	const float3& GetEulerRotation() const { return eulerRotation; }
 	const float3& GetTranslation() const { return translation; }
 	const float3& GetScale() const { return scale; }
 
+	// Setters
 	void SetScale(float3 newScale);
 	void SetPosition(float3 newPosition);
 	void SetRotation(Quat newRotation);
-	void UpdateLocalTransform();
 
 	// Load & Save 
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);

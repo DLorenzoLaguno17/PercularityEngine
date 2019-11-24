@@ -19,7 +19,6 @@ public:
 	void OnLoad(const char* resourceNum, const json &config);
 
 public:
-	std::vector<ResourceMesh*> meshes;
 
 };
 

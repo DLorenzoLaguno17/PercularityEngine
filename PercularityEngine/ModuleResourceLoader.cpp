@@ -95,7 +95,7 @@ bool ModuleResourceLoader::CleanUp()
 	return true;
 }
 
-bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file, std::vector<ResourceMesh*>& meshes) {
+bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file) {
 	
 	BROFILER_CATEGORY("ResourceLoaderLoadModel", Profiler::Color::MediumVioletRed)
 
@@ -115,11 +115,13 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 		if (root_node->mNumChildren > 0) {
 			for (uint i = 0; i < root_node->mNumChildren; ++i){
 				std::string output;
-				ret = LoadNode(scene, root_node->mChildren[i], root, output, meshes, path);
+				ret = LoadNode(path, scene, root_node->mChildren[i], root);
 			}
 		}
 
-		//App->scene->SaveScene(root, root->name);
+		// We save the model like an scene
+		App->scene->SaveScene(root, root->name, modelAddress, true);
+		//App->scene->RecursiveCleanUp(root);
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -134,7 +136,7 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file,
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, GameObject* parent, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path) {	
+bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNode* node, GameObject* parent) {
 
 	bool ret = false;
 
@@ -156,10 +158,10 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, GameObje
 		// All dummy modules have one children (next dummy module or last module containing the mesh)
 		if (nodeName.find("_$AssimpFbx$_") != std::string::npos && node->mNumChildren == 1)
 		{
-			//Dummy module have only one child node, so we use that one as our next GameObject
+			// Dummy module have only one child node, so we use that one as our next GameObject
 			node = node->mChildren[0];
 
-			// Accumulate transform 
+			// We accumulate the transform of the GameObject
 			node->mTransformation.Decompose(scale, rotation, translation);
 			pos += float3(translation.x, translation.y, translation.z);
 			sca = float3(sca.x * scale.x, sca.y * scale.y, sca.z * scale.z);
@@ -185,62 +187,54 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, GameObje
 	tra->SetScale(sca);
 	tra->SetRotation(rot);
 
-	tra->UpdateLocalTransform();
-
-	for (int i = 0; i < node->mNumMeshes; ++i) {		
-
-		//hasMeshes = true;
-
-		//ResourceMesh* mesh = nullptr;
+	for (int i = 0; i < node->mNumMeshes; ++i) {
 
 		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
 		GameObject* child = nullptr;
 
 		if (node->mNumMeshes > 1)
 		{
-			/*mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
-			mesh->file = path;
-			mesh->name = nodeName;
-			mesh->position = pos;
-			mesh->scale = sca;
-			mesh->rotation = rot;*/
-
 			nodeName = currentMesh->mName.C_Str();
 			if (nodeName == "")
-				nodeName = newGo->name + "dummy";
+				nodeName = newGo->name + "_Parent";
 			if (i > 0)
-				nodeName = newGo->name + "_submesh";
+				nodeName = newGo->name + "_SubMesh";
 			child = new GameObject(nodeName, newGo);
 		}
-		else 
+		else child = newGo;
+
+		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
+
+		aiString p;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &p);
+
+		// Check for assigned textures
+		if (p.C_Str() != nullptr)
 		{
-			//mesh = parent_mesh;
-			child = newGo;
+			ComponentMaterial* mat = (ComponentMaterial*)child->CreateComponent(COMPONENT_TYPE::MATERIAL, true);
+			ResourceTexture* tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE);
+			std::string texPath = "Assets/Textures/" + getNameFromPath(p.C_Str(), true);
+			std::string exportedPath;
+
+			// We load the texture in our own file format
+			LoadTexture(texPath.c_str(), exportedPath);
+			tex->name = getNameFromPath(p.C_Str());
+			tex->file = texPath;
+			tex->exported_file = exportedPath;
+
+			tex->UpdateReferenceCount();
+			mat->resource_tex = tex;
 		}
 
-		//mesh->renderizable = true;
-
 		ComponentMesh* mesh_comp = (ComponentMesh*)child->CreateComponent(COMPONENT_TYPE::MESH, true);
-		//child->CreateComponent(COMPONENT_TYPE::MATERIAL, true);
-
-		// Check if it has any assigned texture
-		/*aiMaterial* mat = scene->mMaterials[currentMesh->mMaterialIndex];
-		aiString p;
-		mat->GetTexture(aiTextureType_DIFFUSE, 0, &p);
-		std::string n = getNameFromPath(p.C_Str(), true);
-		mesh->assignedTex = n;*/
-
 		mesh_comp->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
 
-		std::string output;
 		ResourceMesh* mesh = mesh_comp->resource_mesh;
 		mesh->file = path;
 		mesh->name = nodeName;
 		/*mesh->position = pos;
 		mesh->scale = sca;
 		mesh->rotation = rot;*/
-
-		//bool hasMeshes = false;
 
 		// Copy vertices
 		mesh->num_vertices = currentMesh->mNumVertices;
@@ -318,32 +312,18 @@ bool ModuleResourceLoader::LoadNode(const aiScene* scene, aiNode* node, GameObje
 		mesh->id_UVs = App->renderer3D->CreateBuffer(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_UVs, mesh->coords);
 
 		// We import the mesh to our library
-		/*char name[35];
-		sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), loaded_node);
-		std::string asdf = nodeName;
-		ret = ImportMeshToLibrary(mesh, output_file, name);
-		mesh->exported_file = output_file;
-		loaded_node++;
-
-		// We add it to the list of the meshes of the model resource
-		meshes.push_back(mesh);*/
-	}
-
-	/*if (!hasMeshes) {
 		char name[35];
 		sprintf_s(name, 35, "%s %d", getNameFromPath(path).c_str(), loaded_node);
 		std::string asdf = nodeName;
-		ret = ImportMeshToLibrary(parent_mesh, output_file, name);
-		parent_mesh->exported_file = output_file;
+		std::string output;
+		ret = ImportMeshToLibrary(mesh, output, name);
+		mesh->exported_file = output;
 		loaded_node++;
-
-		// We add it to the list of the meshes of the model resource
-		meshes.push_back(parent_mesh);
-	}*/
+	}
 
 	if (node->mNumChildren > 0) {
 		for (int i = 0; i < node->mNumChildren; ++i) {
-			LoadNode(scene, node->mChildren[i], newGo, output_file, meshes, path);
+			LoadNode(path, scene, node->mChildren[i], newGo);
 		}
 	}
 

@@ -4,7 +4,7 @@
 
 bool ResourceScene::LoadInMemory()
 {
-	App->scene->LoadScene(App->scene->GetRoot(), name);
+	App->scene->LoadScene(App->scene->GetRoot(), name, App->scene->sceneAddress, false);
 	return true;
 }
 

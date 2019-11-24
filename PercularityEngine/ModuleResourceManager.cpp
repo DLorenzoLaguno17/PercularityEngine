@@ -97,13 +97,12 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 	bool success = false;
 	std::string written_file;
 
-	std::vector<ResourceMesh*> meshes;
 	switch (type) {
 	case RESOURCE_TYPE::TEXTURE:
 		success = App->res_loader->LoadTexture(new_file, written_file);
 		break;
 	case RESOURCE_TYPE::MODEL:
-		success = App->res_loader->LoadModel(new_file, written_file, meshes);
+		success = App->res_loader->LoadModel(new_file, written_file);
 		break;
 	case RESOURCE_TYPE::SCENE: 
 		success = true; 
@@ -112,23 +111,12 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 
 	// If the import was successful, we create a new resource
 	if (success) {
-		if (type == RESOURCE_TYPE::MODEL) {
-			ResourceModel* res = (ResourceModel*)CreateNewResource(type);
-			res->file = new_file;
-			App->file_system->NormalizePath(res->file);
-			res->exported_file = written_file;
-			res->name = App->res_loader->getNameFromPath(res->file);
-			ret = res->GetUUID();
-			res->meshes = meshes;
-		}
-		else {
-			Resource* res = CreateNewResource(type);
-			res->file = new_file;
-			App->file_system->NormalizePath(res->file);
-			res->exported_file = written_file;
-			res->name = App->res_loader->getNameFromPath(res->file);
-			ret = res->GetUUID();
-		}
+		Resource* res = CreateNewResource(type);
+		res->file = new_file;
+		App->file_system->NormalizePath(res->file);
+		res->exported_file = written_file;
+		res->name = App->res_loader->getNameFromPath(res->file);
+		ret = res->GetUUID();		
 	}
 }
 
@@ -230,46 +218,8 @@ void ModuleResourceManager::DrawProjectExplorer() {
 			switch (it->second->type) {
 			case RESOURCE_TYPE::MODEL:
 				if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
-					ResourceModel* mod = (ResourceModel*)it->second;
-					mod->UpdateReferenceCount();
-
-					// Create the parent GameObject
-					GameObject* parent = new GameObject(it->second->name.c_str(), App->scene->GetRoot());
-
-					for (int i = 0; i < mod->meshes.size(); ++i) {
-					// Create the children GameObjects						
-						GameObject* go = nullptr;
-						if (mod->meshes.size() > 1)	go = new GameObject(mod->meshes[i]->name.c_str(), parent);
-						else go = parent;
-						
-						/*for (int i = 1; i <= mod->meshes.size(); ++i) {
-							if (aux == mod->meshes[i]) { //The first one is the World itself so we skip it
-								GameObject* newGo;
-								newGo = new GameObject("Temp", root, true);
-							}
-						}*/
-
-						ComponentTransform* tra = (ComponentTransform*)go->GetComponent(COMPONENT_TYPE::TRANSFORM);
-						tra->SetRotation(mod->meshes[i]->rotation);
-						tra->SetPosition(mod->meshes[i]->position);
-						tra->SetScale(mod->meshes[i]->scale);
-						tra->UpdateLocalTransform();
-
-						// We only create its mesh if it must have one
-						if (mod->meshes[i]->renderizable && strstr(mod->meshes[i]->name.c_str(), "City")) {
-							ComponentMesh* mesh = (ComponentMesh*)go->CreateComponent(COMPONENT_TYPE::MESH);
-							mesh->resource_mesh = (ResourceMesh*)mod->meshes[i];
-
-							// Check if the assinged texture of the mesh can be loaded
-							std::string texturePath = ASSETS_TEXTURE_FOLDER + mod->meshes[i]->assignedTex;
-							if (FindFileInAssets(texturePath.c_str()) != 0) {
-								ComponentMaterial* tex = (ComponentMaterial*)go->CreateComponent(COMPONENT_TYPE::MATERIAL);
-								tex->resource_tex = (ResourceTexture*)GetResourceFromMap(FindFileInAssets(texturePath.c_str()));
-								tex->resource_tex->UpdateReferenceCount();
-							}
-						}
-					}					
-					App->scene->selected = parent;
+					
+					it->second->UpdateReferenceCount();		
 				}
 				ImGui::Text(it->second->name.c_str());
 				break;

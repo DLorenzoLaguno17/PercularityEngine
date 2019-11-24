@@ -37,10 +37,10 @@ public:
 	void Save(nlohmann::json &config);
 
 	// Loading methods
-	bool LoadModel(const char* path, std::string& output_file, std::vector<ResourceMesh*>& meshes);
+	bool LoadModel(const char* path, std::string& output_file);
 	bool LoadTexture(const char* path, std::string& output_file);
 	void ProcessTexture(uint& texture);
-	bool LoadNode(const aiScene* scene, aiNode* node, GameObject* parent, std::string& output_file, std::vector<ResourceMesh*>& meshes, const char* path);
+	bool LoadNode(const char* path, const aiScene* scene, aiNode* node, GameObject* parent);
 	
 	// Own file format loaders
 	bool LoadMeshFromLibrary(ResourceMesh* mesh);

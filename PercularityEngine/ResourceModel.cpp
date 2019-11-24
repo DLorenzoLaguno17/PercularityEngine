@@ -1,25 +1,14 @@
 #include "ResourceModel.h"
-#include "ResourceMesh.h"
 #include "Application.h"
-#include "ModuleResourceLoader.h"
-#include "ModuleResourceManager.h"
+#include "ModuleScene.h"
 
 bool ResourceModel::LoadInMemory()
 {	
-	bool ret = false;
-
-	for (int i = 0; i < meshes.size(); ++i) {
-		ret = meshes[i]->UpdateReferenceCount();
-	}
-
-	return ret;
+	App->scene->LoadScene(App->scene->GetRoot(), name, App->scene->sceneAddress, true);
+	return true;
 }
 
-void ResourceModel::ReleaseFromMemory() 
-{
-	for (int i = 0; i < meshes.size(); ++i)
-		meshes[i]->ReleaseFromMemory();
-}
+void ResourceModel::ReleaseFromMemory() {}
 
 // Save and Load
 void ResourceModel::OnSave(const char* resourceNum, json &config) const

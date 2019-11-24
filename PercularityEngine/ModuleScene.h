@@ -27,14 +27,15 @@ public:
 	void Pause();
 	void ExitGame();
 
-	//Save & Load
+	// Save & Load
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
-	void LoadModel(const std::string model_name);
-	void LoadScene(GameObject* root, const std::string scene_name);
-	void SaveScene(GameObject* root, std::string scene_name);
+	void LoadScene(GameObject* root, const std::string scene_name, const char* address, bool loadingModel = false);
+	void SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel = false);
 	void RecursiveLoad(GameObject* root, const json &scene_file);
 	void RecursiveSave(GameObject* root, json &scene_file);
+
+	void RecursiveCleanUp(GameObject* root);
 
 	//Methods to create primitives
 	GameObject* CreateSphere(int slices, int stacks, float diameter);
@@ -44,14 +45,10 @@ public:
 
 	GameObject* GetRoot() const { return root; }
 
-
 private:
 
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;	//Draw a plane with some lines
-
-	// Recursive methods
-	void RecursiveCleanUp(GameObject* root);
 	void UpdateGameObjects(GameObject* root);
 
 public:

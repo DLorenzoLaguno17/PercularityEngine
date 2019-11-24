@@ -96,11 +96,6 @@ void ComponentTransform::Scale(float3 scale_)
 	mustUpdate = true;
 }
 
-void ComponentTransform::UpdateLocalTransform() {
-	localTransform = math::float4x4::FromTRS(translation, rotation, scale);
-	mustUpdate = true;
-}
-
 void ComponentTransform::SetLocalTransform(float4x4 transform)
 {
 	transform.Decompose(translation, rotation, scale);
@@ -155,27 +150,31 @@ void ComponentTransform::OnLoad(const char* gameObjectNum, const nlohmann::json 
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Parent UUID"];
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Active"];	
 
-	float3 rot;
+	Quat rot;
 	rot.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(0);
 	rot.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(1);
 	rot.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(2);
-	rotation.w = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(3);
-	SetEulerRotation(rot);
+	rot.w = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(3);
+	SetRotation(rot);
 
-	translation.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(0);
-	translation.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(1);
-	translation.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(2);
+	float3 tra;
+	tra.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(0);
+	tra.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(1);
+	tra.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(2);
+	SetPosition(tra);
 
-	scale.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(0);
-	scale.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(1);
-	scale.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(2);
+	float3 sca;
+	sca.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(0);
+	sca.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(1);
+	sca.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(2);
+	SetScale(sca);
 }
 
 void ComponentTransform::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Active"] = active;
-	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"] = {rotationM.x, rotationM.y, rotationM.z, rotation.w };
-	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"] = { translationM.x, translationM.y, translationM.z };
-	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"] = { scaleM.x, scaleM.y, scaleM.y };
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"] = { translation.x, translation.y, translation.z };
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"] = { scale.x, scale.y, scale.y };
 }

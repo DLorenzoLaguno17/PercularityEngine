@@ -74,7 +74,7 @@ update_status ModuleScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
 		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
-		SaveScene(root, "Test");
+		SaveScene(root, "Test", sceneAddress);
 
 	// If the user wants to load another scene
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
@@ -129,7 +129,6 @@ bool ModuleScene::CleanUp()
 	sceneTree->Clear();
 	numGameObjectsInScene = 0;
 
-
 	return true;
 }
 
@@ -145,17 +144,19 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 // SAVE & LOAD METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleScene::LoadScene(GameObject* root, const std::string scene_name) {
+void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, const char* address, bool loadingModel) {
 
 	LOG("Loading scene: %s", scene_name.c_str());
 	uint startTime = loadingTime.Read();
 
-	// First we delete the current scene
-	CleanUp();
-	root = new GameObject("World", nullptr, true);
+	// First we delete the current scene unless we are loading a model and not a scene
+	if (!loadingModel) {
+		CleanUp();
+		root = new GameObject("World", nullptr, true);
+	}
 
 	json scene_file;
-	std::string full_path = sceneAddress + scene_name + ".json";
+	std::string full_path = address + scene_name + ".json";
 
 	// If the adress of the settings file is null, create  an exception
 	assert(full_path.c_str() != nullptr);
@@ -169,7 +170,7 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name) {
 	stream.close();
 
 	// First we load the resources
-	App->res_manager->LoadResources(scene_file);
+	if (!loadingModel) App->res_manager->LoadResources(scene_file);
 
 	// Then we load all the GameObjects
 	go_counter = scene_file["Game Objects"]["Count"];
@@ -203,14 +204,14 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 		RecursiveLoad(root->children[i], scene_file);
 }
 
-void ModuleScene::SaveScene(GameObject* root, std::string scene_name) {
+void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel) {
 
 	// Create auxiliar file
 	json scene_file;
-	std::string full_path = sceneAddress + scene_name + ".json";
+	std::string full_path = address + scene_name + ".json";
 
-	// First we save the resources
-	App->res_manager->SaveResources(scene_file);
+	// First we save the resources unless we are saving a model and not a scene
+	if(!savingModel) App->res_manager->SaveResources(scene_file);
 
 	RecursiveSave(root, scene_file);
 	scene_file["Game Objects"]["Count"] = saved_go;
