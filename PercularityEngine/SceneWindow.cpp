@@ -1,16 +1,18 @@
-#include "SceneWindow.h"
 #include "Application.h"
-#include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
-#include "ComponentCamera.h"
-#include "GameObject.h"
+#include "ModuleScene.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
+
+#include "SceneWindow.h"
+#include "ComponentCamera.h"
+#include "GameObject.h"
 #include "mmgr/mmgr.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
 
@@ -80,6 +82,13 @@ GameObject* SceneWindow::SelectObject() const
 
 	std::map<float,const GameObject*> objects;
 	App->scene->sceneTree->CollectChilldren(ray,objects);
+
+	float hit;
+	for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
+		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray, hit,hit))
+			objects[hit] = App->scene->nonStaticObjects[i];
+
+
 
 	std::map<float, const GameObject*>::iterator it;
 	for (it = objects.begin(); it != objects.end(); ++it)
