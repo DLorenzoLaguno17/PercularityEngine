@@ -65,7 +65,9 @@ public:
 	uint default_tex = 0;
 
 private:
+	void DeleteModel(GameObject* root);
 	const char* modelAddress;
+	bool sceneloaded = false;
 
 	uint defaultMat_UUID = 0;
 	uint engineIcon_UUID = 0;

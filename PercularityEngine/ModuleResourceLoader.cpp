@@ -76,6 +76,11 @@ bool ModuleResourceLoader::Start()
 	CreateDefaultMaterial();
 	LoadEngineUI();
 
+	// Load FBX
+	std::string output;
+	App->res_loader->LoadModel("Assets/FBX/Street environment_V01.FBX", output);
+	sceneloaded = true;
+
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
 
@@ -124,7 +129,7 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 
 		// We save the model like an scene
 		App->scene->SaveScene(root, root->name, modelAddress, true);
-		//App->scene->RecursiveCleanUp(root);
+		DeleteModel(root);
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -138,6 +143,15 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 // -----------------------------------------------------------------------------------------------
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
+
+void ModuleResourceLoader::DeleteModel(GameObject* root) 
+{	
+	for (int i = 0; i < root->children.size(); ++i)
+		DeleteModel(root->children[i]);
+
+	root->CleanUp();
+	RELEASE(root);
+}
 
 bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNode* node, GameObject* parent) {
 
@@ -332,9 +346,8 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 	}
 
 	if (node->mNumChildren > 0) {
-		for (int i = 0; i < node->mNumChildren; ++i) {
+		for (int i = 0; i < node->mNumChildren; ++i)
 			LoadNode(path, scene, node->mChildren[i], newGo);
-		}
 	}
 
 	return ret;
@@ -526,7 +539,7 @@ bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string&
 			ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_TEXTURE_FOLDER, getNameFromPath(path).c_str(), "dds");
 		RELEASE_ARRAY(data);
 
-		LOG("Imported texture %s", output_file);		
+		LOG("Imported texture %s", output_file.c_str());		
 	}
 
 	if (!ret) LOG("Cannot import texture from path %s", path);

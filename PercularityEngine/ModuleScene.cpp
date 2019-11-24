@@ -38,15 +38,13 @@ bool ModuleScene::Init() {
 	//frustumTest = new GameObject("Camera", root);
 	//frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
 
-	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }),5);
+	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 
 	return true;
 }
 
 bool ModuleScene::Start()
 {
-	// Loading FBX
-	//App->res_loader->LoadModel("Assets/FBX/BakerHouse.fbx");
 
 	return true;
 }
