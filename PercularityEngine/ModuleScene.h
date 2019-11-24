@@ -46,6 +46,7 @@ public:
 
 
 private:
+
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;	//Draw a plane with some lines
 
@@ -54,6 +55,9 @@ private:
 	void UpdateGameObjects(GameObject* root);
 
 public:
+
+	std::vector<GameObject*> nonStaticObjects;
+
 	bool mustLoad = false;
 	//FRUSTUM TESTER
 
