@@ -35,8 +35,8 @@ bool ModuleWindow::Init()
 	else
 	{
 		//Create window
-		int width = winWidth* winSize;
-		int height = winHeight* winSize;
+		int width = winWidth * winSize;
+		int height = winHeight * winSize;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		// Use OpenGL
@@ -125,20 +125,13 @@ void ModuleWindow::SetBorderless(bool goingBorderless) {
 
 void ModuleWindow::SetFulldesktop(bool goingFulldesktop) {
 	if (goingFulldesktop) {
-		winWidth = 1920;
-		winHeight = 1080;
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		winFullscreenDesktop = true;
 	}
 	else {
-		winWidth =1280;
-		winHeight = 720;
 		SDL_SetWindowFullscreen(window, 0);
 		winFullscreenDesktop = false;
 	}
-
-	SDL_SetWindowSize(window, winWidth, winHeight);
-	App->renderer3D->OnResize(winWidth, winHeight);
 }
 
 void ModuleWindow::Load(const nlohmann::json &config) {

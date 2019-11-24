@@ -78,9 +78,7 @@ void ConfigWindow::Update() {
 		static float b = 1.0f;
 
 		if (ImGui::SliderFloat("Brightness", &b, 0.0f, 1.0f))
-			SDL_SetWindowBrightness(App->window->window, b);
-		
-		
+			SDL_SetWindowBrightness(App->window->window, b);		
 
 		ImGui::NewLine();
 	}

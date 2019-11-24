@@ -35,6 +35,8 @@ public:
 	std::string engineName;
 	std::string engineVersion;
 
+	bool closingEngine = false;
+
 private:
 	Timer	ms_timer;
 	float	dt;

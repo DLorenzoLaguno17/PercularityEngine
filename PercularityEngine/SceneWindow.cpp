@@ -26,15 +26,15 @@ void SceneWindow::Update() {
 	windowPosition.y = ImGui::GetWindowPos().y;
 	windowSize.x = ImGui::GetContentRegionAvail().x;
 	windowSize.y = ImGui::GetContentRegionAvail().y;
-	
+
 	ImGui::SameLine( windowSize.x/2 - 60.0f);
 	if (ImGui::Button("Play"))
 		App->scene->Play();
-	
+
 	ImGui::SameLine();
 	if (ImGui::Button("Pause"))
 		App->scene->Pause();
-	
+
 	ImGui::SameLine();
 	if (ImGui::Button("Exit Game"))
 		App->scene->ExitGame();
@@ -44,11 +44,10 @@ void SceneWindow::Update() {
 	{
 		last_windowSize = windowSize;
 	}
-	
+
 	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.x/App->renderer3D->GetCamera()->GetAspectRatio()), ImVec2(0, 1), ImVec2(1, 0));
-	
-	
-	
+
+
 	ImGui::End();
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN &&
@@ -87,7 +86,6 @@ GameObject* SceneWindow::SelectObject() const
 			objects[nearHit] = App->scene->nonStaticObjects[i];
 
 
-
 	std::map<float, const GameObject*>::iterator it;
 	for (it = objects.begin(); it != objects.end(); ++it)
 	{
@@ -116,7 +114,6 @@ GameObject* SceneWindow::SelectObject() const
 			}
 		}
 	}
-	
+
 	return retItem;
 }
-

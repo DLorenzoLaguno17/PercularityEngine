@@ -300,7 +300,6 @@ void ModuleRenderer3D::DrawMeshes()
 			// Get objects from the sceneTree
 			std::vector<const GameObject*> objects;
 			App->scene->sceneTree->CollectChilldren(camera->frustum, objects);
-			int a = objects.size();
 
 			// Get non static objects
 			for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)

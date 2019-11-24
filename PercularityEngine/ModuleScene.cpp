@@ -39,15 +39,13 @@ bool ModuleScene::Init() {
 	//frustumTest = new GameObject("Camera", root);
 	//frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
 
-	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }),5);
+	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 
 	return true;
 }
 
 bool ModuleScene::Start()
 {
-	// Loading FBX
-	//App->res_loader->LoadModel("Assets/FBX/BakerHouse.fbx");
 
 	return true;
 }
@@ -81,9 +79,11 @@ update_status ModuleScene::Update(float dt)
 		SaveScene(root, "Scene", sceneAddress);
 
 	// If the user wants to load another scene
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN
+		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
 		ImGui::OpenPopup("Loading new scene");
-	}
+	
 
 	if (ImGui::BeginPopupModal("Loading new scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
@@ -141,6 +141,8 @@ bool ModuleScene::CleanUp()
 	RecursiveCleanUp(root);
 	numGameObjectsInScene = 0;
 
+	if (App->closingEngine) RELEASE(root);
+
 	return true;
 }
 
@@ -167,7 +169,6 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	// First we delete the current scene unless we are loading a model and not a scene
 	if (!loadingModel) {
 		CleanUp();
-		//root = new GameObject("World", nullptr, true);
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 	}
 
@@ -189,12 +190,9 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	if (!loadingModel) App->res_manager->LoadResources(scene_file);
 
 	// Then we load all the GameObjects
-	go_counter = scene_file["Game Objects"]["Count"];
-	
+	go_counter = scene_file["Game Objects"]["Count"];	
 	RecursiveLoad(root, scene_file);
-
 	selected = root;
-	int a = numGameObjectsInScene;
 	loaded_go = 0;
 
 	uint fullTime = loadingTime.Read() - startTime;
