@@ -10,7 +10,7 @@
 #include "mmgr/mmgr.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
-
+#include "ResourceMesh.h"
 
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
 
@@ -24,15 +24,29 @@ void SceneWindow::Update() {
 	windowPosition.y = ImGui::GetWindowPos().y;
 	windowSize.x = ImGui::GetContentRegionAvail().x;
 	windowSize.y = ImGui::GetContentRegionAvail().y;
+	
+	ImGui::SameLine( windowSize.x/2 - 60.0f);
+	if (ImGui::Button("Play"))
+		App->scene->Play();
+	
+	ImGui::SameLine();
+	if (ImGui::Button("Pause"))
+		App->scene->Pause();
+	
+	ImGui::SameLine();
+	if (ImGui::Button("Exit Game"))
+		App->scene->ExitGame();
 
 	// Check if the scene window has been resized
 	if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
 	{
 		last_windowSize = windowSize;
-		
 	}
 	
 	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.x/App->renderer3D->GetCamera()->GetAspectRatio()), ImVec2(0, 1), ImVec2(1, 0));
+	
+	
+	
 	ImGui::End();
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN &&
@@ -75,16 +89,16 @@ GameObject* SceneWindow::SelectObject() const
 		{
 			LineSegment localRay = ray;
 			localRay.Transform(it->second->transform->GetGlobalTransform().Inverted());
-			for (uint v = 0; v < mesh->mesh.num_indices; v += 3)
+			for (uint v = 0; v < mesh->resource_mesh->num_indices; v += 3)
 			{
-				uint indexA = mesh->mesh.indices[v] * 3;
-				float3 a(mesh->mesh.vertices[indexA]);
+				uint indexA = mesh->resource_mesh->indices[v] * 3;
+				float3 a(mesh->resource_mesh->vertices[indexA]);
 
-				uint indexB = mesh->mesh.indices[v+1] * 3;
-				float3 b(mesh->mesh.vertices[indexB]);
+				uint indexB = mesh->resource_mesh->indices[v+1] * 3;
+				float3 b(mesh->resource_mesh->vertices[indexB]);
 
-				uint indexC = mesh->mesh.indices[v+2] * 3;
-				float3 c(mesh->mesh.vertices[indexC]);
+				uint indexC = mesh->resource_mesh->indices[v+2] * 3;
+				float3 c(mesh->resource_mesh->vertices[indexC]);
 
 				Triangle triangle(a, b, c);
 

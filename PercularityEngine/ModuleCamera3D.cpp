@@ -42,6 +42,7 @@ bool ModuleCamera3D::Start()
 	LOG("Setting up the camera");
 	bool ret = true;
 
+	//App->renderer3D->camera = App->scene->frustumTest->GetComponent<ComponentCamera>();
 
 	return ret;
 }

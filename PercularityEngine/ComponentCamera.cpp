@@ -189,9 +189,7 @@ void ComponentCamera::OnEditor()
 		if (ImGui::DragFloat("Horizontal FOV", &horizontalFov))
 			frustum.horizontalFov = horizontalFov * DEGTORAD;
 
-		float aspectRatio = frustum.verticalFov/frustum.horizontalFov;
-		if (ImGui::DragFloat("Aspect Ratio", &aspectRatio,0.1))
-			SetAspectRatio(aspectRatio);
+		
 	}
 }
 

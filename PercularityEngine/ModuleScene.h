@@ -23,6 +23,10 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void Play();
+	void Pause();
+	void ExitGame();
+
 	//Save & Load
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);

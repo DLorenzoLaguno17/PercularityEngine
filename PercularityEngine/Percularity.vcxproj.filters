@@ -52,6 +52,9 @@
     <Filter Include="Sources\Scene elements\Resources">
       <UniqueIdentifier>{367c8d5d-8ddd-4605-b96a-5ecf0c9d165a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Time Management">
+      <UniqueIdentifier>{e0501123-45a1-48cf-a6be-e4460ce7b12b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleCamera3D.h">
@@ -68,9 +71,6 @@
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Sources\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Sources\Core</Filter>
@@ -213,6 +213,12 @@
     <ClInclude Include="Intersection.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Sources\Tools\Time Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Sources\Tools\Time Management</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -228,9 +234,6 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="log.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
@@ -343,6 +346,12 @@
     </ClCompile>
     <ClCompile Include="Intersection.cpp">
       <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Sources\Tools\Time Management</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Sources\Tools\Time Management</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -131,7 +131,7 @@ void ModuleWindow::SetFulldesktop(bool goingFulldesktop) {
 		winFullscreenDesktop = true;
 	}
 	else {
-		winWidth =300;
+		winWidth =1280;
 		winHeight = 720;
 		SDL_SetWindowFullscreen(window, 0);
 		winFullscreenDesktop = false;

@@ -22,7 +22,7 @@
         "Console": true,
         "Hierarchy": true,
         "Inspector": true,
-        "Project": true,
+        "Project": false,
         "Scene": true
     },
     "Window": {
