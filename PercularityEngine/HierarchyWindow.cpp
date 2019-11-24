@@ -21,6 +21,7 @@ void HierarchyWindow::DrawHierarchy(GameObject* root) {
 		| ImGuiTreeNodeFlags_OpenOnDoubleClick | (App->scene->selected == root ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None);
 
 	ImGui::PushID(root);
+	int a = root->children.size();
 
 	if (root->children.empty())
 	{

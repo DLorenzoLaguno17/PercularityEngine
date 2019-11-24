@@ -128,11 +128,11 @@ void ModuleScene::UpdateGameObjects(GameObject* root) {
 bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
-	//RecursiveCleanUp(root);
-	
 	nonStaticObjects.clear();
 	sceneTree->Clear();
 	RELEASE(sceneTree);
+
+	RecursiveCleanUp(root);
 	numGameObjectsInScene = 0;
 
 	return true;
@@ -142,7 +142,10 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveCleanUp(root->children[i]);
 
-	RELEASE(root);
+	if (root != GetRoot()) {
+		root->CleanUp();
+		RELEASE(root);
+	}
 }
 
 // -----------------------------------------------------------------------------------------------
@@ -158,7 +161,7 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	// First we delete the current scene unless we are loading a model and not a scene
 	if (!loadingModel) {
 		CleanUp();
-		root = new GameObject("World", nullptr, true);
+		//root = new GameObject("World", nullptr, true);
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 	}
 
@@ -181,18 +184,9 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 
 	// Then we load all the GameObjects
 	go_counter = scene_file["Game Objects"]["Count"];
+	
+	RecursiveLoad(root, scene_file);
 
-	for (int i = 1; i <= go_counter; ++i) {
-
-		GameObject* go;
-		go = new GameObject("Temp", GetRoot(), true);
-
-		loaded_go++;
-		char name[50];
-		sprintf_s(name, 50, "GameObject %d", loaded_go);
-		go->OnLoad(name, scene_file);
-	}
-	//RecursiveLoad(root, scene_file);
 	selected = root;
 	int a = numGameObjectsInScene;
 	loaded_go = 0;
@@ -202,21 +196,24 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 }
 
 void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) {
-	loaded_go++;
-	char name[50];
-	sprintf_s(name, 50, "GameObject %d", loaded_go);
-	root->OnLoad(name, scene_file);
+	
+	// We load each GameObject excepte the world
+	if (root != GetRoot()) {
+		loaded_go++;
+		char name[50];
+		sprintf_s(name, 50, "GameObject %d", loaded_go);
+		root->OnLoad(name, scene_file);		
+	}
 
 	for (int i = 1; i <= go_counter; ++i) {
 
+		// Check for children GameObjects
 		char n[50];
 		sprintf_s(n, 50, "GameObject %d", i);
 		uint aux = scene_file["Game Objects"][n]["Parent UUID"];
 
-		if (aux == root->GetUUID() && i != 1) { //The first one is the World itself so we skip it
-			GameObject* newGo;
-			newGo = new GameObject("Temp", root, true);
-		}
+		if (aux == root->GetUUID())
+			GameObject* newGo = new GameObject("Temp", root, true);
 	}
 
 	for (int i = 0; i < root->children.size(); ++i)
@@ -245,8 +242,7 @@ void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char
 
 void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) 
 {
-	if (strcmp(root->name.c_str(), "Camera") != 0) 
-	{
+	if (root != GetRoot()) {
 		saved_go++;
 		char name[50];
 		sprintf_s(name, 50, "GameObject %d", saved_go);

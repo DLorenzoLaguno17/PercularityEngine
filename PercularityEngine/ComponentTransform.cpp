@@ -126,6 +126,7 @@ void ComponentTransform::SetScale(float3 newScale)
 
 void ComponentTransform::SetRotation(Quat newRotation) {
 	rotation = newRotation;
+	UpdateEulerRotation();
 	mustUpdate = true;
 }
 

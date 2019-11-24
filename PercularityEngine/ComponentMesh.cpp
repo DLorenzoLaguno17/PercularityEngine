@@ -48,10 +48,7 @@ void ComponentMesh::OnEditor() {
 	}
 }
 
-void ComponentMesh::CleanUp()
-{
-	resource_mesh->ReleaseFromMemory();
-}
+void ComponentMesh::CleanUp() {}
 
 // Method to render vertex normals
 void ComponentMesh::RenderNormals() {

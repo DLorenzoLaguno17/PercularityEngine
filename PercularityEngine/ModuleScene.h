@@ -61,7 +61,7 @@ public:
 
 	//FRUSTUM TEST
 
-	Tree* sceneTree;
+	Tree* sceneTree = nullptr;
 
 	GameObject* selected = nullptr;
 	const char* sceneAddress;

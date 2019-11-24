@@ -28,6 +28,7 @@ public:
 	void SetScale(float3 newScale);
 	void SetPosition(float3 newPosition);
 	void SetRotation(Quat newRotation);
+	void UpdateEulerRotation();
 
 	// Load & Save 
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
@@ -42,7 +43,6 @@ private:
 	void SetLocalTransform(float4x4 tranform);
 	void SetToZero();
 	void SetEulerRotation(float3 eulerAngles);
-	void UpdateEulerRotation();
 
 public:
 	mat4x4 renderTransform;
