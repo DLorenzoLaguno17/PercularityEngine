@@ -229,7 +229,53 @@ bool ModuleResourceManager::CleanUp()
 }
 
 void ModuleResourceManager::DrawProjectExplorer() {
-	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
+	
+	std::vector<std::string> tex_files;
+	std::vector<std::string> tex_directories;
+	std::vector<std::string> mod_files;
+	std::vector<std::string> mod_directories;
+	std::vector<std::string> sce_files;
+	std::vector<std::string> sce_directories;
+
+	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
+	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
+	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
+
+	for (int i = 0; i < tex_files.size(); ++i) {
+		if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
+
+			std::string path = ASSETS_TEXTURE_FOLDER + tex_files[i];
+			ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
+			if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
+			mat->resource_tex = (ResourceTexture*)GetResourceFromMap(FindFileInAssets(path.c_str()));
+
+		}
+		ImGui::Text(tex_files[i].c_str());
+		break;
+	}
+
+	for (int i = 0; i < mod_files.size(); ++i) {
+		if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
+
+			/*ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
+			if (mat) mat->resource_tex->usedAsReference--;
+			if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
+			mat->resource_tex = (ResourceTexture*)it->second;*/
+		}
+		ImGui::Text(mod_files[i].c_str());
+		break;
+	}
+
+	for (int i = 0; i < sce_files.size(); ++i) {
+		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
+
+			App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
+		}
+		ImGui::Text(sce_files[i].c_str());
+		break;
+	}
+
+	/*for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
 		if (it->second != nullptr && it->second->file.compare("None")) {
 
@@ -257,31 +303,14 @@ void ModuleResourceManager::DrawProjectExplorer() {
 
 			case RESOURCE_TYPE::SCENE:
 				if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
-
-					bool load = false;
-					ImGui::OpenPopup("Load scene");
-
-					if (ImGui::BeginPopupModal("Load scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-					{
-						ImGui::Text("Are you sure you want to load a new scene?");
-						ImGui::Text("The current scene will be discarded.");
-						ImGui::NewLine();
-						ImGui::Separator();
-
-						if (ImGui::Button("Yes", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); load = true; }
-						ImGui::SetItemDefaultFocus();
-						ImGui::SameLine();
-						if (ImGui::Button("Cancel", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); }
-						ImGui::EndPopup();
-					}
-
-					if (load) it->second->UpdateReferenceCount();
+					
+					it->second->UpdateReferenceCount();
 				}
 				ImGui::Text(it->second->name.c_str());
 				break;
 			}
 		}
-	}
+	}*/
 }
 
 // Methods to check the extension of a file

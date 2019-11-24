@@ -48,7 +48,6 @@ void SceneWindow::Update() {
 	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.x/App->renderer3D->GetCamera()->GetAspectRatio()), ImVec2(0, 1), ImVec2(1, 0));
 	
 	
-	
 	ImGui::End();
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN &&
@@ -87,7 +86,6 @@ GameObject* SceneWindow::SelectObject() const
 	for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
 		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray, hit,hit))
 			objects[hit] = App->scene->nonStaticObjects[i];
-
 
 
 	std::map<float, const GameObject*>::iterator it;

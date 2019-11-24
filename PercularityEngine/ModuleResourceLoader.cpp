@@ -77,9 +77,9 @@ bool ModuleResourceLoader::Start()
 	LoadEngineUI();
 
 	// Load FBX
-	std::string output;
+	/*std::string output;
 	App->res_loader->LoadModel("Assets/FBX/Street environment_V01.FBX", output);
-	sceneloaded = true;
+	sceneloaded = true;*/
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -129,7 +129,8 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 
 		// We save the model like an scene
 		App->scene->SaveScene(root, root->name, modelAddress, true);
-		DeleteModel(root);
+		DeleteModel(root); 
+		App->scene->nonStaticObjects.clear();
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -282,10 +283,11 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 					correctFace = false;
 					continue;
 				}
-
-				mesh->indices[j * 3] = face.mIndices[0];
-				mesh->indices[j * 3 + 1] = face.mIndices[1];
-				mesh->indices[j * 3 + 2] = face.mIndices[2];
+				else {
+					mesh->indices[j * 3] = face.mIndices[0];
+					mesh->indices[j * 3 + 1] = face.mIndices[1];
+					mesh->indices[j * 3 + 2] = face.mIndices[2];
+				}
 			}
 			LOG("Faces: %d", mesh->num_indices / 3);
 		}
@@ -343,6 +345,8 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		ret = ImportMeshToLibrary(mesh, output, name);
 		mesh->exported_file = output;
 		loaded_node++;
+
+		//mesh->ReleaseFromMemory();
 	}
 
 	if (node->mNumChildren > 0) {
