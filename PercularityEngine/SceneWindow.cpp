@@ -65,7 +65,7 @@ void SceneWindow::OnClick()
 {
 	//WARNING!! HARDCODE ALERT: There's a margin in both axes, between the window border and the texture (in both axis)
 		//and that made the ray tracing lose precision, that's why I made slight substractions in the mousePos values (-5,-30)
-	vec2 mousePos(float(App->input->GetMouseX() - windowPosition.x - 5), float(App->input->GetMouseY() - windowPosition.y - 30));
+	vec2 mousePos(float(App->input->GetMouseX() - windowPosition.x - 5), float(App->input->GetMouseY() - windowPosition.y -25- 30));
 	mousePos.x = -1.0 + 2.0f*(mousePos.x / windowSize.x);
 	mousePos.y = 1.0 - 2.0f*(mousePos.y / (windowSize.x / App->renderer3D->GetCamera()->GetAspectRatio()));
 
@@ -83,10 +83,10 @@ GameObject* SceneWindow::SelectObject() const
 	std::map<float,const GameObject*> objects;
 	App->scene->sceneTree->CollectChilldren(ray,objects);
 
-	float hit;
+	float nearHit,farHit;
 	for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
-		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray, hit,hit))
-			objects[hit] = App->scene->nonStaticObjects[i];
+		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray,nearHit, farHit))
+			objects[nearHit] = App->scene->nonStaticObjects[i];
 
 
 
@@ -100,13 +100,13 @@ GameObject* SceneWindow::SelectObject() const
 			localRay.Transform(it->second->transform->GetGlobalTransform().Inverted());
 			for (uint v = 0; v < mesh->resource_mesh->num_indices; v += 3)
 			{
-				uint indexA = mesh->resource_mesh->indices[v] * 3;
+				uint indexA = mesh->resource_mesh->indices[v] ;
 				float3 a(mesh->resource_mesh->vertices[indexA]);
 
-				uint indexB = mesh->resource_mesh->indices[v+1] * 3;
+				uint indexB = mesh->resource_mesh->indices[v+1];
 				float3 b(mesh->resource_mesh->vertices[indexB]);
 
-				uint indexC = mesh->resource_mesh->indices[v+2] * 3;
+				uint indexC = mesh->resource_mesh->indices[v+2] ;
 				float3 c(mesh->resource_mesh->vertices[indexC]);
 
 				Triangle triangle(a, b, c);
