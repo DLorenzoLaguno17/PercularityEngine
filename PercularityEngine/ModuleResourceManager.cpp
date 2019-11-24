@@ -244,10 +244,10 @@ void ModuleResourceManager::DrawProjectExplorer() {
 	for (int i = 0; i < tex_files.size(); ++i) {
 		if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
 
-			std::string path = ASSETS_TEXTURE_FOLDER + tex_files[i];
+			/*std::string path = ASSETS_TEXTURE_FOLDER + tex_files[i];
 			ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
 			if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			mat->resource_tex = (ResourceTexture*)GetResourceFromMap(FindFileInAssets(path.c_str()));
+			mat->resource_tex = (ResourceTexture*)GetResourceFromMap(FindFileInAssets(path.c_str()));*/
 
 		}
 		ImGui::Text(tex_files[i].c_str());
@@ -269,7 +269,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 	for (int i = 0; i < sce_files.size(); ++i) {
 		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
 
-			App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
+			//App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
 		}
 		ImGui::Text(sce_files[i].c_str());
 		break;

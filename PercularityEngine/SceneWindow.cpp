@@ -82,7 +82,7 @@ GameObject* SceneWindow::SelectObject() const
 
 	float nearHit,farHit;
 	for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
-		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray,nearHit, farHit))
+		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray, nearHit, farHit))
 			objects[nearHit] = App->scene->nonStaticObjects[i];
 
 

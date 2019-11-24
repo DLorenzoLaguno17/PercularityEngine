@@ -1,6 +1,8 @@
 # Percularity Engine
 Percularity is a game engine that has been developed in the Video Games degree in Universitat Politècnica de Catalunya for student purposes.
 
+Go to our GitHub: https://github.com/DLorenzoLaguno17/PercularityEngine
+
 ## Libraries used
 * [SDL v2.0.6](https://www.libsdl.org/)
 * [STL v2.0](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
@@ -11,6 +13,10 @@ Percularity is a game engine that has been developed in the Video Games degree i
 * [Assimp 4.1](http://assimp.org/)
 * [DevIL v1.8](http://openil.sourceforge.net/)
 * [PhysFS v3.0.2](https://icculus.org/physfs/)
+
+## Innovation
+
+We have implemented a debug window with witch the user can decide wether to activate or not the frustum culling and there is another menu that shows the current performance of the engine and how the changes on the debug window affect it.
 
 ## Controls
 
