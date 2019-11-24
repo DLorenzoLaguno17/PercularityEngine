@@ -8,6 +8,7 @@
 #include "ModuleResourceLoader.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
+#include "Debug.h"
 
 #include "OpenGL.h"
 #include "glmath.h"
@@ -38,7 +39,8 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 
 // Called every frame
 void GameObject::Update() {
-	if (showBondingBox) DrawAABB();
+	if (Debug::drawObjectsAABB || showBondingBox)
+		DrawAABB();
 
 	for (uint i = 0; i < components.size(); ++i) {
 		if (components[i]->IsActive())
@@ -159,11 +161,20 @@ const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 
 void GameObject::DrawAABB()
 {
-	glLineWidth(2.0f);
+	//glLineWidth(2.0f);
 
 	glBegin(GL_LINES);
 
-	glColor3f(0.5, 1, 0.5); //Light green color
+	if (App->scene->selected == this) {
+		glLineWidth(4.0f);
+		glColor3f(0.7, 1, 0.7); //Light green color
+	}
+
+	else {
+		glLineWidth(2.0f);
+		glColor3f(0.2, 0.2, 1); //Light green color
+	}
+
 
 	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());

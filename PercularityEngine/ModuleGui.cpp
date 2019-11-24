@@ -7,6 +7,7 @@
 #include "ModuleScene.h"
 #include "GameObject.h"
 
+#include "DebugWindow.h"
 #include "OpenGL.h"
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl3.h"
@@ -158,12 +159,14 @@ void ModuleGui::Load(const json &config)
 	inspector = new InspectorWindow("Inspector", true);
 	hierarchy = new HierarchyWindow("Hierarchy", true);
 	project = new ProjectWindow("Project", true);
+	debugWindow = new DebugWindow("Debug", true);
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
 	ui_elements_list.push_back(console);
 	ui_elements_list.push_back(inspector);
 	ui_elements_list.push_back(hierarchy);
 	ui_elements_list.push_back(project);
+	ui_elements_list.push_back(debugWindow);
 
 	for (int i = 0; i < ui_elements_list.size(); ++i)
 		ui_elements_list[i]->active = config["User Interface"][ui_elements_list[i]->name];
