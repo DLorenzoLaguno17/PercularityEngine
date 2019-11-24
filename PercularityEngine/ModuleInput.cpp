@@ -141,11 +141,11 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_WINDOWEVENT:
-				if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
-					App->window->SetWindowWidth(e.window.data1);
-					App->window->SetWindowHeight(e.window.data2);
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
-				}
+			if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
+				App->window->SetWindowWidth(e.window.data1);
+				App->window->SetWindowHeight(e.window.data2);
+				App->renderer3D->OnResize(e.window.data1, e.window.data2);
+			}
 			break;
 
 			case SDL_DROPFILE:			

@@ -40,9 +40,9 @@ public:
 		return usedAsReference > 0;
 	}
 
+	virtual void ReleaseFromMemory() = 0;
 protected:
 	virtual bool LoadInMemory() = 0;
-	virtual void ReleaseFromMemory() = 0;
 
 public:
 	// Number of times this resurce is used

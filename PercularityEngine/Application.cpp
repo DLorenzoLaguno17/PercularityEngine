@@ -145,6 +145,7 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
+	closingEngine = true;
 	std::list<Module*>::iterator item = modules.begin();
 
 	SaveSettings();

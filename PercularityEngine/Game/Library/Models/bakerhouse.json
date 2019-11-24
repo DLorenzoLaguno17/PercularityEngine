@@ -5,7 +5,7 @@
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 749415238,
+                    "Parent UUID": 2010393061,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -22,32 +22,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1923080933
+                    "UUID": 1181123009
                 }
             },
             "Name": "bakerhouse",
             "Parent UUID": 0,
-            "UUID": 749415238
+            "UUID": 2010393061
         },
         "GameObject 2": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1949664178,
-                    "Resource UUID": 74653383,
-                    "UUID": 2134252067
+                    "Parent UUID": 1668682312,
+                    "Resource UUID": 1897773411,
+                    "UUID": 1073352670
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1949664178,
-                    "Resource UUID": 1544095626,
-                    "UUID": 532752103,
+                    "Parent UUID": 1668682312,
+                    "Resource UUID": 1811084443,
+                    "UUID": 951265556,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1949664178,
+                    "Parent UUID": 1668682312,
                     "Rotation": [
                         -0.7071068286895752,
                         0.0,
@@ -64,32 +64,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1570860609
+                    "UUID": 760908346
                 }
             },
             "Name": "Chimney",
-            "Parent UUID": 749415238,
-            "UUID": 1949664178
+            "Parent UUID": 2010393061,
+            "UUID": 1668682312
         },
         "GameObject 3": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 597692573,
-                    "Resource UUID": 1866276186,
-                    "UUID": 1606082142
+                    "Parent UUID": 7672498,
+                    "Resource UUID": 1061418695,
+                    "UUID": 358438135
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 597692573,
-                    "Resource UUID": 450808785,
-                    "UUID": 663767418,
+                    "Parent UUID": 7672498,
+                    "Resource UUID": 1954539983,
+                    "UUID": 2118671325,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 597692573,
+                    "Parent UUID": 7672498,
                     "Rotation": [
                         -0.7071068286895752,
                         0.0,
@@ -106,12 +106,12 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 163996914
+                    "UUID": 1591038802
                 }
             },
             "Name": "Baker_house",
-            "Parent UUID": 749415238,
-            "UUID": 597692573
+            "Parent UUID": 2010393061,
+            "UUID": 7672498
         }
     }
 }

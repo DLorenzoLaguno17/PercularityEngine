@@ -76,6 +76,10 @@ bool ModuleResourceLoader::Start()
 	CreateDefaultMaterial();
 	LoadEngineUI();
 
+	// Load scene
+	std::string output;
+	App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
+
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
 
@@ -89,11 +93,11 @@ bool ModuleResourceLoader::CleanUp()
 	// Detach Assimp log stream
 	aiDetachAllLogStreams();
 
-	icon_tex = nullptr;
-	model_icon_tex = nullptr;
-	scene_icon_tex = nullptr;
-	tex_icon_tex = nullptr;
-	default_material = nullptr;
+	RELEASE(icon_tex);
+	RELEASE(model_icon_tex);
+	RELEASE(scene_icon_tex);
+	RELEASE(tex_icon_tex);
+	RELEASE(default_material);
 
 	return true;
 }
@@ -122,9 +126,13 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 			}
 		}
 
-		// We save the model like an scene
+		// We save the model as a scene
 		App->scene->SaveScene(root, root->name, modelAddress, true);
-		//App->scene->RecursiveCleanUp(root);
+		DeleteModel(root); 
+		App->scene->nonStaticObjects.clear();
+		/*GameObject* root =
+		App->scene->nonStaticObjects.
+		//App->scene->sceneTree->Clear();*/
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -138,6 +146,15 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 // -----------------------------------------------------------------------------------------------
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
+
+void ModuleResourceLoader::DeleteModel(GameObject* root) 
+{	
+	for (int i = 0; i < root->children.size(); ++i)
+		DeleteModel(root->children[i]);
+
+	root->CleanUp();
+	RELEASE(root);
+}
 
 bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNode* node, GameObject* parent) {
 
@@ -156,7 +173,9 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 	std::string nodeName = node->mName.C_Str();
 
 	bool found = true;
-	while (found) // Skipp all dummy modules. Assimp loads this fbx nodes to stack all transformations
+
+	// Assimp loads dummy fbx nodes to stack all transformations
+	while (found) 
 	{
 		// All dummy modules have one children (next dummy module or last module containing the mesh)
 		if (nodeName.find("_$AssimpFbx$_") != std::string::npos && node->mNumChildren == 1)
@@ -171,9 +190,6 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 			rot = rot * Quat(rotation.x, rotation.y, rotation.z, rotation.w);
 
 			nodeName = node->mName.C_Str();
-
-			/* If we find a dummy node we "change" our current node into the dummy one and search
-			for other dummy nodes inside that one.*/
 			found = true;
 		}
 		else found = false;
@@ -207,7 +223,6 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		else child = newGo;
 
 		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
-
 		aiString p;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &p);
 
@@ -268,10 +283,11 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 					correctFace = false;
 					continue;
 				}
-
-				mesh->indices[j * 3] = face.mIndices[0];
-				mesh->indices[j * 3 + 1] = face.mIndices[1];
-				mesh->indices[j * 3 + 2] = face.mIndices[2];
+				else {
+					mesh->indices[j * 3] = face.mIndices[0];
+					mesh->indices[j * 3 + 1] = face.mIndices[1];
+					mesh->indices[j * 3 + 2] = face.mIndices[2];
+				}
 			}
 			LOG("Faces: %d", mesh->num_indices / 3);
 		}
@@ -329,12 +345,13 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		ret = ImportMeshToLibrary(mesh, output, name);
 		mesh->exported_file = output;
 		loaded_node++;
+
+		mesh->ReleaseFromMemory();
 	}
 
 	if (node->mNumChildren > 0) {
-		for (int i = 0; i < node->mNumChildren; ++i) {
+		for (int i = 0; i < node->mNumChildren; ++i)
 			LoadNode(path, scene, node->mChildren[i], newGo);
-		}
 	}
 
 	return ret;
@@ -526,7 +543,7 @@ bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string&
 			ret = App->file_system->SaveUnique(output_file, data, size, LIBRARY_TEXTURE_FOLDER, getNameFromPath(path).c_str(), "dds");
 		RELEASE_ARRAY(data);
 
-		LOG("Imported texture %s", output_file);		
+		LOG("Imported texture %s", output_file.c_str());		
 	}
 
 	if (!ret) LOG("Cannot import texture from path %s", path);

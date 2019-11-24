@@ -77,7 +77,7 @@ uint ModuleResourceManager::ReceiveExternalFile(const char* new_file)
 	if (App->file_system->CopyFromOutsideFS(new_file, final_path.c_str())) {
 
 		RESOURCE_TYPE type = GetTypeFromExtension(extension.c_str());
-		ret = ImportFile(final_path.c_str(), type);
+		ret = ImportFile(final_path.c_str(), type, true);
 	}
 
 	return ret;
@@ -123,7 +123,7 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 // Load & Save
 void ModuleResourceManager::LoadResources(const json &scene_file) 
 {
-	//CleanUp();
+	CleanUp();
 
 	uint cnt = scene_file["Resources"]["Count"];
 	for (int i = 1; i <= cnt; ++i) {
@@ -179,6 +179,18 @@ uint ModuleResourceManager::FindFileInAssets(const char* existing_file) const {
 	return 0;
 }
 
+uint ModuleResourceManager::FindFileInLibrary(const char* exported_file) const {
+	std::string file = exported_file;
+	App->file_system->NormalizePath(file);
+
+	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
+	{
+		if (it->second->file.compare(file) == 0)
+			return it->first;
+	}
+	return 0;
+}
+
 const Resource* ModuleResourceManager::GetResourceFromMap(uint uuid) const
 {
 	if (resources.find(uuid) != resources.end())
@@ -202,8 +214,13 @@ Resource* ModuleResourceManager::GetResourceFromMap(uint uuid)
 bool ModuleResourceManager::CleanUp()
 {
 	LOG("Freeing resource manager");
-	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item)
-		RELEASE(item->second);
+	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item) {
+		
+		if (strcmp(item._Ptr->_Myval.second->file.c_str(), "None") != 0) {
+			item._Ptr->_Myval.second->ReleaseFromMemory();
+			RELEASE(item._Ptr->_Myval.second);
+		}
+	}
 
 	resources.clear();
 	resourcesCount = 0;
@@ -212,45 +229,50 @@ bool ModuleResourceManager::CleanUp()
 }
 
 void ModuleResourceManager::DrawProjectExplorer() {
-	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
-	{
-		if (it->second != nullptr && it->second->file.compare("None")) {
+	
+	std::vector<std::string> tex_files;
+	std::vector<std::string> tex_directories;
+	std::vector<std::string> mod_files;
+	std::vector<std::string> mod_directories;
+	std::vector<std::string> sce_files;
+	std::vector<std::string> sce_directories;
 
-			switch (it->second->type) {
-			case RESOURCE_TYPE::MODEL:
-				if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
-					
-					it->second->UpdateReferenceCount();		
-				}
-				ImGui::Text(it->second->name.c_str());
-				break;
+	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
+	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
+	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
-			case RESOURCE_TYPE::TEXTURE:
-				if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
+	for (int i = 0; i < tex_files.size(); ++i) {
+		if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
 
-					it->second->UpdateReferenceCount();
-					
-					ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
-					if (mat) mat->resource_tex->usedAsReference--;
-					if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
-					mat->resource_tex = (ResourceTexture*)it->second;
-				}
-				ImGui::Text(it->second->name.c_str());
-				break;
+			std::string path = ASSETS_TEXTURE_FOLDER + tex_files[i];
+			ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
+			if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
+			mat->resource_tex = (ResourceTexture*)GetResourceFromMap(FindFileInAssets(path.c_str()));
 
-			case RESOURCE_TYPE::SCENE:
-				if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
-
-					ImGui::OpenPopup("Loading new scene");
-					if (App->scene->mustLoad) {
-						it->second->UpdateReferenceCount();
-						App->scene->mustLoad = false;
-					}
-				}
-				ImGui::Text(it->second->name.c_str());
-				break;
-			}
 		}
+		ImGui::Text(tex_files[i].c_str());
+		break;
+	}
+
+	for (int i = 0; i < mod_files.size(); ++i) {
+		if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
+
+			/*ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
+			if (mat) mat->resource_tex->usedAsReference--;
+			if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
+			mat->resource_tex = (ResourceTexture*)it->second;*/
+		}
+		ImGui::Text(mod_files[i].c_str());
+		break;
+	}
+
+	for (int i = 0; i < sce_files.size(); ++i) {
+		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
+
+			App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
+		}
+		ImGui::Text(sce_files[i].c_str());
+		break;
 	}
 }
 

@@ -33,6 +33,7 @@ public:
 	const Resource* GetResourceFromMap(uint uuid) const;
 	Resource* GetResourceFromMap(uint uuid);
 	uint FindFileInAssets(const char* existing_file) const;
+	uint FindFileInLibrary(const char* exported_file) const;
 
 	// Extension checkers
 	bool CheckTextureExtension(const char* extension);

@@ -22,13 +22,13 @@
         "Console": true,
         "Hierarchy": true,
         "Inspector": true,
-        "Project": false,
+        "Project": true,
         "Scene": true
     },
     "Window": {
         "Borderless": false,
         "Full Screen": false,
-        "Full Screen Desktop": false,
+        "Full Screen Desktop": true,
         "Height": 720,
         "Resizable": false,
         "Size": 1,
