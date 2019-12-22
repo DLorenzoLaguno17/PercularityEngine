@@ -78,7 +78,7 @@ bool ModuleResourceLoader::Start()
 
 	// Load scene
 	std::string output;
-	App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
+	//App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
@@ -128,8 +128,8 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 
 		// We save the model as a scene
 		App->scene->SaveScene(root, root->name, modelAddress, true);
-		DeleteModel(root); 
-		App->scene->nonStaticObjects.clear();
+		//DeleteModel(root); 
+		//App->scene->nonStaticObjects.clear();
 		/*GameObject* root =
 		App->scene->nonStaticObjects.
 		//App->scene->sceneTree->Clear();*/

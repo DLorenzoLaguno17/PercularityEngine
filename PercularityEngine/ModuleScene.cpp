@@ -67,10 +67,7 @@ update_status ModuleScene::Update(float dt)
 	if(Debug::drawSceneAxis)
 		DrawAxis();
 
-	//if (sphereCount == 0) App->res_manager->GetResourceFromMap(sphereMesh_UUID)->ReleaseFromMemory();
-
-	// Update all GameObjects
-	UpdateGameObjects(root);
+	//if (sphereCount == 0) App->res_manager->GetResourceFromMap(sphereMesh_UUID)->ReleaseFromMemory();	
 
 	// If the user wants to save the scene
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
@@ -82,8 +79,9 @@ update_status ModuleScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN
 		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
-		ImGui::OpenPopup("Loading new scene");
-	
+		mustLoad = true;
+		
+	if (mustLoad) ImGui::OpenPopup("Loading new scene");	
 
 	if (ImGui::BeginPopupModal("Loading new scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
@@ -92,21 +90,26 @@ update_status ModuleScene::Update(float dt)
 		ImGui::NewLine();
 		ImGui::Separator();
 
-		if (ImGui::Button("Yes", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); mustLoad = true; }
+		if (ImGui::Button("Yes", ImVec2(140, 0))) { 
+			ImGui::CloseCurrentPopup(); 
+			LoadScene(root, "Scene", sceneAddress); 
+		}
+
 		ImGui::SetItemDefaultFocus();
 		ImGui::SameLine();
+
 		if (ImGui::Button("Cancel", ImVec2(140, 0))) { ImGui::CloseCurrentPopup(); }
+
+		mustLoad = false;
 		ImGui::EndPopup();
 	}
+
+	// Update all GameObjects
+	UpdateGameObjects(root);
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		for (int i = 0; i < root->children.size(); ++i)
 			sceneTree->rootNode->Insert(root->children[i]);
-
-	if (mustLoad) {
-		LoadScene(root, "Scene", sceneAddress);
-		mustLoad = false;
-	}
 
 	return UPDATE_CONTINUE;
 }
@@ -140,8 +143,17 @@ bool ModuleScene::CleanUp()
 
 	RecursiveCleanUp(root);
 	numGameObjectsInScene = 0;
+	root->children.clear();
 
-	if (App->closingEngine) RELEASE(root);
+	if (App->closingEngine) {
+		for (uint i = 0; i < root->components.size(); ++i) {
+			root->components[i]->CleanUp();
+			RELEASE(root->components[i]);
+		}
+
+		root->components.clear();
+		RELEASE(root);
+	}
 
 	return true;
 }
@@ -196,7 +208,7 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	loaded_go = 0;
 
 	uint fullTime = loadingTime.Read() - startTime;
-	LOG("Finished loading the scene. Time spent: %d ms", fullTime);
+	LOG("Scene loaded. Time spent: %d ms", fullTime);
 }
 
 void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) {
@@ -209,9 +221,9 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 		root->OnLoad(name, scene_file);		
 	}
 
+	// Check for children of the current GameObject
 	for (int i = 1; i <= go_counter; ++i) {
 
-		// Check for children GameObjects
 		char n[50];
 		sprintf_s(n, 50, "GameObject %d", i);
 		uint aux = scene_file["Game Objects"][n]["Parent UUID"];
@@ -225,6 +237,10 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 }
 
 void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel) {
+
+	LOG("");
+	if (savingModel) LOG("Importing model...")
+	else LOG("Saving scene...");
 
 	// Create auxiliar file
 	json scene_file;
@@ -242,6 +258,9 @@ void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char
 	stream.open(full_path);
 	stream << std::setw(4) << scene_file << std::endl;
 	stream.close();
+	
+	if (savingModel) LOG("Model imported.")
+	else LOG("Scene saved.");
 }
 
 void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) 

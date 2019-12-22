@@ -16,9 +16,6 @@
     <Filter Include="Sources\Core">
       <UniqueIdentifier>{dd9f5abf-361f-442e-9652-a2d9b116a338}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Modules\Scene">
-      <UniqueIdentifier>{631625a9-6f73-4037-8647-f094121aa15a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\3rd party">
       <UniqueIdentifier>{75f6a04e-518d-4e40-8409-357505d9db8d}</UniqueIdentifier>
     </Filter>
@@ -98,9 +95,6 @@
     </ClInclude>
     <ClInclude Include="pcg_uint128.hpp">
       <Filter>Sources\3rd party\RandomPCG</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleScene.h">
-      <Filter>Sources\Modules\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Json Parser\nlohmann\json.hpp">
       <Filter>Sources\3rd party\Json</Filter>
@@ -228,6 +222,9 @@
     <ClInclude Include="DebugWindow.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleScene.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -259,9 +256,6 @@
     </ClCompile>
     <ClCompile Include="glmath.cpp">
       <Filter>Sources\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleScene.cpp">
-      <Filter>Sources\Modules\Scene</Filter>
     </ClCompile>
     <ClCompile Include="MainMenuBar.cpp">
       <Filter>Sources\GUI</Filter>
@@ -367,6 +361,9 @@
     </ClCompile>
     <ClCompile Include="DebugWindow.cpp">
       <Filter>Sources\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
