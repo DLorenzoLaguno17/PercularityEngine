@@ -137,13 +137,9 @@ void ModuleScene::UpdateGameObjects(GameObject* root) {
 bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
-	nonStaticObjects.clear();
 	sceneTree->Clear();
 	RELEASE(sceneTree);
-
 	RecursiveCleanUp(root);
-	numGameObjectsInScene = 0;
-	root->children.clear();
 
 	if (App->closingEngine) {
 		for (uint i = 0; i < root->components.size(); ++i) {

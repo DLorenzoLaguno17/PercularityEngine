@@ -162,10 +162,10 @@ void ModuleGui::Load(const json &config)
 	debugWindow = new DebugWindow("Debug", true);
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
+	ui_elements_list.push_back(project);
 	ui_elements_list.push_back(console);
 	ui_elements_list.push_back(inspector);
 	ui_elements_list.push_back(hierarchy);
-	ui_elements_list.push_back(project);
 	ui_elements_list.push_back(debugWindow);
 
 	for (int i = 0; i < ui_elements_list.size(); ++i)

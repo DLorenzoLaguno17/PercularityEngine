@@ -126,13 +126,9 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 			}
 		}
 
-		// We save the model as a scene
+		// We save the model as a scene file and then delete it from the engine scene
 		App->scene->SaveScene(root, root->name, modelAddress, true);
-		//DeleteModel(root); 
-		//App->scene->nonStaticObjects.clear();
-		/*GameObject* root =
-		App->scene->nonStaticObjects.
-		//App->scene->sceneTree->Clear();*/
+		App->scene->RecursiveCleanUp(root); 
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -146,15 +142,6 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 // -----------------------------------------------------------------------------------------------
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
-
-void ModuleResourceLoader::DeleteModel(GameObject* root) 
-{	
-	for (int i = 0; i < root->children.size(); ++i)
-		DeleteModel(root->children[i]);
-
-	root->CleanUp();
-	RELEASE(root);
-}
 
 bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNode* node, GameObject* parent) {
 

@@ -128,9 +128,14 @@ void GameObject::CleanUp() {
 		components[i]->CleanUp();
 		RELEASE(components[i]);
 	}
-
 	components.clear();
-	children.clear();
+
+	std::vector<GameObject*>::iterator children_it = std::find(parent->children.begin(), parent->children.end(), this);
+	parent->children.erase(children_it);
+
+	App->scene->numGameObjectsInScene--;
+	std::vector<GameObject*>::iterator obj_it = std::find(App->scene->nonStaticObjects.begin(), App->scene->nonStaticObjects.end(), this);
+	App->scene->nonStaticObjects.erase(obj_it);
 }
 
 Component* GameObject::GetComponent(COMPONENT_TYPE componentType)
