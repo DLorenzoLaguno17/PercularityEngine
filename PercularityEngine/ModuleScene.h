@@ -65,7 +65,6 @@ public:
 
 	GameObject* selected = nullptr;
 	const char* sceneAddress;
-	uint numGameObjectsInScene = 0;
 
 private:
 	GameObject* root = nullptr;

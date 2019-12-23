@@ -311,8 +311,7 @@ void ModuleRenderer3D::DrawMeshes()
 				if (Intersect(camera->frustum, objects[i]->aabb))
 				{
 					ComponentMesh* mesh = (ComponentMesh*)objects[i]->GetComponent(COMPONENT_TYPE::MESH);
-					if (mesh)
-						mesh->Render();
+					if (mesh) mesh->Render();
 				}
 			}
 		}

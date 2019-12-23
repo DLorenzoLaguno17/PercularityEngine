@@ -20,7 +20,6 @@ GameObject::GameObject() {
 	UUID = (uint)App->GetRandomGenerator().Int();
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 
-	App->scene->numGameObjectsInScene++;
 	App->scene->nonStaticObjects.push_back(this);
 }
 
@@ -33,7 +32,6 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 
 	if (!loadingScene) transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 
-	App->scene->numGameObjectsInScene++;
 	App->scene->nonStaticObjects.push_back(this);
 }
 
@@ -125,16 +123,14 @@ void GameObject::MakeChild(GameObject* parent) {
 // Cleans the memory of the GameObject
 void GameObject::CleanUp() {
 
+	const char* test = name.c_str();
 	for (uint i = 0; i < components.size(); ++i) {		
 		components[i]->CleanUp();
 		RELEASE(components[i]);
 	}
-	components.clear();
+	components.clear();	
+	parent = nullptr;
 
-	std::vector<GameObject*>::iterator children_it = std::find(parent->children.begin(), parent->children.end(), this);
-	parent->children.erase(children_it);
-
-	App->scene->numGameObjectsInScene--;
 	std::vector<GameObject*>::iterator obj_it = std::find(App->scene->nonStaticObjects.begin(), App->scene->nonStaticObjects.end(), this);
 	App->scene->nonStaticObjects.erase(obj_it);
 }

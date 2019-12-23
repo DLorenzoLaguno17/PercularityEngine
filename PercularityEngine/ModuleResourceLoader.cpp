@@ -116,19 +116,20 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 	{
 		aiNode* root_node = scene->mRootNode;
 
-		GameObject* root = new GameObject(getNameFromPath(path).c_str(), App->scene->GetRoot());
+		GameObject* world = new GameObject("World");
+		GameObject* tempRoot = new GameObject(getNameFromPath(path).c_str(), world);
 
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array		
 		if (root_node->mNumChildren > 0) {
 			for (uint i = 0; i < root_node->mNumChildren; ++i){
 				std::string output;
-				ret = LoadNode(path, scene, root_node->mChildren[i], root);
+				ret = LoadNode(path, scene, root_node->mChildren[i], tempRoot);
 			}
 		}
 
 		// We save the model as a scene file and then delete it from the engine scene
-		App->scene->SaveScene(root, root->name, modelAddress, true);
-		App->scene->RecursiveCleanUp(root); 
+		App->scene->SaveScene(tempRoot, tempRoot->name, modelAddress, true);
+		App->scene->RecursiveCleanUp(world); 
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -233,7 +234,7 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 			tex->file = texPath;
 			tex->exported_file = exportedPath;
 
-			tex->UpdateReferenceCount();
+			tex->IncreaseReferenceCount();
 			mat->resource_tex = tex;
 		}
 

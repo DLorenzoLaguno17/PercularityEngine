@@ -141,6 +141,7 @@ bool ModuleScene::CleanUp()
 	sceneTree->Clear();
 	RELEASE(sceneTree);
 	RecursiveCleanUp(root);
+	root->children.clear();
 
 	if (App->closingEngine) {
 		for (uint i = 0; i < root->components.size(); ++i) {
@@ -199,10 +200,10 @@ void ModuleScene::ExitGame()
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 
 		// Loads the former scene and then deletes the file
-		/*LoadScene(root, "Temporal Scene", sceneAddress, true);
+		LoadScene(root, "Temporal Scene", sceneAddress, true);
 		std::string name = "Temporal Scene.json";
 		std::string path = ASSETS_SCENE_FOLDER + name;
-		App->file_system->DeleteDirectory(path.c_str());*/
+		App->file_system->DeleteDirectory(path.c_str());
 	}
 }
 
