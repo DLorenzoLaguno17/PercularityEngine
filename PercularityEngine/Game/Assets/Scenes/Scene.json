@@ -113,5 +113,49 @@
             "Parent UUID": 567669459,
             "UUID": 795769901
         }
+    },
+    "Resources": {
+        "Count": 5,
+        "Resource 1": {
+            "Exported file": "/library/meshes/bakerhouse 0.mesh",
+            "File": "/Assets/FBX/bakerhouse.fbx",
+            "Name": "Chimney",
+            "Type": "Mesh",
+            "UUID": 657048088
+        },
+        "Resource 2": {
+            "Exported file": "/library/meshes/bakerhouse 1.mesh",
+            "File": "/Assets/FBX/bakerhouse.fbx",
+            "Name": "Baker_house",
+            "Type": "Mesh",
+            "UUID": 667813750
+        },
+        "Resource 3": {
+            "Exported file": "/library/textures/baker_house.dds",
+            "File": "/Assets/Textures/baker_house.png",
+            "Height": 1024,
+            "Name": "baker_house.dds",
+            "Texture": 23,
+            "Type": "Texture",
+            "UUID": 784589424,
+            "Width": 1024
+        },
+        "Resource 4": {
+            "Exported file": "Model",
+            "File": "/assets/fbx/bakerhouse.fbx",
+            "Name": "bakerhouse",
+            "Type": "Model",
+            "UUID": 840131200
+        },
+        "Resource 5": {
+            "Exported file": "/library/textures/baker_house.dds",
+            "File": "/Assets/Textures/baker_house.png",
+            "Height": 1024,
+            "Name": "baker_house.dds",
+            "Texture": 27,
+            "Type": "Texture",
+            "UUID": 1254724266,
+            "Width": 1024
+        }
     }
 }

@@ -47,14 +47,6 @@ private:
 	uint resourcesCount = 0;
 	uint saved_res = 0;
 
-	// Data from the assets
-	std::vector<std::string> tex_files;
-	std::vector<std::string> tex_directories;
-	std::vector<std::string> mod_files;
-	std::vector<std::string> mod_directories;
-	std::vector<std::string> sce_files;
-	std::vector<std::string> sce_directories;
-
 };
 
 #endif // __ModuleResourceManager_H__

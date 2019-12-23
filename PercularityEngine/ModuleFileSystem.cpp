@@ -112,6 +112,12 @@ void ModuleFileSystem::CreateDirectory(const char* directory)
 	PHYSFS_mkdir(directory);
 }
 
+// Deletes a directory
+void ModuleFileSystem::DeleteDirectory(const char* directory)
+{
+	PHYSFS_delete(directory);
+}
+
 void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string> & file_list, vector<string> & dir_list) const
 {
 	char **rc = PHYSFS_enumerateFiles(directory);

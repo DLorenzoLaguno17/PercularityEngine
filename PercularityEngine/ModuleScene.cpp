@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleResourceManager.h"
+#include "ModuleFileSystem.h"
 #include "ModuleGui.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
@@ -161,6 +162,47 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 	if (root != GetRoot()) {
 		root->CleanUp();
 		RELEASE(root);
+	}
+}
+
+// -----------------------------------------------------------------------------------------------
+// GAME SCENE MANAGEMENT
+// -----------------------------------------------------------------------------------------------
+
+void ModuleScene::Play()
+{
+	if (!Time::running) {
+
+		if (Time::paused)
+			Time::Resume();
+		else
+		{
+			Time::Start();
+
+			// Saves the current scene
+			SaveScene(root, "Temporal Scene", sceneAddress, true);
+		}
+	}
+}
+
+void ModuleScene::Pause()
+{
+	Time::Pause();
+}
+
+void ModuleScene::ExitGame()
+{
+	if (Time::running) {
+
+		Time::Stop();
+		CleanUp();
+		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
+
+		// Loads the former scene and then deletes the file
+		/*LoadScene(root, "Temporal Scene", sceneAddress, true);
+		std::string name = "Temporal Scene.json";
+		std::string path = ASSETS_SCENE_FOLDER + name;
+		App->file_system->DeleteDirectory(path.c_str());*/
 	}
 }
 
@@ -593,30 +635,4 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	App->scene->selected = item;
 
 	return item;
-}
-
-void ModuleScene::Play()
-{
-	if (Time::running)
-		return;
-
-	if (Time::paused)
-		Time::Resume();
-
-	else
-	{
-		Time::Start();
-		//To do: Save auxiliar scene
-	}
-}
-
-void ModuleScene::Pause()
-{
-	Time::Pause();
-}
-
-void ModuleScene::ExitGame()
-{
-	Time::Stop();
-	//To do: load auxiliar scene
 }

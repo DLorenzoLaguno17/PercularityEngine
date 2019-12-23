@@ -123,7 +123,7 @@ bool ModuleGui::CleanUp()
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
-	RELEASE(project);
+	RELEASE(debugWindow);
 	RELEASE(project);
 	RELEASE(hierarchy);
 	RELEASE(inspector);
