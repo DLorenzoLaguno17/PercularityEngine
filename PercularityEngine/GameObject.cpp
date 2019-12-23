@@ -93,6 +93,7 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 		if (ret != nullptr) components.push_back(ret); 
 		App->renderer3D->meshes.push_back((ComponentMesh*)ret);
 		break;
+
 	case COMPONENT_TYPE::TRANSFORM:
 		ret = new ComponentTransform(this, active);
 		if (ret != nullptr) components.push_back(ret); 

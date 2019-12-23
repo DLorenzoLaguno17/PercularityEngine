@@ -17,7 +17,7 @@ public:
 	// Methods
 	void Update() {}
 	void OnEditor();
-	void CleanUp() {}
+	void CleanUp();
 
 	// Load & Save 
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);

@@ -8,7 +8,10 @@ bool ResourceScene::LoadInMemory()
 	return true;
 }
 
-void ResourceScene::ReleaseFromMemory() {}
+void ResourceScene::ReleaseFromMemory() 
+{
+	
+}
 
 // Save and Load
 void ResourceScene::OnSave(const char* resourceNum, json &config) const

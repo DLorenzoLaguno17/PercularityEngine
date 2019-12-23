@@ -48,7 +48,9 @@ void ComponentMesh::OnEditor() {
 	}
 }
 
-void ComponentMesh::CleanUp() {}
+void ComponentMesh::CleanUp() {
+	//resource_mesh->DecreaseReferenceCount();
+}
 
 // Method to render vertex normals
 void ComponentMesh::RenderNormals() {

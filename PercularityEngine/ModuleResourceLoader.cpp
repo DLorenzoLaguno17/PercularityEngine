@@ -237,7 +237,7 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 			mat->resource_tex = tex;
 		}
 
-		ComponentMesh* mesh_comp = (ComponentMesh*)child->CreateComponent(COMPONENT_TYPE::MESH, true);
+		ComponentMesh* mesh_comp = (ComponentMesh*)child->CreateComponent(COMPONENT_TYPE::MESH);
 		mesh_comp->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
 
 		ResourceMesh* mesh = mesh_comp->resource_mesh;

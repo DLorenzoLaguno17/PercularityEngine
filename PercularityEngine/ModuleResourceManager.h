@@ -44,7 +44,7 @@ public:
 
 private:
 	std::map<uint, Resource*> resources;
-	uint resourcesCount = 0;
+	//uint resourcesCount = 0;
 	uint saved_res = 0;
 
 };

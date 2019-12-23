@@ -237,7 +237,7 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	stream.close();
 
 	// First we load the resources
-	if (!loadingModel) App->res_manager->LoadResources(scene_file);
+	App->res_manager->LoadResources(scene_file);
 
 	// Then we load all the GameObjects
 	go_counter = scene_file["Game Objects"]["Count"];	
@@ -284,8 +284,8 @@ void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char
 	json scene_file;
 	std::string full_path = address + scene_name + ".json";
 
-	// First we save the resources unless we are saving a model and not a scene
-	if(!savingModel) App->res_manager->SaveResources(scene_file);
+	// First we save the resources
+	App->res_manager->SaveResources(scene_file);
 
 	RecursiveSave(root, scene_file);
 	scene_file["Game Objects"]["Count"] = saved_go;

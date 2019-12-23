@@ -21,6 +21,10 @@ void ComponentMaterial::OnEditor() {
 	}
 }
 
+void ComponentMaterial::CleanUp() {
+	resource_tex->DecreaseReferenceCount();
+}
+
 // Load & Save 
 void ComponentMaterial::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) 
 {	

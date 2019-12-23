@@ -78,10 +78,8 @@ Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint spec
 			break;
 	}
 
-	if (ret != nullptr) {
+	if (ret != nullptr)
 		resources[uuid] = ret;
-		resourcesCount++;
-	}
 
 	return ret;
 }
@@ -168,12 +166,12 @@ void ModuleResourceManager::LoadResources(const json &scene_file)
 			if (strcmp(type.c_str(), "Mesh") == 0) {
 				ResourceMesh* res = (ResourceMesh*)CreateNewResource(RESOURCE_TYPE::MESH, UUID);
 				res->OnLoad(name, scene_file);
-				res->UpdateReferenceCount();
+				res->IncreaseReferenceCount();
 			}
 			if (strcmp(type.c_str(), "Texture") == 0) {
 				ResourceTexture* res = (ResourceTexture*)CreateNewResource(RESOURCE_TYPE::TEXTURE, UUID);
 				res->OnLoad(name, scene_file);
-				res->UpdateReferenceCount();
+				res->IncreaseReferenceCount();
 			}
 		}
 	}
@@ -253,7 +251,6 @@ bool ModuleResourceManager::CleanUp()
 	}
 
 	resources.clear();
-	resourcesCount = 0;
 
 	return true;
 }
@@ -292,7 +289,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 
 			std::string file = ASSETS_MODEL_FOLDER + mod_files[i];
 			Resource* res = GetResourceFromMap(FindFileInAssets(file.c_str()));
-			res->UpdateReferenceCount();
+			res->IncreaseReferenceCount();
 		}
 		ImGui::Text(mod_files[i].c_str());
 	}
@@ -302,7 +299,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 			
 			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
 			Resource* res = GetResourceFromMap(FindFileInAssets(file.c_str()));
-			res->UpdateReferenceCount();
+			res->IncreaseReferenceCount();
 		}
 		ImGui::Text(sce_files[i].c_str());
 	}
