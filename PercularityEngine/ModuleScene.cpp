@@ -181,7 +181,7 @@ void ModuleScene::Play()
 			Time::Start();
 
 			// Saves the current scene
-			SaveScene(root, "Temporal Scene", sceneAddress, true);
+			SaveScene(root, "Temporal Scene", sceneAddress, false, true);
 		}
 	}
 }
@@ -200,7 +200,7 @@ void ModuleScene::ExitGame()
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 
 		// Loads the former scene and then deletes the file
-		LoadScene("Temporal Scene", sceneAddress, true);
+		LoadScene("Temporal Scene", sceneAddress, false, true);
 		std::string name = "Temporal Scene.json";
 		std::string path = ASSETS_SCENE_FOLDER + name;
 		App->file_system->Remove(path.c_str());
@@ -211,7 +211,7 @@ void ModuleScene::ExitGame()
 // SAVE & LOAD METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleScene::LoadScene(const std::string scene_name, const char* address, bool loadingModel) {
+void ModuleScene::LoadScene(const std::string scene_name, const char* address, bool loadingModel, bool tempScene, uint usedAsReference) {
 
 	LOG("");
 	LOG("Loading scene: %s", scene_name.c_str());
@@ -238,15 +238,22 @@ void ModuleScene::LoadScene(const std::string scene_name, const char* address, b
 	stream.close();
 
 	// First we load the resources
-	App->res_manager->LoadResources(scene_file);
+	if (!tempScene) App->res_manager->LoadResources(scene_file);
 
 	// Then we load all the GameObjects
-	go_counter = scene_file["Game Objects"]["Count"];	
+	go_counter = scene_file["Game Objects"]["Count"];
 
 	if (loadingModel) {
 		GameObject* model = new GameObject("Model", nullptr, true);
 		RecursiveLoad(model, scene_file);
 		model->MakeChild(root);
+
+		if (usedAsReference > 0) {
+			char num[10];
+			sprintf_s(num, 10, " (%d)", usedAsReference);
+			std::string full_name = model->name + num;
+			model->name = full_name;
+		}
 	}
 	else RecursiveLoad(root, scene_file);
 
@@ -282,7 +289,7 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 		RecursiveLoad(root->children[i], scene_file);
 }
 
-void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel) {
+void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel, bool tempScene) {
 
 	LOG("");
 	if (savingModel) LOG("Importing model...")
@@ -293,7 +300,7 @@ void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char
 	std::string full_path = address + scene_name + ".json";
 
 	// First we save the resources
-	App->res_manager->SaveResources(scene_file);
+	if (!tempScene) App->res_manager->SaveResources(scene_file);
 
 	RecursiveSave(root, scene_file);
 	scene_file["Game Objects"]["Count"] = saved_go;

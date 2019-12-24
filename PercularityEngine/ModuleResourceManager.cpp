@@ -38,7 +38,7 @@ bool ModuleResourceManager::Start()
 	
 		std::string file = ASSETS_TEXTURE_FOLDER + tex_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
-	}
+	}*/
 
 	for (int i = 0; i < mod_files.size(); ++i) {
 
@@ -50,7 +50,7 @@ bool ModuleResourceManager::Start()
 		
 		std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::SCENE);		
-	}*/
+	}
 
 	return true;
 }
