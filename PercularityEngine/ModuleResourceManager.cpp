@@ -151,7 +151,7 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 // Load & Save
 void ModuleResourceManager::LoadResources(const json &scene_file) 
 {
-	CleanUp();
+	//if (!loadingModel) CleanUp();
 
 	uint cnt = scene_file["Resources"]["Count"];
 	for (int i = 1; i <= cnt; ++i) {
@@ -174,6 +174,7 @@ void ModuleResourceManager::LoadResources(const json &scene_file)
 				res->IncreaseReferenceCount();
 			}
 		}
+		else GetResourceFromMap(UUID)->IncreaseReferenceCount();
 	}
 }
 
@@ -227,13 +228,23 @@ const Resource* ModuleResourceManager::GetResourceFromMap(uint uuid) const
 	return nullptr;
 }
 
-// Returns a resource with certaing uid from the map
+// Returns a resource with certain uuid from the map
 Resource* ModuleResourceManager::GetResourceFromMap(uint uuid)
 {
 	std::map<uint, Resource*>::iterator it = resources.find(uuid);
-	uint i = uuid;
 	if (it != resources.end())
 		return it->second;
+
+	return nullptr;
+}
+
+// Returns a resource with certain name from the map
+Resource* ModuleResourceManager::GetResourceByName(const char* name) 
+{
+	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item) {
+		if (item->second->name.compare(name) == 0)
+			return item->second;
+	}
 
 	return nullptr;
 }
@@ -271,14 +282,17 @@ void ModuleResourceManager::DrawProjectExplorer() {
 
 	/*for (int i = 0; i < tex_files.size(); ++i) {
 		if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
-
-			std::string file = ASSETS_MODEL_FOLDER + mod_files[i];
-			Resource* res = GetResourceFromMap(FindFileInAssets(file.c_str()));
-			res->UpdateReferenceCount();
-
+			
 			ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
-			if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			mat->resource_tex = (ResourceTexture*)res;
+
+			if (mat) {
+				std::string::size_type const p(mod_files[i].find_last_of('.'));
+				std::string name = mod_files[i].substr(0, p);
+
+				Resource* res = GetResourceByName(name.c_str());
+				res->IncreaseReferenceCount();
+				mat->resource_tex = (ResourceTexture*)res;
+			}
 
 		}
 		ImGui::Text(tex_files[i].c_str());
@@ -286,10 +300,13 @@ void ModuleResourceManager::DrawProjectExplorer() {
 
 	for (int i = 0; i < mod_files.size(); ++i) {
 		if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
+			
+			std::string::size_type const p(mod_files[i].find_last_of('.'));
+			std::string name = mod_files[i].substr(0, p);
 
-			std::string file = ASSETS_MODEL_FOLDER + mod_files[i];
-			Resource* res = GetResourceFromMap(FindFileInAssets(file.c_str()));
+			Resource* res = GetResourceByName(name.c_str());
 			res->IncreaseReferenceCount();
+			if (res->usedAsReference > 1) res->LoadInMemory();
 		}
 		ImGui::Text(mod_files[i].c_str());
 	}
@@ -298,7 +315,7 @@ void ModuleResourceManager::DrawProjectExplorer() {
 		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
 			
 			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
-			Resource* res = GetResourceFromMap(FindFileInAssets(file.c_str()));
+			Resource* res = GetResourceByName(App->res_loader->getNameFromPath(sce_files[i]).c_str());
 			res->IncreaseReferenceCount();
 		}
 		ImGui::Text(sce_files[i].c_str());

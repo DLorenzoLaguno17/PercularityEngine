@@ -1,7 +1,7 @@
 #ifndef __ResourceScene_H__
 #define __ResourceScene_H__
 
-#include "Resource.h"
+#include "PercularityResource.h"
 
 class ResourceScene : public Resource
 {

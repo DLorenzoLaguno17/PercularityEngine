@@ -305,9 +305,6 @@
     <ClCompile Include="ModuleResourceManager.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Resource.h">
-      <Filter>Sources\Scene elements\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="ImGui\imgui_impl_opengl3.cpp">
       <Filter>Sources\3rd party\ImGui\SDL_OpenGL3</Filter>
     </ClCompile>
@@ -364,6 +361,9 @@
     </ClCompile>
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="PercularityResource.h">
+      <Filter>Sources\Scene elements\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

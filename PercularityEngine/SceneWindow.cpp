@@ -96,7 +96,7 @@ GameObject* SceneWindow::SelectObject() const
 			localRay.Transform(it->second->transform->GetGlobalTransform().Inverted());
 			for (uint v = 0; v < mesh->resource_mesh->num_indices; v += 3)
 			{
-				uint indexA = mesh->resource_mesh->indices[v] ;
+				uint indexA = mesh->resource_mesh->indices[v];
 				float3 a(mesh->resource_mesh->vertices[indexA]);
 
 				uint indexB = mesh->resource_mesh->indices[v+1];

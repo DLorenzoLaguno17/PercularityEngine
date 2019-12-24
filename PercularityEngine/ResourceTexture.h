@@ -1,7 +1,7 @@
 #ifndef __ResourceTexture_H__
 #define __ResourceTexture_H__
 
-#include "Resource.h"
+#include "PercularityResource.h"
 
 class ResourceTexture : public Resource
 {

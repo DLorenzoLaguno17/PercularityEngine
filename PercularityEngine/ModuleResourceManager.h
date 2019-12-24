@@ -2,7 +2,7 @@
 #define __ModuleResourceManager_H__
 
 #include "Module.h"
-#include "Resource.h"
+#include "PercularityResource.h"
 
 // ---------------------------------------------------
 class ModuleResourceManager : public Module
@@ -32,6 +32,7 @@ public:
 	// Getters
 	const Resource* GetResourceFromMap(uint uuid) const;
 	Resource* GetResourceFromMap(uint uuid);
+	Resource* GetResourceByName(const char* name);
 	uint FindFileInAssets(const char* existing_file) const;
 	uint FindFileInLibrary(const char* exported_file) const;
 

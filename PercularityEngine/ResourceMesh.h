@@ -1,7 +1,7 @@
 #ifndef __ResourceMesh_H__
 #define __ResourceMesh_H__
 
-#include "Resource.h"
+#include "PercularityResource.h"
 
 class ResourceMesh : public Resource 
 {

@@ -148,7 +148,6 @@ Component* GameObject::GetComponent(COMPONENT_TYPE componentType)
 
 const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 {
-
 	for (std::vector<Component*>::const_iterator it = components.begin(); it != components.end(); ++it)
 	{
 		if ((*it)->type == componentType)

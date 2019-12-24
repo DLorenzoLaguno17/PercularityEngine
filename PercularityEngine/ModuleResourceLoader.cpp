@@ -234,7 +234,7 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 			tex->file = texPath;
 			tex->exported_file = exportedPath;
 
-			tex->IncreaseReferenceCount();
+			App->res_loader->LoadTextureFromLibrary(tex);
 			mat->resource_tex = tex;
 		}
 

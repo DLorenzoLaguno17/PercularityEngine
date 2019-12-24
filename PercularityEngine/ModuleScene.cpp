@@ -93,7 +93,7 @@ update_status ModuleScene::Update(float dt)
 
 		if (ImGui::Button("Yes", ImVec2(140, 0))) { 
 			ImGui::CloseCurrentPopup(); 
-			LoadScene(root, "Scene", sceneAddress); 
+			LoadScene("Scene", sceneAddress); 
 		}
 
 		ImGui::SetItemDefaultFocus();
@@ -200,10 +200,10 @@ void ModuleScene::ExitGame()
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 
 		// Loads the former scene and then deletes the file
-		LoadScene(root, "Temporal Scene", sceneAddress, true);
+		LoadScene("Temporal Scene", sceneAddress, true);
 		std::string name = "Temporal Scene.json";
 		std::string path = ASSETS_SCENE_FOLDER + name;
-		App->file_system->DeleteDirectory(path.c_str());
+		App->file_system->Remove(path.c_str());
 	}
 }
 
@@ -211,7 +211,7 @@ void ModuleScene::ExitGame()
 // SAVE & LOAD METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, const char* address, bool loadingModel) {
+void ModuleScene::LoadScene(const std::string scene_name, const char* address, bool loadingModel) {
 
 	LOG("");
 	LOG("Loading scene: %s", scene_name.c_str());
@@ -242,7 +242,14 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 
 	// Then we load all the GameObjects
 	go_counter = scene_file["Game Objects"]["Count"];	
-	RecursiveLoad(root, scene_file);
+
+	if (loadingModel) {
+		GameObject* model = new GameObject("Model", nullptr, true);
+		RecursiveLoad(model, scene_file);
+		model->MakeChild(root);
+	}
+	else RecursiveLoad(root, scene_file);
+
 	selected = root;
 	loaded_go = 0;
 

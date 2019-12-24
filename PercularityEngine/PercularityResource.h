@@ -13,7 +13,6 @@ enum class RESOURCE_TYPE {
 
 class Resource
 {
-
 friend class ModuleResourceManager;
 
 public:
