@@ -35,6 +35,9 @@ public:
 	void RecursiveLoad(GameObject* root, const json &scene_file);
 	void RecursiveSave(GameObject* root, json &scene_file);
 
+	// Assigns a new UUID to all the GameObjects without loosing the hierarchy
+	void RecursiveReset(GameObject* root);
+
 	void RecursiveCleanUp(GameObject* root);
 
 	//Methods to create primitives

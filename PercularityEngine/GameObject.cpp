@@ -35,6 +35,12 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 	App->scene->nonStaticObjects.push_back(this);
 }
 
+// Generates a new UUID
+void GameObject::NewUUID() 
+{ 
+	UUID = (uint)App->GetRandomGenerator().Int(); 
+}
+
 // Called every frame
 void GameObject::Update() {
 	if (Debug::drawObjectsAABB || showBondingBox)
@@ -129,6 +135,7 @@ void GameObject::CleanUp() {
 		RELEASE(components[i]);
 	}
 	components.clear();	
+	children.clear();
 	parent = nullptr;
 
 	std::vector<GameObject*>::iterator obj_it = std::find(App->scene->nonStaticObjects.begin(), App->scene->nonStaticObjects.end(), this);

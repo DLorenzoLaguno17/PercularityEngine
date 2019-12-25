@@ -253,9 +253,13 @@ void ModuleScene::LoadScene(const std::string scene_name, const char* address, b
 			sprintf_s(num, 10, " (%d)", usedAsReference);
 			std::string full_name = model->name + num;
 			model->name = full_name;
-		}
+
+			// We reset the UUIDS of all the GameObjects of the model in case it is duplicated
+			RecursiveReset(root);
+		}		
+
 	}
-	else RecursiveLoad(root, scene_file);
+	else RecursiveLoad(root, scene_file);	
 
 	selected = root;
 	loaded_go = 0;
@@ -282,11 +286,22 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 		uint aux = scene_file["Game Objects"][n]["Parent UUID"];
 
 		if (aux == root->GetUUID())
-			GameObject* newGo = new GameObject("Temp", root, true);
+			GameObject* newGo = new GameObject("Temp", root, true);		
 	}
 
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveLoad(root->children[i], scene_file);
+}
+
+void ModuleScene::RecursiveReset(GameObject* root) 
+{
+	if (root != GetRoot()) {
+		root->NewUUID();
+		root->parent_UUID = root->parent->GetUUID();
+	}
+
+	for (int i = 0; i < root->children.size(); ++i)
+		RecursiveReset(root->children[i]);
 }
 
 void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel, bool tempScene) {

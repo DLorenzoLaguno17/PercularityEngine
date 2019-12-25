@@ -29,6 +29,7 @@ public:
 	void DrawAABB();
 
 	uint GetUUID() const { return UUID; }
+	void NewUUID();
 
 	void MakeStatic(bool isStatic);
 
@@ -59,10 +60,10 @@ public:
 	OBB obb;
 
 	bool isStatic = false;
+	uint parent_UUID = 0;
 
 private:
 	uint UUID = 0;
-	uint parent_UUID = 0;
 };
 
 #endif // __GameObject_H__
