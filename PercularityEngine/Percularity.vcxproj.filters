@@ -55,6 +55,9 @@
     <Filter Include="Sources\Tools\Debug">
       <UniqueIdentifier>{15c4c9d4-9df2-4597-a6fd-46fe8491f647}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\3rd party\Bullet">
+      <UniqueIdentifier>{6ad0eb23-b327-4620-a5fd-d417a5aa5af7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleCamera3D.h">
