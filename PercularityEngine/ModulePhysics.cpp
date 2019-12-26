@@ -14,18 +14,10 @@
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	collision_conf = new btDefaultCollisionConfiguration();
-	dispatcher = new btCollisionDispatcher(collision_conf);
-	broad_phase = new btDbvtBroadphase();
-	solver = new btSequentialImpulseConstraintSolver();
 }
 
 ModulePhysics::~ModulePhysics()
 {
-	delete solver;
-	delete broad_phase;
-	delete dispatcher;
-	delete collision_conf;
 }
 
 bool ModulePhysics::Init()
