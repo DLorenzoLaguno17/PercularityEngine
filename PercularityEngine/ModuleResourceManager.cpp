@@ -21,6 +21,36 @@
 // Called before the first frame
 bool ModuleResourceManager::Start()
 {
+	// Data from the assets
+	std::vector<std::string> tex_files;
+	std::vector<std::string> tex_directories;
+	std::vector<std::string> mod_files;
+	std::vector<std::string> mod_directories;
+	std::vector<std::string> sce_files;
+	std::vector<std::string> sce_directories;
+
+	// We create resources from every asset we have
+	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
+	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
+	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
+
+	/*for (int i = 0; i < tex_files.size(); ++i) {
+	
+		std::string file = ASSETS_TEXTURE_FOLDER + tex_files[i];
+		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
+	}*/
+
+	for (int i = 0; i < mod_files.size(); ++i) {
+
+		std::string file = ASSETS_MODEL_FOLDER + mod_files[i];
+		ImportFile(file.c_str(), RESOURCE_TYPE::MODEL);		
+	}
+
+	for (int i = 0; i < sce_files.size(); ++i) {
+		
+		std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
+		ImportFile(file.c_str(), RESOURCE_TYPE::SCENE);		
+	}
 
 	return true;
 }
@@ -48,10 +78,8 @@ Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint spec
 			break;
 	}
 
-	if (ret != nullptr) {
+	if (ret != nullptr)
 		resources[uuid] = ret;
-		resourcesCount++;
-	}
 
 	return ret;
 }
@@ -123,7 +151,7 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 // Load & Save
 void ModuleResourceManager::LoadResources(const json &scene_file) 
 {
-	CleanUp();
+	//if (!loadingModel) CleanUp();
 
 	uint cnt = scene_file["Resources"]["Count"];
 	for (int i = 1; i <= cnt; ++i) {
@@ -138,14 +166,15 @@ void ModuleResourceManager::LoadResources(const json &scene_file)
 			if (strcmp(type.c_str(), "Mesh") == 0) {
 				ResourceMesh* res = (ResourceMesh*)CreateNewResource(RESOURCE_TYPE::MESH, UUID);
 				res->OnLoad(name, scene_file);
-				res->UpdateReferenceCount();
+				res->IncreaseReferenceCount();
 			}
 			if (strcmp(type.c_str(), "Texture") == 0) {
 				ResourceTexture* res = (ResourceTexture*)CreateNewResource(RESOURCE_TYPE::TEXTURE, UUID);
 				res->OnLoad(name, scene_file);
-				res->UpdateReferenceCount();
+				res->IncreaseReferenceCount();
 			}
 		}
+		else GetResourceFromMap(UUID)->IncreaseReferenceCount();
 	}
 }
 
@@ -199,13 +228,23 @@ const Resource* ModuleResourceManager::GetResourceFromMap(uint uuid) const
 	return nullptr;
 }
 
-// Returns a resource with certaing uid from the map
+// Returns a resource with certain uuid from the map
 Resource* ModuleResourceManager::GetResourceFromMap(uint uuid)
 {
 	std::map<uint, Resource*>::iterator it = resources.find(uuid);
-	uint i = uuid;
 	if (it != resources.end())
 		return it->second;
+
+	return nullptr;
+}
+
+// Returns a resource with certain name from the map
+Resource* ModuleResourceManager::GetResourceByName(const char* name) 
+{
+	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item) {
+		if (item->second->name.compare(name) == 0)
+			return item->second;
+	}
 
 	return nullptr;
 }
@@ -223,13 +262,13 @@ bool ModuleResourceManager::CleanUp()
 	}
 
 	resources.clear();
-	resourcesCount = 0;
 
 	return true;
 }
 
 void ModuleResourceManager::DrawProjectExplorer() {
-	
+
+	// Data from the assets
 	std::vector<std::string> tex_files;
 	std::vector<std::string> tex_directories;
 	std::vector<std::string> mod_files;
@@ -241,38 +280,45 @@ void ModuleResourceManager::DrawProjectExplorer() {
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
 	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
-	for (int i = 0; i < tex_files.size(); ++i) {
+	/*for (int i = 0; i < tex_files.size(); ++i) {
 		if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
-
-			/*std::string path = ASSETS_TEXTURE_FOLDER + tex_files[i];
+			
 			ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
-			if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			mat->resource_tex = (ResourceTexture*)GetResourceFromMap(FindFileInAssets(path.c_str()));*/
+
+			if (mat) {
+				std::string::size_type const p(mod_files[i].find_last_of('.'));
+				std::string name = mod_files[i].substr(0, p);
+
+				Resource* res = GetResourceByName(name.c_str());
+				res->IncreaseReferenceCount();
+				mat->resource_tex = (ResourceTexture*)res;
+			}
 
 		}
 		ImGui::Text(tex_files[i].c_str());
-		break;
-	}
+	}*/
 
 	for (int i = 0; i < mod_files.size(); ++i) {
 		if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
+			
+			std::string::size_type const p(mod_files[i].find_last_of('.'));
+			std::string name = mod_files[i].substr(0, p);
 
-			/*ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
-			if (mat) mat->resource_tex->usedAsReference--;
-			if (mat == nullptr) mat = (ComponentMaterial*)App->scene->selected->CreateComponent(COMPONENT_TYPE::MATERIAL);
-			mat->resource_tex = (ResourceTexture*)it->second;*/
+			Resource* res = GetResourceByName(name.c_str());
+			res->IncreaseReferenceCount();
+			if (res->usedAsReference > 1) res->LoadInMemory();
 		}
 		ImGui::Text(mod_files[i].c_str());
-		break;
 	}
 
 	for (int i = 0; i < sce_files.size(); ++i) {
 		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
-
-			//App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
+			
+			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
+			Resource* res = GetResourceByName(App->res_loader->getNameFromPath(sce_files[i]).c_str());
+			res->IncreaseReferenceCount();
 		}
 		ImGui::Text(sce_files[i].c_str());
-		break;
 	}
 }
 

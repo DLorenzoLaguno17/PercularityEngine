@@ -30,10 +30,13 @@ public:
 	// Save & Load
 	void Load(const nlohmann::json &config);
 	void Save(nlohmann::json &config);
-	void LoadScene(GameObject* root, const std::string scene_name, const char* address, bool loadingModel = false);
-	void SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel = false);
+	void LoadScene(const std::string scene_name, const char* address, bool loadingModel = false, bool tempScene = false, uint usedAsReference = 0);
+	void SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel = false, bool tempScene = false);
 	void RecursiveLoad(GameObject* root, const json &scene_file);
 	void RecursiveSave(GameObject* root, json &scene_file);
+
+	// Assigns a new UUID to all the GameObjects without loosing the hierarchy
+	void RecursiveReset(GameObject* root);
 
 	void RecursiveCleanUp(GameObject* root);
 
@@ -65,7 +68,6 @@ public:
 
 	GameObject* selected = nullptr;
 	const char* sceneAddress;
-	uint numGameObjectsInScene = 0;
 
 private:
 	GameObject* root = nullptr;

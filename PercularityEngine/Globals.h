@@ -61,7 +61,7 @@ enum update_status
 };
 
 // Configuration -----------
-#define TITLE "Percularity v0.1"
+#define TITLE "Percularity v0.3"
 #define ORG "UPC - Tech Talent Center"
 #define ASSETS_FOLDER "/Assets/"
 #define ASSETS_MODEL_FOLDER "/Assets/FBX/"

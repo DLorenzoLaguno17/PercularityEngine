@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleResourceManager.h"
+#include "ModuleFileSystem.h"
 #include "ModuleGui.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
@@ -92,7 +93,7 @@ update_status ModuleScene::Update(float dt)
 
 		if (ImGui::Button("Yes", ImVec2(140, 0))) { 
 			ImGui::CloseCurrentPopup(); 
-			LoadScene(root, "Scene", sceneAddress); 
+			LoadScene("Scene", sceneAddress); 
 		}
 
 		ImGui::SetItemDefaultFocus();
@@ -137,12 +138,9 @@ void ModuleScene::UpdateGameObjects(GameObject* root) {
 bool ModuleScene::CleanUp()
 {
 	LOG("Releasing all the GameObjects");
-	nonStaticObjects.clear();
 	sceneTree->Clear();
 	RELEASE(sceneTree);
-
 	RecursiveCleanUp(root);
-	numGameObjectsInScene = 0;
 	root->children.clear();
 
 	if (App->closingEngine) {
@@ -169,10 +167,51 @@ void ModuleScene::RecursiveCleanUp(GameObject* root) {
 }
 
 // -----------------------------------------------------------------------------------------------
+// GAME SCENE MANAGEMENT
+// -----------------------------------------------------------------------------------------------
+
+void ModuleScene::Play()
+{
+	if (!Time::running) {
+
+		if (Time::paused)
+			Time::Resume();
+		else
+		{
+			Time::Start();
+
+			// Saves the current scene
+			SaveScene(root, "Temporal Scene", sceneAddress, false, true);
+		}
+	}
+}
+
+void ModuleScene::Pause()
+{
+	Time::Pause();
+}
+
+void ModuleScene::ExitGame()
+{
+	if (Time::running) {
+
+		Time::Stop();
+		CleanUp();
+		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
+
+		// Loads the former scene and then deletes the file
+		LoadScene("Temporal Scene", sceneAddress, false, true);
+		std::string name = "Temporal Scene.json";
+		std::string path = ASSETS_SCENE_FOLDER + name;
+		App->file_system->Remove(path.c_str());
+	}
+}
+
+// -----------------------------------------------------------------------------------------------
 // SAVE & LOAD METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, const char* address, bool loadingModel) {
+void ModuleScene::LoadScene(const std::string scene_name, const char* address, bool loadingModel, bool tempScene, uint usedAsReference) {
 
 	LOG("");
 	LOG("Loading scene: %s", scene_name.c_str());
@@ -199,11 +238,29 @@ void ModuleScene::LoadScene(GameObject* root, const std::string scene_name, cons
 	stream.close();
 
 	// First we load the resources
-	if (!loadingModel) App->res_manager->LoadResources(scene_file);
+	if (!tempScene) App->res_manager->LoadResources(scene_file);
 
 	// Then we load all the GameObjects
-	go_counter = scene_file["Game Objects"]["Count"];	
-	RecursiveLoad(root, scene_file);
+	go_counter = scene_file["Game Objects"]["Count"];
+
+	if (loadingModel) {
+		GameObject* model = new GameObject("Model", nullptr, true);
+		RecursiveLoad(model, scene_file);
+		model->MakeChild(root);
+
+		if (usedAsReference > 0) {
+			char num[10];
+			sprintf_s(num, 10, " (%d)", usedAsReference);
+			std::string full_name = model->name + num;
+			model->name = full_name;
+
+			// We reset the UUIDS of all the GameObjects of the model in case it is duplicated
+			RecursiveReset(root);
+		}		
+
+	}
+	else RecursiveLoad(root, scene_file);	
+
 	selected = root;
 	loaded_go = 0;
 
@@ -229,14 +286,25 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 		uint aux = scene_file["Game Objects"][n]["Parent UUID"];
 
 		if (aux == root->GetUUID())
-			GameObject* newGo = new GameObject("Temp", root, true);
+			GameObject* newGo = new GameObject("Temp", root, true);		
 	}
 
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveLoad(root->children[i], scene_file);
 }
 
-void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel) {
+void ModuleScene::RecursiveReset(GameObject* root) 
+{
+	if (root != GetRoot()) {
+		root->NewUUID();
+		root->parent_UUID = root->parent->GetUUID();
+	}
+
+	for (int i = 0; i < root->children.size(); ++i)
+		RecursiveReset(root->children[i]);
+}
+
+void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel, bool tempScene) {
 
 	LOG("");
 	if (savingModel) LOG("Importing model...")
@@ -246,8 +314,8 @@ void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char
 	json scene_file;
 	std::string full_path = address + scene_name + ".json";
 
-	// First we save the resources unless we are saving a model and not a scene
-	if(!savingModel) App->res_manager->SaveResources(scene_file);
+	// First we save the resources
+	if (!tempScene) App->res_manager->SaveResources(scene_file);
 
 	RecursiveSave(root, scene_file);
 	scene_file["Game Objects"]["Count"] = saved_go;
@@ -597,30 +665,4 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	App->scene->selected = item;
 
 	return item;
-}
-
-void ModuleScene::Play()
-{
-	if (Time::running)
-		return;
-
-	if (Time::paused)
-		Time::Resume();
-
-	else
-	{
-		Time::Start();
-		//To do: Save auxiliar scene
-	}
-}
-
-void ModuleScene::Pause()
-{
-	Time::Pause();
-}
-
-void ModuleScene::ExitGame()
-{
-	Time::Stop();
-	//To do: load auxiliar scene
 }

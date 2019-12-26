@@ -20,7 +20,6 @@ GameObject::GameObject() {
 	UUID = (uint)App->GetRandomGenerator().Int();
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 
-	App->scene->numGameObjectsInScene++;
 	App->scene->nonStaticObjects.push_back(this);
 }
 
@@ -33,8 +32,13 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 
 	if (!loadingScene) transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 
-	App->scene->numGameObjectsInScene++;
 	App->scene->nonStaticObjects.push_back(this);
+}
+
+// Generates a new UUID
+void GameObject::NewUUID() 
+{ 
+	UUID = (uint)App->GetRandomGenerator().Int(); 
 }
 
 // Called every frame
@@ -93,6 +97,7 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 		if (ret != nullptr) components.push_back(ret); 
 		App->renderer3D->meshes.push_back((ComponentMesh*)ret);
 		break;
+
 	case COMPONENT_TYPE::TRANSFORM:
 		ret = new ComponentTransform(this, active);
 		if (ret != nullptr) components.push_back(ret); 
@@ -124,13 +129,17 @@ void GameObject::MakeChild(GameObject* parent) {
 // Cleans the memory of the GameObject
 void GameObject::CleanUp() {
 
+	const char* test = name.c_str();
 	for (uint i = 0; i < components.size(); ++i) {		
 		components[i]->CleanUp();
 		RELEASE(components[i]);
 	}
-
-	components.clear();
+	components.clear();	
 	children.clear();
+	parent = nullptr;
+
+	std::vector<GameObject*>::iterator obj_it = std::find(App->scene->nonStaticObjects.begin(), App->scene->nonStaticObjects.end(), this);
+	App->scene->nonStaticObjects.erase(obj_it);
 }
 
 Component* GameObject::GetComponent(COMPONENT_TYPE componentType)
@@ -146,7 +155,6 @@ Component* GameObject::GetComponent(COMPONENT_TYPE componentType)
 
 const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 {
-
 	for (std::vector<Component*>::const_iterator it = components.begin(); it != components.end(); ++it)
 	{
 		if ((*it)->type == componentType)

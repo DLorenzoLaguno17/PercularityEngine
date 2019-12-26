@@ -116,23 +116,20 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 	{
 		aiNode* root_node = scene->mRootNode;
 
-		GameObject* root = new GameObject(getNameFromPath(path).c_str(), App->scene->GetRoot());
+		GameObject* world = new GameObject("World");
+		GameObject* tempRoot = new GameObject(getNameFromPath(path).c_str(), world);
 
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array		
 		if (root_node->mNumChildren > 0) {
 			for (uint i = 0; i < root_node->mNumChildren; ++i){
 				std::string output;
-				ret = LoadNode(path, scene, root_node->mChildren[i], root);
+				ret = LoadNode(path, scene, root_node->mChildren[i], tempRoot);
 			}
 		}
 
-		// We save the model as a scene
-		App->scene->SaveScene(root, root->name, modelAddress, true);
-		//DeleteModel(root); 
-		//App->scene->nonStaticObjects.clear();
-		/*GameObject* root =
-		App->scene->nonStaticObjects.
-		//App->scene->sceneTree->Clear();*/
+		// We save the model as a scene file and then delete it from the engine scene
+		App->scene->SaveScene(tempRoot, tempRoot->name, modelAddress, true);
+		App->scene->RecursiveCleanUp(world); 
 
 		loaded_node = 0;
 		aiReleaseImport(scene);
@@ -147,18 +144,9 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleResourceLoader::DeleteModel(GameObject* root) 
-{	
-	for (int i = 0; i < root->children.size(); ++i)
-		DeleteModel(root->children[i]);
-
-	root->CleanUp();
-	RELEASE(root);
-}
-
 bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNode* node, GameObject* parent) {
 
-	bool ret = false;
+	bool ret = true;
 
 	aiVector3D translation;
 	aiVector3D scale;
@@ -246,11 +234,11 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 			tex->file = texPath;
 			tex->exported_file = exportedPath;
 
-			tex->UpdateReferenceCount();
+			App->res_loader->LoadTextureFromLibrary(tex);
 			mat->resource_tex = tex;
 		}
 
-		ComponentMesh* mesh_comp = (ComponentMesh*)child->CreateComponent(COMPONENT_TYPE::MESH, true);
+		ComponentMesh* mesh_comp = (ComponentMesh*)child->CreateComponent(COMPONENT_TYPE::MESH);
 		mesh_comp->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH);
 
 		ResourceMesh* mesh = mesh_comp->resource_mesh;

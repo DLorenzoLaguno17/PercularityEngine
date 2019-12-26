@@ -4,11 +4,14 @@
 
 bool ResourceScene::LoadInMemory()
 {
-	App->scene->LoadScene(App->scene->GetRoot(), name, App->scene->sceneAddress, false);
+	App->scene->LoadScene(name, App->scene->sceneAddress, false);
 	return true;
 }
 
-void ResourceScene::ReleaseFromMemory() {}
+void ResourceScene::ReleaseFromMemory() 
+{
+	
+}
 
 // Save and Load
 void ResourceScene::OnSave(const char* resourceNum, json &config) const

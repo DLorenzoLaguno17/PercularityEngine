@@ -1,7 +1,7 @@
 #ifndef __ResourceMesh_H__
 #define __ResourceMesh_H__
 
-#include "Resource.h"
+#include "PercularityResource.h"
 
 class ResourceMesh : public Resource 
 {
@@ -39,14 +39,6 @@ public:
 	// Colors
 	uint num_colors = 0;
 	uint* colors = nullptr;
-
-	// Data of other components
-	std::string assignedTex = "None";
-	float3 position = float3::zero;
-	float3 scale = float3::one;
-	Quat rotation = Quat::identity;
-
-	bool renderizable = false;
 
 };
 

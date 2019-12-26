@@ -128,6 +128,7 @@ bool ModuleRenderer3D::Init()
 bool ModuleRenderer3D::Start()
 {
 	OnResize(App->window->GetWindowWidth(), App->window->GetWindowHeight());
+	
 	//Prepare scene
 	SetUpScene();
 

@@ -13,6 +13,8 @@ enum class RESOURCE_TYPE {
 
 class Resource
 {
+friend class ModuleResourceManager;
+
 public:
 	Resource(uint uuid, RESOURCE_TYPE type) : UUID(uuid), type(type) {}
 
@@ -28,7 +30,8 @@ public:
 	virtual void OnSave(const char* resourceNum, json &config) const {}
 
 	bool IsLoadedToMemory() const { return usedAsReference > 0; }
-	bool UpdateReferenceCount() 
+
+	void IncreaseReferenceCount() 
 	{
 		if (usedAsReference > 0) 
 			usedAsReference++;
@@ -36,12 +39,20 @@ public:
 			usedAsReference = 1;
 		else 
 			usedAsReference = 0;
-
-		return usedAsReference > 0;
 	}
 
-	virtual void ReleaseFromMemory() = 0;
+	void DecreaseReferenceCount() {
+		if (usedAsReference > 1)
+			usedAsReference--;
+		else 
+		{
+			ReleaseFromMemory();
+			usedAsReference = 0;
+		}
+	}
+
 protected:
+	virtual void ReleaseFromMemory() = 0;
 	virtual bool LoadInMemory() = 0;
 
 public:

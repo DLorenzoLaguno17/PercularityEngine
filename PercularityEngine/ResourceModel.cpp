@@ -1,10 +1,11 @@
 #include "ResourceModel.h"
 #include "Application.h"
 #include "ModuleScene.h"
+#include "ModuleResourceLoader.h"
 
 bool ResourceModel::LoadInMemory()
 {	
-	App->scene->LoadScene(App->scene->GetRoot(), name, App->scene->sceneAddress, true);
+	App->scene->LoadScene(name, App->res_loader->modelAddress, true, false, usedAsReference);
 	return true;
 }
 
