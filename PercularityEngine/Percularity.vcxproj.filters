@@ -264,9 +264,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools\Time Management</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Sources\Tools\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="DebugWindow.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
@@ -942,6 +939,12 @@
     <ClInclude Include="Bullet\include\LinearMath\btVector3.h">
       <Filter>Sources\3rd party\Bullet\LinearMath</Filter>
     </ClInclude>
+    <ClInclude Include="ModulePhysics.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Sources\Tools\Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -1070,9 +1073,6 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Sources\Tools\Time Management</Filter>
     </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>Sources\Tools\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="DebugWindow.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
@@ -1081,6 +1081,12 @@
     </ClCompile>
     <ClCompile Include="PercularityResource.h">
       <Filter>Sources\Scene elements\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ModulePhysics.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Sources\Tools\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
