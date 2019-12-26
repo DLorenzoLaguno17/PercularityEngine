@@ -5,7 +5,6 @@
 #include "Module.h"
 #include <list>
 
-#include "Json Parser/nlohmann/json.hpp"
 #include "MathGeoLib/include/Algorithm/Random/LCG.h"
 
 class ModuleWindow;
@@ -17,6 +16,7 @@ class ModuleScene;
 class ModuleResourceLoader;
 class ModuleResourceManager;
 class ModuleFileSystem;
+class ModulePhysics;
 
 class Application
 {
@@ -30,6 +30,7 @@ public:
 	ModuleResourceManager* res_manager;
 	ModuleFileSystem* file_system;
 	ModuleScene* scene;
+	ModulePhysics* physics;
 
 	// Aditional data
 	std::string engineName;

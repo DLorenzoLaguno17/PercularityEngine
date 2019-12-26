@@ -6,6 +6,7 @@
 #include "ModuleGui.h"
 #include "ModuleScene.h"
 #include "ModuleResourceLoader.h"
+#include "ModulePhysics.h"
 #include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
 #include "Time.h"
@@ -31,6 +32,7 @@ Application::Application()
 	res_loader = new ModuleResourceLoader(this);
 	res_manager = new ModuleResourceManager(this);
 	file_system = new ModuleFileSystem(this, ASSETS_FOLDER);
+	physics = new ModulePhysics(this);
 
 	// Main Modules
 	AddModule(window);
@@ -40,6 +42,7 @@ Application::Application()
 	AddModule(file_system);
 	AddModule(res_manager);
 	AddModule(res_loader);
+	AddModule(physics);
 	
 	// Scenes
 	AddModule(scene);

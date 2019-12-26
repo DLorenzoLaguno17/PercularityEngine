@@ -5,8 +5,6 @@
 #include <vector>
 #include <map>
 
-
-
 class GameObject;
 class TreeNode;
 
