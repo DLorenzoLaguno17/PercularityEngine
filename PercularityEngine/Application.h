@@ -17,6 +17,7 @@ class ModuleScene;
 class ModuleResourceLoader;
 class ModuleResourceManager;
 class ModuleFileSystem;
+class ModulePhysics;
 
 class Application
 {
@@ -30,6 +31,7 @@ public:
 	ModuleResourceManager* res_manager;
 	ModuleFileSystem* file_system;
 	ModuleScene* scene;
+	ModulePhysics* physics;
 
 	// Aditional data
 	std::string engineName;

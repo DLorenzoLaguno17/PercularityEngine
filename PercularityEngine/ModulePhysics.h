@@ -2,7 +2,6 @@
 #define _MODULE_PHYSICS_H__
 
 #include "Module.h"
-
 #include "Bullet/include/btBulletDynamicsCommon.h"
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects

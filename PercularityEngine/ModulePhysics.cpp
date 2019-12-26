@@ -14,28 +14,31 @@
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	//collision_conf = new btDefaultCollisionConfiguration();
+	//dispatcher = new btCollisionDispatcher(collision_conf);
+	//broad_phase = new btDbvtBroadphase();
+	//solver = new btSequentialImpulseConstraintSolver();
 }
 
-ModulePhysics::~ModulePhysics()
-{
-}
+ModulePhysics::~ModulePhysics() {}
 
 bool ModulePhysics::Init()
 {
-
 	
 	return true;
 }
 
 bool ModulePhysics::Start()
 {
+	//world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);	
+	//world->setGravity(GRAVITY);
 
 	return true;
 }
 
 update_status ModulePhysics::PreUpdate(float dt)
 {
-	world->stepSimulation(dt,60);
+	//world->stepSimulation(dt, 15);
 
 	return UPDATE_CONTINUE;
 }
@@ -52,5 +55,9 @@ update_status ModulePhysics::PostUpdate(float dt)
 
 bool ModulePhysics::CleanUp()
 {
+	//RELEASE(solver);
+	//RELEASE(broad_phase);
+	//RELEASE(dispatcher);
+	//RELEASE(collision_conf);
 	return true;
 }
