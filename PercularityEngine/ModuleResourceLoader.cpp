@@ -26,11 +26,11 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
-#ifdef _DEBUG
-#pragma comment( lib, "MathGeoLib/lib86/Debug/MathGeoLib.lib" )
-#else
-#pragma comment( lib, "MathGeoLib/lib86/Release/MathGeoLib.lib" )
-#endif
+//#ifdef _DEBUG
+//#pragma comment( lib, "MathGeoLib/lib86/Debug/MathGeoLib.lib" )
+//#else
+//#pragma comment( lib, "MathGeoLib/lib86/Release/MathGeoLib.lib" )
+//#endif
 
 #pragma comment (lib, "Assimp/lib86/assimp.lib")
 #pragma comment (lib, "DevIL/lib86/DevIL.lib" )
