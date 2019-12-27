@@ -15,6 +15,8 @@ public:
 	// Called every frame
 	void Update();
 
+public:
+	bool activateConstraint = false;
 };
 
 #endif

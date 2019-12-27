@@ -43,8 +43,8 @@ bool ModulePlayer::Start()
 
 	// Don't change anything below this line ------------------
 
-	float half_width = car.chassis_size.x*0.5f;
-	float half_length = car.chassis_size.z*0.5f;
+	float half_width = car.chassis_size.x * 0.5f;
+	float half_length = car.chassis_size.z * 0.5f;
 
 	vec3 direction(0, -1, 0);
 	vec3 axis(-1, 0, 0);

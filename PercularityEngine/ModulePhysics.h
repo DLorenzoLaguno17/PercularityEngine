@@ -7,9 +7,11 @@
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
+#define MASS 0
 
 struct PhysVehicle;
 struct VehicleInfo;
+class PrimitiveCube;
 class ComponentRigidbody;
 
 class ModulePhysics :public Module
@@ -27,8 +29,10 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 
-	void AddRigidBody();
+	ComponentRigidbody* AddBody(const PrimitiveCube& cube, float mass);
 	PhysVehicle* AddVehicle(const VehicleInfo &info);
+	void CreateTestConstraint();
+	void DeleteTestConstraint();
 
 	void AddConstraintP2P(ComponentRigidbody& bodyA, ComponentRigidbody& bodyB, const vec3& anchorA, const vec3& anchorB);
 	void AddConstraintHinge(ComponentRigidbody& bodyA, ComponentRigidbody& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
@@ -38,6 +42,7 @@ public:
 	std::vector<btDefaultMotionState*> motions;
 	std::vector<PhysVehicle*> vehicles;
 	std::vector<btTypedConstraint*> constraints;
+	std::vector<ComponentRigidbody*> bodies;
 
 private:
 	btDefaultCollisionConfiguration*		collision_conf = nullptr;
@@ -47,6 +52,11 @@ private:
 	btDiscreteDynamicsWorld*				world = nullptr;
 	btDefaultVehicleRaycaster*				vehicle_raycaster = nullptr;
 
+	// Elements for the test constraints
+	PrimitiveCube* right_cube = nullptr;
+	PrimitiveCube* left_cube = nullptr;
+	ComponentRigidbody* right_body = nullptr;
+	ComponentRigidbody* left_body = nullptr;
 };
 
 #endif

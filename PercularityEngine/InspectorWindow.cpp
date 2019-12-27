@@ -24,8 +24,8 @@ void InspectorWindow::Update() {
 		ImGui::NewLine();
 		App->scene->selected->OnEditor();
 
-		if (ImGui::Button("Add RigidBody"))
-			App->physics->AddRigidBody();
+		/*if (ImGui::Button("Add RigidBody"))
+			App->physics->AddRigidBody();*/
 	}
 
 	ImGui::End();

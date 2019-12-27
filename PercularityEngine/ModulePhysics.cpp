@@ -6,6 +6,7 @@
 #include "ComponentTransform.h"
 #include "PhysVehicle.h"
 #include "Globals.h"
+#include "Primitive.h"
 #include "stdio.h"
 
 #include "Brofiler/Lib/Brofiler.h"
@@ -53,6 +54,16 @@ bool ModulePhysics::Start()
 	btRigidBody* body = new btRigidBody(rbInfo);
 	world->addRigidBody(body);
 
+	// Creating cubes for the test constraint
+	right_cube = new PrimitiveCube(3, 4, 3);
+	left_cube = new PrimitiveCube(3, 4, 3);	
+	right_cube->SetPos(0, 2, 25);
+	left_cube->SetPos(0, 2, 25);
+	right_cube->color.Set(Red.r, Red.g, Red.b);
+	left_cube->color.Set(Green.r, Green.g, Green.b);
+	right_body = App->physics->AddBody(*right_cube, 15.0f);
+	left_body = App->physics->AddBody(*right_cube, 15.0f);
+
 	return true;
 }
 
@@ -61,37 +72,17 @@ update_status ModulePhysics::PreUpdate(float dt)
 	BROFILER_CATEGORY("PhysicsPreUpdate", Profiler::Color::Orange);
 
 	world->stepSimulation(dt, 15);
-
-	/*int manifolds = world->getDispatcher()->getNumManifolds();
-	for (int i = 0; i < manifolds; i++)
-	{
-		btPersistentManifold* contactManifold = world->getDispatcher()->getManifoldByIndexInternal(i);
-		btCollisionObject* object_A = (btCollisionObject*)(contactManifold->getBody0());
-		btCollisionObject* object_B = (btCollisionObject*)(contactManifold->getBody1());
-
-		int numContacts = contactManifold->getNumContacts();
-		if (numContacts > 0)
-		{
-			PhysBody* physbody_A = (PhysBody*)object_A->getUserPointer();
-			PhysBody* physbody_B = (PhysBody*)object_B->getUserPointer();
-
-			if (physbody_A && physbody_B)
-			{
-				for (int i = 0; i < physbody_A->collision_listeners.size(); ++i)
-					physbody_A->collision_listeners[i]->OnCollision(physbody_A, physbody_B);
-
-				for (int i = 0; i < physbody_B->collision_listeners.size(); ++i)
-					physbody_B->collision_listeners[i]->OnCollision(physbody_B, physbody_A);
-			}
-		}
-	}*/
-
 	return UPDATE_CONTINUE;
 }
 
 update_status ModulePhysics::Update(float dt)
 {
 	BROFILER_CATEGORY("PhysicsUpdate", Profiler::Color::LightSeaGreen);
+	
+	right_body->GetTransform(&right_cube->transform);
+	left_body->GetTransform(&left_cube->transform);
+	right_cube->Render();
+	left_cube->Render();
 
 	return UPDATE_CONTINUE;
 }
@@ -103,20 +94,14 @@ update_status ModulePhysics::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModulePhysics::AddRigidBody() 
+ComponentRigidbody* ModulePhysics::AddBody(const PrimitiveCube& cube, float mass)
 {
-	// First we create the Component Rigidbody and the collision shape
-	float mass = 30.0f;
-	ComponentRigidbody* rigidbody = (ComponentRigidbody*)App->scene->selected->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
-	btCollisionShape* colShape = new btBoxShape(btVector3(4 * 0.5f, 4 * 0.5f, 4 * 0.5f));
+	btCollisionShape* colShape = new btBoxShape(btVector3(cube.size.x * 0.5f, cube.size.y * 0.5f, cube.size.z * 0.5f));
 	shapes.push_back(colShape);
 
-	// The we set its transform
-	ComponentTransform* transform = (ComponentTransform*)App->scene->selected->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	btTransform startTransform;
-	startTransform.setFromOpenGLMatrix(&transform->renderTransform);
+	startTransform.setFromOpenGLMatrix(&cube.transform);
 
-	// We calculate the local inertia
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)
 		colShape->calculateLocalInertia(mass, localInertia);
@@ -125,10 +110,14 @@ void ModulePhysics::AddRigidBody()
 	motions.push_back(myMotionState);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
-	// To finish we create the Physbody and add it to the world
 	btRigidBody* body = new btRigidBody(rbInfo);
-	rigidbody->CreateBody(body);
+	ComponentRigidbody* pbody = new ComponentRigidbody(body);
+
+	body->setUserPointer(pbody);
 	world->addRigidBody(body);
+	bodies.push_back(pbody);
+
+	return pbody;
 }
 
 bool ModulePhysics::CleanUp()
@@ -161,6 +150,11 @@ bool ModulePhysics::CleanUp()
 
 	shapes.clear();
 
+	for (int i = 0; i < bodies.size(); ++i)
+		RELEASE(bodies[i])
+
+	bodies.clear();
+
 	if (vehicles.size() > 1) {
 		for (int i = 0; i < vehicles.size(); ++i)
 			RELEASE(vehicles[i])
@@ -169,6 +163,8 @@ bool ModulePhysics::CleanUp()
 	}
 
 	// Delete the pointers
+	RELEASE(left_cube);
+	RELEASE(right_cube);
 	RELEASE(vehicle_raycaster);
 	RELEASE(world);
 	RELEASE(solver);
@@ -264,4 +260,20 @@ void ModulePhysics::AddConstraintHinge(ComponentRigidbody &bodyA, ComponentRigid
 	world->addConstraint(hinge, disable_collision);
 	constraints.push_back(hinge);
 	hinge->setDbgDrawSize(2.0f);
+}
+
+void ModulePhysics::CreateTestConstraint()
+{
+	AddConstraintP2P(*right_body, *left_body, { -5, 0, 0 }, { 5, 0, 0 });
+}
+
+void ModulePhysics::DeleteTestConstraint()
+{
+	for (int i = 0; i < constraints.size(); ++i)
+	{
+		world->removeConstraint(constraints[i]);
+		RELEASE(constraints[i]);
+	}
+
+	constraints.clear();
 }
