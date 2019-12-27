@@ -28,7 +28,6 @@ int main(int argc, char ** argv)
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
 
-
 	while (state != MAIN_EXIT)
 	{
 		switch (state)
@@ -50,8 +49,8 @@ int main(int argc, char ** argv)
 			}
 			else
 			{
-				state = MAIN_UPDATE;
 				LOG("-------------- Application Update --------------");
+				state = MAIN_UPDATE;
 			}
 
 			break;

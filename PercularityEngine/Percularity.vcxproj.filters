@@ -1131,6 +1131,9 @@
     <ClInclude Include="MathGeoLib\include\Time\Clock.h">
       <Filter>Sources\3rd party\MathGeoLib\src</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentRigidbody.h">
+      <Filter>Sources\Scene elements\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -1369,6 +1372,9 @@
     </ClCompile>
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp">
       <Filter>Sources\3rd party\MathGeoLib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentRigidbody.cpp">
+      <Filter>Sources\Scene elements\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

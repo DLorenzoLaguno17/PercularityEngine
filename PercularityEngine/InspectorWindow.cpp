@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Application.h"
 #include "ModuleScene.h"
+#include "ModulePhysics.h"
 
 #include <string>
 
@@ -16,10 +17,15 @@ void InspectorWindow::Update() {
 
 	if (App->scene->selected != nullptr) {
 		ImGui::InputText("GameObject", (char*)App->scene->selected->name.c_str(), 20);
+
 		if (ImGui::Checkbox("Static", &App->scene->selected->isStatic))
 			App->scene->selected->MakeStatic(App->scene->selected->isStatic);
+
 		ImGui::NewLine();
 		App->scene->selected->OnEditor();
+
+		if (ImGui::Button("Add RigidBody"))
+			App->physics->AddRigidBody();
 	}
 
 	ImGui::End();

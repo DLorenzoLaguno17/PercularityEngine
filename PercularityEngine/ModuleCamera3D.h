@@ -29,7 +29,7 @@ public:
 	void FocusCameraOn(GameObject* object);
 
 private:
-	float3 reference=float3(0,0,0);
+	float3 reference = float3(0,0,0);
 	ComponentCamera* camera;
 	LineSegment lastRay;
 };

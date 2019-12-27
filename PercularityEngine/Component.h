@@ -8,7 +8,8 @@ enum class COMPONENT_TYPE {
 	TRANSFORM,
 	MATERIAL,
 	MESH,
-	CAMERA
+	CAMERA,
+	RIGIDBODY
 };
 
 class GameObject;

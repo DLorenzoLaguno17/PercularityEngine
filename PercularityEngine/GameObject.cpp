@@ -3,9 +3,11 @@
 #include "ResourceMesh.h"
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
+#include "ComponentRigidbody.h"
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
+#include "ModulePhysics.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
 #include "Debug.h"
@@ -64,8 +66,10 @@ void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_f
 	int size = scene_file["Game Objects"][gameObjectNum]["Components"].size();	
 	if (size >= 2) 
 		CreateComponent(COMPONENT_TYPE::MESH);	
-	if (size == 3)
+	if (size >= 3)
 		CreateComponent(COMPONENT_TYPE::MATERIAL);
+	if (size == 4)
+		CreateComponent(COMPONENT_TYPE::RIGIDBODY);
 
 	for (uint i = 0; i < components.size(); ++i)
 		components[i]->OnLoad(gameObjectNum, scene_file);
@@ -96,6 +100,11 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 		ret = new ComponentMesh(this, active);
 		if (ret != nullptr) components.push_back(ret); 
 		App->renderer3D->meshes.push_back((ComponentMesh*)ret);
+		break;
+
+	case COMPONENT_TYPE::RIGIDBODY:
+		ret = new ComponentRigidbody(this, active);
+		if (ret != nullptr) components.push_back(ret);
 		break;
 
 	case COMPONENT_TYPE::TRANSFORM:
