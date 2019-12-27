@@ -8,6 +8,11 @@
 ComponentRigidbody::ComponentRigidbody(GameObject* parent, bool active) :
 	Component(COMPONENT_TYPE::RIGIDBODY, parent, active) {}
 
+ComponentRigidbody::ComponentRigidbody(btRigidBody* body) : body(body)
+{
+	body->setUserPointer(this);
+}
+
 void ComponentRigidbody::Update() {}
 
 void ComponentRigidbody::OnEditor()

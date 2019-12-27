@@ -10,6 +10,7 @@ class Module;
 class ComponentRigidbody : public Component {
 public:
 	ComponentRigidbody(GameObject* parent, bool active);
+	ComponentRigidbody(btRigidBody* body);
 	~ComponentRigidbody() {}
 
 	// Methods

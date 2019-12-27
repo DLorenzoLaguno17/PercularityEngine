@@ -69,6 +69,8 @@ public:
 	GameObject* selected = nullptr;
 	const char* sceneAddress;
 
+	bool playMode = false;
+
 private:
 	GameObject* root = nullptr;
 

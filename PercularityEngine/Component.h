@@ -16,7 +16,8 @@ class GameObject;
 
 class Component {
 public:
-	//Constructors
+	// Constructors
+	Component() {}
 	Component(COMPONENT_TYPE type, GameObject* parent, bool active);
 
 	// Destructor

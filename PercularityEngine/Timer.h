@@ -21,10 +21,9 @@ public:
 	bool IsRunning() const { return running; }
 
 private:
-
-	bool	running=true;
-	Uint32	started_at=0;
-	Uint32	stopped_at=0;
+	bool	running = true;
+	Uint32	started_at = 0;
+	Uint32	stopped_at = 0;
 };
 
 #endif //__TIMER_H__

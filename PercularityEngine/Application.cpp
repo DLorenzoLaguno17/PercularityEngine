@@ -9,6 +9,7 @@
 #include "ModuleResourceLoader.h"
 #include "ModulePhysics.h"
 #include "ModuleResourceManager.h"
+#include "ModulePlayer.h"
 #include "ModuleFileSystem.h"
 #include "Time.h"
 
@@ -34,6 +35,7 @@ Application::Application()
 	res_manager = new ModuleResourceManager(this);
 	file_system = new ModuleFileSystem(this, ASSETS_FOLDER);
 	physics = new ModulePhysics(this);
+	player = new ModulePlayer(this);
 
 	// Main Modules
 	AddModule(window);
@@ -47,6 +49,7 @@ Application::Application()
 	
 	// Scenes
 	AddModule(scene);
+	AddModule(player);
 
 	// Renderer last!
 	AddModule(renderer3D);

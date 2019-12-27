@@ -7,6 +7,7 @@
 #include "ModuleGui.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
+#include "ModulePlayer.h"
 
 #include "Time.h"
 #include "OpenGL.h"
@@ -182,6 +183,8 @@ void ModuleScene::Play()
 
 			// Saves the current scene
 			SaveScene(root, "Temporal Scene", sceneAddress, false, true);
+			App->player->CreateCar();
+			playMode = true;
 		}
 	}
 }
@@ -198,6 +201,8 @@ void ModuleScene::ExitGame()
 		Time::Stop();
 		CleanUp();
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
+		//App->player->vehicle;
+		playMode = false;
 
 		// Loads the former scene and then deletes the file
 		LoadScene("Temporal Scene", sceneAddress, false, true);

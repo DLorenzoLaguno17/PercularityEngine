@@ -7,6 +7,9 @@
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
 
+struct PhysVehicle;
+struct VehicleInfo;
+
 class ModulePhysics :public Module
 {
 public:
@@ -23,10 +26,12 @@ public:
 	update_status PostUpdate(float dt);
 
 	void AddRigidBody();
+	PhysVehicle* AddVehicle(const VehicleInfo& info);
 
 public:
 	std::vector<btCollisionShape*> shapes;
 	std::vector<btDefaultMotionState*> motions;
+	std::vector<PhysVehicle*> vehicles;
 
 private:
 

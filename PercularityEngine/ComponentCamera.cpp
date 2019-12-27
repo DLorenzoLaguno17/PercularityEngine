@@ -11,7 +11,8 @@
 #include "OpenGL.h"
 
 
-ComponentCamera::ComponentCamera(GameObject* parent, bool active):Component(COMPONENT_TYPE::CAMERA, parent, active)
+ComponentCamera::ComponentCamera(GameObject* parent, bool active) :
+	Component(COMPONENT_TYPE::CAMERA, parent, active)
 {
 	frustum.type = PerspectiveFrustum;
 	frustum.pos = float3(0,0,-10.0f);
@@ -21,7 +22,7 @@ ComponentCamera::ComponentCamera(GameObject* parent, bool active):Component(COMP
 	frustum.nearPlaneDistance = 0.5f;
 	frustum.farPlaneDistance = 200.0f;
 
-	frustum.verticalFov = 60.f*DEGTORAD;
+	frustum.verticalFov = 60.f * DEGTORAD;
 	SetAspectRatio(1.0f);
 }
 
