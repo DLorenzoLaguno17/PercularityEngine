@@ -6,8 +6,7 @@
 #include "mmgr/mmgr.h"
 
 ComponentRigidbody::ComponentRigidbody(GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::RIGIDBODY, parent, active)
-{}
+	Component(COMPONENT_TYPE::RIGIDBODY, parent, active) {}
 
 void ComponentRigidbody::Update() {}
 
@@ -24,7 +23,7 @@ void ComponentRigidbody::OnEditor()
 // Releases all the data
 void ComponentRigidbody::CleanUp() 
 {
-	RELEASE(body);
+	//delete body;
 }
 
 void ComponentRigidbody::CreateBody(btRigidBody* body)

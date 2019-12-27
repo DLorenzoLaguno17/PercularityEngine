@@ -5,7 +5,7 @@
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 486672446,
+                    "Parent UUID": 1867829773,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -22,18 +22,18 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1772864247
+                    "UUID": 1451865595
                 }
             },
             "Name": "street environment_v01",
             "Parent UUID": 0,
-            "UUID": 486672446
+            "UUID": 1867829773
         },
         "GameObject 10": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2010403972,
+                    "Parent UUID": 667363473,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -50,32 +50,32 @@
                         -39.15372085571289,
                         8.553864176974457e-07
                     ],
-                    "UUID": 1940757740
+                    "UUID": 1703650888
                 }
             },
             "Name": "City_building_010",
-            "Parent UUID": 394246310,
-            "UUID": 2010403972
+            "Parent UUID": 529464598,
+            "UUID": 667363473
         },
         "GameObject 11": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 2118514594,
-                    "Resource UUID": 921573605,
-                    "UUID": 833238496
+                    "Parent UUID": 61682344,
+                    "Resource UUID": 1195307706,
+                    "UUID": 1829917161
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 2118514594,
-                    "Resource UUID": 1906077867,
-                    "UUID": 507032286,
+                    "Parent UUID": 61682344,
+                    "Resource UUID": 1574180727,
+                    "UUID": 1378994529,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2118514594,
+                    "Parent UUID": 61682344,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -92,32 +92,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1780189267
+                    "UUID": 1566661271
                 }
             },
             "Name": "City_building_010_Parent",
-            "Parent UUID": 2010403972,
-            "UUID": 2118514594
+            "Parent UUID": 667363473,
+            "UUID": 61682344
         },
         "GameObject 12": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1442695689,
-                    "Resource UUID": 1597376411,
-                    "UUID": 1031367843
+                    "Parent UUID": 1355953469,
+                    "Resource UUID": 613023360,
+                    "UUID": 710222835
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1442695689,
-                    "Resource UUID": 1621693100,
-                    "UUID": 1354966689,
+                    "Parent UUID": 1355953469,
+                    "Resource UUID": 2059546380,
+                    "UUID": 209346082,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1442695689,
+                    "Parent UUID": 1355953469,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -134,32 +134,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1958910032
+                    "UUID": 1602826776
                 }
             },
             "Name": "City_building_010_SubMesh",
-            "Parent UUID": 2010403972,
-            "UUID": 1442695689
+            "Parent UUID": 667363473,
+            "UUID": 1355953469
         },
         "GameObject 13": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 2090057722,
-                    "Resource UUID": 1295090879,
-                    "UUID": 227595545
+                    "Parent UUID": 195411790,
+                    "Resource UUID": 1693373299,
+                    "UUID": 1373783378
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 2090057722,
-                    "Resource UUID": 1253233533,
-                    "UUID": 1273683917,
+                    "Parent UUID": 195411790,
+                    "Resource UUID": 1561500808,
+                    "UUID": 1785196673,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2090057722,
+                    "Parent UUID": 195411790,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -176,32 +176,32 @@
                         37.4932861328125,
                         -1.5106878663573298e-06
                     ],
-                    "UUID": 564226289
+                    "UUID": 455327845
                 }
             },
             "Name": "City_building_011",
-            "Parent UUID": 394246310,
-            "UUID": 2090057722
+            "Parent UUID": 529464598,
+            "UUID": 195411790
         },
         "GameObject 14": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1258707030,
-                    "Resource UUID": 296868578,
-                    "UUID": 1685856503
+                    "Parent UUID": 1183091687,
+                    "Resource UUID": 1866858491,
+                    "UUID": 1956176797
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1258707030,
-                    "Resource UUID": 1251871194,
-                    "UUID": 904650210,
+                    "Parent UUID": 1183091687,
+                    "Resource UUID": 783456250,
+                    "UUID": 402234530,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1258707030,
+                    "Parent UUID": 1183091687,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -218,32 +218,32 @@
                         33.201576232910156,
                         5.014607040720875e-07
                     ],
-                    "UUID": 76952501
+                    "UUID": 1291059942
                 }
             },
             "Name": "City_building_013",
-            "Parent UUID": 394246310,
-            "UUID": 1258707030
+            "Parent UUID": 529464598,
+            "UUID": 1183091687
         },
         "GameObject 15": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 900583979,
-                    "Resource UUID": 240908934,
-                    "UUID": 1386470797
+                    "Parent UUID": 1070431097,
+                    "Resource UUID": 1112294528,
+                    "UUID": 720717423
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 900583979,
-                    "Resource UUID": 803616186,
-                    "UUID": 473610944,
+                    "Parent UUID": 1070431097,
+                    "Resource UUID": 713062395,
+                    "UUID": 797023068,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 900583979,
+                    "Parent UUID": 1070431097,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -260,18 +260,18 @@
                         32.061729431152344,
                         0.0
                     ],
-                    "UUID": 1624644147
+                    "UUID": 358402396
                 }
             },
             "Name": "City_building_014",
-            "Parent UUID": 394246310,
-            "UUID": 900583979
+            "Parent UUID": 529464598,
+            "UUID": 1070431097
         },
         "GameObject 16": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 171030215,
+                    "Parent UUID": 737534596,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -288,32 +288,32 @@
                         -41.972747802734375,
                         8.553864176974457e-07
                     ],
-                    "UUID": 1645259547
+                    "UUID": 1562108346
                 }
             },
             "Name": "City_building_016",
-            "Parent UUID": 394246310,
-            "UUID": 171030215
+            "Parent UUID": 529464598,
+            "UUID": 737534596
         },
         "GameObject 17": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 2132158001,
-                    "Resource UUID": 2142858613,
-                    "UUID": 1150778002
+                    "Parent UUID": 530821845,
+                    "Resource UUID": 1183512865,
+                    "UUID": 1016494443
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 2132158001,
-                    "Resource UUID": 895431373,
-                    "UUID": 123054936,
+                    "Parent UUID": 530821845,
+                    "Resource UUID": 948258168,
+                    "UUID": 549122422,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2132158001,
+                    "Parent UUID": 530821845,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -330,32 +330,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 312572393
+                    "UUID": 301589522
                 }
             },
             "Name": "City_building_016_Parent",
-            "Parent UUID": 171030215,
-            "UUID": 2132158001
+            "Parent UUID": 737534596,
+            "UUID": 530821845
         },
         "GameObject 18": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1524830870,
-                    "Resource UUID": 2013426225,
-                    "UUID": 1174773820
+                    "Parent UUID": 739638254,
+                    "Resource UUID": 1117308665,
+                    "UUID": 118122868
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1524830870,
-                    "Resource UUID": 1808676092,
-                    "UUID": 1899636447,
+                    "Parent UUID": 739638254,
+                    "Resource UUID": 2123002824,
+                    "UUID": 1993904331,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1524830870,
+                    "Parent UUID": 739638254,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -372,18 +372,18 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1543394472
+                    "UUID": 1991993968
                 }
             },
             "Name": "City_building_016_SubMesh",
-            "Parent UUID": 171030215,
-            "UUID": 1524830870
+            "Parent UUID": 737534596,
+            "UUID": 739638254
         },
         "GameObject 19": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1987075640,
+                    "Parent UUID": 722637635,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -400,18 +400,18 @@
                         -39.15372085571289,
                         8.553864176974457e-07
                     ],
-                    "UUID": 1296592700
+                    "UUID": 1655388066
                 }
             },
             "Name": "City_building_017",
-            "Parent UUID": 394246310,
-            "UUID": 1987075640
+            "Parent UUID": 529464598,
+            "UUID": 722637635
         },
         "GameObject 2": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1959129062,
+                    "Parent UUID": 426808852,
                     "Rotation": [
                         -0.9999999403953552,
                         0.0,
@@ -428,32 +428,32 @@
                         0.0,
                         58.96091079711914
                     ],
-                    "UUID": 1248069944
+                    "UUID": 127861553
                 }
             },
             "Name": "Sky001",
-            "Parent UUID": 486672446,
-            "UUID": 1959129062
+            "Parent UUID": 1867829773,
+            "UUID": 426808852
         },
         "GameObject 20": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 605265055,
-                    "Resource UUID": 576590807,
-                    "UUID": 1890457683
+                    "Parent UUID": 767659437,
+                    "Resource UUID": 1905947612,
+                    "UUID": 85376441
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 605265055,
-                    "Resource UUID": 860349149,
-                    "UUID": 2064244423,
+                    "Parent UUID": 767659437,
+                    "Resource UUID": 976502283,
+                    "UUID": 964146922,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 605265055,
+                    "Parent UUID": 767659437,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -470,32 +470,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1234272721
+                    "UUID": 792140488
                 }
             },
             "Name": "City_building_017_Parent",
-            "Parent UUID": 1987075640,
-            "UUID": 605265055
+            "Parent UUID": 722637635,
+            "UUID": 767659437
         },
         "GameObject 21": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 754220405,
-                    "Resource UUID": 1099650237,
-                    "UUID": 1165507092
+                    "Parent UUID": 28148017,
+                    "Resource UUID": 1174097087,
+                    "UUID": 1945247595
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 754220405,
-                    "Resource UUID": 252299957,
-                    "UUID": 957134627,
+                    "Parent UUID": 28148017,
+                    "Resource UUID": 785072685,
+                    "UUID": 2143238266,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 754220405,
+                    "Parent UUID": 28148017,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -512,32 +512,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1456163708
+                    "UUID": 1188005493
                 }
             },
             "Name": "City_building_017_SubMesh",
-            "Parent UUID": 1987075640,
-            "UUID": 754220405
+            "Parent UUID": 722637635,
+            "UUID": 28148017
         },
         "GameObject 22": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1106557484,
-                    "Resource UUID": 678361568,
-                    "UUID": 1841692657
+                    "Parent UUID": 1939102588,
+                    "Resource UUID": 1338708537,
+                    "UUID": 1200396609
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1106557484,
-                    "Resource UUID": 1189300462,
-                    "UUID": 750360904,
+                    "Parent UUID": 1939102588,
+                    "Resource UUID": 2048993804,
+                    "UUID": 1436774677,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1106557484,
+                    "Parent UUID": 1939102588,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -554,32 +554,32 @@
                         -27.426488876342773,
                         0.0
                     ],
-                    "UUID": 810241086
+                    "UUID": 701810493
                 }
             },
             "Name": "City_building_022",
-            "Parent UUID": 394246310,
-            "UUID": 1106557484
+            "Parent UUID": 529464598,
+            "UUID": 1939102588
         },
         "GameObject 23": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1907971170,
-                    "Resource UUID": 1214744091,
-                    "UUID": 1322634924
+                    "Parent UUID": 2101409015,
+                    "Resource UUID": 552086029,
+                    "UUID": 1197208240
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1907971170,
-                    "Resource UUID": 2023999209,
-                    "UUID": 1644857004,
+                    "Parent UUID": 2101409015,
+                    "Resource UUID": 772943056,
+                    "UUID": 1119111003,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1907971170,
+                    "Parent UUID": 2101409015,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -596,32 +596,32 @@
                         37.4932861328125,
                         -1.5106878663573298e-06
                     ],
-                    "UUID": 112357738
+                    "UUID": 578614146
                 }
             },
             "Name": "City_building_023",
-            "Parent UUID": 394246310,
-            "UUID": 1907971170
+            "Parent UUID": 529464598,
+            "UUID": 2101409015
         },
         "GameObject 24": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1414464590,
-                    "Resource UUID": 754718708,
-                    "UUID": 553962361
+                    "Parent UUID": 1423275250,
+                    "Resource UUID": 2112709315,
+                    "UUID": 2093349570
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1414464590,
-                    "Resource UUID": 1825098122,
-                    "UUID": 1788778519,
+                    "Parent UUID": 1423275250,
+                    "Resource UUID": 1608550534,
+                    "UUID": 1337785644,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1414464590,
+                    "Parent UUID": 1423275250,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -638,32 +638,32 @@
                         43.060829162597656,
                         -0.06919445842504501
                     ],
-                    "UUID": 1429103558
+                    "UUID": 655740376
                 }
             },
             "Name": "City_building_024",
-            "Parent UUID": 394246310,
-            "UUID": 1414464590
+            "Parent UUID": 529464598,
+            "UUID": 1423275250
         },
         "GameObject 25": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 696442419,
-                    "Resource UUID": 1508642745,
-                    "UUID": 94686028
+                    "Parent UUID": 1919503858,
+                    "Resource UUID": 1710564755,
+                    "UUID": 1242166545
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 696442419,
-                    "Resource UUID": 889560683,
-                    "UUID": 1938858522,
+                    "Parent UUID": 1919503858,
+                    "Resource UUID": 1001620270,
+                    "UUID": 375679823,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 696442419,
+                    "Parent UUID": 1919503858,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -680,32 +680,32 @@
                         -16.446016311645508,
                         0.0
                     ],
-                    "UUID": 1131871233
+                    "UUID": 2018228655
                 }
             },
             "Name": "City_building_026",
-            "Parent UUID": 394246310,
-            "UUID": 696442419
+            "Parent UUID": 529464598,
+            "UUID": 1919503858
         },
         "GameObject 26": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 823415310,
-                    "Resource UUID": 1005689144,
-                    "UUID": 1901753242
+                    "Parent UUID": 715832286,
+                    "Resource UUID": 532817416,
+                    "UUID": 1100692884
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 823415310,
-                    "Resource UUID": 922809667,
-                    "UUID": 527067636,
+                    "Parent UUID": 715832286,
+                    "Resource UUID": 427263760,
+                    "UUID": 1796284705,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 823415310,
+                    "Parent UUID": 715832286,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -722,32 +722,32 @@
                         -33.75503921508789,
                         -9.383451811117993e-07
                     ],
-                    "UUID": 2068824492
+                    "UUID": 306587677
                 }
             },
             "Name": "City_building_028",
-            "Parent UUID": 394246310,
-            "UUID": 823415310
+            "Parent UUID": 529464598,
+            "UUID": 715832286
         },
         "GameObject 27": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 663558908,
-                    "Resource UUID": 1457139613,
-                    "UUID": 808754986
+                    "Parent UUID": 1734240363,
+                    "Resource UUID": 462069430,
+                    "UUID": 1193968186
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 663558908,
-                    "Resource UUID": 1966302384,
-                    "UUID": 389512393,
+                    "Parent UUID": 1734240363,
+                    "Resource UUID": 2060498662,
+                    "UUID": 430753970,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 663558908,
+                    "Parent UUID": 1734240363,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -764,32 +764,32 @@
                         15.800846099853516,
                         0.0
                     ],
-                    "UUID": 966519604
+                    "UUID": 1575227142
                 }
             },
             "Name": "Object010",
-            "Parent UUID": 394246310,
-            "UUID": 663558908
+            "Parent UUID": 529464598,
+            "UUID": 1734240363
         },
         "GameObject 28": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 298231155,
-                    "Resource UUID": 1112378537,
-                    "UUID": 111367667
+                    "Parent UUID": 2069727502,
+                    "Resource UUID": 1395107808,
+                    "UUID": 1342255153
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 298231155,
-                    "Resource UUID": 2103449612,
-                    "UUID": 203362716,
+                    "Parent UUID": 2069727502,
+                    "Resource UUID": 1968878265,
+                    "UUID": 262830605,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 298231155,
+                    "Parent UUID": 2069727502,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -806,32 +806,32 @@
                         -41.83556365966797,
                         -9.383451811117993e-07
                     ],
-                    "UUID": 1279343059
+                    "UUID": 345703042
                 }
             },
             "Name": "City_building_030",
-            "Parent UUID": 394246310,
-            "UUID": 298231155
+            "Parent UUID": 529464598,
+            "UUID": 2069727502
         },
         "GameObject 29": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 913097181,
-                    "Resource UUID": 240322051,
-                    "UUID": 2108776193
+                    "Parent UUID": 1392499555,
+                    "Resource UUID": 209753339,
+                    "UUID": 286988087
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 913097181,
-                    "Resource UUID": 470584674,
-                    "UUID": 416418894,
+                    "Parent UUID": 1392499555,
+                    "Resource UUID": 1167282834,
+                    "UUID": 348414919,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 913097181,
+                    "Parent UUID": 1392499555,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -848,18 +848,18 @@
                         -41.83556365966797,
                         -9.383451811117993e-07
                     ],
-                    "UUID": 927919907
+                    "UUID": 1209758487
                 }
             },
             "Name": "City_building_031",
-            "Parent UUID": 394246310,
-            "UUID": 913097181
+            "Parent UUID": 529464598,
+            "UUID": 1392499555
         },
         "GameObject 3": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 394246310,
+                    "Parent UUID": 529464598,
                     "Rotation": [
                         -0.7071067690849304,
                         0.0,
@@ -876,32 +876,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 833856203
+                    "UUID": 297976603
                 }
             },
             "Name": "Dummy001",
-            "Parent UUID": 486672446,
-            "UUID": 394246310
+            "Parent UUID": 1867829773,
+            "UUID": 529464598
         },
         "GameObject 30": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 565069922,
-                    "Resource UUID": 408015440,
-                    "UUID": 2104676171
+                    "Parent UUID": 174532493,
+                    "Resource UUID": 833758907,
+                    "UUID": 1924977316
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 565069922,
-                    "Resource UUID": 1904391118,
-                    "UUID": 1676749371,
+                    "Parent UUID": 174532493,
+                    "Resource UUID": 1057773244,
+                    "UUID": 645885837,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 565069922,
+                    "Parent UUID": 174532493,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -918,32 +918,32 @@
                         21.01409912109375,
                         0.0
                     ],
-                    "UUID": 980110169
+                    "UUID": 664220427
                 }
             },
             "Name": "City_building_032",
-            "Parent UUID": 394246310,
-            "UUID": 565069922
+            "Parent UUID": 529464598,
+            "UUID": 174532493
         },
         "GameObject 31": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 2121144145,
-                    "Resource UUID": 1755139808,
-                    "UUID": 1868636108
+                    "Parent UUID": 1721797600,
+                    "Resource UUID": 1301326998,
+                    "UUID": 66181953
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 2121144145,
-                    "Resource UUID": 717642144,
-                    "UUID": 621574821,
+                    "Parent UUID": 1721797600,
+                    "Resource UUID": 1816252079,
+                    "UUID": 1646828122,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2121144145,
+                    "Parent UUID": 1721797600,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -960,32 +960,32 @@
                         42.37042236328125,
                         5.014607040720875e-07
                     ],
-                    "UUID": 168565796
+                    "UUID": 733534060
                 }
             },
             "Name": "City_building_033",
-            "Parent UUID": 394246310,
-            "UUID": 2121144145
+            "Parent UUID": 529464598,
+            "UUID": 1721797600
         },
         "GameObject 32": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1756659969,
-                    "Resource UUID": 60029667,
-                    "UUID": 1127089707
+                    "Parent UUID": 1153889405,
+                    "Resource UUID": 1749874548,
+                    "UUID": 660362244
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1756659969,
-                    "Resource UUID": 1938483836,
-                    "UUID": 322269145,
+                    "Parent UUID": 1153889405,
+                    "Resource UUID": 328478942,
+                    "UUID": 1268611998,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1756659969,
+                    "Parent UUID": 1153889405,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1002,32 +1002,32 @@
                         -16.696884155273438,
                         0.0
                     ],
-                    "UUID": 1230005099
+                    "UUID": 1865998529
                 }
             },
             "Name": "City_building_034",
-            "Parent UUID": 394246310,
-            "UUID": 1756659969
+            "Parent UUID": 529464598,
+            "UUID": 1153889405
         },
         "GameObject 33": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 573350441,
-                    "Resource UUID": 1488896382,
-                    "UUID": 1857867259
+                    "Parent UUID": 479064079,
+                    "Resource UUID": 116606875,
+                    "UUID": 1663768648
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 573350441,
-                    "Resource UUID": 227979500,
-                    "UUID": 1566854179,
+                    "Parent UUID": 479064079,
+                    "Resource UUID": 702921480,
+                    "UUID": 799058715,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 573350441,
+                    "Parent UUID": 479064079,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1044,32 +1044,32 @@
                         -40.80251693725586,
                         -9.383451811117993e-07
                     ],
-                    "UUID": 1952506072
+                    "UUID": 351722502
                 }
             },
             "Name": "City_building_035",
-            "Parent UUID": 394246310,
-            "UUID": 573350441
+            "Parent UUID": 529464598,
+            "UUID": 479064079
         },
         "GameObject 34": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 109134523,
-                    "Resource UUID": 1571504600,
-                    "UUID": 1156846328
+                    "Parent UUID": 1239011244,
+                    "Resource UUID": 314131685,
+                    "UUID": 1682895598
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 109134523,
-                    "Resource UUID": 1313124117,
-                    "UUID": 1872392891,
+                    "Parent UUID": 1239011244,
+                    "Resource UUID": 1584108166,
+                    "UUID": 188580337,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 109134523,
+                    "Parent UUID": 1239011244,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1086,32 +1086,32 @@
                         33.201576232910156,
                         5.014607040720875e-07
                     ],
-                    "UUID": 257482697
+                    "UUID": 1078685828
                 }
             },
             "Name": "City_building_036",
-            "Parent UUID": 394246310,
-            "UUID": 109134523
+            "Parent UUID": 529464598,
+            "UUID": 1239011244
         },
         "GameObject 35": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 487813220,
-                    "Resource UUID": 529209165,
-                    "UUID": 11482069
+                    "Parent UUID": 1024449754,
+                    "Resource UUID": 554061996,
+                    "UUID": 904547651
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 487813220,
-                    "Resource UUID": 1548249976,
-                    "UUID": 1841828533,
+                    "Parent UUID": 1024449754,
+                    "Resource UUID": 1959910312,
+                    "UUID": 1248956102,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 487813220,
+                    "Parent UUID": 1024449754,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1128,32 +1128,32 @@
                         -16.16360855102539,
                         0.0
                     ],
-                    "UUID": 1737795962
+                    "UUID": 989439070
                 }
             },
             "Name": "City_building_037",
-            "Parent UUID": 394246310,
-            "UUID": 487813220
+            "Parent UUID": 529464598,
+            "UUID": 1024449754
         },
         "GameObject 36": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 2064885225,
-                    "Resource UUID": 653941928,
-                    "UUID": 82767449
+                    "Parent UUID": 1952385019,
+                    "Resource UUID": 750146035,
+                    "UUID": 134804925
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 2064885225,
-                    "Resource UUID": 913896072,
-                    "UUID": 1437652888,
+                    "Parent UUID": 1952385019,
+                    "Resource UUID": 512235201,
+                    "UUID": 1262291342,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2064885225,
+                    "Parent UUID": 1952385019,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1170,32 +1170,32 @@
                         -16.495393753051758,
                         0.0
                     ],
-                    "UUID": 376468604
+                    "UUID": 2019970934
                 }
             },
             "Name": "City_building_038",
-            "Parent UUID": 394246310,
-            "UUID": 2064885225
+            "Parent UUID": 529464598,
+            "UUID": 1952385019
         },
         "GameObject 37": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 712935396,
-                    "Resource UUID": 1938512443,
-                    "UUID": 826713890
+                    "Parent UUID": 1213486739,
+                    "Resource UUID": 319341743,
+                    "UUID": 1584529873
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 712935396,
-                    "Resource UUID": 1602621016,
-                    "UUID": 417514741,
+                    "Parent UUID": 1213486739,
+                    "Resource UUID": 1134602498,
+                    "UUID": 2140775659,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 712935396,
+                    "Parent UUID": 1213486739,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1212,32 +1212,32 @@
                         -30.643888473510742,
                         -9.383451811117993e-07
                     ],
-                    "UUID": 485671805
+                    "UUID": 6099292
                 }
             },
             "Name": "City_building_039",
-            "Parent UUID": 394246310,
-            "UUID": 712935396
+            "Parent UUID": 529464598,
+            "UUID": 1213486739
         },
         "GameObject 38": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1417391404,
-                    "Resource UUID": 643520243,
-                    "UUID": 1765812612
+                    "Parent UUID": 1269525657,
+                    "Resource UUID": 2118914491,
+                    "UUID": 492383805
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1417391404,
-                    "Resource UUID": 978268706,
-                    "UUID": 1718994189,
+                    "Parent UUID": 1269525657,
+                    "Resource UUID": 1267855744,
+                    "UUID": 1704130893,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1417391404,
+                    "Parent UUID": 1269525657,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1254,32 +1254,32 @@
                         -30.643888473510742,
                         -9.383451811117993e-07
                     ],
-                    "UUID": 1185874587
+                    "UUID": 1661306418
                 }
             },
             "Name": "City_building_040",
-            "Parent UUID": 394246310,
-            "UUID": 1417391404
+            "Parent UUID": 529464598,
+            "UUID": 1269525657
         },
         "GameObject 39": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 601715821,
-                    "Resource UUID": 1672624185,
-                    "UUID": 1345035220
+                    "Parent UUID": 1364410383,
+                    "Resource UUID": 459866609,
+                    "UUID": 495567891
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 601715821,
-                    "Resource UUID": 1997431157,
-                    "UUID": 320141663,
+                    "Parent UUID": 1364410383,
+                    "Resource UUID": 907976696,
+                    "UUID": 1686975713,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 601715821,
+                    "Parent UUID": 1364410383,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1296,32 +1296,32 @@
                         21.612646102905273,
                         2.121072952832037e-07
                     ],
-                    "UUID": 1093671812
+                    "UUID": 1971117092
                 }
             },
             "Name": "City_building_041",
-            "Parent UUID": 394246310,
-            "UUID": 601715821
+            "Parent UUID": 529464598,
+            "UUID": 1364410383
         },
         "GameObject 4": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 977279712,
-                    "Resource UUID": 1461397725,
-                    "UUID": 2006109584
+                    "Parent UUID": 737047443,
+                    "Resource UUID": 571400300,
+                    "UUID": 1280367563
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 977279712,
-                    "Resource UUID": 306436822,
-                    "UUID": 490784659,
+                    "Parent UUID": 737047443,
+                    "Resource UUID": 336261545,
+                    "UUID": 1473209272,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 977279712,
+                    "Parent UUID": 737047443,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1338,18 +1338,18 @@
                         21.01409912109375,
                         0.0
                     ],
-                    "UUID": 466441251
+                    "UUID": 2005767685
                 }
             },
             "Name": "City_building_004",
-            "Parent UUID": 394246310,
-            "UUID": 977279712
+            "Parent UUID": 529464598,
+            "UUID": 737047443
         },
         "GameObject 40": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 703536365,
+                    "Parent UUID": 916919124,
                     "Rotation": [
                         0.04933978617191315,
                         0.932287335395813,
@@ -1366,18 +1366,18 @@
                         45.251216888427734,
                         -97.03111267089844
                     ],
-                    "UUID": 1098246889
+                    "UUID": 727441282
                 }
             },
             "Name": "Camera001",
-            "Parent UUID": 486672446,
-            "UUID": 703536365
+            "Parent UUID": 1867829773,
+            "UUID": 916919124
         },
         "GameObject 41": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2038891281,
+                    "Parent UUID": 1082646921,
                     "Rotation": [
                         0.04933978617191315,
                         0.932287335395813,
@@ -1394,18 +1394,18 @@
                         20.873329162597656,
                         -35.064212799072266
                     ],
-                    "UUID": 980807801
+                    "UUID": 432760888
                 }
             },
             "Name": "Camera001.Target",
-            "Parent UUID": 486672446,
-            "UUID": 2038891281
+            "Parent UUID": 1867829773,
+            "UUID": 1082646921
         },
         "GameObject 42": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1282389762,
+                    "Parent UUID": 50216038,
                     "Rotation": [
                         -0.6900351047515869,
                         -0.15443938970565796,
@@ -1422,18 +1422,18 @@
                         141.9341278076172,
                         6.204137662280118e-06
                     ],
-                    "UUID": 1772479824
+                    "UUID": 2134887929
                 }
             },
             "Name": "Spot001",
-            "Parent UUID": 486672446,
-            "UUID": 1282389762
+            "Parent UUID": 1867829773,
+            "UUID": 50216038
         },
         "GameObject 43": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 965019143,
+                    "Parent UUID": 1394328745,
                     "Rotation": [
                         5.960464477539063e-08,
                         0.0,
@@ -1450,32 +1450,32 @@
                         -60.96388244628906,
                         -2.6648158382158726e-06
                     ],
-                    "UUID": 1571858408
+                    "UUID": 1858260304
                 }
             },
             "Name": "Spot001.Target",
-            "Parent UUID": 486672446,
-            "UUID": 965019143
+            "Parent UUID": 1867829773,
+            "UUID": 1394328745
         },
         "GameObject 5": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1335435164,
-                    "Resource UUID": 1701736646,
-                    "UUID": 740991280
+                    "Parent UUID": 1145788498,
+                    "Resource UUID": 434579104,
+                    "UUID": 1128637354
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1335435164,
-                    "Resource UUID": 1343218347,
-                    "UUID": 2081709823,
+                    "Parent UUID": 1145788498,
+                    "Resource UUID": 1910270967,
+                    "UUID": 2082180648,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1335435164,
+                    "Parent UUID": 1145788498,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1492,32 +1492,32 @@
                         20.05327606201172,
                         2.121072952832037e-07
                     ],
-                    "UUID": 1174539626
+                    "UUID": 513467796
                 }
             },
             "Name": "City_building_001",
-            "Parent UUID": 394246310,
-            "UUID": 1335435164
+            "Parent UUID": 529464598,
+            "UUID": 1145788498
         },
         "GameObject 6": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1881644225,
-                    "Resource UUID": 1055442927,
-                    "UUID": 1891544148
+                    "Parent UUID": 1312734797,
+                    "Resource UUID": 1992119999,
+                    "UUID": 2029744740
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1881644225,
-                    "Resource UUID": 1469183642,
-                    "UUID": 544071268,
+                    "Parent UUID": 1312734797,
+                    "Resource UUID": 2127507328,
+                    "UUID": 302592531,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1881644225,
+                    "Parent UUID": 1312734797,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1534,32 +1534,32 @@
                         37.4932861328125,
                         -1.5106878663573298e-06
                     ],
-                    "UUID": 1155154431
+                    "UUID": 1300252911
                 }
             },
             "Name": "City_building_007",
-            "Parent UUID": 394246310,
-            "UUID": 1881644225
+            "Parent UUID": 529464598,
+            "UUID": 1312734797
         },
         "GameObject 7": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1388233072,
-                    "Resource UUID": 809642256,
-                    "UUID": 1565721256
+                    "Parent UUID": 798098157,
+                    "Resource UUID": 348307506,
+                    "UUID": 1878949091
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1388233072,
-                    "Resource UUID": 1281096031,
-                    "UUID": 952738520,
+                    "Parent UUID": 798098157,
+                    "Resource UUID": 609747734,
+                    "UUID": 131533302,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1388233072,
+                    "Parent UUID": 798098157,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1576,32 +1576,32 @@
                         18.270824432373047,
                         -2.0522466002148576e-06
                     ],
-                    "UUID": 525688830
+                    "UUID": 399906019
                 }
             },
             "Name": "City_building_008",
-            "Parent UUID": 394246310,
-            "UUID": 1388233072
+            "Parent UUID": 529464598,
+            "UUID": 798098157
         },
         "GameObject 8": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1895947047,
-                    "Resource UUID": 435201243,
-                    "UUID": 222462867
+                    "Parent UUID": 1937738565,
+                    "Resource UUID": 1496670678,
+                    "UUID": 697095411
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1895947047,
-                    "Resource UUID": 717972256,
-                    "UUID": 298963380,
+                    "Parent UUID": 1937738565,
+                    "Resource UUID": 984300257,
+                    "UUID": 1655236951,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1895947047,
+                    "Parent UUID": 1937738565,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1618,32 +1618,32 @@
                         1.8538382053375244,
                         0.0
                     ],
-                    "UUID": 499512685
+                    "UUID": 226445678
                 }
             },
             "Name": "Line002",
-            "Parent UUID": 394246310,
-            "UUID": 1895947047
+            "Parent UUID": 529464598,
+            "UUID": 1937738565
         },
         "GameObject 9": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1117067404,
-                    "Resource UUID": 1033996102,
-                    "UUID": 2096665373
+                    "Parent UUID": 1765016827,
+                    "Resource UUID": 1504535716,
+                    "UUID": 228554759
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1117067404,
-                    "Resource UUID": 2020614781,
-                    "UUID": 2043286255,
+                    "Parent UUID": 1765016827,
+                    "Resource UUID": 1088695978,
+                    "UUID": 1618717564,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1117067404,
+                    "Parent UUID": 1765016827,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -1660,300 +1660,288 @@
                         0.026032090187072754,
                         0.0
                     ],
-                    "UUID": 229457779
+                    "UUID": 1074747580
                 }
             },
             "Name": "Plane001",
-            "Parent UUID": 394246310,
-            "UUID": 1117067404
+            "Parent UUID": 529464598,
+            "UUID": 1765016827
         }
     },
     "Resources": {
         "Count": 71,
         "Resource 1": {
-            "Exported file": "/library/textures/building05 _c.dds",
-            "File": "/Assets/Textures/building05 _c.tga",
-            "Height": 1024,
-            "Name": "building05 _c.dds",
-            "Texture": 100,
-            "Type": "Texture",
-            "UUID": 60029667,
-            "Width": 1024
+            "Exported file": "/library/meshes/bakerhouse 1.mesh",
+            "File": "/Assets/FBX/bakerhouse.fbx",
+            "Name": "Baker_house",
+            "Type": "Mesh",
+            "UUID": 40008991
         },
         "Resource 10": {
+            "Exported file": "/library/meshes/street environment_v01 19.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_028",
+            "Type": "Mesh",
+            "UUID": 427263760
+        },
+        "Resource 11": {
+            "Exported file": "/library/textures/building_v02_c.dds",
+            "File": "/Assets/Textures/building_v02_c.png",
+            "Height": 512,
+            "Name": "building_v02_c.dds",
+            "Texture": 16,
+            "Type": "Texture",
+            "UUID": 434579104,
+            "Width": 512
+        },
+        "Resource 12": {
+            "Exported file": "/library/textures/building_v02_c.dds",
+            "File": "/Assets/Textures/building_v02_c.png",
+            "Height": 512,
+            "Name": "building_v02_c.dds",
+            "Texture": 128,
+            "Type": "Texture",
+            "UUID": 459866609,
+            "Width": 512
+        },
+        "Resource 13": {
             "Exported file": "",
             "File": "/Assets/Textures/",
             "Height": 0,
             "Name": "",
             "Texture": 0,
             "Type": "Texture",
-            "UUID": 435201243,
+            "UUID": 462069430,
             "Width": 0
         },
-        "Resource 11": {
-            "Exported file": "/library/meshes/street environment_v01 22.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_031",
-            "Type": "Mesh",
-            "UUID": 470584674
-        },
-        "Resource 12": {
-            "Exported file": "/library/textures/building05 _c.dds",
-            "File": "/Assets/Textures/building05 _c.tga",
-            "Height": 1024,
-            "Name": "building05 _c.dds",
-            "Texture": 112,
-            "Type": "Texture",
-            "UUID": 529209165,
-            "Width": 1024
-        },
-        "Resource 13": {
-            "Exported file": "/library/textures/building 01_c.dds",
-            "File": "/Assets/Textures/building 01_c.tga",
-            "Height": 1024,
-            "Name": "building 01_c.dds",
-            "Texture": 56,
-            "Type": "Texture",
-            "UUID": 576590807,
-            "Width": 1024
-        },
         "Resource 14": {
-            "Exported file": "/library/textures/building_v01_c.dds",
-            "File": "/Assets/Textures/building_v01_c.png",
-            "Height": 512,
-            "Name": "building_v01_c.dds",
-            "Texture": 124,
-            "Type": "Texture",
-            "UUID": 643520243,
-            "Width": 512
-        },
-        "Resource 15": {
-            "Exported file": "/library/textures/building05 _c.dds",
-            "File": "/Assets/Textures/building05 _c.tga",
-            "Height": 1024,
-            "Name": "building05 _c.dds",
-            "Texture": 116,
-            "Type": "Texture",
-            "UUID": 653941928,
-            "Width": 1024
-        },
-        "Resource 16": {
-            "Exported file": "Model",
-            "File": "/assets/fbx/bakerhouse.fbx",
-            "Name": "bakerhouse",
-            "Type": "Model",
-            "UUID": 660323456
-        },
-        "Resource 17": {
-            "Exported file": "/library/textures/building05 _c.dds",
-            "File": "/Assets/Textures/building05 _c.tga",
-            "Height": 1024,
-            "Name": "building05 _c.dds",
-            "Texture": 64,
-            "Type": "Texture",
-            "UUID": 678361568,
-            "Width": 1024
-        },
-        "Resource 18": {
-            "Exported file": "/library/textures/baker_house.dds",
-            "File": "/Assets/Textures/baker_house.png",
-            "Height": 1024,
-            "Name": "baker_house.dds",
-            "Texture": 8,
-            "Type": "Texture",
-            "UUID": 685532100,
-            "Width": 1024
-        },
-        "Resource 19": {
-            "Exported file": "/library/meshes/street environment_v01 24.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_033",
-            "Type": "Mesh",
-            "UUID": 717642144
-        },
-        "Resource 2": {
-            "Exported file": "/library/textures/baker_house.dds",
-            "File": "/Assets/Textures/baker_house.png",
-            "Height": 1024,
-            "Name": "baker_house.dds",
-            "Texture": 4,
-            "Type": "Texture",
-            "UUID": 116965268,
-            "Width": 1024
-        },
-        "Resource 20": {
-            "Exported file": "/library/meshes/street environment_v01 4.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "Line002",
-            "Type": "Mesh",
-            "UUID": 717972256
-        },
-        "Resource 21": {
-            "Exported file": "/library/textures/building_025_c.dds",
-            "File": "/Assets/Textures/building_025_c.tga",
-            "Height": 256,
-            "Name": "building_025_c.dds",
-            "Texture": 72,
-            "Type": "Texture",
-            "UUID": 754718708,
-            "Width": 256
-        },
-        "Resource 22": {
-            "Exported file": "/library/meshes/street environment_v01 10.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_014",
-            "Type": "Mesh",
-            "UUID": 803616186
-        },
-        "Resource 23": {
-            "Exported file": "/library/textures/building_025_c.dds",
-            "File": "/Assets/Textures/building_025_c.tga",
-            "Height": 256,
-            "Name": "building_025_c.dds",
-            "Texture": 24,
-            "Type": "Texture",
-            "UUID": 809642256,
-            "Width": 256
-        },
-        "Resource 24": {
-            "Exported file": "/library/meshes/street environment_v01 13.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_017_Parent",
-            "Type": "Mesh",
-            "UUID": 860349149
-        },
-        "Resource 25": {
-            "Exported file": "/library/meshes/street environment_v01 18.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_026",
-            "Type": "Mesh",
-            "UUID": 889560683
-        },
-        "Resource 26": {
-            "Exported file": "/library/meshes/street environment_v01 11.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_016_Parent",
-            "Type": "Mesh",
-            "UUID": 895431373
-        },
-        "Resource 27": {
             "Exported file": "/library/meshes/street environment_v01 29.mesh",
             "File": "/Assets/FBX/street environment_v01.fbx",
             "Name": "City_building_038",
             "Type": "Mesh",
-            "UUID": 913896072
+            "UUID": 512235201
         },
-        "Resource 28": {
-            "Exported file": "/library/textures/building 01_c.dds",
-            "File": "/Assets/Textures/building 01_c.tga",
-            "Height": 1024,
-            "Name": "building 01_c.dds",
-            "Texture": 28,
-            "Type": "Texture",
-            "UUID": 921573605,
-            "Width": 1024
-        },
-        "Resource 29": {
-            "Exported file": "/library/meshes/street environment_v01 19.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_028",
-            "Type": "Mesh",
-            "UUID": 922809667
-        },
-        "Resource 3": {
-            "Exported file": "/library/meshes/street environment_v01 26.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_035",
-            "Type": "Mesh",
-            "UUID": 227979500
-        },
-        "Resource 30": {
-            "Exported file": "/library/meshes/street environment_v01 31.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_040",
-            "Type": "Mesh",
-            "UUID": 978268706
-        },
-        "Resource 31": {
+        "Resource 15": {
             "Exported file": "/library/textures/building_v01_c.dds",
             "File": "/Assets/Textures/building_v01_c.png",
             "Height": 512,
             "Name": "building_v01_c.dds",
             "Texture": 80,
             "Type": "Texture",
-            "UUID": 1005689144,
+            "UUID": 532817416,
             "Width": 512
         },
-        "Resource 32": {
-            "Exported file": "",
-            "File": "/Assets/Textures/",
-            "Height": 0,
-            "Name": "",
-            "Texture": 0,
-            "Type": "Texture",
-            "UUID": 1033996102,
-            "Width": 0
-        },
-        "Resource 33": {
-            "Exported file": "/library/textures/building_016_c.dds",
-            "File": "/Assets/Textures/building_016_c.tga",
-            "Height": 256,
-            "Name": "building_016_c.dds",
-            "Texture": 20,
-            "Type": "Texture",
-            "UUID": 1055442927,
-            "Width": 256
-        },
-        "Resource 34": {
-            "Exported file": "/library/textures/building 01_c.dds",
-            "File": "/Assets/Textures/building 01_c.tga",
-            "Height": 1024,
-            "Name": "building 01_c.dds",
-            "Texture": 60,
-            "Type": "Texture",
-            "UUID": 1099650237,
-            "Width": 1024
-        },
-        "Resource 35": {
-            "Exported file": "/library/textures/building_v01_c.dds",
-            "File": "/Assets/Textures/building_v01_c.png",
-            "Height": 512,
-            "Name": "building_v01_c.dds",
-            "Texture": 84,
-            "Type": "Texture",
-            "UUID": 1112378537,
-            "Width": 512
-        },
-        "Resource 36": {
-            "Exported file": "/library/meshes/street environment_v01 15.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_022",
-            "Type": "Mesh",
-            "UUID": 1189300462
-        },
-        "Resource 37": {
+        "Resource 16": {
             "Exported file": "/library/textures/building_016_c.dds",
             "File": "/Assets/Textures/building_016_c.tga",
             "Height": 256,
             "Name": "building_016_c.dds",
             "Texture": 68,
             "Type": "Texture",
-            "UUID": 1214744091,
+            "UUID": 552086029,
             "Width": 256
         },
-        "Resource 38": {
+        "Resource 17": {
+            "Exported file": "/library/textures/building05 _c.dds",
+            "File": "/Assets/Textures/building05 _c.tga",
+            "Height": 1024,
+            "Name": "building05 _c.dds",
+            "Texture": 112,
+            "Type": "Texture",
+            "UUID": 554061996,
+            "Width": 1024
+        },
+        "Resource 18": {
+            "Exported file": "/library/textures/building03_c.dds",
+            "File": "/Assets/Textures/building03_c.tga",
+            "Height": 1024,
+            "Name": "building03_c.dds",
+            "Texture": 12,
+            "Type": "Texture",
+            "UUID": 571400300,
+            "Width": 1024
+        },
+        "Resource 19": {
+            "Exported file": "/library/meshes/street environment_v01 3.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_008",
+            "Type": "Mesh",
+            "UUID": 609747734
+        },
+        "Resource 2": {
+            "Exported file": "/library/textures/building_v01_c.dds",
+            "File": "/Assets/Textures/building_v01_c.png",
+            "Height": 512,
+            "Name": "building_v01_c.dds",
+            "Texture": 104,
+            "Type": "Texture",
+            "UUID": 116606875,
+            "Width": 512
+        },
+        "Resource 20": {
+            "Exported file": "/library/textures/building 01_c.dds",
+            "File": "/Assets/Textures/building 01_c.tga",
+            "Height": 1024,
+            "Name": "building 01_c.dds",
+            "Texture": 32,
+            "Type": "Texture",
+            "UUID": 613023360,
+            "Width": 1024
+        },
+        "Resource 21": {
+            "Exported file": "/library/meshes/street environment_v01 26.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_035",
+            "Type": "Mesh",
+            "UUID": 702921480
+        },
+        "Resource 22": {
+            "Exported file": "/library/meshes/street environment_v01 10.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_014",
+            "Type": "Mesh",
+            "UUID": 713062395
+        },
+        "Resource 23": {
+            "Exported file": "/library/textures/building05 _c.dds",
+            "File": "/Assets/Textures/building05 _c.tga",
+            "Height": 1024,
+            "Name": "building05 _c.dds",
+            "Texture": 116,
+            "Type": "Texture",
+            "UUID": 750146035,
+            "Width": 1024
+        },
+        "Resource 24": {
+            "Exported file": "/library/meshes/street environment_v01 16.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_023",
+            "Type": "Mesh",
+            "UUID": 772943056
+        },
+        "Resource 25": {
             "Exported file": "/library/meshes/street environment_v01 9.mesh",
             "File": "/Assets/FBX/street environment_v01.fbx",
             "Name": "City_building_013",
             "Type": "Mesh",
-            "UUID": 1251871194
+            "UUID": 783456250
+        },
+        "Resource 26": {
+            "Exported file": "/library/meshes/street environment_v01 14.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_017_SubMesh",
+            "Type": "Mesh",
+            "UUID": 785072685
+        },
+        "Resource 27": {
+            "Exported file": "/library/textures/baker_house.dds",
+            "File": "/Assets/Textures/baker_house.png",
+            "Height": 1024,
+            "Name": "baker_house.dds",
+            "Texture": 4,
+            "Type": "Texture",
+            "UUID": 822714112,
+            "Width": 1024
+        },
+        "Resource 28": {
+            "Exported file": "/library/textures/building03_c.dds",
+            "File": "/Assets/Textures/building03_c.tga",
+            "Height": 1024,
+            "Name": "building03_c.dds",
+            "Texture": 92,
+            "Type": "Texture",
+            "UUID": 833758907,
+            "Width": 1024
+        },
+        "Resource 29": {
+            "Exported file": "/library/meshes/street environment_v01 32.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_041",
+            "Type": "Mesh",
+            "UUID": 907976696
+        },
+        "Resource 3": {
+            "Exported file": "Model",
+            "File": "/assets/fbx/bakerhouse.fbx",
+            "Name": "bakerhouse",
+            "Type": "Model",
+            "UUID": 179672252
+        },
+        "Resource 30": {
+            "Exported file": "/library/meshes/bakerhouse 0.mesh",
+            "File": "/Assets/FBX/bakerhouse.fbx",
+            "Name": "Chimney",
+            "Type": "Mesh",
+            "UUID": 932899755
+        },
+        "Resource 31": {
+            "Exported file": "/library/meshes/street environment_v01 11.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_016_Parent",
+            "Type": "Mesh",
+            "UUID": 948258168
+        },
+        "Resource 32": {
+            "Exported file": "/library/meshes/street environment_v01 13.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_017_Parent",
+            "Type": "Mesh",
+            "UUID": 976502283
+        },
+        "Resource 33": {
+            "Exported file": "/library/meshes/street environment_v01 4.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "Line002",
+            "Type": "Mesh",
+            "UUID": 984300257
+        },
+        "Resource 34": {
+            "Exported file": "/library/meshes/street environment_v01 18.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_026",
+            "Type": "Mesh",
+            "UUID": 1001620270
+        },
+        "Resource 35": {
+            "Exported file": "/library/meshes/street environment_v01 23.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_032",
+            "Type": "Mesh",
+            "UUID": 1057773244
+        },
+        "Resource 36": {
+            "Exported file": "/library/meshes/street environment_v01 5.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "Plane001",
+            "Type": "Mesh",
+            "UUID": 1088695978
+        },
+        "Resource 37": {
+            "Exported file": "/library/textures/building03_c.dds",
+            "File": "/Assets/Textures/building03_c.tga",
+            "Height": 1024,
+            "Name": "building03_c.dds",
+            "Texture": 44,
+            "Type": "Texture",
+            "UUID": 1112294528,
+            "Width": 1024
+        },
+        "Resource 38": {
+            "Exported file": "/library/textures/building 01_c.dds",
+            "File": "/Assets/Textures/building 01_c.tga",
+            "Height": 1024,
+            "Name": "building 01_c.dds",
+            "Texture": 52,
+            "Type": "Texture",
+            "UUID": 1117308665,
+            "Width": 1024
         },
         "Resource 39": {
-            "Exported file": "/library/meshes/street environment_v01 8.mesh",
+            "Exported file": "/library/meshes/street environment_v01 30.mesh",
             "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_011",
+            "Name": "City_building_039",
             "Type": "Mesh",
-            "UUID": 1253233533
+            "UUID": 1134602498
         },
         "Resource 4": {
             "Exported file": "/library/textures/building_v01_c.dds",
@@ -1962,315 +1950,327 @@
             "Name": "building_v01_c.dds",
             "Texture": 88,
             "Type": "Texture",
-            "UUID": 240322051,
+            "UUID": 209753339,
             "Width": 512
         },
         "Resource 40": {
-            "Exported file": "/library/meshes/street environment_v01 3.mesh",
+            "Exported file": "/library/meshes/street environment_v01 22.mesh",
             "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_008",
+            "Name": "City_building_031",
             "Type": "Mesh",
-            "UUID": 1281096031
+            "UUID": 1167282834
         },
         "Resource 41": {
-            "Exported file": "/library/textures/building_016_c.dds",
-            "File": "/Assets/Textures/building_016_c.tga",
-            "Height": 256,
-            "Name": "building_016_c.dds",
-            "Texture": 36,
+            "Exported file": "/library/textures/building 01_c.dds",
+            "File": "/Assets/Textures/building 01_c.tga",
+            "Height": 1024,
+            "Name": "building 01_c.dds",
+            "Texture": 60,
             "Type": "Texture",
-            "UUID": 1295090879,
-            "Width": 256
+            "UUID": 1174097087,
+            "Width": 1024
         },
         "Resource 42": {
-            "Exported file": "/library/meshes/street environment_v01 27.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_036",
-            "Type": "Mesh",
-            "UUID": 1313124117
-        },
-        "Resource 43": {
-            "Exported file": "/library/meshes/street environment_v01 1.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_001",
-            "Type": "Mesh",
-            "UUID": 1343218347
-        },
-        "Resource 44": {
-            "Exported file": "/library/meshes/bakerhouse 1.mesh",
-            "File": "/Assets/FBX/bakerhouse.fbx",
-            "Name": "Baker_house",
-            "Type": "Mesh",
-            "UUID": 1415563980
-        },
-        "Resource 45": {
-            "Exported file": "",
-            "File": "/Assets/Textures/",
-            "Height": 0,
-            "Name": "",
-            "Texture": 0,
-            "Type": "Texture",
-            "UUID": 1457139613,
-            "Width": 0
-        },
-        "Resource 46": {
-            "Exported file": "/library/textures/building03_c.dds",
-            "File": "/Assets/Textures/building03_c.tga",
-            "Height": 1024,
-            "Name": "building03_c.dds",
-            "Texture": 12,
-            "Type": "Texture",
-            "UUID": 1461397725,
-            "Width": 1024
-        },
-        "Resource 47": {
-            "Exported file": "/library/meshes/street environment_v01 2.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_007",
-            "Type": "Mesh",
-            "UUID": 1469183642
-        },
-        "Resource 48": {
-            "Exported file": "/library/textures/building_v01_c.dds",
-            "File": "/Assets/Textures/building_v01_c.png",
-            "Height": 512,
-            "Name": "building_v01_c.dds",
-            "Texture": 104,
-            "Type": "Texture",
-            "UUID": 1488896382,
-            "Width": 512
-        },
-        "Resource 49": {
-            "Exported file": "/library/textures/building05 _c.dds",
-            "File": "/Assets/Textures/building05 _c.tga",
-            "Height": 1024,
-            "Name": "building05 _c.dds",
-            "Texture": 76,
-            "Type": "Texture",
-            "UUID": 1508642745,
-            "Width": 1024
-        },
-        "Resource 5": {
-            "Exported file": "/library/textures/building03_c.dds",
-            "File": "/Assets/Textures/building03_c.tga",
-            "Height": 1024,
-            "Name": "building03_c.dds",
-            "Texture": 44,
-            "Type": "Texture",
-            "UUID": 240908934,
-            "Width": 1024
-        },
-        "Resource 50": {
-            "Exported file": "/library/meshes/street environment_v01 28.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_037",
-            "Type": "Mesh",
-            "UUID": 1548249976
-        },
-        "Resource 51": {
-            "Exported file": "/library/textures/building 06_ c.dds",
-            "File": "/Assets/Textures/building 06_ c.tga",
-            "Height": 1024,
-            "Name": "building 06_ c.dds",
-            "Texture": 108,
-            "Type": "Texture",
-            "UUID": 1571504600,
-            "Width": 1024
-        },
-        "Resource 52": {
-            "Exported file": "/library/textures/building 01_c.dds",
-            "File": "/Assets/Textures/building 01_c.tga",
-            "Height": 1024,
-            "Name": "building 01_c.dds",
-            "Texture": 32,
-            "Type": "Texture",
-            "UUID": 1597376411,
-            "Width": 1024
-        },
-        "Resource 53": {
-            "Exported file": "/library/meshes/street environment_v01 30.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_039",
-            "Type": "Mesh",
-            "UUID": 1602621016
-        },
-        "Resource 54": {
-            "Exported file": "/library/meshes/street environment_v01 7.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_010_SubMesh",
-            "Type": "Mesh",
-            "UUID": 1621693100
-        },
-        "Resource 55": {
-            "Exported file": "/library/textures/building_v02_c.dds",
-            "File": "/Assets/Textures/building_v02_c.png",
-            "Height": 512,
-            "Name": "building_v02_c.dds",
-            "Texture": 128,
-            "Type": "Texture",
-            "UUID": 1672624185,
-            "Width": 512
-        },
-        "Resource 56": {
-            "Exported file": "/library/textures/building_v02_c.dds",
-            "File": "/Assets/Textures/building_v02_c.png",
-            "Height": 512,
-            "Name": "building_v02_c.dds",
-            "Texture": 16,
-            "Type": "Texture",
-            "UUID": 1701736646,
-            "Width": 512
-        },
-        "Resource 57": {
-            "Exported file": "/library/textures/building 06_ c.dds",
-            "File": "/Assets/Textures/building 06_ c.tga",
-            "Height": 1024,
-            "Name": "building 06_ c.dds",
-            "Texture": 96,
-            "Type": "Texture",
-            "UUID": 1755139808,
-            "Width": 1024
-        },
-        "Resource 58": {
-            "Exported file": "/library/meshes/street environment_v01 12.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_016_SubMesh",
-            "Type": "Mesh",
-            "UUID": 1808676092
-        },
-        "Resource 59": {
-            "Exported file": "/library/meshes/street environment_v01 17.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_024",
-            "Type": "Mesh",
-            "UUID": 1825098122
-        },
-        "Resource 6": {
-            "Exported file": "/library/meshes/street environment_v01 14.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_017_SubMesh",
-            "Type": "Mesh",
-            "UUID": 252299957
-        },
-        "Resource 60": {
-            "Exported file": "/library/meshes/bakerhouse 0.mesh",
-            "File": "/Assets/FBX/bakerhouse.fbx",
-            "Name": "Chimney",
-            "Type": "Mesh",
-            "UUID": 1898669977
-        },
-        "Resource 61": {
-            "Exported file": "/library/meshes/street environment_v01 23.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_032",
-            "Type": "Mesh",
-            "UUID": 1904391118
-        },
-        "Resource 62": {
-            "Exported file": "/library/meshes/street environment_v01 6.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_010_Parent",
-            "Type": "Mesh",
-            "UUID": 1906077867
-        },
-        "Resource 63": {
-            "Exported file": "/library/meshes/street environment_v01 25.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_034",
-            "Type": "Mesh",
-            "UUID": 1938483836
-        },
-        "Resource 64": {
-            "Exported file": "/library/textures/building_v01_c.dds",
-            "File": "/Assets/Textures/building_v01_c.png",
-            "Height": 512,
-            "Name": "building_v01_c.dds",
-            "Texture": 120,
-            "Type": "Texture",
-            "UUID": 1938512443,
-            "Width": 512
-        },
-        "Resource 65": {
-            "Exported file": "/library/meshes/street environment_v01 20.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "Object010",
-            "Type": "Mesh",
-            "UUID": 1966302384
-        },
-        "Resource 66": {
-            "Exported file": "/library/meshes/street environment_v01 32.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_041",
-            "Type": "Mesh",
-            "UUID": 1997431157
-        },
-        "Resource 67": {
-            "Exported file": "/library/textures/building 01_c.dds",
-            "File": "/Assets/Textures/building 01_c.tga",
-            "Height": 1024,
-            "Name": "building 01_c.dds",
-            "Texture": 52,
-            "Type": "Texture",
-            "UUID": 2013426225,
-            "Width": 1024
-        },
-        "Resource 68": {
-            "Exported file": "/library/meshes/street environment_v01 5.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "Plane001",
-            "Type": "Mesh",
-            "UUID": 2020614781
-        },
-        "Resource 69": {
-            "Exported file": "/library/meshes/street environment_v01 16.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_023",
-            "Type": "Mesh",
-            "UUID": 2023999209
-        },
-        "Resource 7": {
-            "Exported file": "/library/textures/building 06_ c.dds",
-            "File": "/Assets/Textures/building 06_ c.tga",
-            "Height": 1024,
-            "Name": "building 06_ c.dds",
-            "Texture": 40,
-            "Type": "Texture",
-            "UUID": 296868578,
-            "Width": 1024
-        },
-        "Resource 70": {
-            "Exported file": "/library/meshes/street environment_v01 21.mesh",
-            "File": "/Assets/FBX/street environment_v01.fbx",
-            "Name": "City_building_030",
-            "Type": "Mesh",
-            "UUID": 2103449612
-        },
-        "Resource 71": {
             "Exported file": "/library/textures/building 01_c.dds",
             "File": "/Assets/Textures/building 01_c.tga",
             "Height": 1024,
             "Name": "building 01_c.dds",
             "Texture": 48,
             "Type": "Texture",
-            "UUID": 2142858613,
+            "UUID": 1183512865,
             "Width": 1024
+        },
+        "Resource 43": {
+            "Exported file": "/library/textures/building 01_c.dds",
+            "File": "/Assets/Textures/building 01_c.tga",
+            "Height": 1024,
+            "Name": "building 01_c.dds",
+            "Texture": 28,
+            "Type": "Texture",
+            "UUID": 1195307706,
+            "Width": 1024
+        },
+        "Resource 44": {
+            "Exported file": "/library/meshes/street environment_v01 31.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_040",
+            "Type": "Mesh",
+            "UUID": 1267855744
+        },
+        "Resource 45": {
+            "Exported file": "/library/textures/building 06_ c.dds",
+            "File": "/Assets/Textures/building 06_ c.tga",
+            "Height": 1024,
+            "Name": "building 06_ c.dds",
+            "Texture": 96,
+            "Type": "Texture",
+            "UUID": 1301326998,
+            "Width": 1024
+        },
+        "Resource 46": {
+            "Exported file": "/library/textures/building05 _c.dds",
+            "File": "/Assets/Textures/building05 _c.tga",
+            "Height": 1024,
+            "Name": "building05 _c.dds",
+            "Texture": 64,
+            "Type": "Texture",
+            "UUID": 1338708537,
+            "Width": 1024
+        },
+        "Resource 47": {
+            "Exported file": "/library/textures/building_v01_c.dds",
+            "File": "/Assets/Textures/building_v01_c.png",
+            "Height": 512,
+            "Name": "building_v01_c.dds",
+            "Texture": 84,
+            "Type": "Texture",
+            "UUID": 1395107808,
+            "Width": 512
+        },
+        "Resource 48": {
+            "Exported file": "",
+            "File": "/Assets/Textures/",
+            "Height": 0,
+            "Name": "",
+            "Texture": 0,
+            "Type": "Texture",
+            "UUID": 1496670678,
+            "Width": 0
+        },
+        "Resource 49": {
+            "Exported file": "",
+            "File": "/Assets/Textures/",
+            "Height": 0,
+            "Name": "",
+            "Texture": 0,
+            "Type": "Texture",
+            "UUID": 1504535716,
+            "Width": 0
+        },
+        "Resource 5": {
+            "Exported file": "/library/textures/building 06_ c.dds",
+            "File": "/Assets/Textures/building 06_ c.tga",
+            "Height": 1024,
+            "Name": "building 06_ c.dds",
+            "Texture": 108,
+            "Type": "Texture",
+            "UUID": 314131685,
+            "Width": 1024
+        },
+        "Resource 50": {
+            "Exported file": "/library/textures/baker_house.dds",
+            "File": "/Assets/Textures/baker_house.png",
+            "Height": 1024,
+            "Name": "baker_house.dds",
+            "Texture": 8,
+            "Type": "Texture",
+            "UUID": 1558173806,
+            "Width": 1024
+        },
+        "Resource 51": {
+            "Exported file": "/library/meshes/street environment_v01 8.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_011",
+            "Type": "Mesh",
+            "UUID": 1561500808
+        },
+        "Resource 52": {
+            "Exported file": "/library/meshes/street environment_v01 6.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_010_Parent",
+            "Type": "Mesh",
+            "UUID": 1574180727
+        },
+        "Resource 53": {
+            "Exported file": "/library/meshes/street environment_v01 27.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_036",
+            "Type": "Mesh",
+            "UUID": 1584108166
+        },
+        "Resource 54": {
+            "Exported file": "/library/meshes/street environment_v01 17.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_024",
+            "Type": "Mesh",
+            "UUID": 1608550534
+        },
+        "Resource 55": {
+            "Exported file": "/library/textures/building_016_c.dds",
+            "File": "/Assets/Textures/building_016_c.tga",
+            "Height": 256,
+            "Name": "building_016_c.dds",
+            "Texture": 36,
+            "Type": "Texture",
+            "UUID": 1693373299,
+            "Width": 256
+        },
+        "Resource 56": {
+            "Exported file": "/library/textures/building05 _c.dds",
+            "File": "/Assets/Textures/building05 _c.tga",
+            "Height": 1024,
+            "Name": "building05 _c.dds",
+            "Texture": 76,
+            "Type": "Texture",
+            "UUID": 1710564755,
+            "Width": 1024
+        },
+        "Resource 57": {
+            "Exported file": "/library/textures/building05 _c.dds",
+            "File": "/Assets/Textures/building05 _c.tga",
+            "Height": 1024,
+            "Name": "building05 _c.dds",
+            "Texture": 100,
+            "Type": "Texture",
+            "UUID": 1749874548,
+            "Width": 1024
+        },
+        "Resource 58": {
+            "Exported file": "/library/meshes/street environment_v01 24.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_033",
+            "Type": "Mesh",
+            "UUID": 1816252079
+        },
+        "Resource 59": {
+            "Exported file": "/library/textures/building 06_ c.dds",
+            "File": "/Assets/Textures/building 06_ c.tga",
+            "Height": 1024,
+            "Name": "building 06_ c.dds",
+            "Texture": 40,
+            "Type": "Texture",
+            "UUID": 1866858491,
+            "Width": 1024
+        },
+        "Resource 6": {
+            "Exported file": "/library/textures/building_v01_c.dds",
+            "File": "/Assets/Textures/building_v01_c.png",
+            "Height": 512,
+            "Name": "building_v01_c.dds",
+            "Texture": 120,
+            "Type": "Texture",
+            "UUID": 319341743,
+            "Width": 512
+        },
+        "Resource 60": {
+            "Exported file": "/library/textures/building 01_c.dds",
+            "File": "/Assets/Textures/building 01_c.tga",
+            "Height": 1024,
+            "Name": "building 01_c.dds",
+            "Texture": 56,
+            "Type": "Texture",
+            "UUID": 1905947612,
+            "Width": 1024
+        },
+        "Resource 61": {
+            "Exported file": "/library/meshes/street environment_v01 1.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_001",
+            "Type": "Mesh",
+            "UUID": 1910270967
+        },
+        "Resource 62": {
+            "Exported file": "/library/meshes/street environment_v01 28.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_037",
+            "Type": "Mesh",
+            "UUID": 1959910312
+        },
+        "Resource 63": {
+            "Exported file": "/library/meshes/street environment_v01 21.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_030",
+            "Type": "Mesh",
+            "UUID": 1968878265
+        },
+        "Resource 64": {
+            "Exported file": "/library/textures/building_016_c.dds",
+            "File": "/Assets/Textures/building_016_c.tga",
+            "Height": 256,
+            "Name": "building_016_c.dds",
+            "Texture": 20,
+            "Type": "Texture",
+            "UUID": 1992119999,
+            "Width": 256
+        },
+        "Resource 65": {
+            "Exported file": "/library/meshes/street environment_v01 15.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_022",
+            "Type": "Mesh",
+            "UUID": 2048993804
+        },
+        "Resource 66": {
+            "Exported file": "/library/meshes/street environment_v01 7.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_010_SubMesh",
+            "Type": "Mesh",
+            "UUID": 2059546380
+        },
+        "Resource 67": {
+            "Exported file": "/library/meshes/street environment_v01 20.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "Object010",
+            "Type": "Mesh",
+            "UUID": 2060498662
+        },
+        "Resource 68": {
+            "Exported file": "/library/textures/building_025_c.dds",
+            "File": "/Assets/Textures/building_025_c.tga",
+            "Height": 256,
+            "Name": "building_025_c.dds",
+            "Texture": 72,
+            "Type": "Texture",
+            "UUID": 2112709315,
+            "Width": 256
+        },
+        "Resource 69": {
+            "Exported file": "/library/textures/building_v01_c.dds",
+            "File": "/Assets/Textures/building_v01_c.png",
+            "Height": 512,
+            "Name": "building_v01_c.dds",
+            "Texture": 124,
+            "Type": "Texture",
+            "UUID": 2118914491,
+            "Width": 512
+        },
+        "Resource 7": {
+            "Exported file": "/library/meshes/street environment_v01 25.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_034",
+            "Type": "Mesh",
+            "UUID": 328478942
+        },
+        "Resource 70": {
+            "Exported file": "/library/meshes/street environment_v01 12.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_016_SubMesh",
+            "Type": "Mesh",
+            "UUID": 2123002824
+        },
+        "Resource 71": {
+            "Exported file": "/library/meshes/street environment_v01 2.mesh",
+            "File": "/Assets/FBX/street environment_v01.fbx",
+            "Name": "City_building_007",
+            "Type": "Mesh",
+            "UUID": 2127507328
         },
         "Resource 8": {
             "Exported file": "/library/meshes/street environment_v01 0.mesh",
             "File": "/Assets/FBX/street environment_v01.fbx",
             "Name": "City_building_004",
             "Type": "Mesh",
-            "UUID": 306436822
+            "UUID": 336261545
         },
         "Resource 9": {
-            "Exported file": "/library/textures/building03_c.dds",
-            "File": "/Assets/Textures/building03_c.tga",
-            "Height": 1024,
-            "Name": "building03_c.dds",
-            "Texture": 92,
+            "Exported file": "/library/textures/building_025_c.dds",
+            "File": "/Assets/Textures/building_025_c.tga",
+            "Height": 256,
+            "Name": "building_025_c.dds",
+            "Texture": 24,
             "Type": "Texture",
-            "UUID": 408015440,
-            "Width": 1024
+            "UUID": 348307506,
+            "Width": 256
         }
     }
 }

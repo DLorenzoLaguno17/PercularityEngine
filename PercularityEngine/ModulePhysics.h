@@ -7,8 +7,6 @@
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
 
-class ComponentRigidbody;
-
 class ModulePhysics :public Module
 {
 public:
@@ -28,7 +26,6 @@ public:
 
 public:
 	std::vector<btCollisionShape*> shapes;
-	std::vector<ComponentRigidbody*> bodies;
 	std::vector<btDefaultMotionState*> motions;
 
 private:

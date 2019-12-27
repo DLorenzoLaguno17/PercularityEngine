@@ -38,7 +38,6 @@ public:
 	virtual void Update(float dt) {}
 
 	uint GetUUID() const { return UUID; }
-	COMPONENT_TYPE GetType() const { return type; }
 	bool IsActive() { return active; }
 
 public:

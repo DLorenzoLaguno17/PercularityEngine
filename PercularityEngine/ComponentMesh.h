@@ -11,7 +11,6 @@ class ResourceMesh;
 class ComponentMesh : public Component {
 public:
 	ComponentMesh(GameObject* parent, bool active);
-
 	~ComponentMesh() {}
 
 	// Methods
@@ -36,7 +35,6 @@ public:
 public:
 	// Bounding box
 	AABB aabb;
-
 	ResourceMesh* resource_mesh = nullptr;
 
 private:

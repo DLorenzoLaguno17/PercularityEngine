@@ -23,12 +23,9 @@ ComponentCamera::ComponentCamera(GameObject* parent, bool active):Component(COMP
 
 	frustum.verticalFov = 60.f*DEGTORAD;
 	SetAspectRatio(1.0f);
-
 }
 
-ComponentCamera::~ComponentCamera()
-{}
-
+ComponentCamera::~ComponentCamera() {}
 
 // -----------------------------------------------------------------
 void ComponentCamera::Update()
@@ -39,12 +36,13 @@ void ComponentCamera::Update()
 
 //------------------FRUSTUM-------------------
 
-float ComponentCamera::GetNearPlane() const {
+float ComponentCamera::GetNearPlane() const 
+{
 	
 	return frustum.nearPlaneDistance;
 }
 
-float ComponentCamera::GetFarPlane()const
+float ComponentCamera::GetFarPlane() const
 {
 	return frustum.farPlaneDistance;
 }

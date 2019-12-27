@@ -7,10 +7,8 @@ class btRigidBody;
 class btQuaternion;
 class Module;
 
-class ComponentRigidbody : public Component
-{
+class ComponentRigidbody : public Component {
 public:
-
 	ComponentRigidbody(GameObject* parent, bool active);
 	~ComponentRigidbody() {}
 

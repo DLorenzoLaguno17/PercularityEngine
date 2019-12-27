@@ -44,6 +44,14 @@ bool ModulePhysics::Start()
 	world->setGravity(GRAVITY);
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
+	// Big plane as ground
+	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState();
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
+	btRigidBody* body = new btRigidBody(rbInfo);
+	world->addRigidBody(body);
+
 	return true;
 }
 
@@ -103,7 +111,7 @@ void ModulePhysics::AddRigidBody()
 	shapes.push_back(colShape);
 
 	// The we set its transform
-	ComponentTransform* transform = (ComponentTransform*)App->scene->selected->CreateComponent(COMPONENT_TYPE::TRANSFORM);
+	ComponentTransform* transform = (ComponentTransform*)App->scene->selected->GetComponent(COMPONENT_TYPE::TRANSFORM);
 	btTransform startTransform;
 	startTransform.setFromOpenGLMatrix(&transform->renderTransform);
 
@@ -119,9 +127,7 @@ void ModulePhysics::AddRigidBody()
 	// To finish we create the Physbody and add it to the world
 	btRigidBody* body = new btRigidBody(rbInfo);
 	rigidbody->CreateBody(body);
-
 	world->addRigidBody(body);
-	bodies.push_back(rigidbody);
 }
 
 bool ModulePhysics::CleanUp()
@@ -145,11 +151,6 @@ bool ModulePhysics::CleanUp()
 		RELEASE(shapes[i])
 
 	shapes.clear();
-
-	for (int i = 0; i < bodies.size(); ++i)
-		RELEASE(bodies[i])
-
-	bodies.clear();
 
 	// Delete the pointers
 	RELEASE(vehicle_raycaster);
