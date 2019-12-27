@@ -7,6 +7,7 @@
 #include "PhysVehicle.h"
 #include "Globals.h"
 #include "stdio.h"
+#include "OpenGL.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
@@ -27,6 +28,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 	dispatcher = new btCollisionDispatcher(collision_conf);
 	broad_phase = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
+	debugDrawer = new DebugDrawer();
 }
 
 ModulePhysics::~ModulePhysics() {}
@@ -34,6 +36,9 @@ ModulePhysics::~ModulePhysics() {}
 bool ModulePhysics::Init() 
 {
 	LOG("Initializing physics module");
+
+	
+
 	return true;
 }
 
@@ -41,7 +46,6 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics environment");
 	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
-	//world->setDebugDrawer(debug_draw);
 	world->setGravity(GRAVITY);
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
@@ -52,7 +56,7 @@ bool ModulePhysics::Start()
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
 	btRigidBody* body = new btRigidBody(rbInfo);
 	world->addRigidBody(body);
-
+	world->setDebugDrawer(debugDrawer);
 	return true;
 }
 
@@ -61,6 +65,8 @@ update_status ModulePhysics::PreUpdate(float dt)
 	BROFILER_CATEGORY("PhysicsPreUpdate", Profiler::Color::Orange);
 
 	world->stepSimulation(dt, 15);
+
+	
 
 	/*int manifolds = world->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < manifolds; i++)
@@ -99,7 +105,7 @@ update_status ModulePhysics::Update(float dt)
 update_status ModulePhysics::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("PhysicsPostUpdate", Profiler::Color::Yellow);
-
+	world->debugDrawWorld();
 	return UPDATE_CONTINUE;
 }
 
@@ -264,4 +270,46 @@ void ModulePhysics::AddConstraintHinge(ComponentRigidbody &bodyA, ComponentRigid
 	world->addConstraint(hinge, disable_collision);
 	constraints.push_back(hinge);
 	hinge->setDbgDrawSize(2.0f);
+}
+
+
+//~~~~	DEBUG DRAWER	~~~~
+void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+{
+	glLineWidth(1.0f);
+	glBegin(GL_LINES);
+
+	glColor3f(0, 255, 0);
+
+	glVertex3f(from.x(), from.y(), from.z());
+	glVertex3f(to.x(), to.y(), to.z());
+	
+	glEnd();
+}
+
+void DebugDrawer::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
+{
+	/*point.transform.translate(PointOnB.getX(), PointOnB.getY(), PointOnB.getZ());
+	point.color.Set(color.getX(), color.getY(), color.getZ());
+	point.Render();*/
+}
+
+void DebugDrawer::reportErrorWarning(const char* warningString)
+{
+	LOG("Bullet warning: %s", warningString);
+}
+
+void DebugDrawer::draw3dText(const btVector3& location, const char* textString)
+{
+	LOG("Bullet draw text: %s", textString);
+}
+
+void DebugDrawer::setDebugMode(int debugMode)
+{
+	mode = (DebugDrawModes)debugMode;
+}
+
+int	 DebugDrawer::getDebugMode() const
+{
+	return mode;
 }
