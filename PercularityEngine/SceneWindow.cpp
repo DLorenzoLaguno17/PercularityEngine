@@ -12,7 +12,6 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
-#include "MathGeoLib/include/MathGeoLib.h"
 
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
 

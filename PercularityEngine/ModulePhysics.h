@@ -25,12 +25,12 @@ public:
 
 private:
 
-	btDefaultCollisionConfiguration*		collision_conf;
-	btCollisionDispatcher*					dispatcher;
-	btBroadphaseInterface*					broad_phase;
-	btSequentialImpulseConstraintSolver*	solver;
-	btDiscreteDynamicsWorld*				world;
-	btDefaultVehicleRaycaster*				vehicle_raycaster;
+	btDefaultCollisionConfiguration*		collision_conf=nullptr;
+	btCollisionDispatcher*					dispatcher = nullptr;
+	btBroadphaseInterface*					broad_phase = nullptr;
+	btSequentialImpulseConstraintSolver*	solver = nullptr;
+	btDiscreteDynamicsWorld*				world = nullptr;
+	btDefaultVehicleRaycaster*				vehicle_raycaster = nullptr;
 
 };
 

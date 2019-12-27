@@ -7,6 +7,7 @@
 #include "ModuleGui.h"
 #include "ModuleScene.h"
 #include "ModuleResourceLoader.h"
+#include "ModulePhysics.h"
 #include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
 #include "Time.h"

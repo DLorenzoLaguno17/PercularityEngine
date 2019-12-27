@@ -4,7 +4,6 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
-#include "MathGeoLib/include/MathGeoLib.h"
 
 class GameObject;
 class ComponentCamera;

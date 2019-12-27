@@ -5,7 +5,6 @@
 #include "Module.h"
 #include <list>
 
-#include "Json Parser/nlohmann/json.hpp"
 #include "MathGeoLib/include/Algorithm/Random/LCG.h"
 
 class ModuleWindow;

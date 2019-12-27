@@ -2,6 +2,8 @@
 #include "Globals.h"
 #include "stdio.h"
 
+#include "mmgr/mmgr.h"
+
 #ifdef _DEBUG
 	#pragma comment (lib, "Bullet/libx86/BulletDynamics_debug.lib")
 	#pragma comment (lib, "Bullet/libx86/BulletCollision_debug.lib")
@@ -14,17 +16,16 @@
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	//collision_conf = new btDefaultCollisionConfiguration();
-	//dispatcher = new btCollisionDispatcher(collision_conf);
-	//broad_phase = new btDbvtBroadphase();
-	//solver = new btSequentialImpulseConstraintSolver();
+	collision_conf = new btDefaultCollisionConfiguration();
+	dispatcher = new btCollisionDispatcher(collision_conf);
+	broad_phase = new btDbvtBroadphase();
+	solver = new btSequentialImpulseConstraintSolver();
 }
 
 ModulePhysics::~ModulePhysics() {}
 
-bool ModulePhysics::Init()
+bool ModulePhysics::Init() 
 {
-	
 	return true;
 }
 
@@ -38,7 +39,7 @@ bool ModulePhysics::Start()
 
 update_status ModulePhysics::PreUpdate(float dt)
 {
-	//world->stepSimulation(dt, 15);
+	//world->stepSimulation(dt,60);
 
 	return UPDATE_CONTINUE;
 }
@@ -55,9 +56,10 @@ update_status ModulePhysics::PostUpdate(float dt)
 
 bool ModulePhysics::CleanUp()
 {
-	//RELEASE(solver);
-	//RELEASE(broad_phase);
-	//RELEASE(dispatcher);
-	//RELEASE(collision_conf);
+	RELEASE(solver);
+	RELEASE(broad_phase);
+	RELEASE(dispatcher);
+	RELEASE(collision_conf);
+
 	return true;
 }
