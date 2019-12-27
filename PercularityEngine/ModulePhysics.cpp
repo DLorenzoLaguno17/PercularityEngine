@@ -143,6 +143,14 @@ bool ModulePhysics::CleanUp()
 	}
 
 	// Clear all the lists
+	for (int i = 0; i < constraints.size(); ++i)
+	{
+		world->removeConstraint(constraints[i]);
+		RELEASE(constraints[i]);
+	}
+
+	constraints.clear();
+
 	for (int i = 0; i < motions.size(); ++i)
 		RELEASE(motions[i])
 
@@ -172,7 +180,7 @@ bool ModulePhysics::CleanUp()
 }
 
 // Cretes a vehicle and adds it to the scene
-PhysVehicle* ModulePhysics::AddVehicle(const VehicleInfo& info)
+PhysVehicle* ModulePhysics::AddVehicle(const VehicleInfo &info)
 {
 	btCompoundShape* comShape = new btCompoundShape();
 	shapes.push_back(comShape);
@@ -227,4 +235,33 @@ PhysVehicle* ModulePhysics::AddVehicle(const VehicleInfo& info)
 	vehicles.push_back(phys_vehicle);
 
 	return phys_vehicle;
+}
+
+// Constraint creators
+void ModulePhysics::AddConstraintP2P(ComponentRigidbody &bodyA, ComponentRigidbody &bodyB, const vec3 &anchorA, const vec3 &anchorB)
+{
+	btTypedConstraint* p2p = new btPoint2PointConstraint(
+		*(bodyA.body),
+		*(bodyB.body),
+		btVector3(anchorA.x, anchorA.y, anchorA.z),
+		btVector3(anchorB.x, anchorB.y, anchorB.z));
+
+	world->addConstraint(p2p);
+	constraints.push_back(p2p);
+	p2p->setDbgDrawSize(2.0f);
+}
+
+void ModulePhysics::AddConstraintHinge(ComponentRigidbody &bodyA, ComponentRigidbody &bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
+{
+	btHingeConstraint* hinge = new btHingeConstraint(
+		*(bodyA.body),
+		*(bodyB.body),
+		btVector3(anchorA.x, anchorA.y, anchorA.z),
+		btVector3(anchorB.x, anchorB.y, anchorB.z),
+		btVector3(axisA.x, axisA.y, axisA.z),
+		btVector3(axisB.x, axisB.y, axisB.z));
+
+	world->addConstraint(hinge, disable_collision);
+	constraints.push_back(hinge);
+	hinge->setDbgDrawSize(2.0f);
 }

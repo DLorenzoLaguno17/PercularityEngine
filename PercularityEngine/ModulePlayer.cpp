@@ -163,6 +163,11 @@ update_status ModulePlayer::Update(float dt)
 		vehicle->Turn(turn);
 		vehicle->Brake(brake);
 
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		{
+
+		}
+
 		vehicle->Render();
 	}
 

@@ -109,6 +109,9 @@
     <Filter Include="Sources\3rd party\MathGeoLib\src">
       <UniqueIdentifier>{65b77eca-f58c-4911-9810-28b4f72bf288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Modules\Scene">
+      <UniqueIdentifier>{53201ae4-e8c6-4742-acaa-fe047bbe6cc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleCamera3D.h">
@@ -272,9 +275,6 @@
     </ClInclude>
     <ClInclude Include="DebugWindow.h">
       <Filter>Sources\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleScene.h">
-      <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Bullet\include\btBulletCollisionCommon.h">
       <Filter>Sources\3rd party\Bullet</Filter>
@@ -1137,11 +1137,14 @@
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="ModulePlayer.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="PhysVehicle.h">
       <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleScene.h">
+      <Filter>Sources\Modules\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ModulePlayer.h">
+      <Filter>Sources\Modules\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1274,9 +1277,6 @@
     <ClCompile Include="DebugWindow.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleScene.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="PercularityResource.h">
       <Filter>Sources\Scene elements\Resources</Filter>
     </ClCompile>
@@ -1388,11 +1388,14 @@
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="ModulePlayer.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="PhysVehicle.cpp">
       <Filter>Sources\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Sources\Modules\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ModulePlayer.cpp">
+      <Filter>Sources\Modules\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
