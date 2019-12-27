@@ -17,7 +17,7 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
-	void CreateCar();
+	void ResetCar();
 
 public:
 	PhysVehicle* vehicle = nullptr;

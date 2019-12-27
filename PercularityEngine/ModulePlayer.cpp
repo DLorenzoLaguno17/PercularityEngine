@@ -17,109 +17,8 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 ModulePlayer::~ModulePlayer() {}
 
 // Load assets
-bool ModulePlayer::Start() { return true; }
-
-// Unload assets
-bool ModulePlayer::CleanUp()
-{
-	LOG("Unloading player");
-
-	return true;
-}
-
-update_status ModulePlayer::Update(float dt)
-{
-	if (App->scene->playMode) {
-
-		turn = acceleration = brake = 0.0f;
-
-		// Controls of the car
-		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		{
-			if (abs(vehicle->GetKmh()) > 1 && !goingForward) {
-				brake = BRAKE_POWER / 4;
-				startedEngine = false;
-			}
-			else {
-				acceleration = MAX_ACCELERATION;
-				goingForward = true;
-
-				if (!startedEngine) {
-					startedEngine = true;
-				}
-			}
-		}
-
-		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		{
-			if (turn < TURN_DEGREES)
-				turn += TURN_DEGREES;
-		}
-
-		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		{
-			if (turn > -TURN_DEGREES)
-				turn -= TURN_DEGREES;
-		}
-
-		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		{
-			if (abs(vehicle->GetKmh()) > 1 && goingForward) {
-				brake = BRAKE_POWER;
-				startedEngine = false;
-			}
-			else {
-				acceleration = -MAX_ACCELERATION;
-				goingForward = false;
-
-				if (!startedEngine) {
-					startedEngine = true;
-				}
-			}
-		}
-
-		/*// To free the camera
-		if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-			freeCamera = !freeCamera;
-
-		// To have an aerial view
-		if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
-			freeCamera = !freeCamera;
-			App->camera->Position = { 113, 152, 8 };
-			App->camera->LookAt({ 113, 0, 20 });
-		}*/
-
-		vehicle->ApplyEngineForce(acceleration);
-		vehicle->Turn(turn);
-		vehicle->Brake(brake);
-
-		vehicle->Render();
-
-		/*int seconds = (int)((SDL_GetTicks() - timer) / 1000);
-		int minutes = (int)(seconds / 60);
-
-		char title[80];
-
-		if (seconds % 60 < 10)
-			sprintf_s(title, "Obstacle Race v1.0 ~ Speed of the car: %.1f Km/h / Current time: 0%d:0%d", vehicle->GetKmh(), minutes, seconds % 60);
-		else if (minutes < 10)
-			sprintf_s(title, "Obstacle Race v1.0 ~ Speed of the car: %.1f Km/h / Current time: 0%d:%d", vehicle->GetKmh(), minutes, seconds % 60);
-		else
-			sprintf_s(title, "Obstacle Race v1.0 ~ Speed of the car: %.1f Km/h / Current time: %d:%d", vehicle->GetKmh(), minutes, seconds % 60);*/
-
-		/*App->window->SetTitle(title);
-
-		if (!freeCamera) {
-			App->camera->LookAt(vehicle->GetPosition());
-			App->camera->Position = (vehicle->GetPosition() - vehicle->GetForwardVector() * 10) + vec3(0, 4, 0);
-		}*/
-	}
-
-	return UPDATE_CONTINUE;
-}
-
-void ModulePlayer::CreateCar()
-{
+bool ModulePlayer::Start() 
+{ 
 	LOG("Creating the player");
 
 	// Creating car
@@ -205,4 +104,84 @@ void ModulePlayer::CreateCar()
 	vehicle->SetPos(0, 3, 10);
 	initialCarPosition = vehicle->GetPosition();
 	initialForwardVector = vehicle->GetForwardVector();
+
+	return true;
+}
+
+update_status ModulePlayer::Update(float dt)
+{
+	if (App->scene->playMode) {
+
+		turn = acceleration = brake = 0.0f;
+
+		// Controls of the car
+		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		{
+			if (abs(vehicle->GetKmh()) > 1 && !goingForward) {
+				brake = BRAKE_POWER / 4;
+				startedEngine = false;
+			}
+			else {
+				acceleration = MAX_ACCELERATION;
+				goingForward = true;
+
+				if (!startedEngine) {
+					startedEngine = true;
+				}
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		{
+			if (turn < TURN_DEGREES)
+				turn += TURN_DEGREES;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		{
+			if (turn > -TURN_DEGREES)
+				turn -= TURN_DEGREES;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		{
+			if (abs(vehicle->GetKmh()) > 1 && goingForward) {
+				brake = BRAKE_POWER;
+				startedEngine = false;
+			}
+			else {
+				acceleration = -MAX_ACCELERATION;
+				goingForward = false;
+
+				if (!startedEngine) {
+					startedEngine = true;
+				}
+			}
+		}
+
+		vehicle->ApplyEngineForce(acceleration);
+		vehicle->Turn(turn);
+		vehicle->Brake(brake);
+
+		vehicle->Render();
+	}
+
+	return UPDATE_CONTINUE;
+}
+
+// Resets the car
+void ModulePlayer::ResetCar()
+{
+	vehicle->vehicle->getRigidBody()->setAngularVelocity({ 0, 0, 0 });
+	vehicle->vehicle->getRigidBody()->setLinearVelocity({ 0, 0, 0 });
+	vehicle->SetPos(initialCarPosition.x, initialCarPosition.y, initialCarPosition.z);
+	vehicle->RotateBody({ 0, initialForwardVector.x, initialForwardVector.y, initialForwardVector.z });
+}
+
+// Unload assets
+bool ModulePlayer::CleanUp()
+{
+	LOG("Unloading player");
+
+	return true;
 }
