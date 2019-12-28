@@ -4,13 +4,13 @@ You can download Percularity's [latest release](https://github.com/DLorenzoLagun
 
 # About Percularity
 
-## Main core sub-systems
+### Main core sub-systems
 The main core sub-systems that form Percularity are the **resource manager**, the **physics** sub-system
 
-## Specialized sub-system
+### Specialized sub-system
 Since we wanted the engine to be used for creating the game, each pair of students specialyzed the last delivery of the game engine development in one specific subsystem. The sub-system we chose was **physics**. With it, we programmed the possibility of adding **ridigbodies** as GameObject components, and we implemented the possibility of controlling a car in **Game mode**, which can interact with the scene and its collisions. Appart from that, the user can shoot spheres from the camera also to test the physics and we have added a sphere collider around the camera that prevents it from getting inside the meshes of the GameObjects.
 
-## Third-party libraries used
+### Third-party libraries used
 * [SDL v2.0.6](https://www.libsdl.org/)
 * [STL v2.0](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
 * [Dear ImGui v1.72b](https://github.com/ocornut/imgui)
@@ -25,7 +25,7 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 
 # Tasks delivered by each team member
 
-## Joan Marín
+### Joan Marín
 * Camera component.
 * Frustum culling.
 * Mousepicking.
@@ -33,7 +33,7 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 * Quadtrees and octrees.
 * Physicalization of the GameObjects.
 
-## Daniel Lorenzo
+### Daniel Lorenzo
 * User interface.
 * GameObjects.
 * Import and export of textures and models.
