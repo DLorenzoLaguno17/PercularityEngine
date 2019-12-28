@@ -184,13 +184,9 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box, GameObject* gameObject
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidBody* component = new ComponentRigidBody(body);
-
+	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+	component->CreateBody(body);
 	world->addRigidBody(body);
-	rigidBodies.push_back(component);
-
-	component->gameObject = gameObject;
-	gameObject->components.push_back(component);
 
 	return component;
 }
@@ -207,21 +203,14 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* game
 	if (mass != 0.f)
 		colShape->calculateLocalInertia(mass, localInertia);
 
-
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
 	motions.push_back(myMotionState);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidBody* component = new ComponentRigidBody(body);
-
+	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+	component->CreateBody(body);
 	world->addRigidBody(body);
-
-	rigidBodies.push_back(component);
-
-
-	component->gameObject = gameObject;
-	gameObject->components.push_back(component);
 
 	return component;
 }
@@ -238,24 +227,19 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Capsule& capsule, GameObject* ga
 	if (mass != 0.f)
 		colShape->calculateLocalInertia(mass, localInertia);
 
-
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
 	motions.push_back(myMotionState);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidBody* component = new ComponentRigidBody(body);
-
+	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+	component->CreateBody(body);
 	world->addRigidBody(body);
-
-	rigidBodies.push_back(component);
-
-	component->gameObject = gameObject;
-	gameObject->components.push_back(component);
 
 	return component;
 }
 
+// Creates primitive cubes, just for debug purpouses
 ComponentRigidBody* ModulePhysics::AddCube(const PrimitiveCube& cube, float mass)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(cube.size.x * 0.5f, cube.size.y * 0.5f, cube.size.z * 0.5f));
@@ -435,7 +419,7 @@ void ModulePhysics::ClearBalls()
 	spheres.clear();
 }
 
-//~~~~	DEBUG DRAWER	~~~~
+//~~~~	DEBUG DRAWER  ~~~~
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
 	glLineWidth(2.0f);

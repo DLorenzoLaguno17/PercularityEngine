@@ -138,7 +138,6 @@ void GameObject::MakeChild(GameObject* parent) {
 // Cleans the memory of the GameObject
 void GameObject::CleanUp() {
 
-	const char* test = name.c_str();
 	for (uint i = 0; i < components.size(); ++i) {		
 		components[i]->CleanUp();
 		RELEASE(components[i]);
