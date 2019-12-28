@@ -1,7 +1,9 @@
 # Percularity Engine
-Percularity is a game engine that has been developed in the Video Games degree in Universitat PolitËcnica de Catalunya for student purposes.
+Percularity is a game engine that has been developed in the Video Games degree in Universitat Polit√®cnica de Catalunya for student purposes.
 
 Go to our GitHub: https://github.com/DLorenzoLaguno17/PercularityEngine
+
+## Main core sub-systems
 
 ## Libraries used
 * [SDL v2.0.6](https://www.libsdl.org/)
@@ -16,7 +18,7 @@ Go to our GitHub: https://github.com/DLorenzoLaguno17/PercularityEngine
 
 ## Innovation
 
-We have implemented a debug window with witch the user can decide wether to activate or not the frustum culling and there is another menu that shows the current performance of the engine and how the changes on the debug window affect it.
+We have implemented a debug window with which the user can decide wether to activate or not the frustum culling and there is another menu that shows the current performance of the engine and how the changes on the debug window affect it.
 
 ## Controls
 
@@ -27,6 +29,8 @@ We have implemented a debug window with witch the user can decide wether to acti
 * Hold right click - rotate the camera
 * Hold middle click - Move the camera at will
 * Mouse scroll - Zoom in & out
+
+* F1 - In Play mode, switch between car camera and free camera
 
 While right clicking:
 * W - Move camera up
@@ -47,13 +51,12 @@ Note: for the moment, each time a scene is saved, it is placed at Assets/Scenes/
 
 ## Tasks delivered by each member
 
-### Joan MarÌn
+### Joan Mar√≠n
 * Camera component.
 * Frustum culling.
 * Mousepicking.
 * GameObject transformations.
 * Quadtrees and octrees.
-
 
 ### Daniel Lorenzo
 * Import and export of files.
@@ -62,5 +65,5 @@ Note: for the moment, each time a scene is saved, it is placed at Assets/Scenes/
 * Resource manager.
 
 ## License
-This game engine has been created by third course students [Joan Mar√Ìn](https://github.com/X0KA) and [Daniel Lorenzo](https://github.com/DLorenzoLaguno17).
+This game engine has been created by third course students [Joan Mar√≠n](https://github.com/X0KA) and [Daniel Lorenzo](https://github.com/DLorenzoLaguno17).
 Licensed under the [MIT License](LICENSE).
