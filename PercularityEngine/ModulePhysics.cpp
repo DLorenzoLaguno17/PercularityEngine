@@ -1,12 +1,14 @@
 #include "Application.h"
 #include "ModulePhysics.h"
 #include "ModuleScene.h"
+#include "ModulePlayer.h"
+#include "ModuleCamera3D.h"
 #include "GameObject.h"
 #include "ComponentRigidbody.h"
 #include "ComponentTransform.h"
+#include "ComponentCamera.h"
 #include "PhysVehicle.h"
 #include "Globals.h"
-#include "Primitive.h"
 #include "stdio.h"
 
 #include "Brofiler/Lib/Brofiler.h"
@@ -84,6 +86,11 @@ update_status ModulePhysics::Update(float dt)
 	right_cube->Render();
 	left_cube->Render();
 
+	for (int i = 0; i < balls.size(); ++i) {
+		balls[i]->GetTransform(&spheres[i]->transform);
+		spheres[i]->Render();
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -92,6 +99,61 @@ update_status ModulePhysics::PostUpdate(float dt)
 	BROFILER_CATEGORY("PhysicsPostUpdate", Profiler::Color::Yellow);
 
 	return UPDATE_CONTINUE;
+}
+
+bool ModulePhysics::CleanUp()
+{
+	LOG("Destroying Physics module");
+
+	// Remove from the world all collision bodies
+	for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
+	{
+		btCollisionObject* obj = world->getCollisionObjectArray()[i];
+		world->removeCollisionObject(obj);
+	}
+
+	// Clear all the constraints
+	for (int i = 0; i < constraints.size(); ++i)
+	{
+		world->removeConstraint(constraints[i]);
+		RELEASE(constraints[i]);
+	}
+	constraints.clear();
+
+	// Clear all the lists
+	for (int i = 0; i < motions.size(); ++i)
+		RELEASE(motions[i])
+
+	motions.clear();
+
+	for (int i = 0; i < shapes.size(); ++i)
+		RELEASE(shapes[i])
+
+	shapes.clear();
+
+	for (int i = 0; i < bodies.size(); ++i)
+		RELEASE(bodies[i])
+
+	bodies.clear();
+
+	for (int i = 0; i < vehicles.size(); ++i)
+			RELEASE(vehicles[i])
+
+	vehicles.clear();
+
+	ClearBalls();
+
+	// Delete the pointers
+	RELEASE(left_cube);
+	RELEASE(right_cube);
+	RELEASE(vehicle_raycaster);
+	RELEASE(world);
+	RELEASE(solver);
+	RELEASE(broad_phase);
+	RELEASE(dispatcher);
+	RELEASE(collision_conf);
+
+	return true;
 }
 
 ComponentRigidbody* ModulePhysics::AddBody(const PrimitiveCube& cube, float mass)
@@ -120,59 +182,35 @@ ComponentRigidbody* ModulePhysics::AddBody(const PrimitiveCube& cube, float mass
 	return pbody;
 }
 
-bool ModulePhysics::CleanUp()
+void ModulePhysics::ShootBall()
 {
-	LOG("Destroying Physics module");
+	PrimitiveSphere* sphere = new PrimitiveSphere(0.5);
+	sphere->color.Set(Yellow.r, Yellow.g, Yellow.b);
+	sphere->SetPos(App->camera->camera->frustum.pos.x, App->camera->camera->frustum.pos.y, App->camera->camera->frustum.pos.z + 5);
+	spheres.push_back(sphere);
 
-	// Remove from the world all collision bodies
-	for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
-	{
-		btCollisionObject* obj = world->getCollisionObjectArray()[i];
-		world->removeCollisionObject(obj);
-	}
+	float mass = 1.0f;
+	btCollisionShape* colShape = new btSphereShape(sphere->radius);
+	shapes.push_back(colShape);
 
-	// Clear all the lists
-	for (int i = 0; i < constraints.size(); ++i)
-	{
-		world->removeConstraint(constraints[i]);
-		RELEASE(constraints[i]);
-	}
+	btTransform startTransform;
+	startTransform.setFromOpenGLMatrix(&sphere->transform);
 
-	constraints.clear();
+	btVector3 localInertia(0, 0, 0);
+	colShape->calculateLocalInertia(mass, localInertia);
 
-	for (int i = 0; i < motions.size(); ++i)
-		RELEASE(motions[i])
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	motions.push_back(myMotionState);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
-	motions.clear();
+	btRigidBody* body = new btRigidBody(rbInfo);
+	ComponentRigidbody* pbody = new ComponentRigidbody(body);
+	pbody->Push(App->player->vehicle->GetForwardVector().x, App->player->vehicle->GetForwardVector().y, App->player->vehicle->GetForwardVector().z * 15);
 
-	for (int i = 0; i < shapes.size(); ++i)
-		RELEASE(shapes[i])
-
-	shapes.clear();
-
-	for (int i = 0; i < bodies.size(); ++i)
-		RELEASE(bodies[i])
-
-	bodies.clear();
-
-	if (vehicles.size() > 1) {
-		for (int i = 0; i < vehicles.size(); ++i)
-			RELEASE(vehicles[i])
-
-		vehicles.clear();
-	}
-
-	// Delete the pointers
-	RELEASE(left_cube);
-	RELEASE(right_cube);
-	RELEASE(vehicle_raycaster);
-	RELEASE(world);
-	RELEASE(solver);
-	RELEASE(broad_phase);
-	RELEASE(dispatcher);
-	RELEASE(collision_conf);
-
-	return true;
+	body->setUserPointer(pbody);
+	world->addRigidBody(body);
+	physBalls.push_back(body);
+	balls.push_back(pbody);
 }
 
 // Cretes a vehicle and adds it to the scene
@@ -276,4 +314,18 @@ void ModulePhysics::DeleteTestConstraint()
 	}
 
 	constraints.clear();
+}
+
+void ModulePhysics::ClearBalls() 
+{
+	// Clear all the debug balls
+	for (int i = 0; i < physBalls.size(); ++i)
+		world->removeCollisionObject(physBalls[i]);
+
+	for (int i = 0; i < balls.size(); ++i) {
+		RELEASE(balls[i]);
+		RELEASE(spheres[i]);
+	}
+	balls.clear();
+	spheres.clear();
 }

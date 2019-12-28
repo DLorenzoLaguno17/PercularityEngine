@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "glmath.h"
+#include "Primitive.h"
 #include "Bullet/include/btBulletDynamicsCommon.h"
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
@@ -11,7 +12,6 @@
 
 struct PhysVehicle;
 struct VehicleInfo;
-class PrimitiveCube;
 class ComponentRigidbody;
 
 class ModulePhysics :public Module
@@ -33,6 +33,8 @@ public:
 	PhysVehicle* AddVehicle(const VehicleInfo &info);
 	void CreateTestConstraint();
 	void DeleteTestConstraint();
+	void ShootBall();
+	void ClearBalls();
 
 	void AddConstraintP2P(ComponentRigidbody& bodyA, ComponentRigidbody& bodyB, const vec3& anchorA, const vec3& anchorB);
 	void AddConstraintHinge(ComponentRigidbody& bodyA, ComponentRigidbody& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
@@ -43,6 +45,10 @@ public:
 	std::vector<PhysVehicle*> vehicles;
 	std::vector<btTypedConstraint*> constraints;
 	std::vector<ComponentRigidbody*> bodies;
+
+	std::vector<ComponentRigidbody*> balls;
+	std::vector<PrimitiveSphere*> spheres;
+	std::vector<btRigidBody*> physBalls;
 
 private:
 	btDefaultCollisionConfiguration*		collision_conf = nullptr;

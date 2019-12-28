@@ -83,19 +83,30 @@ void ModuleCamera3D::FocusCameraOn(GameObject* object)
 	float3 boxCenter;
 	float vertexToCenter;
 
-	boxCenter = { object->aabb.CenterPoint().x,object->aabb.CenterPoint().y,object->aabb.CenterPoint().z };
+	boxCenter = { object->aabb.CenterPoint().x, object->aabb.CenterPoint().y, object->aabb.CenterPoint().z };
 
 	camera->frustum.pos = boxCenter;
-	//camera->Reference = boxCenter;
 
 	vertexToCenter = object->aabb.MinimalEnclosingSphere().r;
 
-	camera->frustum.pos -= camera->frustum.front * vertexToCenter*2.5;
+	camera->frustum.pos -= camera->frustum.front * vertexToCenter * 2.5;
+}
+
+// Makes the camera look in a certain direction
+void ModuleCamera3D::LookAt(const vec3 &Spot)
+{
+	/*Reference = Spot;
+
+	Z = normalize(Position - Reference);
+	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
+	Y = cross(Z, X);
+
+	CalculateViewMatrix();*/
 }
 
 void ModuleCamera3D::HandleUserInput(float dt)
 {
-	float3	newPos(0, 0, 0);
+	float3 newPos(0, 0, 0);
 	float speed = 10.0f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 20.0f * dt;
@@ -114,7 +125,7 @@ void ModuleCamera3D::HandleUserInput(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= camera->frustum.WorldRight() * speed;
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += camera->frustum.WorldRight() * speed;
 
-		CameraLookAround(speed*10, camera->frustum.pos);
+		CameraLookAround(speed * 10, camera->frustum.pos);
 
 		camera->frustum.pos += newPos;
 		reference += newPos;
@@ -142,8 +153,8 @@ void ModuleCamera3D::HandleUserInput(float dt)
 
 void ModuleCamera3D::CameraLookAround(float speed, float3 reference)
 {
-	float dx = -App->input->GetMouseXMotion()*speed;
-	float dy = -App->input->GetMouseYMotion()*speed;
+	float dx = -App->input->GetMouseXMotion() * speed;
+	float dy = -App->input->GetMouseYMotion() * speed;
 
 	math::Quat rotationX = math::Quat::RotateAxisAngle(float3::unitY, dx * DEGTORAD);
 	math::Quat rotationY = math::Quat::RotateAxisAngle(camera->frustum.WorldRight(), dy * DEGTORAD);
@@ -161,7 +172,5 @@ void ModuleCamera3D::CameraLookAround(float speed, float3 reference)
 
 void ModuleCamera3D::OnClick(const vec2& normMousePos)
 {
-
 	lastRay = App->renderer3D->GetCamera()->frustum.UnProjectLineSegment(normMousePos.x, normMousePos.y);
-
 }

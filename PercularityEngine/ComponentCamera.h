@@ -11,7 +11,7 @@ class ComponentCamera : public Component{
 	friend class ModuleCamera3D;
 
 public:
-	ComponentCamera(GameObject* parent=nullptr, bool active=false);
+	ComponentCamera(GameObject* parent = nullptr, bool active = false);
 	~ComponentCamera();
 
 	void Update();

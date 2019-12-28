@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleResourceManager.h"
+#include "ModulePhysics.h"
 #include "ModuleFileSystem.h"
 #include "ModuleGui.h"
 #include "ModuleInput.h"
@@ -202,6 +203,7 @@ void ModuleScene::ExitGame()
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 		playMode = false;
 		App->player->ResetCar();
+		App->physics->ClearBalls();
 
 		// Loads the former scene and then deletes the file
 		LoadScene("Temporal Scene", sceneAddress, false, true);

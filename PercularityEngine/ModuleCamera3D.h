@@ -25,12 +25,17 @@ public:
 
 	const LineSegment* GetLastRay()const { return &lastRay; }
 
-	//Focus camera on a gameObject
+	// Focus camera on a gameObject
 	void FocusCameraOn(GameObject* object);
+
+	// Makes the camera look in a certain direction
+	void LookAt(const vec3 &Spot);
+
+public:
+	ComponentCamera* camera = nullptr;
 
 private:
 	float3 reference = float3(0,0,0);
-	ComponentCamera* camera;
 	LineSegment lastRay;
 };
 
