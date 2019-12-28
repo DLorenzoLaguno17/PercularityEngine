@@ -20,7 +20,7 @@
     "User Interface": {
         "Configuration": true,
         "Console": true,
-        "Debug": false,
+        "Debug": true,
         "Hierarchy": true,
         "Inspector": true,
         "Project": true,

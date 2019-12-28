@@ -15,6 +15,9 @@ public:
 	// Called every frame
 	void Update();
 
+public:
+	bool activateConstraint = false;
+	bool physScene = false;
 };
 
 #endif
