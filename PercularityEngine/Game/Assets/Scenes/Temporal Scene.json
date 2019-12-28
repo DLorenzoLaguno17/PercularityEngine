@@ -1,5 +1,47 @@
 {
     "Game Objects": {
-        "Count": 0
+        "Count": 1,
+        "GameObject 1": {
+            "Components": {
+                "Material": {
+                    "Active": true,
+                    "Parent UUID": 45249086,
+                    "Resource UUID": 5,
+                    "UUID": 1164192954
+                },
+                "Mesh": {
+                    "Active": true,
+                    "F_Normals on": false,
+                    "Parent UUID": 45249086,
+                    "Resource UUID": 3,
+                    "UUID": 470099754,
+                    "V_Normals on": false
+                },
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 45249086,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 2075589904
+                }
+            },
+            "Name": "Plane",
+            "Parent UUID": 0,
+            "UUID": 45249086
+        }
     }
 }

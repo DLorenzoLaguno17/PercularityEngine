@@ -8,6 +8,7 @@
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
 #include "ModulePlayer.h"
+#include "ModulePhysics.h"
 
 #include "Time.h"
 #include "OpenGL.h"
@@ -566,6 +567,8 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
 
+	App->physics->AddRigidBody(OBB(item->aabb), item, 0.0f);
+
 	return item;
 }
 
@@ -616,6 +619,9 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
+
+
+	App->physics->AddRigidBody(OBB(item->aabb), item, 0.0f);
 
 	return item;
 }

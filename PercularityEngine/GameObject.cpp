@@ -3,7 +3,7 @@
 #include "ResourceMesh.h"
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
-#include "ComponentRigidbody.h"
+#include "ComponentRigidBody.h"
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "ModuleResourceLoader.h"
@@ -103,7 +103,7 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 		break;
 
 	case COMPONENT_TYPE::RIGIDBODY:
-		ret = new ComponentRigidbody(this, active);
+		ret = new ComponentRigidBody(this, active);
 		if (ret != nullptr) components.push_back(ret);
 		break;
 

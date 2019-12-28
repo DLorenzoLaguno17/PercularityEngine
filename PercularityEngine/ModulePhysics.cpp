@@ -2,12 +2,14 @@
 #include "ModulePhysics.h"
 #include "ModuleScene.h"
 #include "GameObject.h"
-#include "ComponentRigidbody.h"
+#include "ComponentRigidBody.h"
 #include "ComponentTransform.h"
 #include "PhysVehicle.h"
 #include "Globals.h"
 #include "stdio.h"
 #include "OpenGL.h"
+#include "GameObject.h"
+#include "Time.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
@@ -57,6 +59,7 @@ bool ModulePhysics::Start()
 	btRigidBody* body = new btRigidBody(rbInfo);
 	world->addRigidBody(body);
 	world->setDebugDrawer(debugDrawer);
+
 	return true;
 }
 
@@ -64,33 +67,8 @@ update_status ModulePhysics::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("PhysicsPreUpdate", Profiler::Color::Orange);
 
-	world->stepSimulation(dt, 15);
-
-	
-
-	/*int manifolds = world->getDispatcher()->getNumManifolds();
-	for (int i = 0; i < manifolds; i++)
-	{
-		btPersistentManifold* contactManifold = world->getDispatcher()->getManifoldByIndexInternal(i);
-		btCollisionObject* object_A = (btCollisionObject*)(contactManifold->getBody0());
-		btCollisionObject* object_B = (btCollisionObject*)(contactManifold->getBody1());
-
-		int numContacts = contactManifold->getNumContacts();
-		if (numContacts > 0)
-		{
-			PhysBody* physbody_A = (PhysBody*)object_A->getUserPointer();
-			PhysBody* physbody_B = (PhysBody*)object_B->getUserPointer();
-
-			if (physbody_A && physbody_B)
-			{
-				for (int i = 0; i < physbody_A->collision_listeners.size(); ++i)
-					physbody_A->collision_listeners[i]->OnCollision(physbody_A, physbody_B);
-
-				for (int i = 0; i < physbody_B->collision_listeners.size(); ++i)
-					physbody_B->collision_listeners[i]->OnCollision(physbody_B, physbody_A);
-			}
-		}
-	}*/
+	if (Time::running)
+		world->stepSimulation(dt, 15);
 
 	return UPDATE_CONTINUE;
 }
@@ -113,7 +91,7 @@ void ModulePhysics::AddRigidBody()
 {
 	// First we create the Component Rigidbody and the collision shape
 	float mass = 30.0f;
-	ComponentRigidbody* rigidbody = (ComponentRigidbody*)App->scene->selected->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+	ComponentRigidBody* rigidbody = (ComponentRigidBody*)App->scene->selected->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
 	btCollisionShape* colShape = new btBoxShape(btVector3(4 * 0.5f, 4 * 0.5f, 4 * 0.5f));
 	shapes.push_back(colShape);
 
@@ -160,18 +138,18 @@ bool ModulePhysics::CleanUp()
 	for (int i = 0; i < motions.size(); ++i)
 		RELEASE(motions[i])
 
-	motions.clear();
+		motions.clear();
 
 	for (int i = 0; i < shapes.size(); ++i)
 		RELEASE(shapes[i])
 
-	shapes.clear();
+		shapes.clear();
 
 	if (vehicles.size() > 1) {
 		for (int i = 0; i < vehicles.size(); ++i)
 			RELEASE(vehicles[i])
 
-		vehicles.clear();
+			vehicles.clear();
 	}
 
 	// Delete the pointers
@@ -183,6 +161,53 @@ bool ModulePhysics::CleanUp()
 	RELEASE(collision_conf);
 
 	return true;
+}
+
+ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box,  GameObject* gameObject, float mass)
+{
+	btCollisionShape* colShape = new btBoxShape(btVector3(box.HalfSize().x, box.HalfSize().y, box.HalfSize().z));
+
+	btTransform transform;
+	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+
+	btVector3 localInertia(0, 0, 0);
+	if (mass != 0.f)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
+	motions.push_back(myMotionState);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+
+	btRigidBody* body = new btRigidBody(rbInfo);
+	ComponentRigidBody* component = new ComponentRigidBody(body);
+
+	world->addRigidBody(body);
+	
+	return component;
+	/*
+	btCollisionShape* colShape = new btSphereShape(sphere.radius);
+	shapes.add(colShape);
+
+	btTransform startTransform;
+	startTransform.setFromOpenGLMatrix(&sphere.transform);
+
+	btVector3 localInertia(0, 0, 0);
+	if (mass != 0.f)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	motions.add(myMotionState);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+
+	btRigidBody* body = new btRigidBody(rbInfo);
+	PhysBody3D* pbody = new PhysBody3D(body);
+
+	body->setUserPointer(pbody);
+	world->addRigidBody(body);
+	bodies.add(pbody);
+
+	return pbody;*/
 }
 
 // Cretes a vehicle and adds it to the scene
@@ -244,7 +269,7 @@ PhysVehicle* ModulePhysics::AddVehicle(const VehicleInfo &info)
 }
 
 // Constraint creators
-void ModulePhysics::AddConstraintP2P(ComponentRigidbody &bodyA, ComponentRigidbody &bodyB, const vec3 &anchorA, const vec3 &anchorB)
+void ModulePhysics::AddConstraintP2P(ComponentRigidBody &bodyA, ComponentRigidBody &bodyB, const vec3 &anchorA, const vec3 &anchorB)
 {
 	btTypedConstraint* p2p = new btPoint2PointConstraint(
 		*(bodyA.body),
@@ -257,7 +282,7 @@ void ModulePhysics::AddConstraintP2P(ComponentRigidbody &bodyA, ComponentRigidbo
 	p2p->setDbgDrawSize(2.0f);
 }
 
-void ModulePhysics::AddConstraintHinge(ComponentRigidbody &bodyA, ComponentRigidbody &bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
+void ModulePhysics::AddConstraintHinge(ComponentRigidBody &bodyA, ComponentRigidBody &bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
 {
 	btHingeConstraint* hinge = new btHingeConstraint(
 		*(bodyA.body),
@@ -279,7 +304,7 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 	glLineWidth(1.0f);
 	glBegin(GL_LINES);
 
-	glColor3f(0, 255, 0);
+	glColor3f(color.x(), color.y(), color.z());
 
 	glVertex3f(from.x(), from.y(), from.z());
 	glVertex3f(to.x(), to.y(), to.z());

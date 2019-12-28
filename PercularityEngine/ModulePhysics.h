@@ -10,8 +10,18 @@
 
 struct PhysVehicle;
 struct VehicleInfo;
-class ComponentRigidbody;
+class ComponentRigidBody;
 class DebugDrawer;
+class ComponentMesh;
+class GameObject;
+
+enum class SHAPE_TYPE {
+	none=-1,
+	BOX,
+	CAPSULE,
+	SPHERE,
+	CONVEX_HULL
+};
 
 class ModulePhysics :public Module
 {
@@ -28,11 +38,13 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 
+	ComponentRigidBody* AddRigidBody(OBB& box,  GameObject* gameObject,float mass = 1.0f );
+
 	void AddRigidBody();
 	PhysVehicle* AddVehicle(const VehicleInfo &info);
 
-	void AddConstraintP2P(ComponentRigidbody& bodyA, ComponentRigidbody& bodyB, const vec3& anchorA, const vec3& anchorB);
-	void AddConstraintHinge(ComponentRigidbody& bodyA, ComponentRigidbody& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
+	void AddConstraintP2P(ComponentRigidBody& bodyA, ComponentRigidBody& bodyB, const vec3& anchorA, const vec3& anchorB);
+	void AddConstraintHinge(ComponentRigidBody& bodyA, ComponentRigidBody& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
 
 public:
 	std::vector<btCollisionShape*> shapes;
