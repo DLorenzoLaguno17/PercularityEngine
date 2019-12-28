@@ -62,12 +62,12 @@ bool ModulePhysics::Start()
 	// Creating cubes for the test constraint
 	right_cube = new PrimitiveCube(3, 4, 3);
 	left_cube = new PrimitiveCube(3, 4, 3);	
-	right_cube->SetPos(10, 2, 25);
-	left_cube->SetPos(-10, 2, 25);
+	right_cube->SetPos(5, 2, 25);
+	left_cube->SetPos(-5, 2, 25);
 	right_cube->color.Set(Red.r, Red.g, Red.b);
 	left_cube->color.Set(Green.r, Green.g, Green.b);
 	right_body = App->physics->AddCube(*right_cube, 15.0f);
-	left_body = App->physics->AddCube(*right_cube, 15.0f);
+	left_body = App->physics->AddCube(*left_cube, 15.0f);
 
 	// Set debug mode to wireframe
 	debugDrawer->setDebugMode(1);
@@ -281,7 +281,7 @@ void ModulePhysics::ShootBall()
 {
 	PrimitiveSphere* sphere = new PrimitiveSphere(0.5);
 	sphere->color.Set(Yellow.r, Yellow.g, Yellow.b);
-	sphere->SetPos(App->camera->camera->frustum.pos.x, App->camera->camera->frustum.pos.y, App->camera->camera->frustum.pos.z + 5);
+	sphere->SetPos(App->camera->camera->frustum.pos.x, App->camera->camera->frustum.pos.y, App->camera->camera->frustum.pos.z);
 	spheres.push_back(sphere);
 
 	float mass = 1.0f;
@@ -300,7 +300,7 @@ void ModulePhysics::ShootBall()
 
 	btRigidBody* body = new btRigidBody(rbInfo);
 	ComponentRigidBody* pbody = new ComponentRigidBody(body);
-	pbody->Push(App->player->vehicle->GetForwardVector().x, App->player->vehicle->GetForwardVector().y, App->player->vehicle->GetForwardVector().z * 25);
+	pbody->Push(App->camera->camera->frustum.front.x * 25, App->camera->camera->frustum.front.y * 25, App->camera->camera->frustum.front.z * 25);
 
 	body->setUserPointer(pbody);
 	world->addRigidBody(body);

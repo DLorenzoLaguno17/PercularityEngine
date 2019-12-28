@@ -169,9 +169,7 @@ update_status ModulePlayer::Update(float dt)
 		vehicle->Brake(brake);
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		{
 			App->physics->ShootBall();
-		}
 
 		vehicle->Render();
 
