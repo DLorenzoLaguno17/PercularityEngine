@@ -103,6 +103,11 @@ void ComponentTransform::SetLocalTransform(float4x4 transform)
 	mustUpdate = true;
 }
 
+void ComponentTransform::SetGlobalTransform(float4x4 transform)
+{
+	globalTransform = transform;
+}
+
 void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 {
 	float3 angleIncrease = (eulerAngle - eulerRotation)*DEGTORAD;

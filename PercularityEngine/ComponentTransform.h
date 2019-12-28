@@ -34,12 +34,13 @@ public:
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
-private:
+public:
 	//Update transform
 	void UpdateTransform();
 	void UpdateRenderTransform();//float4x4 -> mat4x4
 	void Move(float3 positionIncrease);
 	void Scale(float3 scale_);
+	void SetGlobalTransform(float4x4 tranform);
 	void SetLocalTransform(float4x4 tranform);
 	void SetToZero();
 	void SetEulerRotation(float3 eulerAngles);

@@ -60,6 +60,8 @@ bool ModulePhysics::Start()
 	world->addRigidBody(body);
 	world->setDebugDrawer(debugDrawer);
 
+	debugDrawer->setDebugMode(1);
+
 	return true;
 }
 
@@ -84,6 +86,7 @@ update_status ModulePhysics::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("PhysicsPostUpdate", Profiler::Color::Yellow);
 	world->debugDrawWorld();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -167,6 +170,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box,  GameObject* gameObjec
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(box.HalfSize().x, box.HalfSize().y, box.HalfSize().z));
 
+
 	btTransform transform;
 	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
 
@@ -183,31 +187,30 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box,  GameObject* gameObjec
 	ComponentRigidBody* component = new ComponentRigidBody(body);
 
 	world->addRigidBody(body);
-	
-	return component;
-	/*
-	btCollisionShape* colShape = new btSphereShape(sphere.radius);
-	shapes.add(colShape);
 
-	btTransform startTransform;
-	startTransform.setFromOpenGLMatrix(&sphere.transform);
+	return component;
+}
+
+ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* gameObject, float mass)
+{
+	btCollisionShape* colShape = new btSphereShape(sphere.r);
+	btTransform transform;
+	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
 
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)
 		colShape->calculateLocalInertia(mass, localInertia);
 
-	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-	motions.add(myMotionState);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
+	motions.push_back(myMotionState);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	PhysBody3D* pbody = new PhysBody3D(body);
+	ComponentRigidBody* component = new ComponentRigidBody(body);
 
-	body->setUserPointer(pbody);
 	world->addRigidBody(body);
-	bodies.add(pbody);
-
-	return pbody;*/
+	return component;
 }
 
 // Cretes a vehicle and adds it to the scene
@@ -301,7 +304,7 @@ void ModulePhysics::AddConstraintHinge(ComponentRigidBody &bodyA, ComponentRigid
 //~~~~	DEBUG DRAWER	~~~~
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	glLineWidth(1.0f);
+	glLineWidth(2.0f);
 	glBegin(GL_LINES);
 
 	glColor3f(color.x(), color.y(), color.z());
@@ -309,6 +312,7 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 	glVertex3f(from.x(), from.y(), from.z());
 	glVertex3f(to.x(), to.y(), to.z());
 	
+	glColor3f(255, 255, 255);
 	glEnd();
 }
 

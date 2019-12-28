@@ -2,6 +2,9 @@
 #include "ModulePhysics.h"
 #include "ComponentRigidBody.h"
 #include "ImGui/imgui.h"
+#include "GameObject.h"
+#include "ComponentTransform.h"
+#include "Time.h"
 
 #include "mmgr/mmgr.h"
 
@@ -13,7 +16,12 @@ ComponentRigidBody::ComponentRigidBody(btRigidBody* body) : body(body)
 	body->setUserPointer(this);
 }
 
-void ComponentRigidBody::Update() {}
+void ComponentRigidBody::Update() {
+	/*if (Time::running)
+	{
+		body->getWorldTransform().getOpenGLMatrix(&gameObject->transform->renderTransform);
+	}*/
+}
 
 void ComponentRigidBody::OnEditor()
 {

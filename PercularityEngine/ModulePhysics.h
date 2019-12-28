@@ -39,6 +39,7 @@ public:
 	update_status PostUpdate(float dt);
 
 	ComponentRigidBody* AddRigidBody(OBB& box,  GameObject* gameObject,float mass = 1.0f );
+	ComponentRigidBody* AddRigidBody(Sphere& sphere, GameObject* gameObject, float mass = 1.0f);
 
 	void AddRigidBody();
 	PhysVehicle* AddVehicle(const VehicleInfo &info);

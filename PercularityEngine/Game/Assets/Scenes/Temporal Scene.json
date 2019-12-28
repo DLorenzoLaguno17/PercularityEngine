@@ -5,21 +5,21 @@
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 45249086,
+                    "Parent UUID": 1292290555,
                     "Resource UUID": 5,
-                    "UUID": 1164192954
+                    "UUID": 925523670
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 45249086,
-                    "Resource UUID": 3,
-                    "UUID": 470099754,
+                    "Parent UUID": 1292290555,
+                    "Resource UUID": 1,
+                    "UUID": 1069914872,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 45249086,
+                    "Parent UUID": 1292290555,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -32,16 +32,16 @@
                         1.0
                     ],
                     "Translation": [
-                        0.0,
+                        18.899999618530273,
                         0.0,
                         0.0
                     ],
-                    "UUID": 2075589904
+                    "UUID": 1733338590
                 }
             },
-            "Name": "Plane",
+            "Name": "Sphere",
             "Parent UUID": 0,
-            "UUID": 45249086
+            "UUID": 1292290555
         }
     }
 }
