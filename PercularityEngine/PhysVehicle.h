@@ -1,7 +1,7 @@
 #ifndef	__PhysVehicle_H__
 #define	__PhysVehicle_H__
 
-#include "ComponentRigidbody.h"
+#include "ComponentRigidBody.h"
 #include "glmath.h"
 
 class btRaycastVehicle;
@@ -37,7 +37,7 @@ struct VehicleInfo
 	int num_wheels;
 };
 
-struct PhysVehicle : public ComponentRigidbody
+struct PhysVehicle : public ComponentRigidBody
 {
 public:
 	PhysVehicle(btRigidBody* body, btRaycastVehicle* vehicle, const VehicleInfo& info);

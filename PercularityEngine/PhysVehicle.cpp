@@ -5,7 +5,7 @@
 
 // ----------------------------------------------------------------------------
 PhysVehicle::PhysVehicle(btRigidBody* body, btRaycastVehicle* vehicle, const VehicleInfo& info) : 
-	ComponentRigidbody(body), vehicle(vehicle), info(info) {}
+	ComponentRigidBody(body), vehicle(vehicle), info(info) {}
 
 // ----------------------------------------------------------------------------
 PhysVehicle::~PhysVehicle()

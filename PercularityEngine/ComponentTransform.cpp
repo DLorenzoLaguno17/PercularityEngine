@@ -103,12 +103,30 @@ void ComponentTransform::SetLocalTransform(float4x4 transform)
 	mustUpdate = true;
 }
 
+void ComponentTransform::SetGlobalTransform(float4x4 transform)
+{
+	globalTransform = transform;
+}
+
 void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 {
 	float3 angleIncrease = (eulerAngle - eulerRotation)*DEGTORAD;
 	Quat newRotation = Quat::FromEulerXYZ(angleIncrease.x, angleIncrease.y, angleIncrease.z);
 	rotation = rotation * newRotation;
 	eulerRotation = eulerAngle;
+	mustUpdate = true;
+}
+
+//TEST
+void ComponentTransform::SetLocalTransform(mat4x4 transform)
+{
+	float4x4 newTransform;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			newTransform[j][i] = transform.M[i * 4 + j];
+
+	newTransform.Decompose(translation, rotation, scale);
+	eulerRotation = rotation.ToEulerXYZ().Abs();
 	mustUpdate = true;
 }
 

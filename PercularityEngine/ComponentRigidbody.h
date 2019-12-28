@@ -7,11 +7,11 @@ class btRigidBody;
 class btQuaternion;
 class Module;
 
-class ComponentRigidbody : public Component {
+class ComponentRigidBody : public Component {
 public:
-	ComponentRigidbody(GameObject* parent, bool active);
-	ComponentRigidbody(btRigidBody* body);
-	~ComponentRigidbody() {}
+	ComponentRigidBody(GameObject* parent, bool active);
+	ComponentRigidBody(btRigidBody* body);
+	~ComponentRigidBody() {}
 
 	// Methods
 	void Update() override;

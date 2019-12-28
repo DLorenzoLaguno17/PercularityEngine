@@ -1,5 +1,47 @@
 {
     "Game Objects": {
-        "Count": 0
+        "Count": 1,
+        "GameObject 1": {
+            "Components": {
+                "Material": {
+                    "Active": true,
+                    "Parent UUID": 1631482159,
+                    "Resource UUID": 5,
+                    "UUID": 1037442397
+                },
+                "Mesh": {
+                    "Active": true,
+                    "F_Normals on": false,
+                    "Parent UUID": 1631482159,
+                    "Resource UUID": 1,
+                    "UUID": 1263933689,
+                    "V_Normals on": false
+                },
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 1631482159,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 714334615
+                }
+            },
+            "Name": "Sphere",
+            "Parent UUID": 0,
+            "UUID": 1631482159
+        }
     }
 }
