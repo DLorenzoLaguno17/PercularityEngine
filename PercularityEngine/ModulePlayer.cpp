@@ -176,12 +176,12 @@ update_status ModulePlayer::Update(float dt)
 		vehicle->Render();
 
 		// Camera from the car's point of view
-		if (!freeCamera) {
+		/*if (!freeCamera) {
 			App->camera->LookAt(vehicle->GetPosition());
 			vec3 temp = (vehicle->GetPosition() - vehicle->GetForwardVector() * 10) + vec3(0, 4, 0);
 			float3 finalPos = { temp.x, temp.y, temp.z };
 			App->camera->camera->frustum.pos = finalPos;
-		}
+		}*/
 	}
 
 	return UPDATE_CONTINUE;

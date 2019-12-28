@@ -29,7 +29,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 
-	ComponentRigidbody* AddBody(const PrimitiveCube& cube, float mass);
+	ComponentRigidbody* AddPrimitiveBody(const PrimitiveCube& cube, float mass);
 	PhysVehicle* AddVehicle(const VehicleInfo &info);
 	void CreateTestConstraint();
 	void DeleteTestConstraint();

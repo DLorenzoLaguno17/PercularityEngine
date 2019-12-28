@@ -63,8 +63,8 @@ bool ModulePhysics::Start()
 	left_cube->SetPos(0, 2, 25);
 	right_cube->color.Set(Red.r, Red.g, Red.b);
 	left_cube->color.Set(Green.r, Green.g, Green.b);
-	right_body = App->physics->AddBody(*right_cube, 15.0f);
-	left_body = App->physics->AddBody(*right_cube, 15.0f);
+	right_body = App->physics->AddPrimitiveBody(*right_cube, 15.0f);
+	left_body = App->physics->AddPrimitiveBody(*right_cube, 15.0f);
 
 	return true;
 }
@@ -156,7 +156,7 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
-ComponentRigidbody* ModulePhysics::AddBody(const PrimitiveCube& cube, float mass)
+ComponentRigidbody* ModulePhysics::AddPrimitiveBody(const PrimitiveCube& cube, float mass)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(cube.size.x * 0.5f, cube.size.y * 0.5f, cube.size.z * 0.5f));
 	shapes.push_back(colShape);
@@ -205,7 +205,7 @@ void ModulePhysics::ShootBall()
 
 	btRigidBody* body = new btRigidBody(rbInfo);
 	ComponentRigidbody* pbody = new ComponentRigidbody(body);
-	pbody->Push(App->player->vehicle->GetForwardVector().x, App->player->vehicle->GetForwardVector().y, App->player->vehicle->GetForwardVector().z * 15);
+	pbody->Push(App->player->vehicle->GetForwardVector().x, App->player->vehicle->GetForwardVector().y, App->player->vehicle->GetForwardVector().z * 25);
 
 	body->setUserPointer(pbody);
 	world->addRigidBody(body);
