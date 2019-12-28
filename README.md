@@ -1,11 +1,17 @@
-# Percularity Engine
-Percularity is a game engine that has been developed in the Video Games degree in Universitat Politècnica de Catalunya for student purposes.
+Percularity is a a game engine programmed from scratch with `C++` using open third-party libraries. It has been developed by [Daniel Lorenzo](https://www.linkedin.com/in/daniel-lorenzo-laguno-a2ab35180/) & [Joan Marín](https://www.linkedin.com/in/joan-marín-encinas-6a4693191/), two third course students of the [Bachelor's Degree in Video Games by UPC at CITM](https://www.citm.upc.edu/ing/estudis/graus-videojocs/). The purpouse of the subject was to build a game engine useful enough it could allow us to develop a game with the whole class as a big team. Using pairs, each team developed their own version of the program with the idea of mergeing the best parts of each of them into the best game engine we could get.
 
-Go to our GitHub: https://github.com/DLorenzoLaguno17/PercularityEngine
+Donwload Percularity's [latest release](https://github.com/DLorenzoLaguno17/PercularityEngine/releases)!
+Check out our [GitHub](https://github.com/DLorenzoLaguno17/PercularityEngine) repository! 
+
+# About Percularity
 
 ## Main core sub-systems
+The main core sub-systems that form Percularity are the **resource manager**, the **physics** sub-system
 
-## Libraries used
+## Specialized sub-system
+Since we wanted the engine to be used for creating the game, each pair of students specialyzed the last delivery of the game engine development in one specific subsystem. The sub-system we chose was **physics**. With it, we programmed the possibility of adding **ridigbodies** as GameObject components, and we implemented the possibility of controlling a car in **Game mode**, which can interact with the scene and its collisions. Appart from that, the user can shoot spheres from the camera also to test the physics and we have added a sphere collider around the camera that prevents it from getting inside the meshes of the GameObjects.
+
+## Third-party libraries used
 * [SDL v2.0.6](https://www.libsdl.org/)
 * [STL v2.0](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
 * [Dear ImGui v1.72b](https://github.com/ocornut/imgui)
@@ -15,55 +21,28 @@ Go to our GitHub: https://github.com/DLorenzoLaguno17/PercularityEngine
 * [Assimp 4.1](http://assimp.org/)
 * [DevIL v1.8](http://openil.sourceforge.net/)
 * [PhysFS v3.0.2](https://icculus.org/physfs/)
+* [Nlohmann's JSON v3.7.3](https://github.com/nlohmann/json)
+* [Bullet]()
 
-## Innovation
+# Tasks delivered by each team member
 
-We have implemented a debug window with which the user can decide wether to activate or not the frustum culling and there is another menu that shows the current performance of the engine and how the changes on the debug window affect it.
-
-## Controls
-
-### Camera movement
-
-* F - Focus the camera on the selected GameObject
-
-* Hold right click - rotate the camera
-* Hold middle click - Move the camera at will
-* Mouse scroll - Zoom in & out
-
-* F1 - In Play mode, switch between car camera and free camera
-
-While right clicking:
-* W - Move camera up
-* S - Move camera down
-* A - Move camera left
-* D - Move camera right
-* T - Rise the camera
-* G - Descend the camera
-
-* Left shift - Duplicate camera movement speed
-
-### Save & Load
-
-* CTRL + S - Save the scene
-* CTRL + L - Load the scene
-
-Note: for the moment, each time a scene is saved, it is placed at Assets/Scenes/ and it's always called Scene.json, and only scenes named like that can be loaded by now.
-
-## Tasks delivered by each member
-
-### Joan Marín
+## Joan Marín
 * Camera component.
 * Frustum culling.
 * Mousepicking.
 * GameObject transformations.
 * Quadtrees and octrees.
+* Physicalization of the GameObjects.
 
-### Daniel Lorenzo
-* Import and export of files.
+## Daniel Lorenzo
+* User interface.
+* GameObjects.
+* Import and export of textures and models.
 * Own file format.
 * Serialization of the scene.
 * Resource manager.
+* Mesh, material and rigidbody components.
+* Car and spheres to test the collisions of the scene.
 
-## License
-This game engine has been created by third course students [Joan Marín](https://github.com/X0KA) and [Daniel Lorenzo](https://github.com/DLorenzoLaguno17).
-Licensed under the [MIT License](LICENSE).
+# License
+This game engine is licensed under the [MIT License](LICENSE).
