@@ -23,6 +23,7 @@ public:
 	const float3& GetEulerRotation() const { return eulerRotation; }
 	const float3& GetTranslation() const { return translation; }
 	const float3& GetScale() const { return scale; }
+	const mat4x4 GetGlobalGLTransform()const ;
 
 	// Setters
 	void SetScale(float3 newScale);

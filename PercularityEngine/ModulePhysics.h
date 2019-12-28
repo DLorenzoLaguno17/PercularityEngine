@@ -53,6 +53,7 @@ public:
 	std::vector<btDefaultMotionState*> motions;
 	std::vector<PhysVehicle*> vehicles;
 	std::vector<btTypedConstraint*> constraints;
+	std::vector<ComponentRigidBody*> rigidBodies;
 
 private:
 	btDefaultCollisionConfiguration*		collision_conf = nullptr;

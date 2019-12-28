@@ -84,6 +84,16 @@ void ComponentTransform::UpdateRenderTransform()
 			renderTransform.M[i * 4 + j] = globalTransform[j][i];
 }
 
+const mat4x4 ComponentTransform::GetGlobalGLTransform()const
+{
+	mat4x4 ret;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			ret.M[i * 4 + j] = globalTransform[j][i];
+
+	return ret;
+}
+
 void ComponentTransform::Move(float3 positionIncrease)
 {
 	translation += positionIncrease;
@@ -117,7 +127,6 @@ void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 	mustUpdate = true;
 }
 
-//TEST
 void ComponentTransform::SetLocalTransform(mat4x4 transform)
 {
 	float4x4 newTransform;

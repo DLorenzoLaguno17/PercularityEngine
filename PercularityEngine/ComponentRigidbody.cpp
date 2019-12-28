@@ -17,11 +17,20 @@ ComponentRigidBody::ComponentRigidBody(btRigidBody* body) : body(body)
 }
 
 void ComponentRigidBody::Update() {
-	if (Time::running)
+	if (gameObject != nullptr)
 	{
-		static mat4x4 newTransform;
-		body->getWorldTransform().getOpenGLMatrix(&newTransform);
-		gameObject->transform->SetLocalTransform(newTransform);
+		if (Time::running)
+		{
+			static mat4x4 newTransform;
+			body->getWorldTransform().getOpenGLMatrix(&newTransform);
+			gameObject->transform->SetLocalTransform(newTransform);
+		}
+		else
+		{
+			btTransform newTransform;
+			newTransform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
+			body->setWorldTransform(newTransform);
+		}
 	}
 }
 

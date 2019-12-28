@@ -191,6 +191,9 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box,  GameObject* gameObjec
 	world->addRigidBody(body);
 	rigidBodies.push_back(component);
 
+	component->gameObject = gameObject;
+	gameObject->components.push_back(component);
+
 	return component;
 }
 
@@ -218,6 +221,10 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* game
 
 	rigidBodies.push_back(component);
 
+
+	component->gameObject = gameObject;
+	gameObject->components.push_back(component);
+
 	return component;
 }
 
@@ -244,6 +251,9 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Capsule& capsule, GameObject* ga
 	world->addRigidBody(body);
 
 	rigidBodies.push_back(component);
+
+	component->gameObject = gameObject;
+	gameObject->components.push_back(component);
 
 	return component;
 }
