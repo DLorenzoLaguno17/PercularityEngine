@@ -21,8 +21,9 @@ void ComponentMaterial::OnEditor() {
 	}
 }
 
-void ComponentMaterial::CleanUp() {
-	resource_tex->DecreaseReferenceCount();
+void ComponentMaterial::CleanUp() 
+{
+	//resource_tex->DecreaseReferenceCount();
 }
 
 // Load & Save 

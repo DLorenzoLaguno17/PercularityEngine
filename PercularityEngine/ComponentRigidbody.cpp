@@ -19,7 +19,7 @@ ComponentRigidBody::ComponentRigidBody(btRigidBody* body) : body(body)
 void ComponentRigidBody::Update() {
 	if (gameObject != nullptr)
 	{
-		if (Time::running)
+		if (Time::running || active == false)
 		{
 			static mat4x4 newTransform;
 			body->getWorldTransform().getOpenGLMatrix(&newTransform);
@@ -38,7 +38,6 @@ void ComponentRigidBody::OnEditor()
 {
 	if (ImGui::CollapsingHeader("RigidBody")) {
 		ImGui::Checkbox("Enabled", &active);
-
 
 		ImGui::NewLine();
 	}

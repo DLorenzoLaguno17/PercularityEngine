@@ -69,7 +69,7 @@ void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_f
 	if (size >= 3)
 		CreateComponent(COMPONENT_TYPE::MATERIAL);
 	if (size == 4)
-		CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+		App->physics->AddRigidBody(obb, this, 10.0f);
 
 	for (uint i = 0; i < components.size(); ++i)
 		components[i]->OnLoad(gameObjectNum, scene_file);
@@ -191,7 +191,6 @@ void GameObject::DrawAABB()
 		glColor3f(0.2, 0.2, 1); //Light green color
 	}
 
-
 	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
 
@@ -236,7 +235,7 @@ void GameObject::DrawAABB()
 void GameObject::UpdateAABB()
 {
 	ComponentMesh* mesh = GetComponent<ComponentMesh>();
-	if (mesh!=nullptr)
+	if (mesh != nullptr)
 	{
 		obb = mesh->GetAABB();
 		obb.Transform(transform->GetGlobalTransform());

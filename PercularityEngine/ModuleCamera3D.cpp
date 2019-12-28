@@ -17,13 +17,10 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
-ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
-{
-}
+ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : 
+	Module(app, start_enabled) {}
 
-ModuleCamera3D::~ModuleCamera3D()
-{}
-
+ModuleCamera3D::~ModuleCamera3D() {}
 
 bool ModuleCamera3D::Init()
 {

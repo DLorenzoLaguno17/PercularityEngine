@@ -340,7 +340,6 @@ public:
 		m_worldTransform = worldTrans;
 	}
 
-
 	SIMD_FORCE_INLINE btBroadphaseProxy*	getBroadphaseHandle()
 	{
 		return m_broadphaseHandle;
