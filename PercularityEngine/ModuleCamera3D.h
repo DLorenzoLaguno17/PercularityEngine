@@ -7,6 +7,7 @@
 
 class GameObject;
 class ComponentCamera;
+class ComponentRigidBody;
 
 class ModuleCamera3D : public Module
 {
@@ -33,6 +34,7 @@ public:
 
 public:
 	ComponentCamera* camera = nullptr;
+	ComponentRigidBody* body = nullptr;
 
 private:
 	float3 reference = float3(0,0,0);

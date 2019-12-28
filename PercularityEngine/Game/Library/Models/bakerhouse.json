@@ -5,7 +5,7 @@
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 758743585,
+                    "Parent UUID": 2128082531,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -22,32 +22,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 684382379
+                    "UUID": 42116927
                 }
             },
             "Name": "bakerhouse",
             "Parent UUID": 0,
-            "UUID": 758743585
+            "UUID": 2128082531
         },
         "GameObject 2": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1165932370,
-                    "Resource UUID": 250884418,
-                    "UUID": 178474760
+                    "Parent UUID": 907396512,
+                    "Resource UUID": 400801675,
+                    "UUID": 1054978189
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1165932370,
-                    "Resource UUID": 902112351,
-                    "UUID": 1339564527,
+                    "Parent UUID": 907396512,
+                    "Resource UUID": 1312834154,
+                    "UUID": 1958389704,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1165932370,
+                    "Parent UUID": 907396512,
                     "Rotation": [
                         -0.7071068286895752,
                         0.0,
@@ -64,32 +64,32 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 643158817
+                    "UUID": 1326118153
                 }
             },
             "Name": "Chimney",
-            "Parent UUID": 758743585,
-            "UUID": 1165932370
+            "Parent UUID": 2128082531,
+            "UUID": 907396512
         },
         "GameObject 3": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 657248809,
-                    "Resource UUID": 1214407254,
-                    "UUID": 1964834967
+                    "Parent UUID": 1775135667,
+                    "Resource UUID": 1492891582,
+                    "UUID": 1860797624
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 657248809,
-                    "Resource UUID": 893854970,
-                    "UUID": 1816248344,
+                    "Parent UUID": 1775135667,
+                    "Resource UUID": 1859694086,
+                    "UUID": 543799269,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 657248809,
+                    "Parent UUID": 1775135667,
                     "Rotation": [
                         -0.7071068286895752,
                         0.0,
@@ -106,12 +106,12 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1885264760
+                    "UUID": 1183871004
                 }
             },
             "Name": "Baker_house",
-            "Parent UUID": 758743585,
-            "UUID": 657248809
+            "Parent UUID": 2128082531,
+            "UUID": 1775135667
         }
     },
     "Resources": {
@@ -123,32 +123,32 @@
             "Name": "baker_house.dds",
             "Texture": 4,
             "Type": "Texture",
-            "UUID": 250884418,
+            "UUID": 400801675,
             "Width": 1024
         },
         "Resource 2": {
-            "Exported file": "/library/meshes/bakerhouse 1.mesh",
-            "File": "/Assets/FBX/bakerhouse.fbx",
-            "Name": "Baker_house",
-            "Type": "Mesh",
-            "UUID": 893854970
-        },
-        "Resource 3": {
             "Exported file": "/library/meshes/bakerhouse 0.mesh",
             "File": "/Assets/FBX/bakerhouse.fbx",
             "Name": "Chimney",
             "Type": "Mesh",
-            "UUID": 902112351
+            "UUID": 1312834154
         },
-        "Resource 4": {
+        "Resource 3": {
             "Exported file": "/library/textures/baker_house.dds",
             "File": "/Assets/Textures/baker_house.png",
             "Height": 1024,
             "Name": "baker_house.dds",
             "Texture": 8,
             "Type": "Texture",
-            "UUID": 1214407254,
+            "UUID": 1492891582,
             "Width": 1024
+        },
+        "Resource 4": {
+            "Exported file": "/library/meshes/bakerhouse 1.mesh",
+            "File": "/Assets/FBX/bakerhouse.fbx",
+            "Name": "Baker_house",
+            "Type": "Mesh",
+            "UUID": 1859694086
         }
     }
 }

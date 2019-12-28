@@ -1,7 +1,7 @@
 #include "Application.h"
-
 #include "ModuleInput.h"
 #include "ModuleScene.h"
+#include "ModulePhysics.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGui.h"
 #include "ModuleRenderer3D.h"
@@ -10,6 +10,7 @@
 #include "Globals.h"
 #include "GameObject.h"
 #include "ComponentCamera.h"
+#include "ComponentRigidbody.h"
 
 #include "OpenGL.h"
 #include "Par Shapes/par_shapes.h"
@@ -26,12 +27,12 @@ ModuleCamera3D::~ModuleCamera3D()
 
 bool ModuleCamera3D::Init()
 {
-
 	LOG("ModuleCamera Init()");
 
 	camera = new ComponentCamera();
 	reference = camera->frustum.pos;
 	App->renderer3D->camera = camera;
+	body = App->physics->CameraCollider();
 
 	return true;
 }

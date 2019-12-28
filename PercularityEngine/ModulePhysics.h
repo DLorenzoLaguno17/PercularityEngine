@@ -38,7 +38,6 @@ public:
 
 	DebugDrawModes mode;
 	Line line;
-	//Primitive point;
 };
 
 class ModulePhysics :public Module
@@ -59,12 +58,14 @@ public:
 	void PhysicalizeScene() {}
 	void UnphysicalizeScene() {}
 
-	ComponentRigidBody* AddCube(const PrimitiveCube& cube, float mass);
 	ComponentRigidBody* AddRigidBody(OBB& box,  GameObject* gameObject,float mass = 1.0f );
 	ComponentRigidBody* AddRigidBody(Sphere& sphere, GameObject* gameObject, float mass = 1.0f);
 	ComponentRigidBody* AddRigidBody(Capsule& capsule, GameObject* gameObject, float mass = 1.0f);
 
+	ComponentRigidBody* AddCube(const PrimitiveCube& cube, float mass);
+	ComponentRigidBody* CameraCollider();
 	PhysVehicle* AddVehicle(const VehicleInfo &info);
+
 	void CreateTestConstraint();
 	void DeleteTestConstraint();
 	void ShootBall();

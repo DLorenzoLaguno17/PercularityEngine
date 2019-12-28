@@ -266,6 +266,31 @@ ComponentRigidBody* ModulePhysics::AddCube(const PrimitiveCube& cube, float mass
 	return pbody;
 }
 
+ComponentRigidBody* ModulePhysics::CameraCollider()
+{	
+	/*btCollisionShape* colShape = new btSphereShape(10);
+	shapes.push_back(colShape);
+
+	btTransform transform;
+	transform.setFromOpenGLMatrix(&App->camera);
+
+	btVector3 localInertia(0, 0, 0);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
+	motions.push_back(myMotionState);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(MASS, myMotionState, colShape, localInertia);
+
+	btRigidBody* body = new btRigidBody(rbInfo);
+	ComponentRigidBody* pbody = new ComponentRigidBody(body);
+
+	body->setUserPointer(pbody);
+	world->addRigidBody(body);
+	rigidBodies.push_back(pbody);*/
+
+	//return pbody;
+	return nullptr;
+}
+
 // -----------------------------------------------------------------------------------------------
 // METHODS RELATED WITH THE PLAYER
 // -----------------------------------------------------------------------------------------------
