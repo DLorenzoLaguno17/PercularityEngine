@@ -17,10 +17,12 @@ ComponentRigidBody::ComponentRigidBody(btRigidBody* body) : body(body)
 }
 
 void ComponentRigidBody::Update() {
-	/*if (Time::running)
+	if (Time::running)
 	{
-		body->getWorldTransform().getOpenGLMatrix(&gameObject->transform->renderTransform);
-	}*/
+		static mat4x4 newTransform;
+		body->getWorldTransform().getOpenGLMatrix(&newTransform);
+		gameObject->transform->SetLocalTransform(newTransform);
+	}
 }
 
 void ComponentRigidBody::OnEditor()

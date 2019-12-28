@@ -60,6 +60,7 @@ bool ModulePhysics::Start()
 	world->addRigidBody(body);
 	world->setDebugDrawer(debugDrawer);
 
+	//Set debug mode to wireframe
 	debugDrawer->setDebugMode(1);
 
 	return true;
@@ -78,6 +79,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 update_status ModulePhysics::Update(float dt)
 {
 	BROFILER_CATEGORY("PhysicsUpdate", Profiler::Color::LightSeaGreen);
+
+	if (testdude != nullptr)
+		testdude->Update();
 
 	return UPDATE_CONTINUE;
 }
@@ -210,6 +214,10 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* game
 	ComponentRigidBody* component = new ComponentRigidBody(body);
 
 	world->addRigidBody(body);
+
+	testdude = component;
+	component->gameObject = gameObject;
+
 	return component;
 }
 

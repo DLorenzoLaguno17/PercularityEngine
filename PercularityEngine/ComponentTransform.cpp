@@ -117,6 +117,19 @@ void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 	mustUpdate = true;
 }
 
+//TEST
+void ComponentTransform::SetLocalTransform(mat4x4 transform)
+{
+	float4x4 newTransform;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			newTransform[j][i] = transform.M[i * 4 + j];
+
+	newTransform.Decompose(translation, rotation, scale);
+	eulerRotation = rotation.ToEulerXYZ().Abs();
+	mustUpdate = true;
+}
+
 void ComponentTransform::SetPosition(float3 newPosition)
 {
 	translation = newPosition;

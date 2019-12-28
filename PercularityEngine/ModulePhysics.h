@@ -62,6 +62,8 @@ private:
 	btDefaultVehicleRaycaster*				vehicle_raycaster = nullptr;
 	DebugDrawer*							debugDrawer = nullptr;
 	
+	ComponentRigidBody* testdude = nullptr;
+
 };
 
 class DebugDrawer : public btIDebugDraw

@@ -489,9 +489,9 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	App->scene->selected = item;
 
 	Sphere sphere;
-	sphere.r = diameter ;
+	sphere.r = diameter;
 
-	App->physics->AddRigidBody(sphere, item, 0.0f);
+	App->physics->AddRigidBody(sphere, item, 1.0f);
 
 	return item;
 }
@@ -572,7 +572,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
 
-	App->physics->AddRigidBody(OBB(item->aabb), item, 1.0f);
+	App->physics->AddRigidBody(OBB(item->aabb), item,0.0f);
 
 	return item;
 }
