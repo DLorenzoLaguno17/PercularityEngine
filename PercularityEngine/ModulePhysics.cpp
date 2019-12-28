@@ -335,7 +335,6 @@ void ModulePhysics::AddConstraintHinge(ComponentRigidBody &bodyA, ComponentRigid
 	hinge->setDbgDrawSize(2.0f);
 }
 
-
 //~~~~	DEBUG DRAWER	~~~~
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
