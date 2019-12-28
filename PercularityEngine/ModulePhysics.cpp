@@ -80,8 +80,6 @@ update_status ModulePhysics::Update(float dt)
 {
 	BROFILER_CATEGORY("PhysicsUpdate", Profiler::Color::LightSeaGreen);
 
-	if (testdude != nullptr)
-		testdude->Update();
 
 	return UPDATE_CONTINUE;
 }
@@ -173,7 +171,7 @@ bool ModulePhysics::CleanUp()
 ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box,  GameObject* gameObject, float mass)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(box.HalfSize().x, box.HalfSize().y, box.HalfSize().z));
-
+	shapes.push_back(colShape);
 
 	btTransform transform;
 	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
@@ -191,6 +189,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box,  GameObject* gameObjec
 	ComponentRigidBody* component = new ComponentRigidBody(body);
 
 	world->addRigidBody(body);
+	rigidBodies.push_back(component);
 
 	return component;
 }
@@ -198,6 +197,8 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box,  GameObject* gameObjec
 ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* gameObject, float mass)
 {
 	btCollisionShape* colShape = new btSphereShape(sphere.r);
+	shapes.push_back(colShape);
+
 	btTransform transform;
 	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
 
@@ -215,8 +216,34 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* game
 
 	world->addRigidBody(body);
 
-	testdude = component;
-	component->gameObject = gameObject;
+	rigidBodies.push_back(component);
+
+	return component;
+}
+
+ComponentRigidBody* ModulePhysics::AddRigidBody(Capsule& capsule, GameObject* gameObject, float mass)
+{
+	btCollisionShape* colShape = new btCapsuleShape(capsule.r,capsule.Height());
+	shapes.push_back(colShape);
+
+	btTransform transform;
+	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+
+	btVector3 localInertia(0, 0, 0);
+	if (mass != 0.f)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
+	motions.push_back(myMotionState);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+
+	btRigidBody* body = new btRigidBody(rbInfo);
+	ComponentRigidBody* component = new ComponentRigidBody(body);
+
+	world->addRigidBody(body);
+
+	rigidBodies.push_back(component);
 
 	return component;
 }

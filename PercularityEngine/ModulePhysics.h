@@ -40,6 +40,7 @@ public:
 
 	ComponentRigidBody* AddRigidBody(OBB& box,  GameObject* gameObject,float mass = 1.0f );
 	ComponentRigidBody* AddRigidBody(Sphere& sphere, GameObject* gameObject, float mass = 1.0f);
+	ComponentRigidBody* AddRigidBody(Capsule& capsule, GameObject* gameObject, float mass = 1.0f);
 
 	void AddRigidBody();
 	PhysVehicle* AddVehicle(const VehicleInfo &info);
