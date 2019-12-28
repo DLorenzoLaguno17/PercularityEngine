@@ -16,6 +16,11 @@ void DebugWindow::Update()
 		if (activateConstraint) App->physics->CreateTestConstraint();
 		else App->physics->DeleteTestConstraint();
 	}
+	if (ImGui::Checkbox("Physicalize all the scene", &physScene))
+	{
+		if (physScene) App->physics->PhysicalizeScene();
+		else App->physics->UnphysicalizeScene();
+	}
 
 	ImGui::NewLine();
 	ImGui::Text("Scene");
@@ -45,7 +50,7 @@ void DebugWindow::Update()
 
 	bool cullingAccelerated = Debug::frustumAccelerated;
 	if (ImGui::Checkbox("Culling accelerated", &cullingAccelerated))
-		Debug::frustumAccelerated= cullingAccelerated;
+		Debug::frustumAccelerated = cullingAccelerated;
 
 
 	ImGui::End();

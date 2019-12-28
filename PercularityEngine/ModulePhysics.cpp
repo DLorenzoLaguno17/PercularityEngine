@@ -10,6 +10,9 @@
 #include "PhysVehicle.h"
 #include "Globals.h"
 #include "stdio.h"
+#include "OpenGL.h"
+#include "GameObject.h"
+#include "Time.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
@@ -30,6 +33,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 	dispatcher = new btCollisionDispatcher(collision_conf);
 	broad_phase = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
+	debugDrawer = new DebugDrawer();
 }
 
 ModulePhysics::~ModulePhysics() {}
@@ -44,7 +48,6 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics environment");
 	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
-	//world->setDebugDrawer(debug_draw);
 	world->setGravity(GRAVITY);
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
@@ -59,12 +62,15 @@ bool ModulePhysics::Start()
 	// Creating cubes for the test constraint
 	right_cube = new PrimitiveCube(3, 4, 3);
 	left_cube = new PrimitiveCube(3, 4, 3);	
-	right_cube->SetPos(0, 2, 25);
-	left_cube->SetPos(0, 2, 25);
+	right_cube->SetPos(10, 2, 25);
+	left_cube->SetPos(-10, 2, 25);
 	right_cube->color.Set(Red.r, Red.g, Red.b);
 	left_cube->color.Set(Green.r, Green.g, Green.b);
-	right_body = App->physics->AddPrimitiveBody(*right_cube, 15.0f);
-	left_body = App->physics->AddPrimitiveBody(*right_cube, 15.0f);
+	right_body = App->physics->AddCube(*right_cube, 15.0f);
+	left_body = App->physics->AddCube(*right_cube, 15.0f);
+
+	// Set debug mode to wireframe
+	debugDrawer->setDebugMode(1);
 
 	return true;
 }
@@ -73,7 +79,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("PhysicsPreUpdate", Profiler::Color::Orange);
 
-	world->stepSimulation(dt, 15);
+	if (Time::running)
+		world->stepSimulation(dt, 15);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -97,6 +105,7 @@ update_status ModulePhysics::Update(float dt)
 update_status ModulePhysics::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("PhysicsPostUpdate", Profiler::Color::Yellow);
+	world->debugDrawWorld();
 
 	return UPDATE_CONTINUE;
 }
@@ -123,29 +132,27 @@ bool ModulePhysics::CleanUp()
 	// Clear all the lists
 	for (int i = 0; i < motions.size(); ++i)
 		RELEASE(motions[i])
-
 	motions.clear();
 
 	for (int i = 0; i < shapes.size(); ++i)
 		RELEASE(shapes[i])
-
 	shapes.clear();
 
-	for (int i = 0; i < bodies.size(); ++i)
-		RELEASE(bodies[i])
-
-	bodies.clear();
+	for (int i = 0; i < rigidBodies.size(); ++i)
+		RELEASE(rigidBodies[i])
+	rigidBodies.clear();
 
 	for (int i = 0; i < vehicles.size(); ++i)
-			RELEASE(vehicles[i])
-
+		RELEASE(vehicles[i])
 	vehicles.clear();
 
+	// Clear all the debug balls
 	ClearBalls();
 
 	// Delete the pointers
 	RELEASE(left_cube);
 	RELEASE(right_cube);
+	RELEASE(debugDrawer);
 	RELEASE(vehicle_raycaster);
 	RELEASE(world);
 	RELEASE(solver);
@@ -156,7 +163,90 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
-ComponentRigidbody* ModulePhysics::AddPrimitiveBody(const PrimitiveCube& cube, float mass)
+// -----------------------------------------------------------------------------------------------
+// METHODS TO ADD RIGIDBODIES
+// -----------------------------------------------------------------------------------------------
+
+ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box, GameObject* gameObject, float mass)
+{
+	btCollisionShape* colShape = new btBoxShape(btVector3(box.HalfSize().x, box.HalfSize().y, box.HalfSize().z));
+	shapes.push_back(colShape);
+
+	btTransform transform;
+	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+
+	btVector3 localInertia(0, 0, 0);
+	if (mass != 0.f)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
+	motions.push_back(myMotionState);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+
+	btRigidBody* body = new btRigidBody(rbInfo);
+	ComponentRigidBody* component = new ComponentRigidBody(body);
+
+	world->addRigidBody(body);
+	rigidBodies.push_back(component);
+
+	return component;
+}
+
+ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* gameObject, float mass)
+{
+	btCollisionShape* colShape = new btSphereShape(sphere.r);
+	shapes.push_back(colShape);
+
+	btTransform transform;
+	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+
+	btVector3 localInertia(0, 0, 0);
+	if (mass != 0.f)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
+	motions.push_back(myMotionState);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+
+	btRigidBody* body = new btRigidBody(rbInfo);
+	ComponentRigidBody* component = new ComponentRigidBody(body);
+
+	world->addRigidBody(body);
+
+	rigidBodies.push_back(component);
+
+	return component;
+}
+
+ComponentRigidBody* ModulePhysics::AddRigidBody(Capsule& capsule, GameObject* gameObject, float mass)
+{
+	btCollisionShape* colShape = new btCapsuleShape(capsule.r, capsule.Height());
+	shapes.push_back(colShape);
+
+	btTransform transform;
+	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+
+	btVector3 localInertia(0, 0, 0);
+	if (mass != 0.f)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
+	motions.push_back(myMotionState);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+
+	btRigidBody* body = new btRigidBody(rbInfo);
+	ComponentRigidBody* component = new ComponentRigidBody(body);
+
+	world->addRigidBody(body);
+
+	rigidBodies.push_back(component);
+
+	return component;
+}
+
+ComponentRigidBody* ModulePhysics::AddCube(const PrimitiveCube& cube, float mass)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(cube.size.x * 0.5f, cube.size.y * 0.5f, cube.size.z * 0.5f));
 	shapes.push_back(colShape);
@@ -173,15 +263,20 @@ ComponentRigidbody* ModulePhysics::AddPrimitiveBody(const PrimitiveCube& cube, f
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidbody* pbody = new ComponentRigidbody(body);
+	ComponentRigidBody* pbody = new ComponentRigidBody(body);
 
 	body->setUserPointer(pbody);
 	world->addRigidBody(body);
-	bodies.push_back(pbody);
+	rigidBodies.push_back(pbody);
 
 	return pbody;
 }
 
+// -----------------------------------------------------------------------------------------------
+// METHODS RELATED WITH THE PLAYER
+// -----------------------------------------------------------------------------------------------
+
+// Shoots a ball
 void ModulePhysics::ShootBall()
 {
 	PrimitiveSphere* sphere = new PrimitiveSphere(0.5);
@@ -204,7 +299,7 @@ void ModulePhysics::ShootBall()
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidbody* pbody = new ComponentRigidbody(body);
+	ComponentRigidBody* pbody = new ComponentRigidBody(body);
 	pbody->Push(App->player->vehicle->GetForwardVector().x, App->player->vehicle->GetForwardVector().y, App->player->vehicle->GetForwardVector().z * 25);
 
 	body->setUserPointer(pbody);
@@ -272,7 +367,7 @@ PhysVehicle* ModulePhysics::AddVehicle(const VehicleInfo &info)
 }
 
 // Constraint creators
-void ModulePhysics::AddConstraintP2P(ComponentRigidbody &bodyA, ComponentRigidbody &bodyB, const vec3 &anchorA, const vec3 &anchorB)
+void ModulePhysics::AddConstraintP2P(ComponentRigidBody &bodyA, ComponentRigidBody &bodyB, const vec3 &anchorA, const vec3 &anchorB)
 {
 	btTypedConstraint* p2p = new btPoint2PointConstraint(
 		*(bodyA.body),
@@ -285,7 +380,7 @@ void ModulePhysics::AddConstraintP2P(ComponentRigidbody &bodyA, ComponentRigidbo
 	p2p->setDbgDrawSize(2.0f);
 }
 
-void ModulePhysics::AddConstraintHinge(ComponentRigidbody &bodyA, ComponentRigidbody &bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
+void ModulePhysics::AddConstraintHinge(ComponentRigidBody &bodyA, ComponentRigidBody &bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
 {
 	btHingeConstraint* hinge = new btHingeConstraint(
 		*(bodyA.body),
@@ -328,4 +423,46 @@ void ModulePhysics::ClearBalls()
 	}
 	balls.clear();
 	spheres.clear();
+}
+
+//~~~~	DEBUG DRAWER	~~~~
+void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+{
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+
+	glColor3f(color.x(), color.y(), color.z());
+
+	glVertex3f(from.x(), from.y(), from.z());
+	glVertex3f(to.x(), to.y(), to.z());
+
+	glColor3f(255, 255, 255);
+	glEnd();
+}
+
+void DebugDrawer::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
+{
+	/*point.transform.translate(PointOnB.getX(), PointOnB.getY(), PointOnB.getZ());
+	point.color.Set(color.getX(), color.getY(), color.getZ());
+	point.Render();*/
+}
+
+void DebugDrawer::reportErrorWarning(const char* warningString)
+{
+	LOG("Bullet warning: %s", warningString);
+}
+
+void DebugDrawer::draw3dText(const btVector3& location, const char* textString)
+{
+	LOG("Bullet draw text: %s", textString);
+}
+
+void DebugDrawer::setDebugMode(int debugMode)
+{
+	mode = (DebugDrawModes)debugMode;
+}
+
+int	 DebugDrawer::getDebugMode() const
+{
+	return mode;
 }
