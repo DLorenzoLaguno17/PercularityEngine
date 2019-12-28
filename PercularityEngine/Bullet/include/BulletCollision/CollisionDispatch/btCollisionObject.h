@@ -334,7 +334,7 @@ public:
 		return m_worldTransform;
 	}
 
-	void	setWorldTransform(const btTransform& worldTrans)
+	void setWorldTransform(const btTransform& worldTrans)
 	{
 		m_updateRevision++;
 		m_worldTransform = worldTrans;

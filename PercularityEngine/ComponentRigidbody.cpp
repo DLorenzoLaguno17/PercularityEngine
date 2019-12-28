@@ -44,14 +44,9 @@ void ComponentRigidBody::OnEditor()
 	}
 }
 
-// Releases all the data
-void ComponentRigidBody::CleanUp() 
-{
-	//delete body;
-}
-
 void ComponentRigidBody::CreateBody(btRigidBody* body)
 {
+	this->body = body;
 	body->setUserPointer(this);
 }
 
@@ -107,8 +102,7 @@ void ComponentRigidBody::SetPos(float x, float y, float z)
 // Rotates the Rigidbody
 void ComponentRigidBody::RotateBody(btQuaternion rotationQuaternion) {
 
-	btTransform transform = body->getWorldTransform();
-
-	transform.setRotation(rotationQuaternion);
-	body->setWorldTransform(transform);
+	btTransform t = body->getWorldTransform();
+	t.setRotation(rotationQuaternion);
+	body->setWorldTransform(t);
 }

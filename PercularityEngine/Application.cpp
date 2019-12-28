@@ -157,7 +157,7 @@ bool Application::CleanUp()
 
 	SaveSettings();
 
-	while(item != modules.end() && ret == true)
+	while (item != modules.end() && ret == true)
 	{
 		ret = (*item)->CleanUp();
 		item = next(item);
