@@ -51,7 +51,7 @@ public:
 
 	std::string name;
 	std::vector<GameObject*> children;
-	GameObject* parent;
+	GameObject* parent=nullptr;
 
 	bool extended = true;
 	bool showBondingBox =false;

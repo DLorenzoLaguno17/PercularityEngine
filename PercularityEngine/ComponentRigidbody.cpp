@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "ComponentTransform.h"
 #include "Time.h"
+#include "ModuleScene.h"
 
 #include "mmgr/mmgr.h"
 
@@ -21,15 +22,21 @@ void ComponentRigidBody::Update() {
 	{
 		if (Time::running || active == false)
 		{
-			static mat4x4 newTransform;
-			body->getWorldTransform().getOpenGLMatrix(&newTransform);
+			mat4x4 bodyTransform, parentTransform, newTransform;
+			body->getWorldTransform().getOpenGLMatrix(&bodyTransform);
+			
+
+			
+
+			if (gameObject->parent != nullptr)
+				parentTransform = gameObject->parent->transform->GetGlobalGLTransform();
+			else
+				parentTransform = IdentityMatrix;
+
+			newTransform = parentTransform.inverse()*bodyTransform;
+
 			gameObject->transform->SetLocalTransform(newTransform);
-		}
-		else
-		{
-			btTransform newTransform;
-			newTransform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
-			body->setWorldTransform(newTransform);
+
 		}
 	}
 }
@@ -104,4 +111,14 @@ void ComponentRigidBody::RotateBody(btQuaternion rotationQuaternion) {
 	btTransform t = body->getWorldTransform();
 	t.setRotation(rotationQuaternion);
 	body->setWorldTransform(t);
+}
+
+void ComponentRigidBody::OnUpdateTransform()
+{
+	if (!Time::running || followObject)
+	{
+		btTransform newTransform;
+		newTransform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
+		body->setWorldTransform(newTransform);
+	}
 }

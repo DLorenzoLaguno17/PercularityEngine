@@ -25,9 +25,13 @@ public:
 	void RotateBody(btQuaternion rotationQuaternion);
 	void CreateBody(btRigidBody* body);
 
+	void OnUpdateTransform();
+
 	// Load & Save 
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
+
+	bool followObject = false;
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::RIGIDBODY; }
 

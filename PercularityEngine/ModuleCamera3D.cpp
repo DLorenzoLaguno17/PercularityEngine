@@ -11,6 +11,7 @@
 #include "GameObject.h"
 #include "ComponentCamera.h"
 #include "ComponentRigidbody.h"
+#include "ComponentTransform.h"
 
 #include "OpenGL.h"
 #include "Par Shapes/par_shapes.h"
@@ -29,7 +30,8 @@ bool ModuleCamera3D::Init()
 	camera = new ComponentCamera();
 	reference = camera->frustum.pos;
 	App->renderer3D->camera = camera;
-	body = App->physics->CameraCollider();
+
+	
 
 	return true;
 }
@@ -40,7 +42,13 @@ bool ModuleCamera3D::Start()
 	LOG("Setting up the camera");
 	bool ret = true;
 
-	//App->renderer3D->camera = App->scene->frustumTest->GetComponent<ComponentCamera>();
+	Sphere sphere;
+	sphere.r = 10.0f;
+
+	cameraCollider = new GameObject("Camera collider");
+	App->physics->AddRigidBody(sphere, cameraCollider, 5.0f)->followObject = true;
+	cameraCollider->GetComponent<ComponentRigidBody>()->body->setActivationState(DISABLE_DEACTIVATION);
+
 
 	return ret;
 }
@@ -72,6 +80,9 @@ update_status ModuleCamera3D::Update(float dt)
 	glVertex3f(lastRay.b.x, lastRay.b.y, lastRay.b.z);
 
 	glEnd();
+
+	cameraCollider->Update();
+	cameraCollider->transform->SetPosition(camera->frustum.pos);
 
 	return UPDATE_CONTINUE;
 }

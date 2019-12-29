@@ -177,17 +177,15 @@ const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 
 void GameObject::DrawAABB()
 {
-	//glLineWidth(2.0f);
+	glLineWidth(2.0f);
 
 	glBegin(GL_LINES);
 
 	if (App->scene->selected == this) {
-		glLineWidth(4.0f);
 		glColor3f(0.7, 1, 0.7); //Light green color
 	}
 
 	else {
-		glLineWidth(2.0f);
 		glColor3f(0.2, 0.2, 1); //Light green color
 	}
 

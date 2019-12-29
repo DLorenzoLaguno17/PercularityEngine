@@ -19,7 +19,7 @@
     },
     "User Interface": {
         "Configuration": true,
-        "Console": true,
+        "Console": false,
         "Debug": true,
         "Hierarchy": true,
         "Inspector": true,
@@ -30,9 +30,9 @@
         "Borderless": false,
         "Full Screen": false,
         "Full Screen Desktop": false,
-        "Height": 768,
+        "Height": 1017,
         "Resizable": false,
         "Size": 1,
-        "Width": 1024
+        "Width": 1920
     }
 }

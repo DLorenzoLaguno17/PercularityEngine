@@ -42,6 +42,7 @@ public:
 	void Move(float3 positionIncrease);
 	void Scale(float3 scale_);
 	void SetGlobalTransform(float4x4 tranform);
+	void SetGlobalTransform(mat4x4 tranform);
 	void SetLocalTransform(float4x4 tranform);
 	void SetLocalTransform(mat4x4 transform);//TEST
 	void SetToZero();

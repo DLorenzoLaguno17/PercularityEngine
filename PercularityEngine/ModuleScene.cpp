@@ -494,7 +494,7 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	Sphere sphere;
 	sphere.r = diameter;
 
-	App->physics->AddRigidBody(sphere, item, 1.0f);
+	App->physics->AddRigidBody(sphere, item, 0.5f);
 
 	return item;
 }
@@ -681,6 +681,8 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
+
+	App->physics->AddRigidBody(OBB(item->aabb), item, 0.0f);
 
 	return item;
 }

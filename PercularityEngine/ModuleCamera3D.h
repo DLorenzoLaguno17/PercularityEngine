@@ -34,7 +34,8 @@ public:
 
 public:
 	ComponentCamera* camera = nullptr;
-	ComponentRigidBody* body = nullptr;
+	GameObject* cameraCollider = nullptr;
+	ComponentRigidBody* cameraBody = nullptr;
 
 private:
 	float3 reference = float3(0,0,0);

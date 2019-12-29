@@ -41,15 +41,16 @@ ModulePhysics::~ModulePhysics() {}
 bool ModulePhysics::Init() 
 {
 	LOG("Initializing physics module");
+	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
+	world->setGravity(GRAVITY);
+	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 	return true;
 }
 
 bool ModulePhysics::Start()
 {
 	LOG("Creating Physics environment");
-	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
-	world->setGravity(GRAVITY);
-	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
+	
 
 	// Big plane as ground
 	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
@@ -58,6 +59,7 @@ bool ModulePhysics::Start()
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
 	btRigidBody* body = new btRigidBody(rbInfo);
 	world->addRigidBody(body);
+	world->setDebugDrawer(debugDrawer);
 
 	// Creating cubes for the test constraint
 	right_cube = new PrimitiveCube(3, 4, 3);
@@ -173,7 +175,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box, GameObject* gameObject
 	shapes.push_back(colShape);
 
 	btTransform transform;
-	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+	transform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
 
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)

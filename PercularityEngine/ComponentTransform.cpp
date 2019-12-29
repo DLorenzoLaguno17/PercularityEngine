@@ -52,8 +52,10 @@ void ComponentTransform::UpdateTransform()
 	{
 		localTransform = float4x4::FromTRS(translation, rotation, scale);
 
-		if (strcmp("World", gameObject->name.c_str()) != 0) 
+		if (strcmp("World", gameObject->name.c_str()) != 0 && gameObject->parent != nullptr)
 			globalTransform = gameObject->parent->transform->GetGlobalTransform() * localTransform;
+		else
+			globalTransform = localTransform;
 
 		UpdateRenderTransform();
 		gameObject->UpdateAABB();
@@ -116,6 +118,13 @@ void ComponentTransform::SetLocalTransform(float4x4 transform)
 void ComponentTransform::SetGlobalTransform(float4x4 transform)
 {
 	globalTransform = transform;
+}
+
+void ComponentTransform::SetGlobalTransform(mat4x4 transform)
+{
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			globalTransform[j][i]=transform.M[i * 4 + j];
 }
 
 void ComponentTransform::SetEulerRotation(float3 eulerAngle)
