@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 class Application;
-struct PhysBody;
+class ComponentRigidBody;
 
 class Module
 {
@@ -50,7 +50,7 @@ public:
 		return true; 
 	}
 
-	virtual void OnCollision(PhysBody* body1, PhysBody* body2)
+	virtual void OnCollision(ComponentRigidBody* body1, ComponentRigidBody* body2)
 	{}
 
 	virtual void Load(const nlohmann::json &config)

@@ -14,6 +14,8 @@
 #include "Time.h"
 #include "stdio.h"
 
+#include "Debug.h"
+
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
@@ -94,8 +96,41 @@ update_status ModulePhysics::PreUpdate(float dt)
 	BROFILER_CATEGORY("PhysicsPreUpdate", Profiler::Color::Orange);
 
 	if (Time::running)
+	{
 		world->stepSimulation(dt, 15);
 
+		int numManifolds = world->getDispatcher()->getNumManifolds();
+		for (int i = 0; i < numManifolds; i++)
+		{
+			btPersistentManifold* contactManifold = world->getDispatcher()->getManifoldByIndexInternal(i);
+			btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
+			btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
+
+			int numContacts = contactManifold->getNumContacts();
+			if (numContacts > 0)
+			{
+				ComponentRigidBody* pbodyA = (ComponentRigidBody*)obA->getUserPointer();
+				ComponentRigidBody* pbodyB = (ComponentRigidBody*)obB->getUserPointer();
+
+				if (pbodyA && pbodyB)
+				{
+					std::vector<Module*>::iterator item = pbodyA->collision_listeners.begin();
+					while (item != pbodyA->collision_listeners.end())
+					{
+						(*item)->OnCollision(pbodyA, pbodyB);
+						item++;
+					}
+
+					item = pbodyA->collision_listeners.begin();
+					while (item != pbodyA->collision_listeners.end())
+					{
+						(*item)->OnCollision(pbodyA, pbodyB);
+						item++;
+					}
+				}
+			}
+		}
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -120,7 +155,8 @@ update_status ModulePhysics::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("PhysicsPostUpdate", Profiler::Color::Yellow);
 
-	if (debug) world->debugDrawWorld();
+	if (Debug::drawColliders)
+		if (debug) world->debugDrawWorld();
 
 	return UPDATE_CONTINUE;
 }
@@ -195,6 +231,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box, GameObject* gameObject
 	component->mass = mass;
 	component->CreateBody(body);
 	world->addRigidBody(body);
+	body->setUserPointer(component);
 
 	return component;
 }
@@ -223,6 +260,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* game
 	component->CreateBody(body);
 	world->addRigidBody(body);
 
+	body->setUserPointer(component);
 	return component;
 }
 
@@ -249,7 +287,8 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Capsule& capsule, GameObject* ga
 	component->mass = mass;
 	component->CreateBody(body);
 	world->addRigidBody(body);
-
+	
+	body->setUserPointer(component);
 	return component;
 }
 

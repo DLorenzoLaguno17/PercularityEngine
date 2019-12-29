@@ -8,3 +8,7 @@ bool Debug::drawSceneAxis = true;
 
 bool Debug::frustumCullingActive = true;
 bool Debug::frustumAccelerated = true;
+
+bool Debug::drawColliders = true;
+
+bool Debug::drawMouseLine = false;

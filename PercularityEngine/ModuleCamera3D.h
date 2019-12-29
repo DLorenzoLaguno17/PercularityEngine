@@ -32,11 +32,15 @@ public:
 	// Makes the camera look in a certain direction
 	void LookAt(const vec3 &Spot);
 
+	void OnCollision(ComponentRigidBody* c1, ComponentRigidBody* c2);
+
 public:
-	ComponentCamera* camera = nullptr;
-	GameObject* cameraCollider = nullptr;
+	ComponentCamera* camera		= nullptr;
+	GameObject* cameraCollider	= nullptr;
+	ComponentRigidBody* collider = nullptr;
 
 private:
+
 	float3 reference = float3(0,0,0);
 	LineSegment lastRay;
 };
