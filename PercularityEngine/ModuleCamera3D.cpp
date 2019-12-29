@@ -54,6 +54,7 @@ bool ModuleCamera3D::Start()
 bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
+	cameraCollider->CleanUp();
 	RELEASE(cameraCollider);
 	RELEASE(camera);
 

@@ -227,7 +227,6 @@ void ModuleScene::LoadScene(const std::string scene_name, const char* address, b
 	// First we delete the current scene unless we are loading a model and not a scene
 	if (!loadingModel) {
 		CleanUp();
-		//if (!tempScene) App->physics->CleanUp();
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
 	}
 

@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ModulePhysics.h"
+#include "ModuleScene.h"
 #include "DebugWindow.h"
 #include "Debug.h"
 
@@ -16,14 +17,11 @@ void DebugWindow::Update()
 		if (activateConstraint) App->physics->CreateTestConstraint();
 		else App->physics->DeleteTestConstraint();
 	}
-	if (ImGui::Checkbox("Physicalize all the scene", &physScene))
-	{
-		if (physScene) App->physics->PhysicalizeScene();
-		else App->physics->UnphysicalizeScene();
-	}
-
 	if (ImGui::Checkbox("Show rigidbodies", &debugPhysics))
 		App->physics->debug = !App->physics->debug;
+
+	if (ImGui::Button("Physicalize the scene"))
+		App->physics->PhysicalizeScene(App->scene->GetRoot());
 
 	ImGui::NewLine();
 	ImGui::Text("Scene");

@@ -5,7 +5,6 @@
 #include "ModulePhysics.h"
 
 #include <string>
-
 #include "mmgr/mmgr.h"
 
 InspectorWindow::InspectorWindow(char* name, bool active) : UIElement(name, active) {}
@@ -24,14 +23,10 @@ void InspectorWindow::Update() {
 		ImGui::NewLine();
 		App->scene->selected->OnEditor();
 
-		if (App->scene->selected->GetComponent(COMPONENT_TYPE::RIGIDBODY) == nullptr) {
-			if (ImGui::Button("Add RigidBody"))
-			{
-				Sphere sphere;
-				sphere.r = 10;
-				App->physics->AddRigidBody(App->scene->selected->obb, App->scene->selected, 5.0f);
-
-			}
+		if (App->scene->selected->GetComponent(COMPONENT_TYPE::RIGIDBODY) == nullptr) 
+		{
+			if (ImGui::Button("Add RigidBody"))	
+				App->physics->AddRigidBody(App->scene->selected->obb, App->scene->selected, 10.0f);
 		}
 	}
 

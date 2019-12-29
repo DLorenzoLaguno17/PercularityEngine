@@ -55,9 +55,6 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 
-	void PhysicalizeScene() {}
-	void UnphysicalizeScene() {}
-
 	ComponentRigidBody* AddRigidBody(OBB& box,  GameObject* gameObject,float mass = 1.0f );
 	ComponentRigidBody* AddRigidBody(Sphere& sphere, GameObject* gameObject, float mass = 1.0f);
 	ComponentRigidBody* AddRigidBody(Capsule& capsule, GameObject* gameObject, float mass = 1.0f);
@@ -70,6 +67,7 @@ public:
 	void ShootBall();
 	void ClearBalls();
 
+	void PhysicalizeScene(GameObject* root);
 	void AddConstraintP2P(ComponentRigidBody& bodyA, ComponentRigidBody& bodyB, const vec3& anchorA, const vec3& anchorB);
 	void AddConstraintHinge(ComponentRigidBody& bodyA, ComponentRigidBody& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
 

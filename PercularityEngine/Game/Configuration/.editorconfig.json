@@ -19,7 +19,7 @@
     },
     "User Interface": {
         "Configuration": true,
-        "Console": false,
+        "Console": true,
         "Debug": true,
         "Hierarchy": true,
         "Inspector": true,

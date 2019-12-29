@@ -9,10 +9,10 @@
 #include "ComponentCamera.h"
 #include "PhysVehicle.h"
 #include "Globals.h"
-#include "stdio.h"
 #include "OpenGL.h"
 #include "GameObject.h"
 #include "Time.h"
+#include "stdio.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
@@ -80,8 +80,8 @@ bool ModulePhysics::Start()
 	left_cube->SetPos(-5, 2, 25);
 	right_cube->color.Set(Red.r, Red.g, Red.b);
 	left_cube->color.Set(Green.r, Green.g, Green.b);
-	right_body = App->physics->AddCube(*right_cube, MASS);
-	left_body = App->physics->AddCube(*left_cube, MASS);
+	right_body = App->physics->AddCube(*right_cube, 25.0f);
+	left_body = App->physics->AddCube(*left_cube, 25.0f);
 
 	// Set debug mode to wireframe
 	debugDrawer->setDebugMode(1);
@@ -432,6 +432,15 @@ void ModulePhysics::ClearBalls()
 	}
 	balls.clear();
 	spheres.clear();
+}
+
+void ModulePhysics::PhysicalizeScene(GameObject* root)
+{
+	if (root->GetComponent(COMPONENT_TYPE::MESH) != nullptr)
+		AddRigidBody(root->obb, root, 10.0f);
+
+	for (int i = 0; i < root->children.size(); ++i)
+		PhysicalizeScene(root->children[i]);
 }
 
 //~~~~	DEBUG DRAWER  ~~~~
