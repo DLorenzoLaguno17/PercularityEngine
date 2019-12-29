@@ -177,7 +177,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box, GameObject* gameObject
 	shapes.push_back(colShape);
 
 	btTransform transform;
-	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+	transform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
 
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)
@@ -204,7 +204,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* game
 	shapes.push_back(colShape);
 
 	btTransform transform;
-	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+	transform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
 
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)
@@ -231,7 +231,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Capsule& capsule, GameObject* ga
 	shapes.push_back(colShape);
 
 	btTransform transform;
-	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
+	transform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
 
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)

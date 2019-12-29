@@ -135,16 +135,8 @@ void ComponentRigidBody::OnUpdateTransform()
 {
 	if (!Time::running || followObject)
 	{
-		float4x4 objectTransform = gameObject->transform->GetGlobalTransform();
-		objectTransform =objectTransform* objectTransform.Translate(localPosition);
-
-		mat4x4 glTransform;
-		for (int i = 0; i < 4; ++i)
-			for (int j = 0; j < 4; ++j)
-				glTransform.M[i * 4 + j] = objectTransform[j][i];
-
 		btTransform newTransform;
-		newTransform.setFromOpenGLMatrix(&glTransform);
+		newTransform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
 		body->setWorldTransform(newTransform);
 	}
 }

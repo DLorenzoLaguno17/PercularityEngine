@@ -23,7 +23,7 @@ public:
 	const float3& GetEulerRotation() const { return eulerRotation; }
 	const float3& GetTranslation() const { return translation; }
 	const float3& GetScale() const { return scale; }
-	const mat4x4 GetGlobalGLTransform()const ;
+	const mat4x4 GetGlobalGLTransform() const; // float4x4 -> mat4x4
 
 	// Setters
 	void SetScale(float3 newScale);
@@ -38,7 +38,6 @@ public:
 public:
 	//Update transform
 	void UpdateTransform();
-	void UpdateRenderTransform();//float4x4 -> mat4x4
 	void Move(float3 positionIncrease);
 	void Scale(float3 scale_);
 	void SetGlobalTransform(float4x4 tranform);
@@ -47,9 +46,6 @@ public:
 	void SetLocalTransform(mat4x4 transform);//TEST
 	void SetToZero();
 	void SetEulerRotation(float3 eulerAngles);
-
-public:
-	mat4x4 renderTransform;
 
 private:
 	bool mustUpdate = true;

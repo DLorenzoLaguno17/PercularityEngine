@@ -22,7 +22,7 @@
 bool ModuleResourceManager::Start()
 {
 	// Data from the assets
-	/*std::vector<std::string> tex_files;
+	std::vector<std::string> tex_files;
 	std::vector<std::string> tex_directories;
 	std::vector<std::string> mod_files;
 	std::vector<std::string> mod_directories;
@@ -32,15 +32,15 @@ bool ModuleResourceManager::Start()
 	// We create resources from every asset we have
 	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
-	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);*/
+	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
-	/*for (int i = 0; i < tex_files.size(); ++i) {
+	for (int i = 0; i < tex_files.size(); ++i) {
 	
 		std::string file = ASSETS_TEXTURE_FOLDER + tex_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
-	}*/
+	}
 
-	/*for (int i = 0; i < mod_files.size(); ++i) {
+	for (int i = 0; i < mod_files.size(); ++i) {
 
 		std::string file = ASSETS_MODEL_FOLDER + mod_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::MODEL);		
@@ -50,7 +50,7 @@ bool ModuleResourceManager::Start()
 		
 		std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::SCENE);		
-	}*/
+	}
 
 	return true;
 }
