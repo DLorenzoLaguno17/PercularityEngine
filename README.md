@@ -4,11 +4,24 @@ You can download Percularity's [latest release](https://github.com/DLorenzoLagun
 
 # About Percularity
 
+<p align="center">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/PercularityIcon.png?raw=true" alt="Icon" width="150" height="150">
+</p>
+
 ### Main core sub-systems
 The main core sub-systems that form Percularity are the **resource manager**, the **physics** sub-system
 
 ### Specialized sub-system
+
+<p align="center">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif2.gif?raw=true" alt="Gif1" width="750" height="500">
+</p>
+
 Since we wanted the engine to be used for creating the game, each pair of students specialyzed the last delivery of the game engine development in one specific subsystem. The sub-system we chose was **physics**. With it, we programmed the possibility of adding **ridigbodies** as GameObject components, and we implemented the possibility of controlling a car in **Game mode**, which can interact with the scene and its collisions. Appart from that, the user can shoot spheres from the camera also to test the physics and we have added a sphere collider around the camera that prevents it from getting inside the meshes of the GameObjects.
+
+<p align="center">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif1.gif?raw=true" alt="Citizen BT" width="750" height="500">
+</p>
 
 ### Third-party libraries used
 * [SDL v2.0.6](https://www.libsdl.org/)
@@ -21,7 +34,6 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 * [DevIL v1.8](http://openil.sourceforge.net/)
 * [PhysFS v3.0.2](https://icculus.org/physfs/)
 * [Nlohmann's JSON v3.7.3](https://github.com/nlohmann/json)
-* [Bullet]()
 
 # Tasks delivered by each team member
 
