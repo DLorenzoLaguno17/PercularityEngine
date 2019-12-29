@@ -43,10 +43,10 @@ bool ModuleCamera3D::Start()
 	bool ret = true;
 
 	Sphere sphere;
-	sphere.r = 10.0f;
+	sphere.r = 5.0f;
 
 	cameraCollider = new GameObject("Camera collider");
-	collider = App->physics->AddRigidBody(sphere, cameraCollider, 0.0);
+	collider = App->physics->AddRigidBody(sphere, cameraCollider, 5.0);
 	collider->followObject = true;
 	collider->collision_listeners.push_back(this);
 
@@ -71,28 +71,13 @@ update_status ModuleCamera3D::Update(float dt)
 {
 	BROFILER_CATEGORY("CameraUpdate", Profiler::Color::LightSeaGreen);
 
-	if (Time::time - timeCounter >= cameraSaveFreq)
-	{
-		timeCounter = Time::time;
-
-		if (!cameraCollided)
-			lastPosition = camera->frustum.pos;
-	}
-	
-	if (cameraCollided)
-	{
-		camera->frustum.pos = lastPosition;
-		cameraCollider->transform->SetPosition(lastPosition);
-		cameraCollided = false;
-	}
-	else {
-		cameraCollider->transform->SetPosition(camera->frustum.pos);
-	}
-
 	HandleUserInput(dt);
-
+	
+	cameraCollider->transform->SetPosition(camera->frustum.pos);
+	
 	camera->Update();
 	cameraCollider->Update();
+
 
 	if (Debug::drawMouseLine)
 	{
@@ -106,7 +91,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 		glEnd();
 	}
-		
 	return UPDATE_CONTINUE;
 }
 
@@ -210,5 +194,4 @@ void ModuleCamera3D::OnClick(const vec2& normMousePos)
 
 void ModuleCamera3D::OnCollision(ComponentRigidBody* c1, ComponentRigidBody* c2)
 {
-	cameraCollided = true;
 }

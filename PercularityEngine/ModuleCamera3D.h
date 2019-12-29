@@ -40,14 +40,9 @@ public:
 	ComponentRigidBody* collider = nullptr;
 
 private:
-	float3 lastPosition=float3(0,0,0);
+
 	float3 reference = float3(0,0,0);
 	LineSegment lastRay;
-
-	bool cameraCollided = false;
-
-	float cameraSaveFreq=0.150f;
-	float timeCounter=0.0f;
 };
 
 #endif
