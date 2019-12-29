@@ -47,7 +47,7 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 ### Joan Marín
 
 <p align="center">
-  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Joan.jpg?raw=true" alt="Joan" width="300" height="350">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Joan.jpg?raw=true" alt="Joan" width="200" height="250">
 </p>
 
 * Camera component.
@@ -60,7 +60,7 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 ### Daniel Lorenzo
 
 <p align="center">
-  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Dani.jpg?raw=true" alt="Dani" width="300" height="350">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Dani.jpg?raw=true" alt="Dani" width="200" height="300">
 </p>
 
 * User interface.
