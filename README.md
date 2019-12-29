@@ -45,6 +45,11 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 # Tasks delivered by each team member
 
 ### Joan Marín
+
+<p align="center">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Joan.jpg?raw=true" alt="Dani" width="400" height="750">
+</p>
+
 * Camera component.
 * Frustum culling.
 * Mousepicking.
@@ -53,6 +58,11 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 * Physicalization of the GameObjects.
 
 ### Daniel Lorenzo
+
+<p align="center">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Dani.jpg?raw=true" alt="Dani" width="400" height="750">
+</p>
+
 * User interface.
 * GameObjects.
 * Import and export of textures and models.
