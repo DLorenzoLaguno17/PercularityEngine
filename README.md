@@ -5,22 +5,29 @@ You can download Percularity's [latest release](https://github.com/DLorenzoLagun
 # About Percularity
 
 <p align="center">
-  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/PercularityIcon.png?raw=true" alt="Icon" width="150" height="150">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/PercularityIcon.png?raw=true" alt="Icon" width="100" height="100">
 </p>
 
 ### Main core sub-systems
-The main core sub-systems that form Percularity are the **resource manager**, the **physics** sub-system
+
+The main core sub-systems that form Percularity are the following:
+ * The **resource manager** handles all the external files that are loaded into the engine. Whenever the user drags and drops a texture, an image, a JSON file or an FBX, this subsystem reads it using Assimp and DevIL, importing them into Percularity's own file format and stores it in its library. 
+ * The **camera** manages the frustum culling, which renders only what is inside the view of the camera and the mousepicking, that allows the user select GameObjects clicking in them.
+ * The **scene** has all the GameObjects and is in charge of **Game mode**, all the hierarchy of the GameObjects and the save and load of projects.
+ * The **renderer** is in charge of the UI (wich uses ImGui) and controls the order of what is visible on the screen.
+ * The **physics** sub-system is in charge of managing the dynamics of the GameObjects, such as gravity and interactions between them.
+ * The **application** is the most important sub-system. Is in control of all the modules and makes its loop.
 
 ### Specialized sub-system
 
 <p align="center">
-  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif2.gif?raw=true" alt="Gif1" width="750" height="500">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif2.gif?raw=true" alt="Gif1" width="750" height="400">
 </p>
 
-Since we wanted the engine to be used for creating the game, each pair of students specialyzed the last delivery of the game engine development in one specific subsystem. The sub-system we chose was **physics**. With it, we programmed the possibility of adding **ridigbodies** as GameObject components, and we implemented the possibility of controlling a car in **Game mode**, which can interact with the scene and its collisions. Appart from that, the user can shoot spheres from the camera also to test the physics and we have added a sphere collider around the camera that prevents it from getting inside the meshes of the GameObjects.
+Since we wanted the engine to be used for creating the game, each pair of students specialyzed the last delivery of the game engine development in one specific subsystem. The sub-system we chose was **physics**. With it, we programmed the possibility of adding **ridigbodies** as GameObject components (either box, sphere or capsule colliders), and we implemented the possibility of controlling a car in **Game mode**, which can interact with the scene and its collisions. Appart from that, the user can shoot spheres from the camera also to test the physics and we have added a sphere collider around the camera that prevents it from getting inside the meshes of the GameObjects.
 
 <p align="center">
-  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif1.gif?raw=true" alt="Citizen BT" width="750" height="500">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif1.gif?raw=true" alt="Citizen BT" width="750" height="400">
 </p>
 
 ### Third-party libraries used
