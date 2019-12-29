@@ -4,8 +4,6 @@
 #include "Component.h"
 #include "glmath.h"
 
-#include "MathGeoLib.h"
-
 class ComponentCamera : public Component{
 	
 	friend class ModuleCamera3D;

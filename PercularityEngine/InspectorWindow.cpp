@@ -23,11 +23,22 @@ void InspectorWindow::Update() {
 		ImGui::NewLine();
 		App->scene->selected->OnEditor();
 
-		if (App->scene->selected->GetComponent(COMPONENT_TYPE::RIGIDBODY) == nullptr) 
+		if (App->scene->selected->GetComponent(COMPONENT_TYPE::RIGIDBODY) == nullptr)
 		{
-			if (ImGui::Button("Add RigidBody"))	
+			if (ImGui::Button("Add Box RigidBody"))
 				App->physics->AddRigidBody(App->scene->selected->obb, App->scene->selected, 10.0f);
-		}
+
+			if (ImGui::Button("Add Sphere RigidBody")) {
+				Sphere sphere; sphere.r = 2.5;
+				App->physics->AddRigidBody(sphere, App->scene->selected, 10.0f);
+			}
+			
+			if (ImGui::Button("Add Capsule RigidBody")) {
+				LineSegment l = { App->scene->selected->obb.pos / 4, -App->scene->selected->obb.pos / 4 };
+				Capsule capsule; capsule.r = 2.5; capsule.l = l;
+				App->physics->AddRigidBody(capsule, App->scene->selected, 10.0f);
+			}
+		}		
 	}
 
 	ImGui::End();

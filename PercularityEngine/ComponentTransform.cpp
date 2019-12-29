@@ -57,7 +57,6 @@ void ComponentTransform::UpdateTransform()
 		else
 			globalTransform = localTransform;
 
-		UpdateRenderTransform();
 		gameObject->UpdateAABB();
 
 		for (int i = 0; i < gameObject->children.size(); ++i)
@@ -79,14 +78,7 @@ void ComponentTransform::UpdateTransform()
 
 }
 
-void ComponentTransform::UpdateRenderTransform()
-{
-	for (int i = 0; i < 4; ++i)
-		for (int j = 0; j < 4; ++j)
-			renderTransform.M[i * 4 + j] = globalTransform[j][i];
-}
-
-const mat4x4 ComponentTransform::GetGlobalGLTransform()const
+const mat4x4 ComponentTransform::GetGlobalGLTransform() const
 {
 	mat4x4 ret;
 	for (int i = 0; i < 4; ++i)

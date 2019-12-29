@@ -41,7 +41,7 @@ void DebugWindow::Update()
 	ImGui::Text("Game Objects");
 	bool drawAABBS = Debug::drawObjectsAABB;
 	if (ImGui::Checkbox("Draw AABBs", &drawAABBS))
-		Debug::drawObjectsAABB=drawAABBS;
+		Debug::drawObjectsAABB = drawAABBS;
 
 	ImGui::NewLine();
 	ImGui::Text("Rendering");

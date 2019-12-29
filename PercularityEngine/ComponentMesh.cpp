@@ -102,7 +102,7 @@ void ComponentMesh::RenderNormals() {
 void ComponentMesh::Render() const  {
 	
 	glPushMatrix();
-	glMultMatrixf(gameObject->transform->renderTransform.M);
+	glMultMatrixf(gameObject->transform->GetGlobalGLTransform().M);
 
 	// Render the texture
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
