@@ -29,9 +29,7 @@ bool ModuleCamera3D::Init()
 
 	camera = new ComponentCamera();
 	reference = camera->frustum.pos;
-	App->renderer3D->camera = camera;
-
-	
+	App->renderer3D->camera = camera;	
 
 	return true;
 }
@@ -46,9 +44,8 @@ bool ModuleCamera3D::Start()
 	sphere.r = 10.0f;
 
 	cameraCollider = new GameObject("Camera collider");
-	App->physics->AddRigidBody(sphere, cameraCollider, 5.0f)->followObject = true;
+	App->physics->AddRigidBody(sphere, cameraCollider, MASS)->followObject = true;
 	cameraCollider->GetComponent<ComponentRigidBody>()->body->setActivationState(DISABLE_DEACTIVATION);
-
 
 	return ret;
 }
@@ -57,6 +54,7 @@ bool ModuleCamera3D::Start()
 bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
+	RELEASE(cameraCollider);
 	RELEASE(camera);
 
 	return true;
@@ -102,11 +100,11 @@ void ModuleCamera3D::FocusCameraOn(GameObject* object)
 }
 
 // Makes the camera look in a certain direction
-void ModuleCamera3D::LookAt(const vec3 &Spot)
+void ModuleCamera3D::LookAt(const vec3 &spot)
 {
-	/*Reference = Spot;
+	//reference = { spot.x, spot.y, spot.z };
 
-	Z = normalize(Position - Reference);
+	/*Z = normalize(Position - reference);
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 

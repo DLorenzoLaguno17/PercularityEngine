@@ -69,7 +69,7 @@ void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_f
 	if (size >= 3)
 		CreateComponent(COMPONENT_TYPE::MATERIAL);
 	if (size == 4)
-		App->physics->AddRigidBody(obb, this, 10.0f);
+		CreateComponent(COMPONENT_TYPE::RIGIDBODY);
 
 	for (uint i = 0; i < components.size(); ++i)
 		components[i]->OnLoad(gameObjectNum, scene_file);

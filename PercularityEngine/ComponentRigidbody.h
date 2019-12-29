@@ -16,7 +16,7 @@ public:
 	// Methods
 	void Update() override;
 	void OnEditor();
-	void CleanUp() override {}
+	void CleanUp() override;
 
 	void Push(float x, float y, float z);
 	void GetTransform(float* matrix) const;
@@ -38,6 +38,7 @@ public:
 public:
 	std::vector<Module*> collision_listeners;
 	btRigidBody* body = nullptr;
+	float mass = 0.0f;
 	//SENSOR sensorType = NONE;
 
 };

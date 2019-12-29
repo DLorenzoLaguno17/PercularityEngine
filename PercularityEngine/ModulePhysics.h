@@ -63,7 +63,6 @@ public:
 	ComponentRigidBody* AddRigidBody(Capsule& capsule, GameObject* gameObject, float mass = 1.0f);
 
 	ComponentRigidBody* AddCube(const PrimitiveCube& cube, float mass);
-	ComponentRigidBody* CameraCollider();
 	PhysVehicle* AddVehicle(const VehicleInfo &info);
 
 	void CreateTestConstraint();
@@ -85,12 +84,14 @@ public:
 	std::vector<PrimitiveSphere*> spheres;
 	std::vector<btRigidBody*> physBalls;
 
+	btDiscreteDynamicsWorld*				world = nullptr;
+	bool debug = true;
+
 private:
 	btDefaultCollisionConfiguration*		collision_conf = nullptr;
 	btCollisionDispatcher*					dispatcher = nullptr;
 	btBroadphaseInterface*					broad_phase = nullptr;
 	btSequentialImpulseConstraintSolver*	solver = nullptr;
-	btDiscreteDynamicsWorld*				world = nullptr;
 	btDefaultVehicleRaycaster*				vehicle_raycaster = nullptr;
 	DebugDrawer*							debugDrawer = nullptr;
 	

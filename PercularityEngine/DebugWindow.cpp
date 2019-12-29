@@ -22,6 +22,9 @@ void DebugWindow::Update()
 		else App->physics->UnphysicalizeScene();
 	}
 
+	if (ImGui::Checkbox("Show rigidbodies", &debugPhysics))
+		App->physics->debug = !App->physics->debug;
+
 	ImGui::NewLine();
 	ImGui::Text("Scene");
 	bool drawOCTREE = Debug::drawSceneTree;

@@ -29,7 +29,7 @@ void InspectorWindow::Update() {
 			{
 				Sphere sphere;
 				sphere.r = 10;
-				App->physics->AddRigidBody(App->scene->selected->obb, App->scene->selected, 0.0f);
+				App->physics->AddRigidBody(App->scene->selected->obb, App->scene->selected, 5.0f);
 
 			}
 		}

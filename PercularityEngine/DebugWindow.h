@@ -18,6 +18,7 @@ public:
 public:
 	bool activateConstraint = false;
 	bool physScene = false;
+	bool debugPhysics = true;
 };
 
 #endif

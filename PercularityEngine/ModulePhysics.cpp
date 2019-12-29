@@ -36,7 +36,19 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 	debugDrawer = new DebugDrawer();
 }
 
-ModulePhysics::~ModulePhysics() {}
+ModulePhysics::~ModulePhysics() 
+{
+	// Delete the pointers
+	RELEASE(left_cube);
+	RELEASE(right_cube);
+	RELEASE(debugDrawer);
+	RELEASE(vehicle_raycaster);
+	RELEASE(world);
+	RELEASE(solver);
+	RELEASE(broad_phase);
+	RELEASE(dispatcher);
+	RELEASE(collision_conf);
+}
 
 bool ModulePhysics::Init() 
 {
@@ -68,8 +80,8 @@ bool ModulePhysics::Start()
 	left_cube->SetPos(-5, 2, 25);
 	right_cube->color.Set(Red.r, Red.g, Red.b);
 	left_cube->color.Set(Green.r, Green.g, Green.b);
-	right_body = App->physics->AddCube(*right_cube, 15.0f);
-	left_body = App->physics->AddCube(*left_cube, 15.0f);
+	right_body = App->physics->AddCube(*right_cube, MASS);
+	left_body = App->physics->AddCube(*left_cube, MASS);
 
 	// Set debug mode to wireframe
 	debugDrawer->setDebugMode(1);
@@ -107,7 +119,8 @@ update_status ModulePhysics::Update(float dt)
 update_status ModulePhysics::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("PhysicsPostUpdate", Profiler::Color::Yellow);
-	world->debugDrawWorld();
+
+	if (debug) world->debugDrawWorld();
 
 	return UPDATE_CONTINUE;
 }
@@ -151,17 +164,6 @@ bool ModulePhysics::CleanUp()
 	// Clear all the debug balls
 	ClearBalls();
 
-	// Delete the pointers
-	RELEASE(left_cube);
-	RELEASE(right_cube);
-	RELEASE(debugDrawer);
-	RELEASE(vehicle_raycaster);
-	RELEASE(world);
-	RELEASE(solver);
-	RELEASE(broad_phase);
-	RELEASE(dispatcher);
-	RELEASE(collision_conf);
-
 	return true;
 }
 
@@ -175,7 +177,7 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box, GameObject* gameObject
 	shapes.push_back(colShape);
 
 	btTransform transform;
-	transform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
+	transform.setFromOpenGLMatrix(&gameObject->transform->renderTransform);
 
 	btVector3 localInertia(0, 0, 0);
 	if (mass != 0.f)
@@ -186,7 +188,10 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(OBB& box, GameObject* gameObject
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+	
+	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->GetComponent(COMPONENT_TYPE::RIGIDBODY);
+	if (component == nullptr) component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+	component->mass = mass;
 	component->CreateBody(body);
 	world->addRigidBody(body);
 
@@ -210,7 +215,10 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Sphere& sphere, GameObject* game
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+
+	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->GetComponent(COMPONENT_TYPE::RIGIDBODY);
+	if (component == nullptr) component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+	component->mass = mass;
 	component->CreateBody(body);
 	world->addRigidBody(body);
 
@@ -234,7 +242,10 @@ ComponentRigidBody* ModulePhysics::AddRigidBody(Capsule& capsule, GameObject* ga
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+
+	ComponentRigidBody* component = (ComponentRigidBody*)gameObject->GetComponent(COMPONENT_TYPE::RIGIDBODY);
+	if (component == nullptr) component = (ComponentRigidBody*)gameObject->CreateComponent(COMPONENT_TYPE::RIGIDBODY);
+	component->mass = mass;
 	component->CreateBody(body);
 	world->addRigidBody(body);
 
@@ -266,31 +277,6 @@ ComponentRigidBody* ModulePhysics::AddCube(const PrimitiveCube& cube, float mass
 	rigidBodies.push_back(pbody);
 
 	return pbody;
-}
-
-ComponentRigidBody* ModulePhysics::CameraCollider()
-{	
-	/*btCollisionShape* colShape = new btSphereShape(10);
-	shapes.push_back(colShape);
-
-	btTransform transform;
-	transform.setFromOpenGLMatrix(&App->camera);
-
-	btVector3 localInertia(0, 0, 0);
-
-	btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
-	motions.push_back(myMotionState);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(MASS, myMotionState, colShape, localInertia);
-
-	btRigidBody* body = new btRigidBody(rbInfo);
-	ComponentRigidBody* pbody = new ComponentRigidBody(body);
-
-	body->setUserPointer(pbody);
-	world->addRigidBody(body);
-	rigidBodies.push_back(pbody);*/
-
-	//return pbody;
-	return nullptr;
 }
 
 // -----------------------------------------------------------------------------------------------
