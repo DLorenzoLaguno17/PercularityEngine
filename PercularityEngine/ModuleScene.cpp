@@ -154,6 +154,9 @@ bool ModuleScene::CleanUp()
 
 		root->components.clear();
 		RELEASE(root);
+		std::string name = "Temporal Scene.json";
+		std::string path = ASSETS_SCENE_FOLDER + name;
+		App->file_system->Remove(path.c_str());
 	}
 
 	return true;

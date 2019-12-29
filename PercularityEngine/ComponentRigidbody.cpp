@@ -43,7 +43,7 @@ void ComponentRigidBody::OnEditor()
 	if (ImGui::CollapsingHeader("RigidBody")) {
 		ImGui::Checkbox("Enabled", &active);
 
-		ImGui::Text("Mass of the building: %f", mass);
+		ImGui::Text("Mass of the building: %.2f", mass);
 		ImGui::NewLine();
 
 		if (ImGui::DragFloat3("Local Position", (float*)&localPosition, 0.2))
