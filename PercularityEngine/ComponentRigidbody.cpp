@@ -72,6 +72,12 @@ void ComponentRigidBody::OnLoad(const char* gameObjectNum, const nlohmann::json 
 	mass = scene_file["Game Objects"][gameObjectNum]["Components"]["Rigidbody"]["Mass"];
 
 	App->physics->AddRigidBody(gameObject->obb, gameObject, mass);
+
+	float3 pos;
+	pos.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Offset"].at(0);
+	pos.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Offset"].at(1);
+	pos.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Offset"].at(2);
+	localPosition = pos;
 }
 
 void ComponentRigidBody::OnSave(const char* gameObjectNum, nlohmann::json &scene_file)
@@ -80,6 +86,7 @@ void ComponentRigidBody::OnSave(const char* gameObjectNum, nlohmann::json &scene
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Rigidbody"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Rigidbody"]["Active"] = active;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Rigidbody"]["Mass"] = mass;
+	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Offset"] = { localPosition.x, localPosition.y, localPosition.y };
 }
 
 // Pushes the rigidbody with velocity determined by a vector
