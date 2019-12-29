@@ -27,7 +27,7 @@ The main core sub-systems that form Percularity are the following:
 Since we wanted the engine to be used for creating the game, each pair of students specialized the last delivery of the game engine development in one specific subsystem. The sub-system we chose was **physics**. With it, we programmed the possibility of adding **ridigbodies** as GameObject components (either box, sphere or capsule colliders), and we implemented the possibility of controlling a car in **Game mode**, which can interact with the scene and its collisions. Appart from that, the user can shoot spheres from the camera also to test the physics and we have added a sphere collider around the camera that prevents it from getting inside the meshes of the GameObjects.
 
 <p align="center">
-  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif1.gif?raw=true" alt="Citizen BT" width="550" height="400">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif1.gif?raw=true" alt="Citizen BT" width="750" height="400">
 </p>
 
 ### Third-party libraries used
