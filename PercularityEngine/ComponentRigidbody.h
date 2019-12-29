@@ -35,6 +35,9 @@ public:
 
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::RIGIDBODY; }
 
+	float3 localPosition=float3::zero;
+
+
 public:
 	std::vector<Module*> collision_listeners;
 	btRigidBody* body = nullptr;

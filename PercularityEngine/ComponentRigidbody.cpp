@@ -33,7 +33,7 @@ void ComponentRigidBody::Update() {
 			newTransform = parentTransform.inverse()*bodyTransform;
 
 			gameObject->transform->SetLocalTransform(newTransform);
-
+			gameObject->transform->Move(-localPosition);
 		}
 	}
 }
@@ -45,6 +45,9 @@ void ComponentRigidBody::OnEditor()
 
 		ImGui::Text("Mass of the building: %f", mass);
 		ImGui::NewLine();
+
+		if (ImGui::DragFloat3("Local Position", (float*)&localPosition, 0.2))
+			OnUpdateTransform();
 	}
 }
 
@@ -125,8 +128,16 @@ void ComponentRigidBody::OnUpdateTransform()
 {
 	if (!Time::running || followObject)
 	{
+		float4x4 objectTransform = gameObject->transform->GetGlobalTransform();
+		objectTransform =objectTransform* objectTransform.Translate(localPosition);
+
+		mat4x4 glTransform;
+		for (int i = 0; i < 4; ++i)
+			for (int j = 0; j < 4; ++j)
+				glTransform.M[i * 4 + j] = objectTransform[j][i];
+
 		btTransform newTransform;
-		newTransform.setFromOpenGLMatrix(&gameObject->transform->GetGlobalGLTransform());
+		newTransform.setFromOpenGLMatrix(&glTransform);
 		body->setWorldTransform(newTransform);
 	}
 }
