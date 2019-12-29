@@ -46,7 +46,7 @@ void ComponentRigidBody::OnEditor()
 		ImGui::Text("Mass of the building: %f", mass);
 		ImGui::NewLine();
 
-		if (ImGui::DragFloat3("Local Position", (float*)&localPosition, 0.2))
+		if (ImGui::DragFloat3("Local Position", (float*)&localPosition, 0.1))
 			OnUpdateTransform();
 	}
 }
