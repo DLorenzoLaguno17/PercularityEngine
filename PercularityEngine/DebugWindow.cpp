@@ -53,6 +53,21 @@ void DebugWindow::Update()
 	if (ImGui::Checkbox("Culling accelerated", &cullingAccelerated))
 		Debug::frustumAccelerated = cullingAccelerated;
 
+	ImGui::NewLine();
+	ImGui::Text("Mouse");
+
+	bool showMouseRay = Debug::drawMouseLine;
+	if (ImGui::Checkbox("Mouse ray", &showMouseRay))
+		Debug::drawMouseLine = showMouseRay;
+
+
+
+	ImGui::NewLine();
+	ImGui::Text("Colliders");
+
+	bool drawColliders = Debug::drawColliders;
+	if (ImGui::Checkbox("Show colliders", &drawColliders))
+		Debug::drawColliders = drawColliders;
 
 	ImGui::End();
 }

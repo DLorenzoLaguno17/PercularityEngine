@@ -13,6 +13,11 @@ public:
 
 	static bool frustumAccelerated;
 	static bool frustumCullingActive;
+	
+	static bool drawColliders;
+
+	static bool drawMouseLine;
+
 
 };
 

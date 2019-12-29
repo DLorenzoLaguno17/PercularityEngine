@@ -12,6 +12,8 @@
 #include "ComponentCamera.h"
 #include "ComponentRigidbody.h"
 #include "ComponentTransform.h"
+#include "Time.h"
+#include "Debug.h"
 
 #include "OpenGL.h"
 #include "Par Shapes/par_shapes.h"
@@ -44,7 +46,10 @@ bool ModuleCamera3D::Start()
 	sphere.r = 10.0f;
 
 	cameraCollider = new GameObject("Camera collider");
-	App->physics->AddRigidBody(sphere, cameraCollider, MASS)->followObject = true;
+	collider = App->physics->AddRigidBody(sphere, cameraCollider, 0.0);
+	collider->followObject = true;
+	collider->collision_listeners.push_back(this);
+
 	cameraCollider->GetComponent<ComponentRigidBody>()->body->setActivationState(DISABLE_DEACTIVATION);
 
 	return ret;
@@ -66,23 +71,42 @@ update_status ModuleCamera3D::Update(float dt)
 {
 	BROFILER_CATEGORY("CameraUpdate", Profiler::Color::LightSeaGreen);
 
+	if (Time::time - timeCounter >= cameraSaveFreq)
+	{
+		timeCounter = Time::time;
+
+		if (!cameraCollided)
+			lastPosition = camera->frustum.pos;
+	}
+	
+	if (cameraCollided)
+	{
+		camera->frustum.pos = lastPosition;
+		cameraCollider->transform->SetPosition(lastPosition);
+		cameraCollided = false;
+	}
+	else {
+		cameraCollider->transform->SetPosition(camera->frustum.pos);
+	}
+
 	HandleUserInput(dt);
 
 	camera->Update();
-
-	glBegin(GL_LINES);
-
-	glColor3f(1, 1, 1); //Light green color
-
-	//Frustum lines
-	glVertex3f(lastRay.a.x, lastRay.a.y, lastRay.a.z);
-	glVertex3f(lastRay.b.x, lastRay.b.y, lastRay.b.z);
-
-	glEnd();
-
 	cameraCollider->Update();
-	cameraCollider->transform->SetPosition(camera->frustum.pos);
 
+	if (Debug::drawMouseLine)
+	{
+		glBegin(GL_LINES);
+
+		glColor3f(1, 1, 1); //Light green color
+
+		//Frustum lines
+		glVertex3f(lastRay.a.x, lastRay.a.y, lastRay.a.z);
+		glVertex3f(lastRay.b.x, lastRay.b.y, lastRay.b.z);
+
+		glEnd();
+	}
+		
 	return UPDATE_CONTINUE;
 }
 
@@ -127,8 +151,9 @@ void ModuleCamera3D::HandleUserInput(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT) newPos.y += speed;
 		if (App->input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT) newPos.y -= speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += camera->frustum.front * speed;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)newPos += camera->frustum.front * speed;
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= camera->frustum.front * speed;
+		
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= camera->frustum.WorldRight() * speed;
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += camera->frustum.WorldRight() * speed;
@@ -181,4 +206,9 @@ void ModuleCamera3D::CameraLookAround(float speed, float3 reference)
 void ModuleCamera3D::OnClick(const vec2& normMousePos)
 {
 	lastRay = App->renderer3D->GetCamera()->frustum.UnProjectLineSegment(normMousePos.x, normMousePos.y);
+}
+
+void ModuleCamera3D::OnCollision(ComponentRigidBody* c1, ComponentRigidBody* c2)
+{
+	cameraCollided = true;
 }
