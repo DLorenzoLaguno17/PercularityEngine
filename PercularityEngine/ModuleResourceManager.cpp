@@ -34,11 +34,11 @@ bool ModuleResourceManager::Start()
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
 	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
-	for (int i = 0; i < tex_files.size(); ++i) {
+	/*for (int i = 0; i < tex_files.size(); ++i) {
 	
 		std::string file = ASSETS_TEXTURE_FOLDER + tex_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
-	}
+	}*/
 
 	for (int i = 0; i < mod_files.size(); ++i) {
 

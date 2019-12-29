@@ -91,7 +91,6 @@ vec3 PhysVehicle::GetPosition() {
 
 	PrimitiveCube chassis(info.chassis_size.x, info.chassis_size.y, info.chassis_size.z);
 	vehicle->getChassisWorldTransform().getOpenGLMatrix(&chassis.transform);
-	btQuaternion q = vehicle->getChassisWorldTransform().getRotation();
 
 	pos.x = chassis.transform.M[12];
 	pos.y = chassis.transform.M[13];

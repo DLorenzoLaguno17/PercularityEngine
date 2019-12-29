@@ -34,7 +34,7 @@ void InspectorWindow::Update() {
 			}
 			
 			if (ImGui::Button("Add Capsule RigidBody")) {
-				LineSegment l = { App->scene->selected->obb.pos / 2, -App->scene->selected->obb.pos / 2 };
+				LineSegment l = { App->scene->selected->obb.pos / 4, -App->scene->selected->obb.pos / 4 };
 				Capsule capsule; capsule.r = 2.5; capsule.l = l;
 				App->physics->AddRigidBody(capsule, App->scene->selected, 10.0f);
 			}

@@ -78,7 +78,7 @@ void ComponentTransform::UpdateTransform()
 
 }
 
-const mat4x4 ComponentTransform::GetGlobalGLTransform()const
+const mat4x4 ComponentTransform::GetGlobalGLTransform() const
 {
 	mat4x4 ret;
 	for (int i = 0; i < 4; ++i)
