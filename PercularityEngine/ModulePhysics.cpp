@@ -288,7 +288,9 @@ void ModulePhysics::ShootBall()
 {
 	PrimitiveSphere* sphere = new PrimitiveSphere(0.5);
 	sphere->color.Set(Yellow.r, Yellow.g, Yellow.b);
-	sphere->SetPos(App->camera->camera->frustum.pos.x, App->camera->camera->frustum.pos.y, App->camera->camera->frustum.pos.z);
+	sphere->SetPos(App->camera->camera->frustum.pos.x + App->camera->camera->frustum.front.x, 
+		App->camera->camera->frustum.pos.y + App->camera->camera->frustum.front.y, 
+		App->camera->camera->frustum.pos.z + App->camera->camera->frustum.front.z);
 	spheres.push_back(sphere);
 
 	float mass = 1.0f;
@@ -307,7 +309,7 @@ void ModulePhysics::ShootBall()
 
 	btRigidBody* body = new btRigidBody(rbInfo);
 	ComponentRigidBody* pbody = new ComponentRigidBody(body);
-	pbody->Push(App->camera->camera->frustum.front.x * 25, App->camera->camera->frustum.front.y * 25, App->camera->camera->frustum.front.z * 25);
+	pbody->Push(App->camera->camera->frustum.front.x * 35, App->camera->camera->frustum.front.y * 35, App->camera->camera->frustum.front.z * 35);
 
 	body->setUserPointer(pbody);
 	world->addRigidBody(body);
