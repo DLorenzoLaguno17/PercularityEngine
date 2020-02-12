@@ -37,6 +37,7 @@ public:
 
 	float3 localPosition = float3::zero;
 
+	bool dynamicObject = false;
 
 public:
 	std::vector<Module*> collision_listeners;

@@ -41,13 +41,54 @@ void ComponentRigidBody::Update() {
 void ComponentRigidBody::OnEditor()
 {
 	if (ImGui::CollapsingHeader("RigidBody")) {
-		ImGui::Checkbox("Enabled", &active);
 
-		ImGui::Text("Mass of the building: %.2f", mass);
-		ImGui::NewLine();
+		ImGui::Checkbox("Enabled", &active);
+		if (ImGui::Button("Set to zero"))
+		{
+			localPosition = float3(0.0f, 0.0f, 0.0f);
+			OnUpdateTransform();
+		}
 
 		if (ImGui::DragFloat3("Local Position", (float*)&localPosition, 0.1))
 			OnUpdateTransform();
+		
+		if (ImGui::Checkbox("Dynamic object", &dynamicObject))
+		{
+			if (!dynamicObject)
+			{
+				App->physics->world->removeRigidBody(body);
+
+				btVector3 localInertia(0, 0, 0);
+				body->getCollisionShape()->calculateLocalInertia(0.0f, localInertia);
+				body->setMassProps(0.0f, localInertia);
+
+				App->physics->world->addRigidBody(body);
+			}
+			else
+			{
+				App->physics->world->removeRigidBody(body);
+
+				btVector3 localInertia(0, 0, 0);
+				body->getCollisionShape()->calculateLocalInertia(mass, localInertia);
+				body->setMassProps(mass, localInertia);
+
+				App->physics->world->addRigidBody(body);
+			}
+		}
+		
+		if (dynamicObject)
+		{
+			if (ImGui::DragFloat("Mass of the building: %.2f", &mass))
+			{
+				App->physics->world->removeRigidBody(body);
+
+				btVector3 localInertia(0, 0, 0);
+				body->getCollisionShape()->calculateLocalInertia(mass, localInertia);
+				body->setMassProps(mass, localInertia);
+
+				App->physics->world->addRigidBody(body);
+			}
+		}
 	}
 }
 
