@@ -11,6 +11,7 @@
 #include "ModuleResourceManager.h"
 #include "ModulePlayer.h"
 #include "ModuleFileSystem.h"
+#include "ModuleCommands.h"
 #include "Time.h"
 
 #include <fstream>
@@ -36,11 +37,13 @@ Application::Application()
 	file_system = new ModuleFileSystem(this, ASSETS_FOLDER);
 	physics = new ModulePhysics(this);
 	player = new ModulePlayer(this);
+	commands = new ModuleCommands(this);
 
 	// Main Modules
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(commands);
 	AddModule(gui);
 	AddModule(file_system);
 	AddModule(res_manager);
