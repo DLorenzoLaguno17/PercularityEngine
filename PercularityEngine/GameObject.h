@@ -24,8 +24,9 @@ public:
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
-	// Makes a it child of another GameObject
+	// Makes it a child of another GameObject
 	void MakeChild(GameObject* parent);
+
 	void UpdateAABB();
 	void DrawAABB();
 
@@ -52,7 +53,7 @@ public:
 
 	std::string name;
 	std::vector<GameObject*> children;
-	GameObject* parent=nullptr;
+	GameObject* parent = nullptr;
 
 	bool extended = true;
 	bool showBondingBox =false;

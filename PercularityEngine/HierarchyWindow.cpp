@@ -8,14 +8,16 @@
 HierarchyWindow::HierarchyWindow(char* name, bool active) : UIElement(name, active) {}
 
 // Show scene window
-void HierarchyWindow::Update() {
+void HierarchyWindow::Update() 
+{
 
 	ImGui::Begin("Hierarchy", &active);	
 	DrawHierarchy(App->scene->GetRoot());
 	ImGui::End();
 }
 
-void HierarchyWindow::DrawHierarchy(GameObject* root) {
+void HierarchyWindow::DrawHierarchy(GameObject* root) 
+{
 
 	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | (root->extended ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None)
 		| ImGuiTreeNodeFlags_OpenOnDoubleClick | (App->scene->selected == root ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None);
@@ -31,11 +33,10 @@ void HierarchyWindow::DrawHierarchy(GameObject* root) {
 	root->extended = ImGui::TreeNodeEx(root, node_flags, root->name.c_str());
 	
 	if (ImGui::IsItemClicked())
-	{
 		App->scene->selected = root;
-	}
 
-	if (root->extended) {
+	if (root->extended) 
+	{
 		for (int i = 0; i < root->children.size(); ++i)
 			DrawHierarchy(root->children[i]);
 		

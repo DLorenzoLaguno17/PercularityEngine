@@ -121,12 +121,14 @@ Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
 	return ret;
 }
 
-void GameObject::OnEditor() {
+void GameObject::OnEditor() 
+{
 	for (uint i = 0; i < components.size(); ++i)
 		components[i]->OnEditor();
 }
 
-void GameObject::MakeChild(GameObject* parent) {
+void GameObject::MakeChild(GameObject* parent) 
+{
 	this->parent = parent;
 	parent->children.push_back(this);
 	parent_UUID = parent->GetUUID();
@@ -136,12 +138,14 @@ void GameObject::MakeChild(GameObject* parent) {
 }
 
 // Cleans the memory of the GameObject
-void GameObject::CleanUp() {
-
-	for (uint i = 0; i < components.size(); ++i) {		
+void GameObject::CleanUp() 
+{
+	for (uint i = 0; i < components.size(); ++i) 
+	{		
 		components[i]->CleanUp();
 		RELEASE(components[i]);
 	}
+
 	components.clear();	
 	children.clear();
 	parent = nullptr;
@@ -178,16 +182,10 @@ const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 void GameObject::DrawAABB()
 {
 	glLineWidth(2.0f);
-
 	glBegin(GL_LINES);
 
-	if (App->scene->selected == this) {
-		glColor3f(0.7, 1, 0.7); //Light green color
-	}
-
-	else {
-		glColor3f(0.2, 0.2, 1); //Light green color
-	}
+	if (App->scene->selected == this)	glColor3f(0.7, 1, 0.7); // Light green color
+	else								glColor3f(0.2, 0.2, 1); // Dark blue color
 
 	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
 	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());

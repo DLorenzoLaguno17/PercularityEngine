@@ -8,10 +8,7 @@
 class ComponentTransform : public Component 
 {
 public:
-
 	ComponentTransform(GameObject* parent, bool active);
-
-	// Destructor
 	~ComponentTransform() {}
 
 	// Methods
@@ -49,6 +46,7 @@ public:
 	void SetEulerRotation(float3 eulerAngles);
 
 public:
+	// For undo and redo features
 	bool firstTime = true;
 	float3 lastTranslation = float3::zero;
 	float3 lastRotation = float3::zero;
@@ -68,7 +66,6 @@ private:
 	float3 translationM = float3::zero;
 	float3 rotationM = float3::zero;
 	float3 scaleM = float3::one;
-
 };
 
 // ---------------------------------------------------

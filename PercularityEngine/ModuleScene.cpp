@@ -115,6 +115,15 @@ update_status ModuleScene::Update(float dt)
 		for (int i = 0; i < root->children.size(); ++i)
 			sceneTree->rootNode->Insert(root->children[i]);
 
+	// If delete is pressed, destroy selected GameObjects
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && selected != root)
+	{
+		GameObject* parent = selected->parent;
+		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), selected));
+		RecursiveCleanUp(selected);
+		selected = parent;
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -130,7 +139,8 @@ update_status ModuleScene::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModuleScene::UpdateGameObjects(GameObject* root) {
+void ModuleScene::UpdateGameObjects(GameObject* root)
+{
 	root->Update();
 
 	for (uint i = 0; i < root->children.size(); ++i)
@@ -146,8 +156,10 @@ bool ModuleScene::CleanUp()
 	RecursiveCleanUp(root);
 	root->children.clear();
 
-	if (App->closingEngine) {
-		for (uint i = 0; i < root->components.size(); ++i) {
+	if (App->closingEngine) 
+	{
+		for (uint i = 0; i < root->components.size(); ++i) 
+		{
 			root->components[i]->CleanUp();
 			RELEASE(root->components[i]);
 		}
@@ -162,11 +174,13 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
-void ModuleScene::RecursiveCleanUp(GameObject* root) {
+void ModuleScene::RecursiveCleanUp(GameObject* root) 
+{
 	for (int i = 0; i < root->children.size(); ++i)
 		RecursiveCleanUp(root->children[i]);
 
-	if (root != GetRoot()) {
+	if (root != GetRoot()) 
+	{
 		root->CleanUp();
 		RELEASE(root);
 	}
