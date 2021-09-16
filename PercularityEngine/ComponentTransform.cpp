@@ -8,8 +8,8 @@
 #include "ImGui/ImGuizmo.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::TRANSFORM, parent, active) {
-
+	Component(COMPONENT_TYPE::TRANSFORM, parent, active) 
+{
 	translationM = GetTranslation();
 	rotationM = GetEulerRotation();
 	scaleM = GetScale();
@@ -17,41 +17,44 @@ ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
 
 void ComponentTransform::Update()
 {
-	/*if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		lastTranslation = translation;
-		lastRotation = eulerRotation;
-		lastScale = scale;
-	}*/
-
-	UpdateTransform();
-
-	/*if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	// Check if the transform has changed, and record the action if it has
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && gameObject == App->scene->selected)
 	{
 		if (!lastTranslation.Equals(translation))
 		{
 			TranslateGameObject* translationAction = new TranslateGameObject(ACTION_TYPE::TRANSLATE_GAMEOBJECT, lastTranslation, translation, this);
 			App->undo->StoreNewAction(translationAction);
+
+			lastTranslation = translation;
+			firstTime = false;
 		}
 
-		else if (!lastRotation.Equals(eulerRotation))
+		if (!lastRotation.Equals(eulerRotation))
 		{
 			RotateGameObject* rotationAction = new RotateGameObject(ACTION_TYPE::ROTATE_GAMEOBJECT, eulerRotation, rotationM, this);
 			App->undo->StoreNewAction(rotationAction);
+
+			lastRotation = eulerRotation;
+			firstTime = false;
 		}
 
 		else if (!lastScale.Equals(scale))
 		{
 			ScaleGameObject* scaleAction = new ScaleGameObject(ACTION_TYPE::SCALE_GAMEOBJECT, scale, scaleM, this);
 			App->undo->StoreNewAction(scaleAction);
+
+			lastScale = scale;
+			firstTime = false;
 		}
-	}*/
+	}
+
+	UpdateTransform();
 }
 
-void ComponentTransform::OnEditor() {
-
-	if (ImGui::CollapsingHeader("Transform")) {
-
+void ComponentTransform::OnEditor() 
+{
+	if (ImGui::CollapsingHeader("Transform")) 
+	{
 		float4x4 model = gameObject->transform->GetLocalTransform();
 		model.Transpose();
 
@@ -100,7 +103,8 @@ void ComponentTransform::UpdateTransform()
 		for (int i = 0; i < gameObject->components.size(); ++i)
 			gameObject->components[i]->OnUpdateTransform();
 
-		if (gameObject->isStatic) {
+		if (gameObject->isStatic) 
+		{
 			App->scene->sceneTree->Erase(gameObject);
 			App->scene->sceneTree->Insert(gameObject);
 		}
