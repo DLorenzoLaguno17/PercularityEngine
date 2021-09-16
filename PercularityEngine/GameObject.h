@@ -7,7 +7,8 @@ class ComponentMesh;
 class ComponentMaterial;
 class ComponentTransform;
 
-class GameObject {
+class GameObject 
+{
 public:
 	//Constructors
 	GameObject();

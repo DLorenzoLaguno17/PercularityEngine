@@ -2,9 +2,11 @@
 #define _ComponentTransform_H_
 
 #include "Component.h"
+#include "ModuleUndo.h"
 #include "glmath.h"
 
-class ComponentTransform : public Component {
+class ComponentTransform : public Component 
+{
 public:
 
 	ComponentTransform(GameObject* parent, bool active);
@@ -55,13 +57,60 @@ private:
 
 	Quat rotation = Quat::identity;
 	float3 eulerRotation = float3::zero;
-
 	float3 translation = float3::zero;
 	float3 scale = float3::one;
 
-	float3 translationM;
-	float3 rotationM;
-	float3 scaleM;
+	float3 translationM = float3::zero;
+	float3 rotationM = float3::zero;
+	float3 scaleM = float3::one;
+
+	bool firstTime = true;
+	float3 lastTranslation = float3::zero;
+	float3 lastRotation = float3::zero;
+	float3 lastScale = float3::one;
+};
+
+// ---------------------------------------------------
+class TranslateGameObject : public Action
+{
+public:
+	TranslateGameObject(ACTION_TYPE type, float3 lastPosition, float3 newPosition, ComponentTransform* transform) :
+		Action(type), lastPosition(lastPosition), newPosition(newPosition), transform(transform) {}
+
+	void Undo() override { transform->SetPosition(lastPosition); };
+	void Redo() override { transform->SetPosition(newPosition); };
+
+	float3 lastPosition;
+	float3 newPosition;
+	ComponentTransform* transform = nullptr;
+};
+
+class RotateGameObject : public Action
+{
+public:
+	RotateGameObject(ACTION_TYPE type, float3 lastAngles, float3 newAngles, ComponentTransform* transform) :
+		Action(type), lastAngles(lastAngles), newAngles(newAngles), transform(transform) {}
+
+	void Undo() override { transform->SetEulerRotation(lastAngles); };
+	void Redo() override { transform->SetEulerRotation(newAngles); };
+
+	float3 lastAngles;
+	float3 newAngles;
+	ComponentTransform* transform = nullptr;
+};
+
+class ScaleGameObject : public Action
+{
+public:
+	ScaleGameObject(ACTION_TYPE type, float3 lastScale, float3 newScale, ComponentTransform* transform) :
+		Action(type), lastScale(lastScale), newScale(newScale), transform(transform) {}
+
+	void Undo() override { transform->SetScale(lastScale); };
+	void Redo() override { transform->SetScale(newScale); };
+
+	float3 lastScale;
+	float3 newScale;
+	ComponentTransform* transform = nullptr;
 };
 
 #endif // _ComponentTransform_H_

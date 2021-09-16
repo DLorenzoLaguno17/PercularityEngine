@@ -18,6 +18,7 @@ class ModuleResourceManager;
 class ModuleFileSystem;
 class ModulePhysics;
 class ModulePlayer;
+class ModuleUndo;
 
 class Application
 {
@@ -33,6 +34,7 @@ public:
 	ModuleScene* scene;
 	ModulePhysics* physics;
 	ModulePlayer* player;
+	ModuleUndo* undo;
 
 	// Aditional data
 	std::string engineName;

@@ -29,10 +29,10 @@
     "Window": {
         "Borderless": false,
         "Full Screen": false,
-        "Full Screen Desktop": false,
-        "Height": 987,
+        "Full Screen Desktop": true,
+        "Height": 1080,
         "Resizable": false,
         "Size": 1,
-        "Width": 1680
+        "Width": 1920
     }
 }

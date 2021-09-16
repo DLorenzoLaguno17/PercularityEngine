@@ -3,7 +3,8 @@
 
 #include "Globals.h"
 
-enum class COMPONENT_TYPE {
+enum class COMPONENT_TYPE 
+{
 	NONE,
 	TRANSFORM,
 	MATERIAL,
@@ -14,7 +15,8 @@ enum class COMPONENT_TYPE {
 
 class GameObject;
 
-class Component {
+class Component 
+{
 public:
 	// Constructors
 	Component() {}

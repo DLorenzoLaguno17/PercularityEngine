@@ -11,6 +11,7 @@
 #include "ModuleResourceManager.h"
 #include "ModulePlayer.h"
 #include "ModuleFileSystem.h"
+#include "ModuleUndo.h"
 #include "Time.h"
 
 #include <fstream>
@@ -36,6 +37,7 @@ Application::Application()
 	file_system = new ModuleFileSystem(this, ASSETS_FOLDER);
 	physics = new ModulePhysics(this);
 	player = new ModulePlayer(this);
+	undo = new ModuleUndo(this);
 
 	// Main Modules
 	AddModule(window);
@@ -46,6 +48,7 @@ Application::Application()
 	AddModule(res_manager);
 	AddModule(res_loader);
 	AddModule(physics);
+	AddModule(undo);
 	
 	// Scenes
 	AddModule(scene);

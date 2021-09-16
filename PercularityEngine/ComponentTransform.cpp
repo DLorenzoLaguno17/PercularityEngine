@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ModuleScene.h"
+#include "ModuleInput.h"
 
 #include "ComponentTransform.h"
 #include "ImGui/imgui.h"
@@ -16,7 +17,35 @@ ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
 
 void ComponentTransform::Update()
 {
+	/*if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		lastTranslation = translation;
+		lastRotation = eulerRotation;
+		lastScale = scale;
+	}*/
+
 	UpdateTransform();
+
+	/*if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		if (!lastTranslation.Equals(translation))
+		{
+			TranslateGameObject* translationAction = new TranslateGameObject(ACTION_TYPE::TRANSLATE_GAMEOBJECT, lastTranslation, translation, this);
+			App->undo->StoreNewAction(translationAction);
+		}
+
+		else if (!lastRotation.Equals(eulerRotation))
+		{
+			RotateGameObject* rotationAction = new RotateGameObject(ACTION_TYPE::ROTATE_GAMEOBJECT, eulerRotation, rotationM, this);
+			App->undo->StoreNewAction(rotationAction);
+		}
+
+		else if (!lastScale.Equals(scale))
+		{
+			ScaleGameObject* scaleAction = new ScaleGameObject(ACTION_TYPE::SCALE_GAMEOBJECT, scale, scaleM, this);
+			App->undo->StoreNewAction(scaleAction);
+		}
+	}*/
 }
 
 void ComponentTransform::OnEditor() {
@@ -34,13 +63,19 @@ void ComponentTransform::OnEditor() {
 			SetToZero();
 
 		if (ImGui::DragFloat3("Translation", (float*)&translationM, 0.3))
+		{
 			SetPosition(translationM);
+		}
 
 		if (ImGui::DragFloat3("Rotation", (float*)&rotationM, 0.3))
+		{
 			SetEulerRotation(rotationM);
+		}
 
 		if (ImGui::DragFloat3("Scale", (float*)&scaleM, 0.05))
+		{
 			SetScale(scaleM);
+		}
 
 		ImGui::NewLine();
 	}
@@ -121,6 +156,12 @@ void ComponentTransform::SetGlobalTransform(mat4x4 transform)
 
 void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 {
+	if (firstTime)
+	{
+		lastRotation = eulerRotation;
+		firstTime = false;
+	}
+
 	float3 angleIncrease = (eulerAngle - eulerRotation)*DEGTORAD;
 	Quat newRotation = Quat::FromEulerXYZ(angleIncrease.x, angleIncrease.y, angleIncrease.z);
 	rotation = rotation * newRotation;
@@ -142,17 +183,30 @@ void ComponentTransform::SetLocalTransform(mat4x4 transform)
 
 void ComponentTransform::SetPosition(float3 newPosition)
 {
+	if (firstTime)
+	{
+		lastTranslation = translation;
+		firstTime = false;
+	}
+
 	translation = newPosition;
 	mustUpdate = true;
 }
 
 void ComponentTransform::SetScale(float3 newScale)
 {
+	if (firstTime)
+	{
+		lastScale = scale;
+		firstTime = false;
+	}
+
 	scale = newScale;
 	mustUpdate = true;
 }
 
 void ComponentTransform::SetRotation(Quat newRotation) {
+	
 	rotation = newRotation;
 	UpdateEulerRotation();
 	mustUpdate = true;
