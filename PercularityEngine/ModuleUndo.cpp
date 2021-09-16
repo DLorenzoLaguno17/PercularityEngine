@@ -31,14 +31,20 @@ bool ModuleUndo::CleanUp()
 
 void ModuleUndo::Undo()
 {
-	actions[cursor]->Undo();
-	cursor--;
+	if (cursor > 0)
+	{
+		actions[cursor - 1]->Undo();
+		cursor--;
+	}
 };
 
 void ModuleUndo::Redo() 
 {
-	cursor++;
-	actions[cursor]->Redo();
+	if (cursor < actions.size())
+	{
+		cursor++;
+		actions[cursor - 1]->Redo();
+	}
 };
 
 void ModuleUndo::StoreNewAction(Action* newAction)

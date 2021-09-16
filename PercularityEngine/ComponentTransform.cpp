@@ -17,6 +17,8 @@ ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
 
 void ComponentTransform::Update()
 {
+	UpdateTransform();
+
 	// Check if the transform has changed, and record the action if it has
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && gameObject == App->scene->selected)
 	{
@@ -31,7 +33,7 @@ void ComponentTransform::Update()
 
 		if (!lastRotation.Equals(eulerRotation))
 		{
-			RotateGameObject* rotationAction = new RotateGameObject(ACTION_TYPE::ROTATE_GAMEOBJECT, eulerRotation, rotationM, this);
+			RotateGameObject* rotationAction = new RotateGameObject(ACTION_TYPE::ROTATE_GAMEOBJECT, lastRotation, eulerRotation, this);
 			App->undo->StoreNewAction(rotationAction);
 
 			lastRotation = eulerRotation;
@@ -40,15 +42,13 @@ void ComponentTransform::Update()
 
 		else if (!lastScale.Equals(scale))
 		{
-			ScaleGameObject* scaleAction = new ScaleGameObject(ACTION_TYPE::SCALE_GAMEOBJECT, scale, scaleM, this);
+			ScaleGameObject* scaleAction = new ScaleGameObject(ACTION_TYPE::SCALE_GAMEOBJECT, lastScale, scale, this);
 			App->undo->StoreNewAction(scaleAction);
 
 			lastScale = scale;
 			firstTime = false;
 		}
 	}
-
-	UpdateTransform();
 }
 
 void ComponentTransform::OnEditor() 
@@ -66,19 +66,13 @@ void ComponentTransform::OnEditor()
 			SetToZero();
 
 		if (ImGui::DragFloat3("Translation", (float*)&translationM, 0.3))
-		{
 			SetPosition(translationM);
-		}
 
 		if (ImGui::DragFloat3("Rotation", (float*)&rotationM, 0.3))
-		{
 			SetEulerRotation(rotationM);
-		}
 
 		if (ImGui::DragFloat3("Scale", (float*)&scaleM, 0.05))
-		{
 			SetScale(scaleM);
-		}
 
 		ImGui::NewLine();
 	}
@@ -264,4 +258,41 @@ void ComponentTransform::OnSave(const char* gameObjectNum, nlohmann::json &scene
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"] = {rotation.x, rotation.y, rotation.z, rotation.w };
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"] = { translation.x, translation.y, translation.z };
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"] = { scale.x, scale.y, scale.y };
+}
+
+// --------------------------------------------------
+void TranslateGameObject::Undo()
+{
+	transform->SetPosition(lastPosition);
+	transform->lastTranslation = transform->GetTranslation();
+}
+
+void TranslateGameObject::Redo()
+{
+	transform->SetPosition(newPosition);
+	transform->lastTranslation = transform->GetTranslation();
+}
+
+void RotateGameObject::Undo()
+{
+	transform->SetEulerRotation(lastAngles);
+	transform->lastRotation = transform->GetEulerRotation();
+}
+
+void RotateGameObject::Redo()
+{
+	transform->SetEulerRotation(newAngles);
+	transform->lastRotation = transform->GetEulerRotation();
+}
+
+void ScaleGameObject::Undo()
+{
+	transform->SetScale(lastScale);
+	transform->lastScale = transform->GetScale();
+}
+
+void ScaleGameObject::Redo()
+{
+	transform->SetScale(newScale);
+	transform->lastScale = transform->GetScale();
 }

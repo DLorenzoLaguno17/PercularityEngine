@@ -37,7 +37,6 @@ public:
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
-public:
 	//Update transform
 	void UpdateTransform();
 	void Move(float3 positionIncrease);
@@ -48,6 +47,12 @@ public:
 	void SetLocalTransform(mat4x4 transform);//TEST
 	void SetToZero();
 	void SetEulerRotation(float3 eulerAngles);
+
+public:
+	bool firstTime = true;
+	float3 lastTranslation = float3::zero;
+	float3 lastRotation = float3::zero;
+	float3 lastScale = float3::one;
 
 private:
 	bool mustUpdate = true;
@@ -64,10 +69,6 @@ private:
 	float3 rotationM = float3::zero;
 	float3 scaleM = float3::one;
 
-	bool firstTime = true;
-	float3 lastTranslation = float3::zero;
-	float3 lastRotation = float3::zero;
-	float3 lastScale = float3::one;
 };
 
 // ---------------------------------------------------
@@ -77,8 +78,8 @@ public:
 	TranslateGameObject(ACTION_TYPE type, float3 lastPosition, float3 newPosition, ComponentTransform* transform) :
 		Action(type), lastPosition(lastPosition), newPosition(newPosition), transform(transform) {}
 
-	void Undo() override { transform->SetPosition(lastPosition); };
-	void Redo() override { transform->SetPosition(newPosition); };
+	void Undo() override;
+	void Redo() override;
 
 	float3 lastPosition;
 	float3 newPosition;
@@ -91,8 +92,8 @@ public:
 	RotateGameObject(ACTION_TYPE type, float3 lastAngles, float3 newAngles, ComponentTransform* transform) :
 		Action(type), lastAngles(lastAngles), newAngles(newAngles), transform(transform) {}
 
-	void Undo() override { transform->SetEulerRotation(lastAngles); };
-	void Redo() override { transform->SetEulerRotation(newAngles); };
+	void Undo() override;
+	void Redo() override;
 
 	float3 lastAngles;
 	float3 newAngles;
@@ -105,8 +106,8 @@ public:
 	ScaleGameObject(ACTION_TYPE type, float3 lastScale, float3 newScale, ComponentTransform* transform) :
 		Action(type), lastScale(lastScale), newScale(newScale), transform(transform) {}
 
-	void Undo() override { transform->SetScale(lastScale); };
-	void Redo() override { transform->SetScale(newScale); };
+	void Undo() override;
+	void Redo() override;
 
 	float3 lastScale;
 	float3 newScale;
