@@ -1,8 +1,6 @@
 Percularity is a a game engine programmed from scratch with `C++` using open third-party libraries. It has been developed by [Daniel Lorenzo](https://www.linkedin.com/in/daniel-lorenzo-laguno-a2ab35180/) & [Joan Marín](https://www.linkedin.com/in/joan-marín-encinas-6a4693191/), two third course students of the [Bachelor's Degree in Video Games by UPC at CITM](https://www.citm.upc.edu/ing/estudis/graus-videojocs/). The purpouse of the subject was to build a game engine useful enough it could allow us to develop a game with the whole class as a big team. Using pairs, each team developed their own version of the program with the idea of mergeing the best parts of each of them into the best game engine we could get.
 
-<p align="center">
-  <iframe width="750" height="400" src="https://www.youtube.com/embed/1fTSsjieH-Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</p>
+<iframe width="600" height="335" src="https://www.youtube.com/embed/1fTSsjieH-Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 You can download Percularity's [latest release](https://github.com/DLorenzoLaguno17/PercularityEngine/releases) or check out our [GitHub](https://github.com/DLorenzoLaguno17/PercularityEngine) repository! 
 
@@ -25,13 +23,13 @@ The main core sub-systems that form Percularity are the following:
 ### Specialized sub-system
 
 <p align="center">
-  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif2.gif?raw=true" alt="Gif1" width="750" height="400">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif2.gif?raw=true" alt="Gif1" width="600" height="335">
 </p>
 
 Since we wanted the engine to be used for creating the game, each pair of students specialized the last delivery of the game engine development in one specific subsystem. The sub-system we chose was **physics**. With it, we programmed the possibility of adding **ridigbodies** as GameObject components (either box, sphere or capsule colliders), and we implemented the possibility of controlling a car in **Game mode**, which can interact with the scene and its collisions. Appart from that, the user can shoot spheres from the camera also to test the physics and we have added a sphere collider around the camera that prevents it from getting inside the meshes of the GameObjects.
 
 <p align="center">
-  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif1.gif?raw=true" alt="Citizen BT" width="750" height="400">
+  <img src="https://github.com/DLorenzoLaguno17/PercularityEngine/blob/master/Page%20assets/Gif1.gif?raw=true" alt="Citizen BT" width="600" height="335">
 </p>
 
 ### Third-party libraries used
