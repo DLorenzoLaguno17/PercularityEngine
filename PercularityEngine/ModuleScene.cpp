@@ -192,8 +192,8 @@ void ModuleScene::RecursiveCleanUp(GameObject* root)
 
 void ModuleScene::Play()
 {
-	if (!Time::running) {
-
+	if (!Time::running) 
+	{
 		if (Time::paused)
 			Time::Resume();
 		else
