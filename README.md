@@ -1,12 +1,11 @@
 Percularity is a a game engine programmed from scratch with `C++` using open third-party libraries. It has been developed by [Daniel Lorenzo](https://www.linkedin.com/in/daniel-lorenzo-laguno-a2ab35180/) & [Joan Marín](https://www.linkedin.com/in/joan-marín-encinas-6a4693191/), two third course students of the [Bachelor's Degree in Video Games by UPC at CITM](https://www.citm.upc.edu/ing/estudis/graus-videojocs/). The purpouse of the subject was to build a game engine useful enough it could allow us to develop a game with the whole class as a big team. Using pairs, each team developed their own version of the program with the idea of mergeing the best parts of each of them into the best game engine we could get.
 
-You can download Percularity's [latest release](https://github.com/DLorenzoLaguno17/PercularityEngine/releases) or check out our [GitHub](https://github.com/DLorenzoLaguno17/PercularityEngine) repository! 
-
 <p align="center">
   <iframe width="750" height="400" src="https://www.youtube.com/embed/1fTSsjieH-Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </p>
 
-a
+You can download Percularity's [latest release](https://github.com/DLorenzoLaguno17/PercularityEngine/releases) or check out our [GitHub](https://github.com/DLorenzoLaguno17/PercularityEngine) repository! 
+
 # About Percularity
 
 <p align="center">
