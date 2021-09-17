@@ -2,7 +2,9 @@ Percularity is a a game engine programmed from scratch with `C++` using open thi
 
 You can download Percularity's [latest release](https://github.com/DLorenzoLaguno17/PercularityEngine/releases) or check out our [GitHub](https://github.com/DLorenzoLaguno17/PercularityEngine) repository! 
 
-<iframe width="750" height="400" src="https://www.youtube.com/embed/1fTSsjieH-Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<p align="center">
+  <iframe width="750" height="400" src="https://www.youtube.com/embed/1fTSsjieH-Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
 
 a
 # About Percularity
