@@ -78,4 +78,3 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 
 # License
 This game engine is licensed under the [MIT License](LICENSE).
-
