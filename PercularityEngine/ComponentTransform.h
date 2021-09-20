@@ -72,8 +72,8 @@ private:
 class TranslateGameObject : public Action
 {
 public:
-	TranslateGameObject(ACTION_TYPE type, float3 lastPosition, float3 newPosition, ComponentTransform* transform) :
-		Action(type), lastPosition(lastPosition), newPosition(newPosition), transform(transform) {}
+	TranslateGameObject(float3 lastPosition, float3 newPosition, ComponentTransform* transform) :
+		lastPosition(lastPosition), newPosition(newPosition), transform(transform) {}
 
 	void Undo() override;
 	void Redo() override;
@@ -86,8 +86,8 @@ public:
 class RotateGameObject : public Action
 {
 public:
-	RotateGameObject(ACTION_TYPE type, float3 lastAngles, float3 newAngles, ComponentTransform* transform) :
-		Action(type), lastAngles(lastAngles), newAngles(newAngles), transform(transform) {}
+	RotateGameObject(float3 lastAngles, float3 newAngles, ComponentTransform* transform) :
+		lastAngles(lastAngles), newAngles(newAngles), transform(transform) {}
 
 	void Undo() override;
 	void Redo() override;
@@ -100,8 +100,8 @@ public:
 class ScaleGameObject : public Action
 {
 public:
-	ScaleGameObject(ACTION_TYPE type, float3 lastScale, float3 newScale, ComponentTransform* transform) :
-		Action(type), lastScale(lastScale), newScale(newScale), transform(transform) {}
+	ScaleGameObject(float3 lastScale, float3 newScale, ComponentTransform* transform) :
+		lastScale(lastScale), newScale(newScale), transform(transform) {}
 
 	void Undo() override;
 	void Redo() override;

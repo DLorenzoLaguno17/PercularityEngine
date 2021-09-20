@@ -3,24 +3,11 @@
 
 #include "Module.h"
 
-enum class ACTION_TYPE
-{
-	NO_ACTION,
-	ADD_GAMEOBJECT,
-	TRANSLATE_GAMEOBJECT,
-	ROTATE_GAMEOBJECT,
-	SCALE_GAMEOBJECT,
-};
-
 class Action 
 {
 public:
-	Action(ACTION_TYPE type = ACTION_TYPE::NO_ACTION) : type(type) {};
-
 	virtual void Undo() {};
 	virtual void Redo() {};
-
-	ACTION_TYPE type;
 };
 
 // ---------------------------------------------------

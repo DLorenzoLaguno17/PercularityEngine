@@ -24,7 +24,7 @@ void ComponentTransform::Update()
 	{
 		if (!lastTranslation.Equals(translation))
 		{
-			TranslateGameObject* translationAction = new TranslateGameObject(ACTION_TYPE::TRANSLATE_GAMEOBJECT, lastTranslation, translation, this);
+			TranslateGameObject* translationAction = new TranslateGameObject(lastTranslation, translation, this);
 			App->undo->StoreNewAction(translationAction);
 
 			lastTranslation = translation;
@@ -33,7 +33,7 @@ void ComponentTransform::Update()
 
 		if (!lastRotation.Equals(eulerRotation))
 		{
-			RotateGameObject* rotationAction = new RotateGameObject(ACTION_TYPE::ROTATE_GAMEOBJECT, lastRotation, eulerRotation, this);
+			RotateGameObject* rotationAction = new RotateGameObject(lastRotation, eulerRotation, this);
 			App->undo->StoreNewAction(rotationAction);
 
 			lastRotation = eulerRotation;
@@ -42,7 +42,7 @@ void ComponentTransform::Update()
 
 		else if (!lastScale.Equals(scale))
 		{
-			ScaleGameObject* scaleAction = new ScaleGameObject(ACTION_TYPE::SCALE_GAMEOBJECT, lastScale, scale, this);
+			ScaleGameObject* scaleAction = new ScaleGameObject(lastScale, scale, this);
 			App->undo->StoreNewAction(scaleAction);
 
 			lastScale = scale;
@@ -108,7 +108,6 @@ void ComponentTransform::UpdateTransform()
 		for (int i = 0; i < gameObject->children.size(); ++i)
 			gameObject->children[i]->transform->mustUpdate = true;
 	}
-
 }
 
 const mat4x4 ComponentTransform::GetGlobalGLTransform() const

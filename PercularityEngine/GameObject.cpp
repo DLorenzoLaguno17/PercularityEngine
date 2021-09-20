@@ -16,7 +16,8 @@
 #include "glmath.h"
 #include "mmgr/mmgr.h"
 
-GameObject::GameObject() {
+GameObject::GameObject() 
+{
 	name = "Untitled";
 	MakeChild(App->scene->GetRoot());
 	UUID = (uint)App->GetRandomGenerator().Int();
@@ -44,11 +45,13 @@ void GameObject::NewUUID()
 }
 
 // Called every frame
-void GameObject::Update() {
+void GameObject::Update() 
+{
 	if (Debug::drawObjectsAABB || showBondingBox)
 		DrawAABB();
 
-	for (uint i = 0; i < components.size(); ++i) {
+	for (uint i = 0; i < components.size(); ++i) 
+	{
 		if (components[i]->IsActive())
 			components[i]->Update();
 	}
@@ -176,7 +179,6 @@ const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 	}
 
 	return nullptr;
-
 }
 
 void GameObject::DrawAABB()
