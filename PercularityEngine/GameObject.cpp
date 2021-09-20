@@ -38,6 +38,27 @@ GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) 
 	App->scene->nonStaticObjects.push_back(this);
 }
 
+GameObject::GameObject(GameObject* gameObject)
+{
+	name = gameObject->name;
+	UUID = (uint)App->GetRandomGenerator().Int();
+
+	for (uint i = 0; i < gameObject->components.size(); ++i)
+	{
+		if (gameObject->components[i]->type != COMPONENT_TYPE::RIGIDBODY)
+			CreateComponent(gameObject->components[i]->type, gameObject->components[i]->IsActive(), gameObject->components[i]);
+		if (i == 0)	transform = (ComponentTransform*)components[0];
+	}
+
+	for (uint i = 0; i < gameObject->children.size(); ++i)
+	{
+		GameObject* child = new GameObject(gameObject->children[i]);
+		child->MakeChild(this);
+	}
+
+	App->scene->nonStaticObjects.push_back(this);
+}
+
 // Generates a new UUID
 void GameObject::NewUUID() 
 { 
@@ -88,30 +109,30 @@ void GameObject::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
 }
 
 // Creates components for its GameObject
-Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active) {
-
+Component* GameObject::CreateComponent(COMPONENT_TYPE type, bool active, Component* reference) 
+{
 	Component* ret = nullptr;
 
 	switch (type)
 	{
 	case COMPONENT_TYPE::MATERIAL:
-		ret = new ComponentMaterial(this, active);
+		ret = new ComponentMaterial(this, active, (ComponentMaterial*)reference);
 		if (ret != nullptr) components.push_back(ret);
 		break;
 
 	case COMPONENT_TYPE::MESH:
-		ret = new ComponentMesh(this, active);
+		ret = new ComponentMesh(this, active, (ComponentMesh*)reference);
 		if (ret != nullptr) components.push_back(ret); 
 		App->renderer3D->meshes.push_back((ComponentMesh*)ret);
 		break;
 
 	case COMPONENT_TYPE::RIGIDBODY:
-		ret = new ComponentRigidBody(this, active);
+		ret = new ComponentRigidBody(this, active, (ComponentRigidBody*)reference);
 		if (ret != nullptr) components.push_back(ret);
 		break;
 
 	case COMPONENT_TYPE::TRANSFORM:
-		ret = new ComponentTransform(this, active);
+		ret = new ComponentTransform(this, active, (ComponentTransform*)reference);
 		if (ret != nullptr) components.push_back(ret); 
 		break;
 
@@ -173,9 +194,7 @@ const Component* GameObject::GetComponent(COMPONENT_TYPE componentType) const
 	for (std::vector<Component*>::const_iterator it = components.begin(); it != components.end(); ++it)
 	{
 		if ((*it)->type == componentType)
-		{
 			return *it;
-		}
 	}
 
 	return nullptr;
@@ -246,8 +265,7 @@ void GameObject::UpdateAABB()
 void GameObject::MakeStatic(bool isStatic)
 {
 	if (isStatic)
-	{
-		
+	{		
 		for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
 		{
 			if (App->scene->nonStaticObjects[i] == this)

@@ -8,7 +8,7 @@
 class ComponentTransform : public Component 
 {
 public:
-	ComponentTransform(GameObject* parent, bool active);
+	ComponentTransform(GameObject* parent, bool active, ComponentTransform* reference);
 	~ComponentTransform() {}
 
 	// Methods

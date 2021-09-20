@@ -7,9 +7,22 @@
 #include "GameObject.h"
 #include "ImGui/ImGuizmo.h"
 
-ComponentTransform::ComponentTransform(GameObject* parent, bool active) :
+ComponentTransform::ComponentTransform(GameObject* parent, bool active, ComponentTransform* reference) :
 	Component(COMPONENT_TYPE::TRANSFORM, parent, active) 
 {
+	if (reference)
+	{
+		UUID = reference->UUID;
+		parent_UUID = reference->parent_UUID;
+		active = reference->active;
+
+		translation = reference->GetTranslation();
+		eulerRotation = reference->GetEulerRotation();
+		scale = reference->GetScale();
+
+		mustUpdate = true;
+	}
+
 	translationM = GetTranslation();
 	rotationM = GetEulerRotation();
 	scaleM = GetScale();

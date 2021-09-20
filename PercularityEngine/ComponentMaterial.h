@@ -7,9 +7,10 @@
 
 class ResourceTexture;
 
-class ComponentMaterial : public Component {
+class ComponentMaterial : public Component 
+{
 public:
-	ComponentMaterial(GameObject* parent, bool active);
+	ComponentMaterial(GameObject* parent, bool active, ComponentMaterial* reference);
 
 	// Destructor
 	~ComponentMaterial() {}

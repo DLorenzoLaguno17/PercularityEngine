@@ -55,8 +55,8 @@ bool ModuleResourceManager::Start()
 	return true;
 }
 
-Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint specific_uuid) {
-	
+Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint specific_uuid) 
+{	
 	Resource* ret = nullptr;
 	uint uuid;
 	

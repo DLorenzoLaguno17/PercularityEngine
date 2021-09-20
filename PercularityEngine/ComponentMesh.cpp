@@ -15,8 +15,18 @@
 #include "Par Shapes/par_shapes.h"
 #include "mmgr/mmgr.h"
 
-ComponentMesh::ComponentMesh(GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::MESH, parent, active) {}
+ComponentMesh::ComponentMesh(GameObject* parent, bool active, ComponentMesh* reference) :
+	Component(COMPONENT_TYPE::MESH, parent, active) 
+{
+	if (reference)
+	{
+		aabb = reference->aabb;
+		UUID = reference->UUID;
+		parent_UUID = reference->parent_UUID;
+		active = reference->active;
+		resource_mesh = (ResourceMesh*)App->res_manager->GetResourceFromMap(reference->resource_mesh->GetUUID());
+	}
+}
 
 void ComponentMesh::Update() 
 {
@@ -25,7 +35,8 @@ void ComponentMesh::Update()
 
 void ComponentMesh::OnEditor() {
 
-	if (ImGui::CollapsingHeader("Mesh")) {
+	if (ImGui::CollapsingHeader("Mesh")) 
+	{
 		ImGui::Checkbox("Enabled", &active);
 
 		ImGui::Text("Vertices:");
@@ -48,7 +59,8 @@ void ComponentMesh::OnEditor() {
 	}
 }
 
-void ComponentMesh::CleanUp() {
+void ComponentMesh::CleanUp() 
+{
 	//resource_mesh->DecreaseReferenceCount();
 }
 

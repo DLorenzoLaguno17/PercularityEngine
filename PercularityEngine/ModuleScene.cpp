@@ -118,10 +118,10 @@ update_status ModuleScene::Update(float dt)
 	// If delete is pressed, destroy selected GameObjects
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && selected != root)
 	{
-		GameObject* parent = selected->parent;
-		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), selected));
-		RecursiveCleanUp(selected);
-		selected = parent;
+		GameObject* deletedObject = new GameObject(selected);
+		DeleteGameObject* deleteAction = new DeleteGameObject(deletedObject, selected->parent);
+		App->undo->StoreNewAction(deleteAction);
+		RemoveGameObject(selected);
 	}
 
 	return UPDATE_CONTINUE;
@@ -186,6 +186,14 @@ void ModuleScene::RecursiveCleanUp(GameObject* root)
 	}
 }
 
+void ModuleScene::RemoveGameObject(GameObject* gameObject)
+{
+	GameObject* parent = gameObject->parent;
+	parent->children.erase(std::find(parent->children.begin(), parent->children.end(), gameObject));
+	RecursiveCleanUp(gameObject);
+	selected = parent;
+}
+
 // -----------------------------------------------------------------------------------------------
 // GAME SCENE MANAGEMENT
 // -----------------------------------------------------------------------------------------------
@@ -214,8 +222,8 @@ void ModuleScene::Pause()
 
 void ModuleScene::ExitGame()
 {
-	if (Time::running) {
-
+	if (Time::running) 
+	{
 		Time::Stop();
 		CleanUp();
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
@@ -244,7 +252,7 @@ void ModuleScene::LoadScene(const std::string scene_name, const char* address, b
 	// First we delete the current scene unless we are loading a model and not a scene
 	if (!loadingModel) {
 		CleanUp();
-		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80,-80,-80 }, { 80,80,80 }), 5);
+		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80, -80, -80 }, { 80, 80, 80 }), 5);
 	}
 
 	json scene_file;
@@ -382,6 +390,42 @@ void ModuleScene::Save(nlohmann::json &config)
 	config["Scene"]["Cube resource UUID"] = cubeMesh_UUID;
 	config["Scene"]["Plane resource UUID"] = planeMesh_UUID;
 	config["Scene"]["Donut resource UUID"] = donutMesh_UUID;
+}
+
+//------------------------------------------------------
+/*void CreateGameObject::Undo()
+{
+	App->scene->RemoveGameObject(gameObject);
+}
+
+void CreateGameObject::Redo()
+{
+	gameObject = new GameObject(backup);
+	gameObject->MakeChild(parent);
+	App->scene->selected = gameObject;
+}
+
+void CreateGameObject::CleanUp()
+{
+	App->scene->RecursiveCleanUp(backup);
+	App->scene->RecursiveCleanUp(gameObject);
+}*/
+
+void DeleteGameObject::Undo()
+{
+	gameObject = new GameObject(backup);
+	gameObject->MakeChild(parent);
+	App->scene->selected = gameObject;
+}
+
+void DeleteGameObject::Redo()
+{
+	App->scene->RemoveGameObject(gameObject);
+}
+
+void DeleteGameObject::CleanUp()
+{
+	App->scene->RecursiveCleanUp(backup);
 }
 
 // -----------------------------------------------------------------------------------------------
@@ -533,7 +577,7 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	//Create the mesh with Par_Shapes
 	//create 6 faces of the cube (we don't use par_shapes_create_cube
 	//because it doesn't have normals or uvs
-	par_shapes_mesh_s* mesh_front =par_shapes_create_plane(1,1);
+	par_shapes_mesh_s* mesh_front = par_shapes_create_plane(1,1);
 	par_shapes_mesh_s* back = par_shapes_create_plane(1, 1);
 	par_shapes_mesh_s* right = par_shapes_create_plane(1, 1);
 	par_shapes_mesh_s* left = par_shapes_create_plane(1, 1);
@@ -566,7 +610,8 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	par_shapes_scale(mesh_front, sizeX, sizeY, sizeZ);
 
 	// If it is the first time we create a Cube, we save its mesh as a resource
-	if (cubeCount == 1) {
+	if (cubeCount == 1) 
+	{
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, cubeMesh_UUID);
 		mesh->LoadParShape(mesh_front);
 		std::string file;
@@ -643,7 +688,6 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
 	App->scene->selected = item;
-
 
 	App->physics->AddRigidBody(OBB(item->aabb), item, 0.0f);
 

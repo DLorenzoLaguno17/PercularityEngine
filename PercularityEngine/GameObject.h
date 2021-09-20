@@ -12,6 +12,7 @@ class GameObject
 public:
 	//Constructors
 	GameObject();
+	GameObject(GameObject* gameObject);
 	GameObject(std::string name, GameObject* parent = nullptr, bool loadingScene = false);
 
 	// Destructor
@@ -26,7 +27,6 @@ public:
 
 	// Makes it a child of another GameObject
 	void MakeChild(GameObject* parent);
-
 	void UpdateAABB();
 	void DrawAABB();
 
@@ -35,7 +35,7 @@ public:
 
 	void MakeStatic(bool isStatic);
 
-	Component* CreateComponent(COMPONENT_TYPE type, bool active = true);
+	Component* CreateComponent(COMPONENT_TYPE type, bool active = true, Component* reference = nullptr);
 	void OnEditor();
 
 	Component* GetComponent(COMPONENT_TYPE componentType);

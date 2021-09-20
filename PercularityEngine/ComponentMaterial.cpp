@@ -6,12 +6,23 @@
 #include "GameObject.h"
 #include "ImGui/imgui.h"
 
-ComponentMaterial::ComponentMaterial(GameObject* parent, bool active) : 
-	Component(COMPONENT_TYPE::MATERIAL, parent, active) {}
+ComponentMaterial::ComponentMaterial(GameObject* parent, bool active, ComponentMaterial* reference) :
+	Component(COMPONENT_TYPE::MATERIAL, parent, active) 
+{
+	if (reference)
+	{
+		UUID = reference->UUID;
+		parent_UUID = reference->parent_UUID;
+		active = reference->active;
+		resource_tex = (ResourceTexture*)App->res_manager->GetResourceFromMap(reference->resource_tex->GetUUID());
+	}
+}
 
-void ComponentMaterial::OnEditor() {
+void ComponentMaterial::OnEditor() 
+{
 
-	if (ImGui::CollapsingHeader("Material")) {
+	if (ImGui::CollapsingHeader("Material")) 
+	{
 		ImGui::Checkbox(resource_tex->name.c_str(), &active);
 		ImGui::Text("Size: %dx%d", resource_tex->height, resource_tex->width);
 		ImGui::NewLine();

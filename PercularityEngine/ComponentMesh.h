@@ -8,9 +8,10 @@
 struct par_shapes_mesh_s;
 class ResourceMesh;
 
-class ComponentMesh : public Component {
+class ComponentMesh : public Component 
+{
 public:
-	ComponentMesh(GameObject* parent, bool active);
+	ComponentMesh(GameObject* parent, bool active, ComponentMesh* reference);
 	~ComponentMesh() {}
 
 	// Methods

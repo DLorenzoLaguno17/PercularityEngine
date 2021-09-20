@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleUndo.h"
 #include "ModuleInput.h"
+#include "Time.h"
 
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
@@ -25,6 +26,12 @@ update_status ModuleUndo::Update(float dt)
 
 bool ModuleUndo::CleanUp()
 {
+	for (uint i = 0; i < actions.size(); ++i)
+	{
+		actions[i]->CleanUp();
+		RELEASE(actions[i]);
+	}
+
 	actions.clear();
 	return true;
 }
@@ -49,14 +56,22 @@ void ModuleUndo::Redo()
 
 void ModuleUndo::StoreNewAction(Action* newAction)
 {
-	if (cursor != actions.size())
+	if (Time::running) 
 	{
-		for (uint i = actions.size(); i > cursor; --i)
-			actions.pop_back();
+
 	}
+	else
+	{
+		if (cursor != actions.size())
+		{
+			for (uint i = actions.size(); i > cursor; --i)
+			{
+				actions.back()->CleanUp();
+				actions.pop_back();
+			}
+		}
 
-	actions.push_back(newAction);
-	cursor = actions.size();
-
-	LOG("Added new action. Curren list size: %d", actions.size());
+		actions.push_back(newAction);
+		cursor = actions.size();
+	}
 }

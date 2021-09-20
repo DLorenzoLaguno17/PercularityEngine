@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Tree.h"
 #include "Timer.h"
+#include "ModuleUndo.h"
 
 class GameObject;
 class SceneWindow;
@@ -38,6 +39,7 @@ public:
 	// Assigns a new UUID to all the GameObjects without loosing the hierarchy
 	void RecursiveReset(GameObject* root);
 
+	void RemoveGameObject(GameObject* gameObject);
 	void RecursiveCleanUp(GameObject* root);
 
 	//Methods to create primitives
@@ -49,7 +51,6 @@ public:
 	GameObject* GetRoot() const { return root; }
 
 private:
-
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;	//Draw a plane with some lines
 	void UpdateGameObjects(GameObject* root);
@@ -90,5 +91,38 @@ private:
 	uint donutMesh_UUID = 0;
 
 	uint go_counter = 0;
+};
+
+// ---------------------------------------------------
+class DeleteGameObject : public Action
+{
+public:
+	DeleteGameObject(GameObject* gameObject, GameObject* parent) :
+		backup(gameObject), parent(parent) {};
+
+	void Undo() override;
+	void Redo() override;
+	void CleanUp() override;
+
+private:
+	GameObject* parent = nullptr;
+	GameObject* gameObject = nullptr;
+	GameObject* backup = nullptr;
+};
+
+class CreateGameObject : public Action
+{
+public:
+	CreateGameObject(GameObject* gameObject, GameObject* parent) :
+		gameObject(gameObject), parent(parent) {};
+
+	void Undo() override;
+	void Redo() override;
+	void CleanUp() override;
+
+private:
+	GameObject* parent = nullptr;
+	GameObject* gameObject = nullptr;
+	GameObject* backup = nullptr;
 };
 #endif

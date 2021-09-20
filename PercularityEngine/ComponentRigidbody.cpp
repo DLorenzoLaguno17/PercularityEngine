@@ -9,8 +9,20 @@
 
 #include "mmgr/mmgr.h"
 
-ComponentRigidBody::ComponentRigidBody(GameObject* parent, bool active) :
-	Component(COMPONENT_TYPE::RIGIDBODY, parent, active) {}
+ComponentRigidBody::ComponentRigidBody(GameObject* parent, bool active, ComponentRigidBody* reference) :
+	Component(COMPONENT_TYPE::RIGIDBODY, parent, active) 
+{
+	if (reference)
+	{
+		UUID = reference->UUID;
+		parent_UUID = reference->parent_UUID;
+		active = reference->active;
+		mass = reference->mass;
+
+		App->physics->AddRigidBody(gameObject->obb, gameObject, mass);
+		localPosition = reference->localPosition;
+	}
+}
 
 ComponentRigidBody::ComponentRigidBody(btRigidBody* body) : body(body)
 {
@@ -40,7 +52,8 @@ void ComponentRigidBody::Update() {
 
 void ComponentRigidBody::OnEditor()
 {
-	if (ImGui::CollapsingHeader("RigidBody")) {
+	if (ImGui::CollapsingHeader("RigidBody")) 
+	{
 
 		ImGui::Checkbox("Enabled", &active);
 		if (ImGui::Button("Set to zero"))

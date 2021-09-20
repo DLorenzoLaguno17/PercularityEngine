@@ -9,7 +9,7 @@ class Module;
 
 class ComponentRigidBody : public Component {
 public:
-	ComponentRigidBody(GameObject* parent, bool active);
+	ComponentRigidBody(GameObject* parent, bool active, ComponentRigidBody* reference);
 	ComponentRigidBody(btRigidBody* body);
 	~ComponentRigidBody() {}
 
@@ -31,19 +31,16 @@ public:
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
-	bool followObject = false;
-
 	static COMPONENT_TYPE GetComponentType() { return COMPONENT_TYPE::RIGIDBODY; }
-
-	float3 localPosition = float3::zero;
-
-	bool dynamicObject = false;
 
 public:
 	std::vector<Module*> collision_listeners;
 	btRigidBody* body = nullptr;
 	float mass = 0.0f;
 
+	bool followObject = false;
+	bool dynamicObject = false;
+	float3 localPosition = float3::zero;
 };
 
 #endif // _ComponentRigidbody_H_
