@@ -29,7 +29,8 @@ ComponentRigidBody::ComponentRigidBody(btRigidBody* body) : body(body)
 	body->setUserPointer(this);
 }
 
-void ComponentRigidBody::Update() {
+void ComponentRigidBody::Update() 
+{
 	if (gameObject != nullptr)
 	{
 		if (Time::running || active == false)

@@ -17,11 +17,13 @@ public:
 	void CleanUp() {}
 
 	// Getters
-	const float4x4& GetLocalTransform() const { return localTransform; }
-	const float4x4& GetGlobalTransform() const { return globalTransform; }
+	const Quat& GetRotation() const { return rotation; }
 	const float3& GetEulerRotation() const { return eulerRotation; }
 	const float3& GetTranslation() const { return translation; }
 	const float3& GetScale() const { return scale; }
+
+	const float4x4& GetLocalTransform() const { return localTransform; }
+	const float4x4& GetGlobalTransform() const { return globalTransform; }
 	const mat4x4 GetGlobalGLTransform() const; // float4x4 -> mat4x4
 
 	// Setters
@@ -49,8 +51,8 @@ public:
 	// For undo and redo features
 	bool firstTime = true;
 	float3 lastTranslation = float3::zero;
-	float3 lastRotation = float3::zero;
 	float3 lastScale = float3::one;
+	Quat lastRotation = Quat::identity;
 
 private:
 	bool mustUpdate = true;
@@ -86,14 +88,14 @@ public:
 class RotateGameObject : public Action
 {
 public:
-	RotateGameObject(float3 lastAngles, float3 newAngles, uint gameObject_uuid) :
-		lastAngles(lastAngles), newAngles(newAngles), uuid(gameObject_uuid) {}
+	RotateGameObject(Quat lastRotation, Quat newRotation, uint gameObject_uuid) :
+		lastRotation(lastRotation), newRotation(newRotation), uuid(gameObject_uuid) {}
 
 	void Undo() override;
 	void Redo() override;
 
-	float3 lastAngles;
-	float3 newAngles;
+	Quat lastRotation;
+	Quat newRotation;
 	uint uuid;
 };
 

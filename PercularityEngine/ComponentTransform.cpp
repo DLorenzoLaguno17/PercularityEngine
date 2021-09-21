@@ -16,16 +16,20 @@ ComponentTransform::ComponentTransform(GameObject* parent, bool active, Componen
 		parent_UUID = reference->parent_UUID;
 		active = reference->active;
 
-		firstTime = false;
 		translation = reference->GetTranslation();
 		scale = reference->GetScale();
-		SetEulerRotation(reference->GetEulerRotation());
+		rotation = reference->GetRotation();
+
+		firstTime = false;
+		SetPosition(translation);
+		SetScale(scale);
+		SetRotation(rotation);
+		firstTime = true;
 	}
 
 	translationM = GetTranslation();
 	rotationM = GetEulerRotation();
 	scaleM = GetScale();
-	firstTime = true;
 }
 
 void ComponentTransform::Update()
@@ -44,12 +48,12 @@ void ComponentTransform::Update()
 			firstTime = true;
 		}
 
-		if (!lastRotation.Equals(eulerRotation))
+		if (!lastRotation.Equals(rotation))
 		{
-			RotateGameObject* rotationAction = new RotateGameObject(lastRotation, eulerRotation, parent_UUID);
+			RotateGameObject* rotationAction = new RotateGameObject(lastRotation, rotation, parent_UUID);
 			App->undo->StoreNewAction(rotationAction);
 
-			lastRotation = eulerRotation;
+			lastRotation = rotation;
 			firstTime = true;
 		}
 
@@ -161,18 +165,18 @@ void ComponentTransform::SetGlobalTransform(mat4x4 transform)
 {
 	for (int i = 0; i < 4; ++i)
 		for (int j = 0; j < 4; ++j)
-			globalTransform[j][i]=transform.M[i * 4 + j];
+			globalTransform[j][i] = transform.M[i * 4 + j];
 }
 
 void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 {
 	if (firstTime)
 	{
-		lastRotation = eulerRotation;
+		lastRotation = rotation;
 		firstTime = false;
 	}
 
-	float3 angleIncrease = (eulerAngle - eulerRotation)*DEGTORAD;
+	float3 angleIncrease = (eulerAngle - eulerRotation) * DEGTORAD;
 	Quat newRotation = Quat::FromEulerXYZ(angleIncrease.x, angleIncrease.y, angleIncrease.z);
 	rotation = rotation * newRotation;
 	eulerRotation = eulerAngle;
@@ -292,15 +296,15 @@ void TranslateGameObject::Redo()
 void RotateGameObject::Undo()
 {
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
-	gameObject->transform->SetEulerRotation(lastAngles);
-	gameObject->transform->lastRotation = gameObject->transform->GetEulerRotation();
+	gameObject->transform->SetRotation(lastRotation);
+	gameObject->transform->lastRotation = gameObject->transform->GetRotation();
 }										  
 
 void RotateGameObject::Redo()
 {
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
-	gameObject->transform->SetEulerRotation(newAngles);
-	gameObject->transform->lastRotation = gameObject->transform->GetEulerRotation();
+	gameObject->transform->SetRotation(newRotation);
+	gameObject->transform->lastRotation = gameObject->transform->GetRotation();
 }
 
 void ScaleGameObject::Undo()

@@ -384,7 +384,8 @@ void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char
 
 void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) 
 {
-	if (root != GetRoot()) {
+	if (root != GetRoot()) 
+	{
 		saved_go++;
 		char name[50];
 		sprintf_s(name, 50, "GameObject %d", saved_go);
@@ -422,13 +423,12 @@ void CreateGameObject::Redo()
 	gameObject = new GameObject(backup);
 	gameObject->MakeChild(parent);
 	App->scene->selected = gameObject;
-}
+}*/
 
 void CreateGameObject::CleanUp()
 {
 	App->scene->RecursiveCleanUp(backup);
-	App->scene->RecursiveCleanUp(gameObject);
-}*/
+}
 
 void DeleteGameObject::Undo()
 {

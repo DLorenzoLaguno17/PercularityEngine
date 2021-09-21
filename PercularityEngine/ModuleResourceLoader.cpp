@@ -120,8 +120,10 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 		GameObject* tempRoot = new GameObject(getNameFromPath(path).c_str(), world);
 
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array		
-		if (root_node->mNumChildren > 0) {
-			for (uint i = 0; i < root_node->mNumChildren; ++i){
+		if (root_node->mNumChildren > 0) 
+		{
+			for (uint i = 0; i < root_node->mNumChildren; ++i)
+			{
 				std::string output;
 				ret = LoadNode(path, scene, root_node->mChildren[i], tempRoot);
 			}
@@ -194,8 +196,8 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 	tra->SetScale(sca);
 	tra->SetRotation(rot);
 
-	for (int i = 0; i < node->mNumMeshes; ++i) {
-
+	for (int i = 0; i < node->mNumMeshes; ++i) 
+	{
 		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
 		GameObject* child = nullptr;
 
@@ -271,7 +273,8 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 					correctFace = false;
 					continue;
 				}
-				else {
+				else 
+				{
 					mesh->indices[j * 3] = face.mIndices[0];
 					mesh->indices[j * 3 + 1] = face.mIndices[1];
 					mesh->indices[j * 3 + 2] = face.mIndices[2];
@@ -367,7 +370,8 @@ bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& 
 		+ sizeof(float3) * mesh->num_normals
 		+ sizeof(float) * mesh->num_UVs;
 
-	if (size > 0) {
+	if (size > 0) 
+	{
 		// Allocate memory
 		char* data = new char[size];
 		char* cursor = data;
@@ -415,13 +419,14 @@ bool ModuleResourceLoader::ImportMeshToLibrary(ResourceMesh* mesh, std::string& 
 	return ret;
 }
 
-bool ModuleResourceLoader::LoadMeshFromLibrary(ResourceMesh* mesh) {	
-	
+bool ModuleResourceLoader::LoadMeshFromLibrary(ResourceMesh* mesh) 
+{		
 	bool ret = false;
 	char* buffer = nullptr;
 	App->file_system->Load(mesh->exported_file.c_str(), &buffer);
 
-	if (buffer) {
+	if (buffer) 
+	{
 		char* cursor = buffer;
 
 		// Amount of: 1.Indices / 2.Vertices / 3.Colors / 4.Normals / 5.UVs
@@ -484,7 +489,8 @@ bool ModuleResourceLoader::LoadMeshFromLibrary(ResourceMesh* mesh) {
 // TEXTURE-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-bool ModuleResourceLoader::LoadTexture(const char* path, std::string& output_file) {
+bool ModuleResourceLoader::LoadTexture(const char* path, std::string& output_file) 
+{
 	bool ret = false;
 	
 	ILuint image;
@@ -513,7 +519,8 @@ bool ModuleResourceLoader::LoadTexture(const char* path, std::string& output_fil
 }
 
 // Stores a texture as a DDS in the library
-bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string& output_file) {
+bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string& output_file) 
+{
 	bool ret = false;
 
 	ILuint size;
@@ -535,11 +542,11 @@ bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string&
 	}
 
 	if (!ret) LOG("Cannot import texture from path %s", path);
-
 	return ret;
 }
 
-bool ModuleResourceLoader::LoadTextureFromLibrary(ResourceTexture* tex) {
+bool ModuleResourceLoader::LoadTextureFromLibrary(ResourceTexture* tex) 
+{
 	bool ret = false;
 
 	ILuint image;
@@ -549,11 +556,13 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(ResourceTexture* tex) {
 	// We adapt the  path for DevIL
 	const char* adapted_path = strstr(tex->exported_file.c_str(), "library");
 
-	if (!ilLoadImage(adapted_path)) {
+	if (!ilLoadImage(adapted_path)) 
+	{
 		ilDeleteImages(1, &image);
 		LOG("The texture image could not be loaded");
 	}
-	else {
+	else 
+	{
 		ProcessTexture(tex->texture);
 		LOG("Created texture from path: %s", tex->exported_file.c_str());
 
@@ -573,7 +582,8 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(ResourceTexture* tex) {
 	return ret;
 }
 
-void ModuleResourceLoader::ProcessTexture(uint& texture) {	
+void ModuleResourceLoader::ProcessTexture(uint& texture) 
+{	
 	texture = ilutGLBindTexImage();
 
 	if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
@@ -603,7 +613,8 @@ void ModuleResourceLoader::ProcessTexture(uint& texture) {
 // OTHER METHODS
 // -----------------------------------------------------------------------------------------------
 
-std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) {
+std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExtension) 
+{
 	std::string full_name;
 
 	App->file_system->NormalizePath(path);
@@ -619,7 +630,8 @@ std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExt
 	}
 }
 
-void ModuleResourceLoader::LoadEngineUI() {
+void ModuleResourceLoader::LoadEngineUI() 
+{
 	icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, engineIcon_UUID);
 	model_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, modelIcon_UUID);
 	scene_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, sceneIcon_UUID);
@@ -641,7 +653,8 @@ void ModuleResourceLoader::LoadEngineUI() {
 	LoadTextureFromLibrary(tex_icon_tex);
 }
 
-void ModuleResourceLoader::CreateDefaultMaterial() {
+void ModuleResourceLoader::CreateDefaultMaterial() 
+{
 	CreateDefaultTexture();
 
 	default_material = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, defaultMat_UUID);
@@ -651,7 +664,8 @@ void ModuleResourceLoader::CreateDefaultMaterial() {
 	default_material->exported_file = "None";
 }
 
-void ModuleResourceLoader::CreateDefaultTexture() {
+void ModuleResourceLoader::CreateDefaultTexture() 
+{
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
@@ -677,7 +691,8 @@ void ModuleResourceLoader::CreateDefaultTexture() {
 }
 
 // Save & Load
-void ModuleResourceLoader::Load(const nlohmann::json &config) {
+void ModuleResourceLoader::Load(const nlohmann::json &config) 
+{
 	defaultMat_UUID = config["Resource loader"]["Default material UUID"];
 	engineIcon_UUID = config["Resource loader"]["Engine icon UUID"];
 	modelIcon_UUID = config["Resource loader"]["Model icon UUID"];
@@ -685,7 +700,8 @@ void ModuleResourceLoader::Load(const nlohmann::json &config) {
 	sceneIcon_UUID = config["Resource loader"]["Scene icon UUID"];
 }
 
-void ModuleResourceLoader::Save(nlohmann::json &config) {
+void ModuleResourceLoader::Save(nlohmann::json &config) 
+{
 	config["Resource loader"]["Default material UUID"] = defaultMat_UUID;
 	config["Resource loader"]["Engine icon UUID"] = engineIcon_UUID;
 	config["Resource loader"]["Model icon UUID"] = modelIcon_UUID;
