@@ -16,16 +16,16 @@ ComponentTransform::ComponentTransform(GameObject* parent, bool active, Componen
 		parent_UUID = reference->parent_UUID;
 		active = reference->active;
 
+		firstTime = false;
 		translation = reference->GetTranslation();
-		eulerRotation = reference->GetEulerRotation();
 		scale = reference->GetScale();
-
-		mustUpdate = true;
+		SetEulerRotation(reference->GetEulerRotation());
 	}
 
 	translationM = GetTranslation();
 	rotationM = GetEulerRotation();
 	scaleM = GetScale();
+	firstTime = true;
 }
 
 void ComponentTransform::Update()
@@ -37,29 +37,29 @@ void ComponentTransform::Update()
 	{
 		if (!lastTranslation.Equals(translation))
 		{
-			TranslateGameObject* translationAction = new TranslateGameObject(lastTranslation, translation, this);
+			TranslateGameObject* translationAction = new TranslateGameObject(lastTranslation, translation, parent_UUID);
 			App->undo->StoreNewAction(translationAction);
 
 			lastTranslation = translation;
-			firstTime = false;
+			firstTime = true;
 		}
 
 		if (!lastRotation.Equals(eulerRotation))
 		{
-			RotateGameObject* rotationAction = new RotateGameObject(lastRotation, eulerRotation, this);
+			RotateGameObject* rotationAction = new RotateGameObject(lastRotation, eulerRotation, parent_UUID);
 			App->undo->StoreNewAction(rotationAction);
 
 			lastRotation = eulerRotation;
-			firstTime = false;
+			firstTime = true;
 		}
 
 		else if (!lastScale.Equals(scale))
 		{
-			ScaleGameObject* scaleAction = new ScaleGameObject(lastScale, scale, this);
+			ScaleGameObject* scaleAction = new ScaleGameObject(lastScale, scale, parent_UUID);
 			App->undo->StoreNewAction(scaleAction);
 
 			lastScale = scale;
-			firstTime = false;
+			firstTime = true;
 		}
 	}
 }
@@ -215,8 +215,8 @@ void ComponentTransform::SetScale(float3 newScale)
 	mustUpdate = true;
 }
 
-void ComponentTransform::SetRotation(Quat newRotation) {
-	
+void ComponentTransform::SetRotation(Quat newRotation) 
+{	
 	rotation = newRotation;
 	UpdateEulerRotation();
 	mustUpdate = true;
@@ -238,7 +238,8 @@ void ComponentTransform::UpdateEulerRotation()
 }
 
 // Load & Save 
-void ComponentTransform::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
+void ComponentTransform::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) 
+{
 	UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Parent UUID"];
 	active = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Active"];	
@@ -263,7 +264,8 @@ void ComponentTransform::OnLoad(const char* gameObjectNum, const nlohmann::json 
 	SetScale(sca);
 }
 
-void ComponentTransform::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
+void ComponentTransform::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 
+{
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Active"] = active;
@@ -275,36 +277,42 @@ void ComponentTransform::OnSave(const char* gameObjectNum, nlohmann::json &scene
 // --------------------------------------------------
 void TranslateGameObject::Undo()
 {
-	transform->SetPosition(lastPosition);
-	transform->lastTranslation = transform->GetTranslation();
+	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	gameObject->transform->SetPosition(lastPosition);
+	gameObject->transform->lastTranslation = gameObject->transform->GetTranslation();
 }
 
 void TranslateGameObject::Redo()
 {
-	transform->SetPosition(newPosition);
-	transform->lastTranslation = transform->GetTranslation();
+	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	gameObject->transform->SetPosition(newPosition);
+	gameObject->transform->lastTranslation = gameObject->transform->GetTranslation();
 }
 
 void RotateGameObject::Undo()
 {
-	transform->SetEulerRotation(lastAngles);
-	transform->lastRotation = transform->GetEulerRotation();
-}
+	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	gameObject->transform->SetEulerRotation(lastAngles);
+	gameObject->transform->lastRotation = gameObject->transform->GetEulerRotation();
+}										  
 
 void RotateGameObject::Redo()
 {
-	transform->SetEulerRotation(newAngles);
-	transform->lastRotation = transform->GetEulerRotation();
+	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	gameObject->transform->SetEulerRotation(newAngles);
+	gameObject->transform->lastRotation = gameObject->transform->GetEulerRotation();
 }
 
 void ScaleGameObject::Undo()
 {
-	transform->SetScale(lastScale);
-	transform->lastScale = transform->GetScale();
+	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	gameObject->transform->SetScale(lastScale);
+	gameObject->transform->lastScale = gameObject->transform->GetScale();
 }
 
 void ScaleGameObject::Redo()
 {
-	transform->SetScale(newScale);
-	transform->lastScale = transform->GetScale();
+	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	gameObject->transform->SetScale(newScale);
+	gameObject->transform->lastScale = gameObject->transform->GetScale();
 }

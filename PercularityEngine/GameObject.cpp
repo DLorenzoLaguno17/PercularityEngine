@@ -20,7 +20,7 @@ GameObject::GameObject()
 {
 	name = "Untitled";
 	MakeChild(App->scene->GetRoot());
-	UUID = (uint)App->GetRandomGenerator().Int();
+	NewUUID();
 	transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
 
 	App->scene->nonStaticObjects.push_back(this);
@@ -28,20 +28,17 @@ GameObject::GameObject()
 
 GameObject::GameObject(std::string name, GameObject* parent, bool loadingScene) : name(name)
 {
-	if (parent) MakeChild(parent);
-	
-	if (strcmp("World", name.c_str()) != 0)
-		UUID = (uint)App->GetRandomGenerator().Int();
+	if (parent) MakeChild(parent);	
+	if (strcmp("World", name.c_str()) != 0)	NewUUID();
 
 	if (!loadingScene) transform = (ComponentTransform*)CreateComponent(COMPONENT_TYPE::TRANSFORM);
-
 	App->scene->nonStaticObjects.push_back(this);
 }
 
 GameObject::GameObject(GameObject* gameObject)
 {
 	name = gameObject->name;
-	UUID = (uint)App->GetRandomGenerator().Int();
+	UUID = gameObject->GetUUID();
 
 	for (uint i = 0; i < gameObject->components.size(); ++i)
 	{

@@ -36,24 +36,27 @@ public:
 	void RecursiveLoad(GameObject* root, const json &scene_file);
 	void RecursiveSave(GameObject* root, json &scene_file);
 
-	// Assigns a new UUID to all the GameObjects without loosing the hierarchy
-	void RecursiveReset(GameObject* root);
+	// Returns GameObject with a specific uuid
+	GameObject* GetGameObject(GameObject* root, uint uuid) const;
+	GameObject* GetRoot() const { return root; }
 
 	void RemoveGameObject(GameObject* gameObject);
 	void RecursiveCleanUp(GameObject* root);
 
-	//Methods to create primitives
+	// Methods to create primitives
 	GameObject* CreateSphere(int slices, int stacks, float diameter);
 	GameObject* CreateCube(float sizeX, float sizeY, float sizeZ);
 	GameObject* CreatePlane(float length, float depth);
 	GameObject* CreateDonut(int slices, int stacks, float radius);
 
-	GameObject* GetRoot() const { return root; }
 
 private:
+	// Assigns a new UUID to all the GameObjects without loosing the hierarchy
+	void RecursiveReset(GameObject* root);
+	void UpdateGameObjects(GameObject* root);
+
 	void DrawAxis() const;			//Draw XYZ axis of coordinates
 	void DrawSimplePlane()const;	//Draw a plane with some lines
-	void UpdateGameObjects(GameObject* root);
 
 public:
 

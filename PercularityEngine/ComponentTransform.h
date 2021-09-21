@@ -34,7 +34,7 @@ public:
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
-	//Update transform
+	// Update transform
 	void UpdateTransform();
 	void Move(float3 positionIncrease);
 	void Scale(float3 scale_);
@@ -72,43 +72,43 @@ private:
 class TranslateGameObject : public Action
 {
 public:
-	TranslateGameObject(float3 lastPosition, float3 newPosition, ComponentTransform* transform) :
-		lastPosition(lastPosition), newPosition(newPosition), transform(transform) {}
+	TranslateGameObject(float3 lastPosition, float3 newPosition, uint gameObject_uuid) :
+		lastPosition(lastPosition), newPosition(newPosition), uuid(gameObject_uuid) {}
 
 	void Undo() override;
 	void Redo() override;
 
 	float3 lastPosition;
 	float3 newPosition;
-	ComponentTransform* transform = nullptr;
+	uint uuid;
 };
 
 class RotateGameObject : public Action
 {
 public:
-	RotateGameObject(float3 lastAngles, float3 newAngles, ComponentTransform* transform) :
-		lastAngles(lastAngles), newAngles(newAngles), transform(transform) {}
+	RotateGameObject(float3 lastAngles, float3 newAngles, uint gameObject_uuid) :
+		lastAngles(lastAngles), newAngles(newAngles), uuid(gameObject_uuid) {}
 
 	void Undo() override;
 	void Redo() override;
 
 	float3 lastAngles;
 	float3 newAngles;
-	ComponentTransform* transform = nullptr;
+	uint uuid;
 };
 
 class ScaleGameObject : public Action
 {
 public:
-	ScaleGameObject(float3 lastScale, float3 newScale, ComponentTransform* transform) :
-		lastScale(lastScale), newScale(newScale), transform(transform) {}
+	ScaleGameObject(float3 lastScale, float3 newScale, uint gameObject_uuid) :
+		lastScale(lastScale), newScale(newScale), uuid(gameObject_uuid) {}
 
 	void Undo() override;
 	void Redo() override;
 
 	float3 lastScale;
 	float3 newScale;
-	ComponentTransform* transform = nullptr;
+	uint uuid;
 };
 
 #endif // _ComponentTransform_H_
