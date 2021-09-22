@@ -49,7 +49,7 @@ public:
 
 public:
 	// For undo and redo features
-	bool firstTime = true;
+	bool firstTime = false;
 	float3 lastTranslation = float3::zero;
 	float3 lastScale = float3::one;
 	Quat lastRotation = Quat::identity;

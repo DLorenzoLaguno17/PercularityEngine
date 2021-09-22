@@ -10,7 +10,7 @@ class ComponentTransform;
 class GameObject 
 {
 public:
-	//Constructors
+	// Constructors
 	GameObject();
 	GameObject(GameObject* gameObject);
 	GameObject(std::string name, GameObject* parent = nullptr, bool loadingScene = false);

@@ -20,16 +20,15 @@ ComponentTransform::ComponentTransform(GameObject* parent, bool active, Componen
 		scale = reference->GetScale();
 		rotation = reference->GetRotation();
 
-		firstTime = false;
 		SetPosition(translation);
 		SetScale(scale);
 		SetRotation(rotation);
-		firstTime = true;
 	}
 
 	translationM = GetTranslation();
 	rotationM = GetEulerRotation();
 	scaleM = GetScale();
+	firstTime = true;
 }
 
 void ComponentTransform::Update()
@@ -137,6 +136,7 @@ const mat4x4 ComponentTransform::GetGlobalGLTransform() const
 	return ret;
 }
 
+
 void ComponentTransform::Move(float3 positionIncrease)
 {
 	translation += positionIncrease;
@@ -168,6 +168,18 @@ void ComponentTransform::SetGlobalTransform(mat4x4 transform)
 			globalTransform[j][i] = transform.M[i * 4 + j];
 }
 
+void ComponentTransform::SetLocalTransform(mat4x4 transform)
+{
+	float4x4 newTransform;
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			newTransform[j][i] = transform.M[i * 4 + j];
+
+	newTransform.Decompose(translation, rotation, scale);
+	eulerRotation = rotation.ToEulerXYZ().Abs();
+	mustUpdate = true;
+}
+
 void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 {
 	if (firstTime)
@@ -180,18 +192,6 @@ void ComponentTransform::SetEulerRotation(float3 eulerAngle)
 	Quat newRotation = Quat::FromEulerXYZ(angleIncrease.x, angleIncrease.y, angleIncrease.z);
 	rotation = rotation * newRotation;
 	eulerRotation = eulerAngle;
-	mustUpdate = true;
-}
-
-void ComponentTransform::SetLocalTransform(mat4x4 transform)
-{
-	float4x4 newTransform;
-	for (int i = 0; i < 4; ++i)
-		for (int j = 0; j < 4; ++j)
-			newTransform[j][i] = transform.M[i * 4 + j];
-
-	newTransform.Decompose(translation, rotation, scale);
-	eulerRotation = rotation.ToEulerXYZ().Abs();
 	mustUpdate = true;
 }
 
@@ -254,18 +254,21 @@ void ComponentTransform::OnLoad(const char* gameObjectNum, const nlohmann::json 
 	rot.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(2);
 	rot.w = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(3);
 	SetRotation(rot);
+	lastRotation = rot;
 
 	float3 tra;
 	tra.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(0);
 	tra.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(1);
 	tra.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(2);
 	SetPosition(tra);
+	lastTranslation = tra;
 
 	float3 sca;
 	sca.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(0);
 	sca.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(1);
 	sca.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(2);
 	SetScale(sca);
+	lastScale = sca;
 }
 
 void ComponentTransform::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 
@@ -284,6 +287,7 @@ void TranslateGameObject::Undo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetPosition(lastPosition);
 	gameObject->transform->lastTranslation = gameObject->transform->GetTranslation();
+	App->scene->selected = gameObject;
 }
 
 void TranslateGameObject::Redo()
@@ -291,6 +295,7 @@ void TranslateGameObject::Redo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetPosition(newPosition);
 	gameObject->transform->lastTranslation = gameObject->transform->GetTranslation();
+	App->scene->selected = gameObject;
 }
 
 void RotateGameObject::Undo()
@@ -298,6 +303,7 @@ void RotateGameObject::Undo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetRotation(lastRotation);
 	gameObject->transform->lastRotation = gameObject->transform->GetRotation();
+	App->scene->selected = gameObject;
 }										  
 
 void RotateGameObject::Redo()
@@ -305,6 +311,7 @@ void RotateGameObject::Redo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetRotation(newRotation);
 	gameObject->transform->lastRotation = gameObject->transform->GetRotation();
+	App->scene->selected = gameObject;
 }
 
 void ScaleGameObject::Undo()
@@ -312,6 +319,7 @@ void ScaleGameObject::Undo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetScale(lastScale);
 	gameObject->transform->lastScale = gameObject->transform->GetScale();
+	App->scene->selected = gameObject;
 }
 
 void ScaleGameObject::Redo()
@@ -319,4 +327,5 @@ void ScaleGameObject::Redo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetScale(newScale);
 	gameObject->transform->lastScale = gameObject->transform->GetScale();
+	App->scene->selected = gameObject;
 }
