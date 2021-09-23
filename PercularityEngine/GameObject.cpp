@@ -41,11 +41,11 @@ GameObject::GameObject(GameObject* gameObject)
 	UUID = gameObject->GetUUID();
 
 	for (uint i = 0; i < gameObject->components.size(); ++i)
-	{
-		if (gameObject->components[i]->type != COMPONENT_TYPE::RIGIDBODY)
-			CreateComponent(gameObject->components[i]->type, gameObject->components[i]->IsActive(), gameObject->components[i]);
-		if (i == 0)	transform = (ComponentTransform*)components[0];
-	}
+		CreateComponent(gameObject->components[i]->type, gameObject->components[i]->IsActive(), gameObject->components[i]);
+		
+	transform = (ComponentTransform*)GetComponent(COMPONENT_TYPE::TRANSFORM);	
+	ComponentRigidBody* rb = (ComponentRigidBody*)GetComponent(COMPONENT_TYPE::RIGIDBODY);
+	if (rb) App->physics->AddRigidBody(obb, this, rb->mass);
 
 	for (uint i = 0; i < gameObject->children.size(); ++i)
 	{

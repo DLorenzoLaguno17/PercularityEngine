@@ -18,8 +18,6 @@ ComponentRigidBody::ComponentRigidBody(GameObject* parent, bool active, Componen
 		parent_UUID = reference->parent_UUID;
 		active = reference->active;
 		mass = reference->mass;
-
-		App->physics->AddRigidBody(gameObject->obb, gameObject, mass);
 		localPosition = reference->localPosition;
 	}
 }
@@ -55,7 +53,6 @@ void ComponentRigidBody::OnEditor()
 {
 	if (ImGui::CollapsingHeader("RigidBody")) 
 	{
-
 		ImGui::Checkbox("Enabled", &active);
 		if (ImGui::Button("Set to zero"))
 		{
