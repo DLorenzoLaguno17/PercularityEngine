@@ -97,6 +97,21 @@ private:
 };
 
 // ---------------------------------------------------
+class CreateGameObject : public Action
+{
+public:
+	CreateGameObject(GameObject* gameObject);
+
+	void Undo() override;
+	void Redo() override;
+	void CleanUp() override;
+
+private:
+	GameObject* parent = nullptr;
+	GameObject* gameObject = nullptr;
+	GameObject* backup = nullptr;
+};
+
 class DeleteGameObject : public Action
 {
 public:
@@ -113,19 +128,4 @@ private:
 	GameObject* backup = nullptr;
 };
 
-class CreateGameObject : public Action
-{
-public:
-	CreateGameObject(GameObject* gameObject, GameObject* parent) :
-		gameObject(gameObject), parent(parent) {};
-
-	void Undo() override;
-	void Redo() override;
-	void CleanUp() override;
-
-private:
-	GameObject* parent = nullptr;
-	GameObject* gameObject = nullptr;
-	GameObject* backup = nullptr;
-};
 #endif

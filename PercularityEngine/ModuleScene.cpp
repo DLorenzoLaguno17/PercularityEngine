@@ -51,7 +51,6 @@ bool ModuleScene::Init() {
 
 bool ModuleScene::Start()
 {
-
 	return true;
 }
 
@@ -206,8 +205,8 @@ void ModuleScene::RemoveGameObject(GameObject* gameObject)
 {
 	GameObject* parent = gameObject->parent;
 	parent->children.erase(std::find(parent->children.begin(), parent->children.end(), gameObject));
-	RecursiveCleanUp(gameObject);
 	selected = parent;
+	RecursiveCleanUp(gameObject);
 }
 
 // -----------------------------------------------------------------------------------------------
@@ -297,7 +296,8 @@ void ModuleScene::LoadScene(const std::string scene_name, const char* address, b
 		RecursiveLoad(model, scene_file);
 		model->MakeChild(root);
 
-		if (usedAsReference > 0) {
+		if (usedAsReference > 0) 
+		{
 			char num[10];
 			sprintf_s(num, 10, " (%d)", usedAsReference);
 			std::string full_name = model->name + num;
@@ -413,7 +413,13 @@ void ModuleScene::Save(nlohmann::json &config)
 }
 
 //------------------------------------------------------
-/*void CreateGameObject::Undo()
+CreateGameObject::CreateGameObject(GameObject* gameObject) :
+	gameObject(gameObject), parent(gameObject->parent)
+{
+	backup = new GameObject(gameObject);
+};
+
+void CreateGameObject::Undo()
 {
 	App->scene->RemoveGameObject(gameObject);
 }
@@ -423,7 +429,7 @@ void CreateGameObject::Redo()
 	gameObject = new GameObject(backup);
 	gameObject->MakeChild(parent);
 	App->scene->selected = gameObject;
-}*/
+}
 
 void CreateGameObject::CleanUp()
 {
@@ -473,31 +479,30 @@ void ModuleScene::DrawSimplePlane() const
 	glEnd();
 }
 
-void ModuleScene::DrawAxis() const {
-
+void ModuleScene::DrawAxis() const 
+{
 	glLineWidth(7.0f);
-
 	glBegin(GL_LINES);
 
-	//X axis
+	// X axis
 	glColor3f(1, 0, 0); //Red color
 
 	glVertex3f(-0.1f, 0.1f, -0.1f);
 	glVertex3f(5.1f, 0.1f, -0.1f);
 
-	///Draw an X
+	/// Draw an X
 	glVertex3f(5.0f, 2.0f, -0.2f);
 	glVertex3f(4.5f, 1.5f, -0.2f);
 	glVertex3f(4.5f, 2.0f, -0.2f);
 	glVertex3f(5.0f, 1.5f, -0.2f);
 
-	//Y axis
+	// Y axis
 	glColor3f(0, 1, 0); //Green color
 
 	glVertex3f(-0.1f, 0.1f, -0.1f);
 	glVertex3f(-0.1f, 5.1f, -0.1f);
 
-	///Draw an Y
+	/// Draw an Y
 	glVertex3f(0.0f, 5.5f, 0.0f);
 	glVertex3f(0.0f, 6.0f, 0.0f);
 	glVertex3f(0.0f, 6.0f, 0.0f);
@@ -505,13 +510,13 @@ void ModuleScene::DrawAxis() const {
 	glVertex3f(0.0f, 6.0f, 0.0f);
 	glVertex3f(0.15f, 6.5f, 0.0f);
 
-	//Z axis
+	// Z axis
 	glColor3f(0, 0, 1); //Blue color
 
 	glVertex3f(-0.1f, 0.1f, -0.1f);
 	glVertex3f(-0.1f, 0.1f, 5.1f);
 
-	///Draw a Z
+	/// Draw a Z
 	glVertex3f(0.0f, 2.0f, 4.5f);
 	glVertex3f(0.0f, 2.0f, 5.0f);
 	glVertex3f(0.0f, 2.0f, 5.0f);
@@ -520,15 +525,15 @@ void ModuleScene::DrawAxis() const {
 	glVertex3f(0.0f, 1.5f, 5.0f);
 
 	glEnd();
-
-	glColor3f(1, 1, 1);//Set color back to white
+	glColor3f(1, 1, 1); //Set color back to white
 }
 
 GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 {
 	GameObject* item = new GameObject();
 
-	if (sphereCount > 0) {
+	if (sphereCount > 0) 
+	{
 		char name[50];
 		sprintf_s(name, 50, "Sphere (%d)", sphereCount);
 		item->name = name;
@@ -568,13 +573,15 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
-	App->scene->selected = item;
 
 	Sphere sphere;
 	sphere.r = diameter;
-
 	App->physics->AddRigidBody(sphere, item, 0.5f);
 
+	CreateGameObject* creationAction = new CreateGameObject(item);
+	App->undo->StoreNewAction(creationAction);
+
+	App->scene->selected = item;
 	return item;
 }
 
@@ -582,7 +589,8 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 {
 	GameObject* item = new GameObject();
 
-	if (cubeCount > 0) {
+	if (cubeCount > 0) 
+	{
 		char name[50];
 		sprintf_s(name, 50, "Cube (%d)", cubeCount);
 		item->name = name;
@@ -653,10 +661,13 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
+
+	App->physics->AddRigidBody(OBB(item->aabb), item, 0.5f);
+
+	CreateGameObject* creationAction = new CreateGameObject(item);
+	App->undo->StoreNewAction(creationAction);
+
 	App->scene->selected = item;
-
-	App->physics->AddRigidBody(OBB(item->aabb), item,0.0f);
-
 	return item;
 }
 
@@ -664,7 +675,8 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 {
 	GameObject* item = new GameObject();
 
-	if (planeCount > 0) {
+	if (planeCount > 0) 
+	{
 		char name[50];
 		sprintf_s(name, 50, "Plane (%d)", planeCount);
 		item->name = name;
@@ -683,7 +695,8 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	par_shapes_scale(plane,length,0.0f, depth);
 
 	// If it is the first time we create a Plane, we save its mesh as a resource
-	if (planeCount == 1) {
+	if (planeCount == 1) 
+	{
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, planeMesh_UUID);
 		mesh->LoadParShape(plane);
 		std::string file;
@@ -706,10 +719,13 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
+
+	App->physics->AddRigidBody(OBB(item->aabb), item, 0.5f);
+
+	CreateGameObject* creationAction = new CreateGameObject(item);
+	App->undo->StoreNewAction(creationAction);
+
 	App->scene->selected = item;
-
-	App->physics->AddRigidBody(OBB(item->aabb), item, 0.0f);
-
 	return item;
 }
 
@@ -717,7 +733,8 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 {
 	GameObject* item = new GameObject();
 
-	if (donutCount > 0) {
+	if (donutCount > 0) 
+	{
 		char name[50];
 		sprintf_s(name, 50, "Donut (%d)", donutCount);
 		item->name = name;
@@ -736,7 +753,8 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	par_shapes_scale(newMesh, radius, radius, radius);
 
 	// If it is the first time we create a Sphere, we save its mesh as a resource
-	if (donutCount == 1) {
+	if (donutCount == 1) 
+	{
 		mesh->resource_mesh = (ResourceMesh*)App->res_manager->CreateNewResource(RESOURCE_TYPE::MESH, donutMesh_UUID);
 		mesh->LoadParShape(newMesh);
 		std::string file;
@@ -759,9 +777,12 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 
 	// Set default texture
 	material->resource_tex = App->res_loader->default_material;
+
+	App->physics->AddRigidBody(OBB(item->aabb), item, 0.5f);
+
+	CreateGameObject* creationAction = new CreateGameObject(item);
+	App->undo->StoreNewAction(creationAction);
+
 	App->scene->selected = item;
-
-	App->physics->AddRigidBody(OBB(item->aabb), item, 0.0f);
-
 	return item;
 }
