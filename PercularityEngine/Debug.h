@@ -4,7 +4,6 @@
 class Debug
 {
 public:
-
 	static bool drawObjectsAABB;
 
 	static bool drawSceneTree;
@@ -15,10 +14,7 @@ public:
 	static bool frustumCullingActive;
 	
 	static bool drawColliders;
-
 	static bool drawMouseLine;
-
-
 };
 
 #endif

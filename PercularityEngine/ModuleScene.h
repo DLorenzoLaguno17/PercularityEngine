@@ -1,13 +1,19 @@
 #ifndef _MODULE_SCENE_H__
 #define _MODULE_SCENE_H__
 
-#include "Module.h"
-#include "Tree.h"
+#include "ModuleTaskManager.h"
 #include "Timer.h"
-#include "ModuleUndo.h"
 
 class GameObject;
 class SceneWindow;
+class Tree;
+
+class LoadSceneTask : public Task
+{
+public:
+	const char* sceneAddress;
+	void Execute() override;
+};
 
 class ModuleScene : public Module
 {
@@ -27,6 +33,8 @@ public:
 	void Play();
 	void Pause();
 	void ExitGame();
+
+	void OnTaskFinished(Task* task);
 
 	// Save & Load
 	void Load(const nlohmann::json &config);
@@ -49,7 +57,6 @@ public:
 	GameObject* CreatePlane(float length, float depth);
 	GameObject* CreateDonut(int slices, int stacks, float radius);
 
-
 private:
 	// Assigns a new UUID to all the GameObjects without loosing the hierarchy
 	void RecursiveReset(GameObject* root);
@@ -62,16 +69,15 @@ public:
 
 	std::vector<GameObject*> nonStaticObjects;
 	bool mustLoad = false;
-	//FRUSTUM TESTER
 
+	// FRUSTUM TESTER
 	GameObject* frustumTest = nullptr;
 
-	//FRUSTUM TEST
-
+	// FRUSTUM TEST
 	Tree* sceneTree = nullptr;
 
 	GameObject* selected = nullptr;
-	const char* sceneAddress;
+	const char* sceneAddress = nullptr;
 
 	bool playMode = false;
 
@@ -94,38 +100,6 @@ private:
 	uint donutMesh_UUID = 0;
 
 	uint go_counter = 0;
-};
-
-// ---------------------------------------------------
-class CreateGameObject : public Action
-{
-public:
-	CreateGameObject(GameObject* gameObject);
-
-	void Undo() override;
-	void Redo() override;
-	void CleanUp() override;
-
-private:
-	GameObject* parent = nullptr;
-	GameObject* gameObject = nullptr;
-	GameObject* backup = nullptr;
-};
-
-class DeleteGameObject : public Action
-{
-public:
-	DeleteGameObject(GameObject* gameObject, GameObject* parent) :
-		backup(gameObject), parent(parent) {};
-
-	void Undo() override;
-	void Redo() override;
-	void CleanUp() override;
-
-private:
-	GameObject* parent = nullptr;
-	GameObject* gameObject = nullptr;
-	GameObject* backup = nullptr;
 };
 
 #endif

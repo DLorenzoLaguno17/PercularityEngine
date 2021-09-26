@@ -9,9 +9,6 @@ class Task;
 
 class Module
 {
-private :
-	bool enabled;
-
 public:
 	Application* App;
 
@@ -35,7 +32,10 @@ public:
 	virtual void Save(nlohmann::json &config) {}
 
 	// Multi-threading
-	virtual void OnTaskFinished(Task*) {}
+	virtual void OnTaskFinished(Task* task) {}
+
+private:
+	bool enabled = false;
 };
 
 #endif

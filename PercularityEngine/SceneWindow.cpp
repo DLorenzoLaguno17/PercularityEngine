@@ -12,6 +12,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
+#include "Tree.h"
 
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
 
@@ -40,12 +41,9 @@ void SceneWindow::Update() {
 
 	// Check if the scene window has been resized
 	if (windowSize.x != last_windowSize.x || windowSize.y != last_windowSize.y)
-	{
 		last_windowSize = windowSize;
-	}
 
 	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.x/App->renderer3D->GetCamera()->GetAspectRatio()), ImVec2(0, 1), ImVec2(1, 0));
-
 
 	ImGui::End();
 
@@ -66,24 +64,23 @@ void SceneWindow::OnClick()
 	mousePos.y = 1.0 - 2.0f*(mousePos.y / (windowSize.x / App->renderer3D->GetCamera()->GetAspectRatio()));
 
 	App->camera->OnClick(mousePos);
-
 	App->scene->selected = SelectObject();
 }
 
 GameObject* SceneWindow::SelectObject() const
 {
-	GameObject* retItem = nullptr;
+	GameObject* ret = nullptr;	
+	if (App->scene->sceneTree == nullptr) return ret;
 
 	LineSegment ray = *App->camera->GetLastRay();
 
 	std::map<float,const GameObject*> objects;
-	App->scene->sceneTree->CollectChilldren(ray,objects);
+	App->scene->sceneTree->CollectChilldren(ray, objects);
 
 	float nearHit,farHit;
 	for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
 		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray, nearHit, farHit))
 			objects[nearHit] = App->scene->nonStaticObjects[i];
-
 
 	std::map<float, const GameObject*>::iterator it;
 	for (it = objects.begin(); it != objects.end(); ++it)
@@ -107,12 +104,10 @@ GameObject* SceneWindow::SelectObject() const
 				Triangle triangle(a, b, c);
 
 				if (localRay.Intersects(triangle, nullptr, nullptr))
-				{
 					return (GameObject*)it->second;
-				}
 			}
 		}
 	}
 
-	return retItem;
+	return ret;
 }

@@ -1146,10 +1146,13 @@
     <ClInclude Include="ComponentRigidBody.h">
       <Filter>Sources\Scene elements\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleUndo.h">
+    <ClInclude Include="ModuleTaskManager.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleTaskManager.h">
+    <ClInclude Include="SceneActions.h">
+      <Filter>Sources\Modules\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleUndo.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1403,10 +1406,13 @@
     <ClCompile Include="ComponentRigidBody.cpp">
       <Filter>Sources\Scene elements\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleUndo.cpp">
+    <ClCompile Include="ModuleTaskManager.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleTaskManager.cpp">
+    <ClCompile Include="SceneActions.cpp">
+      <Filter>Sources\Modules\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleUndo.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>

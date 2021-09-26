@@ -20,7 +20,7 @@ public:
 
 	void OnClick();
 
-	GameObject* SelectObject()const;
+	GameObject* SelectObject() const;
 
 private:
 	ImVec2 last_windowSize = { 0,0 };

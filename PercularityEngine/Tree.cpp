@@ -4,17 +4,16 @@
 #include "Intersection.h"
 #include "mmgr/mmgr.h"
 
-Tree::Tree(TREE_TYPE type,AABB aabb,int capacity) :type(type)
+Tree::Tree(TREE_TYPE type,AABB aabb,int capacity) : type(type)
 {
 	rootNode = new TreeNode(aabb,type, NODE_TYPE::ROOT,capacity);
 
 	rootNode->capacity = capacity;
 	rootNode->treeType = type;
-	rootNode->aabb= aabb;
-
+	rootNode->aabb = aabb;
 }
 
-Tree::Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint,int capacity) :type(type)
+Tree::Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint,int capacity) : type(type)
 {
 	rootNode = new TreeNode();
 
@@ -23,9 +22,6 @@ Tree::Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint,int capacity) :type(
 	rootNode->aabb.minPoint = minPoint;
 	rootNode->aabb.maxPoint = maxPoint;
 }
-
-Tree::~Tree()
-{}
 
 void Tree::Draw()
 {
@@ -45,6 +41,7 @@ void Tree::Erase(GameObject* gameObject)
 void Tree::Clear()
 {
 	rootNode->Clear();
+	RELEASE(rootNode);
 }
 
 void Tree::CollectChilldren(const AABB& aabb_, std::vector<const GameObject*>& vector)
@@ -63,21 +60,11 @@ void Tree::CollectChilldren(const LineSegment& ray, std::map<float,const GameObj
 }
 
 //~~~~~~~~NODE METHODS~~~~~~~~~~
-
-TreeNode::TreeNode()
-{
-}
-
-TreeNode::TreeNode(AABB aabb, TREE_TYPE type, NODE_TYPE ntype,int capacity): aabb(aabb),treeType(type),nodeType(ntype),capacity(capacity)
-{
-}
-
-TreeNode::~TreeNode()
-{}
+TreeNode::TreeNode(AABB aabb, TREE_TYPE type, NODE_TYPE ntype,int capacity) : 
+	aabb(aabb), treeType(type), nodeType(ntype), capacity(capacity) {}
 
 void TreeNode::Split()
-{
-	
+{	
 	switch (treeType)
 	{
 	case TREE_TYPE::QUADTREE:
@@ -92,7 +79,6 @@ void TreeNode::Split()
 void TreeNode::Draw()
 {
 	glLineWidth(7.0f);
-
 	glBegin(GL_LINES);
 
 	if (objects.empty())
@@ -404,10 +390,8 @@ bool TreeNode::Insert(GameObject* gameObject)
 
 				else if (nodesContaining > 1)
 					objects.push_back(auxVector[a]);
-			}
-			
-		}
-		
+			}			
+		}		
 
 		break;
 	}
@@ -417,16 +401,14 @@ bool TreeNode::Insert(GameObject* gameObject)
 
 void TreeNode::CollectChilldren(const AABB& aabb_, std::vector<const GameObject*>& vector)
 {
-
-	if (!aabb.Intersects(aabb_))
+	if (!aabb.Intersects(aabb_)) 
 		return;
 
 	for (int i = 0; i < objects.size(); ++i)
 		vector.push_back(objects[i]);
 
 	for (int i = 0; i < nodesAmount; ++i)
-		nodes[i].CollectChilldren(aabb_,vector);
-
+		nodes[i].CollectChilldren(aabb_, vector);
 }
 
 void TreeNode::CollectChilldren(const Frustum& frustum, std::vector<const GameObject*>& vector)
@@ -440,16 +422,17 @@ void TreeNode::CollectChilldren(const Frustum& frustum, std::vector<const GameOb
 
 	for (int i = 0; i < nodesAmount; ++i)
 		nodes[i].CollectChilldren(frustum,vector);
-	
-
 }
 
 void TreeNode::CollectChilldren(const LineSegment& ray, std::map<float, const GameObject*>& container, float nearest)
 {
-	if (ray.Intersects(aabb)){
-		for (int i = 0; i < objects.size(); ++i){
+	if (ray.Intersects(aabb))
+	{
+		for (int i = 0; i < objects.size(); ++i)
+		{
 			float nearHit, farHit;
-			if (objects[i]->aabb.Intersects(ray, nearHit,farHit) ) {
+			if (objects[i]->aabb.Intersects(ray, nearHit,farHit)) 
+			{
 				if (nearest)
 					container[nearHit] = objects[i];
 				else

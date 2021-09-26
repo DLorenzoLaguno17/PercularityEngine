@@ -6,6 +6,7 @@
 #include "ImGui/imgui.h"
 #include "GameObject.h"
 #include "ImGui/ImGuizmo.h"
+#include "Tree.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent, bool active, ComponentTransform* reference) :
 	Component(COMPONENT_TYPE::TRANSFORM, parent, active) 

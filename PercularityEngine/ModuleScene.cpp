@@ -10,8 +10,11 @@
 #include "ModuleCamera3D.h"
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
+#include "ModuleTaskManager.h"
+#include "SceneActions.h"
 
 #include "Time.h"
+#include "Tree.h"
 #include "OpenGL.h"
 #include "GameObject.h"
 #include "ComponentMesh.h"
@@ -31,12 +34,19 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
+void LoadSceneTask::Execute() 
+{ 
+	App->scene->LoadScene("Scene", sceneAddress); 
+};
+
+// ---------------------------------------------------
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	loadingTime.Start();
 }
 
-bool ModuleScene::Init() {
+bool ModuleScene::Init() 
+{
 	root = new GameObject("World");
 	selected = root;
 	sceneAddress = "Assets/Scenes/";
@@ -94,9 +104,14 @@ update_status ModuleScene::Update(float dt)
 		ImGui::NewLine();
 		ImGui::Separator();
 
-		if (ImGui::Button("Yes", ImVec2(140, 0))) { 
+		if (ImGui::Button("Yes", ImVec2(140, 0))) 
+		{ 
 			ImGui::CloseCurrentPopup(); 
 			LoadScene("Scene", sceneAddress); 
+			/*LoadSceneTask* task = new LoadSceneTask;
+			task->owner = this;
+			task->sceneAddress = sceneAddress;
+			App->task_manager->ScheduleTask(task, this);*/
 		}
 
 		ImGui::SetItemDefaultFocus();
@@ -131,7 +146,7 @@ update_status ModuleScene::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("ScenePostUpdate", Profiler::Color::Yellow);
 
-	if (Debug::drawSceneTree)
+	if (Debug::drawSceneTree && sceneTree)
 		sceneTree->Draw();
 
 	//frustumTest->GetComponent<ComponentCamera>()->DrawFrustum();
@@ -252,6 +267,11 @@ void ModuleScene::ExitGame()
 		std::string path = ASSETS_SCENE_FOLDER + name;
 		App->file_system->Remove(path.c_str());
 	}
+}
+
+void ModuleScene::OnTaskFinished(Task* task)
+{
+	delete task;
 }
 
 // -----------------------------------------------------------------------------------------------
@@ -410,47 +430,6 @@ void ModuleScene::Save(nlohmann::json &config)
 	config["Scene"]["Cube resource UUID"] = cubeMesh_UUID;
 	config["Scene"]["Plane resource UUID"] = planeMesh_UUID;
 	config["Scene"]["Donut resource UUID"] = donutMesh_UUID;
-}
-
-//------------------------------------------------------
-CreateGameObject::CreateGameObject(GameObject* gameObject) :
-	gameObject(gameObject), parent(gameObject->parent)
-{
-	backup = new GameObject(gameObject);
-};
-
-void CreateGameObject::Undo()
-{
-	App->scene->RemoveGameObject(gameObject);
-}
-
-void CreateGameObject::Redo()
-{
-	gameObject = new GameObject(backup);
-	gameObject->MakeChild(parent);
-	App->scene->selected = gameObject;
-}
-
-void CreateGameObject::CleanUp()
-{
-	App->scene->RecursiveCleanUp(backup);
-}
-
-void DeleteGameObject::Undo()
-{
-	gameObject = new GameObject(backup);
-	gameObject->MakeChild(parent);
-	App->scene->selected = gameObject;
-}
-
-void DeleteGameObject::Redo()
-{
-	App->scene->RemoveGameObject(gameObject);
-}
-
-void DeleteGameObject::CleanUp()
-{
-	App->scene->RecursiveCleanUp(backup);
 }
 
 // -----------------------------------------------------------------------------------------------

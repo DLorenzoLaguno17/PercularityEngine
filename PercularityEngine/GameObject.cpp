@@ -11,6 +11,7 @@
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
 #include "Debug.h"
+#include "Tree.h"
 
 #include "OpenGL.h"
 #include "glmath.h"

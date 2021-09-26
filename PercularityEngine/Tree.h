@@ -8,29 +8,30 @@
 class GameObject;
 class TreeNode;
 
-enum class TREE_TYPE {
-	NONE=-1,
+enum class TREE_TYPE 
+{
+	NONE = -1,
 	QUADTREE,
 	OCTREE
 	//KDTREE  -> Might be implemented in the future
 };
 
-enum class NODE_TYPE {
-	NONE=-1,
+enum class NODE_TYPE 
+{
+	NONE = -1,
 	ROOT,
 	BRANCH,
 	LEAF
 };
 
-class Tree {
-
+class Tree 
+{
 public:
-
-	//Constructor & destructor
+	// Constructor & destructor
 	Tree(TREE_TYPE type, AABB aabb, int capacity);
 	Tree(TREE_TYPE type, float3 minPoint, float3 maxPoint,int capacity);
 
-	~Tree();
+	~Tree() {};
 
 	void Draw();
 	void Clear();
@@ -50,14 +51,15 @@ public:
 
 };
 
-class TreeNode {
+class TreeNode 
+{
 	friend class Tree;
-public:
 
-	//Constructor & destructor
-	TreeNode();
+public:
+	// Constructor & destructor
+	TreeNode() {};
 	TreeNode(AABB aabb, TREE_TYPE type, NODE_TYPE ntype,int capacity);
-	~TreeNode();
+	~TreeNode() {};
 
 	void Clear();
 	void ClearSubNodes();

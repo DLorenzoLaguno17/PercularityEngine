@@ -51,6 +51,7 @@ Application::Application()
 	AddModule(res_loader);
 	AddModule(physics);
 	AddModule(undo);
+	AddModule(task_manager);
 	
 	// Scenes
 	AddModule(scene);

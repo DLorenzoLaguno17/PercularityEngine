@@ -3,8 +3,6 @@
 #include "ModuleCamera3D.h"
 #include "ModuleWindow.h"
 #include "ModuleGui.h"
-#include <stdio.h>
-#include <iostream>
 #include "OpenGL.h"
 #include "Brofiler/Lib/Brofiler.h"
 #include "ComponentCamera.h"
@@ -13,9 +11,10 @@
 #include "GameObject.h"
 #include "Debug.h"
 
-//test
-#include"ModuleScene.h"
-
+#include "ModuleScene.h"
+#include "Tree.h"
+#include <iostream>
+#include <stdio.h>
 #include "mmgr/mmgr.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
@@ -284,6 +283,7 @@ void ModuleRenderer3D::DrawMeshes()
 	{
 		for (int i = 0; i < meshes.size(); ++i)
 			meshes[i]->Render();
+
 		return;
 	}
 	else
@@ -298,20 +298,23 @@ void ModuleRenderer3D::DrawMeshes()
 		}
 		else
 		{
-			// Get objects from the sceneTree
-			std::vector<const GameObject*> objects;
-			App->scene->sceneTree->CollectChilldren(camera->frustum, objects);
-
-			// Get non static objects
-			for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
-				objects.push_back(App->scene->nonStaticObjects[i]);
-
-			for (int i = 0; i < objects.size(); ++i)
+			if (App->scene->sceneTree)
 			{
-				if (Intersect(camera->frustum, objects[i]->aabb))
+				// Get objects from the sceneTree
+				std::vector<const GameObject*> objects;
+				App->scene->sceneTree->CollectChilldren(camera->frustum, objects);
+
+				// Get non static objects
+				for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
+					objects.push_back(App->scene->nonStaticObjects[i]);
+
+				for (int i = 0; i < objects.size(); ++i)
 				{
-					ComponentMesh* mesh = (ComponentMesh*)objects[i]->GetComponent(COMPONENT_TYPE::MESH);
-					if (mesh) mesh->Render();
+					if (Intersect(camera->frustum, objects[i]->aabb))
+					{
+						ComponentMesh* mesh = (ComponentMesh*)objects[i]->GetComponent(COMPONENT_TYPE::MESH);
+						if (mesh) mesh->Render();
+					}
 				}
 			}
 		}
