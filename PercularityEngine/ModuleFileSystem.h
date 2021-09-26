@@ -1,5 +1,5 @@
-#ifndef __MODULEFILESYSTEM_H__
-#define __MODULEFILESYSTEM_H__
+#ifndef __MODULE_FILESYSTEM_H__
+#define __MODULE_FILESYSTEM_H__
 
 #include "Module.h"
 #include "Globals.h"
@@ -57,4 +57,4 @@ private:
 	aiFileIO* AssimpIO = nullptr;
 };
 
-#endif // __MODULEFILESYSTEM_H__
+#endif // __MODULE_FILESYSTEM_H__

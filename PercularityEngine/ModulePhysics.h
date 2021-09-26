@@ -83,7 +83,7 @@ public:
 	std::vector<btRigidBody*> physBalls;
 
 	btDiscreteDynamicsWorld*				world = nullptr;
-	bool debug = true;
+	bool debug = false;
 
 private:
 	btDefaultCollisionConfiguration*		collision_conf = nullptr;

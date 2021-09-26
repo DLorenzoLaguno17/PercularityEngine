@@ -205,8 +205,8 @@ void ModuleScene::RemoveGameObject(GameObject* gameObject)
 {
 	GameObject* parent = gameObject->parent;
 	parent->children.erase(std::find(parent->children.begin(), parent->children.end(), gameObject));
-	selected = parent;
 	RecursiveCleanUp(gameObject);
+	selected = parent;
 }
 
 // -----------------------------------------------------------------------------------------------

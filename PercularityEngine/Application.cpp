@@ -12,6 +12,7 @@
 #include "ModulePlayer.h"
 #include "ModuleFileSystem.h"
 #include "ModuleUndo.h"
+#include "ModuleTaskManager.h"
 #include "Time.h"
 
 #include <fstream>
@@ -38,6 +39,7 @@ Application::Application()
 	physics = new ModulePhysics(this);
 	player = new ModulePlayer(this);
 	undo = new ModuleUndo(this);
+	task_manager = new ModuleTaskManager(this);
 
 	// Main Modules
 	AddModule(window);

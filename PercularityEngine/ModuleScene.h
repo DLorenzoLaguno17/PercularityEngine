@@ -12,8 +12,8 @@ class SceneWindow;
 class ModuleScene : public Module
 {
 	friend class SceneWindow;
-public:
 
+public:
 	ModuleScene(Application* app, bool start_enabled = true);
 	~ModuleScene() {}
 
