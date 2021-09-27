@@ -1,5 +1,5 @@
-#ifndef __ModuleResourceManager_H__
-#define __ModuleResourceManager_H__
+#ifndef __MODULE_RESOURCEMANAGER_H__
+#define __MODULE_RESOURCEMANAGER_H__
 
 #include "Module.h"
 #include "PercularityResource.h"
@@ -9,14 +9,9 @@ class ModuleResourceManager : public Module
 {
 public:
 	ModuleResourceManager(Application* app, bool start_enabled = true) : Module(app, start_enabled) {}
-
-	// Destructor
 	virtual ~ModuleResourceManager() {}
 
-	// Call before first frame
 	bool Start();
-
-	// Called before quitting
 	bool CleanUp();
 
 	// Save & Load
@@ -36,12 +31,13 @@ public:
 	uint FindFileInAssets(const char* existing_file) const;
 	uint FindFileInLibrary(const char* exported_file) const;
 
-	// Extension checkers
-	bool CheckTextureExtension(const char* extension);
-	bool CheckModelExtension(const char* extension);
-	RESOURCE_TYPE GetTypeFromExtension(const char* extension);
-
 	void DrawProjectExplorer();
+
+private:
+	// Extension checkers
+	bool HasTextureExtension(const char* extension);
+	bool HasModelExtension(const char* extension);
+	RESOURCE_TYPE GetTypeFromExtension(const char* extension);
 
 private:
 	std::map<uint, Resource*> resources;
@@ -50,4 +46,4 @@ private:
 
 };
 
-#endif // __ModuleResourceManager_H__
+#endif // __MODULE_RESOURCEMANAGER_H__

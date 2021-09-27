@@ -7,11 +7,13 @@
 #include "ComponentMaterial.h"
 #include "ResourceTexture.h"
 #include "ModuleScene.h"
+#include "ModuleUndo.h"
 
 #include "mmgr/mmgr.h"
 
 // Show main menu bar
-void MainMenuBar::Update(std::vector<UIElement*> list) {
+void MainMenuBar::Update(std::vector<UIElement*> list) 
+{
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -33,8 +35,11 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 		if (ImGui::BeginMenu("Edit"))
 		{
-			ImGui::MenuItem("Undo", "Ctrl+Z");
-			ImGui::MenuItem("Redo", "Ctrl+Y");
+			if (ImGui::MenuItem("Undo", "Ctrl+Z"))
+				App->undo->Undo();
+
+			if (ImGui::MenuItem("Redo", "Ctrl+Y"))
+				App->undo->Redo();
 
 			ImGui::Separator();
 			ImGui::MenuItem("Cut", "Ctrl+X");
@@ -43,8 +48,8 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 			ImGui::Separator();
 			ImGui::MenuItem("Duplicate", "Ctrl+D");
-			ImGui::MenuItem("Delete", "Supr");
 
+			ImGui::MenuItem("Delete", "Supr");
 			ImGui::EndMenu();
 		}
 
@@ -112,7 +117,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 			ImGui::Separator();
 			ImGui::Text("MIT License");
 			ImGui::NewLine();
-			ImGui::Text("Copyright(c) 2019 Joan Marin & Dani Lorenzo");
+			ImGui::Text("Copyright(c) 2021 Joan Marin & Dani Lorenzo");
 			ImGui::NewLine();
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
 			ImGui::Text("of this software and associated documentation files (the 'Software'), to deal");
@@ -134,6 +139,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list) {
 
 			ImGui::EndMenu();
 		}
+
 		ImGui::EndMainMenuBar();
 	}
 }

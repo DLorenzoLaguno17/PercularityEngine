@@ -7,10 +7,9 @@
 ProjectWindow::ProjectWindow(char* name, bool active) : UIElement(name, active) {}
 
 // Show the project explorer
-void ProjectWindow::Update() {
+void ProjectWindow::Update() 
+{
 	ImGui::Begin("Project", &active);
-
 	App->res_manager->DrawProjectExplorer();
-
 	ImGui::End();
 }

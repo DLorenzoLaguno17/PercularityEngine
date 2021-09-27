@@ -64,13 +64,14 @@ update_status ModuleInput::PreUpdate(float dt)
 			input_list.push_back((SDL_Scancode)i);
 			if (input_list.size() > MAX_INPUTS) input_list.pop_front();
 
-			if (keyboard[i] == KEY_IDLE) {
+			if (keyboard[i] == KEY_IDLE) 
+			{
 				keyboard[i] = KEY_DOWN;
-
 				input_state_list.push_back(KEY_DOWN);
 				if (input_state_list.size() > MAX_INPUTS) input_state_list.pop_front();
 			}
-			else {
+			else 
+			{
 				keyboard[i] = KEY_REPEAT;
 				input_state_list.push_back(KEY_REPEAT);
 				if (input_state_list.size() > MAX_INPUTS) input_state_list.pop_front();
@@ -81,9 +82,9 @@ update_status ModuleInput::PreUpdate(float dt)
 			input_list.push_back((SDL_Scancode)i);
 			if (input_list.size() > MAX_INPUTS) input_list.pop_front();
 
-			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN) {
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN) 
+			{
 				keyboard[i] = KEY_UP;
-
 				input_state_list.push_back(KEY_UP);
 				if (input_state_list.size() > MAX_INPUTS) input_state_list.pop_front();
 			}
@@ -129,8 +130,8 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / (uint)App->window->GetWindowSize();;
-			mouse_y = e.motion.y / (uint)App->window->GetWindowSize();;
+			mouse_x = e.motion.x / (uint)App->window->GetWindowSize();
+			mouse_y = e.motion.y / (uint)App->window->GetWindowSize();
 
 			mouse_x_motion = e.motion.xrel / (uint)App->window->GetWindowSize();
 			mouse_y_motion = e.motion.yrel / (uint)App->window->GetWindowSize();
@@ -141,7 +142,8 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_WINDOWEVENT:
-			if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
+			if (e.window.event == SDL_WINDOWEVENT_RESIZED) 
+			{
 				App->window->SetWindowWidth(e.window.data1);
 				App->window->SetWindowHeight(e.window.data2);
 				App->renderer3D->OnResize(e.window.data1, e.window.data2);
@@ -150,8 +152,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_DROPFILE:			
 			App->res_manager->ReceiveExternalFile(e.drop.file);
-			SDL_free((void*)e.drop.file);
-			
+			SDL_free((void*)e.drop.file);			
 			break;			
 		}
 
@@ -172,8 +173,8 @@ bool ModuleInput::CleanUp()
 	return true;
 }
 
-bool ModuleInput::IsMouseInsideWindow(UIElement* window) const {
-
+bool ModuleInput::IsMouseInsideWindow(UIElement* window) const 
+{
 	return (ImGui::GetMousePos().x > window->windowPosition.x && ImGui::GetMousePos().x < window->windowSize.x + window->windowPosition.x
 		&& ImGui::GetMousePos().y > window->windowPosition.y && ImGui::GetMousePos().y < window->windowSize.y + window->windowPosition.y);
 }

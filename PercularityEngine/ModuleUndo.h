@@ -24,6 +24,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	// Ctrl+Z and Ctrl+Y methods
 	void Undo();
 	void Redo();
 

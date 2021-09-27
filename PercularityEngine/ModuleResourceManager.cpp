@@ -95,15 +95,15 @@ uint ModuleResourceManager::ReceiveExternalFile(const char* new_file)
 	// If we don't have iot already, we add the file to our Assets folder
 	App->file_system->SplitFilePath(new_file, nullptr, &final_path, &extension);
 
-	if (CheckTextureExtension(extension.c_str()))
+	if (HasTextureExtension(extension.c_str()))
 		final_path = ASSETS_TEXTURE_FOLDER + final_path;
-	else if (CheckModelExtension(extension.c_str()))
+	else if (HasModelExtension(extension.c_str()))
 		final_path = ASSETS_MODEL_FOLDER + final_path;
 	else if (strcmp(extension.c_str(), "json") == 0)
 		final_path = ASSETS_SCENE_FOLDER + final_path;
 
-	if (App->file_system->CopyFromOutsideFS(new_file, final_path.c_str())) {
-
+	if (App->file_system->CopyFromOutsideFS(new_file, final_path.c_str())) 
+	{
 		RESOURCE_TYPE type = GetTypeFromExtension(extension.c_str());
 		ret = ImportFile(final_path.c_str(), type, true);
 	}
@@ -266,8 +266,8 @@ bool ModuleResourceManager::CleanUp()
 	return true;
 }
 
-void ModuleResourceManager::DrawProjectExplorer() {
-
+void ModuleResourceManager::DrawProjectExplorer() 
+{
 	// Data from the assets
 	std::vector<std::string> tex_files;
 	std::vector<std::string> tex_directories;
@@ -298,7 +298,8 @@ void ModuleResourceManager::DrawProjectExplorer() {
 		ImGui::Text(tex_files[i].c_str());
 	}*/
 
-	for (int i = 0; i < mod_files.size(); ++i) {
+	for (int i = 0; i < mod_files.size(); ++i) 
+	{
 		if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
 			
 			std::string::size_type const p(mod_files[i].find_last_of('.'));
@@ -311,7 +312,8 @@ void ModuleResourceManager::DrawProjectExplorer() {
 		ImGui::Text(mod_files[i].c_str());
 	}
 
-	for (int i = 0; i < sce_files.size(); ++i) {
+	for (int i = 0; i < sce_files.size(); ++i) 
+	{
 		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
 			
 			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
@@ -325,16 +327,18 @@ void ModuleResourceManager::DrawProjectExplorer() {
 // Methods to check the extension of a file
 RESOURCE_TYPE ModuleResourceManager::GetTypeFromExtension(const char* extension) 
 {	
-	if (CheckModelExtension(extension)) return RESOURCE_TYPE::MODEL;
-	else if (CheckTextureExtension(extension)) return RESOURCE_TYPE::TEXTURE;
+	if (HasModelExtension(extension)) return RESOURCE_TYPE::MODEL;
+	else if (HasTextureExtension(extension)) return RESOURCE_TYPE::TEXTURE;
 	else if (strcmp(extension, "json") == 0) return RESOURCE_TYPE::SCENE;
 	else return RESOURCE_TYPE::UNKNOWN;
 }
 
-bool ModuleResourceManager::CheckTextureExtension(const char* extension) {
+bool ModuleResourceManager::HasTextureExtension(const char* extension) 
+{
 	return (strcmp(extension, "dds") == 0 || strcmp(extension, "png") == 0 || strcmp(extension, "jpg") == 0);
 }
 
-bool ModuleResourceManager::CheckModelExtension(const char* extension) {
+bool ModuleResourceManager::HasModelExtension(const char* extension) 
+{
 	return (strcmp(extension, "fbx") == 0 || strcmp(extension, "FBX") == 0 || strcmp(extension, "obj") == 0);
 }
