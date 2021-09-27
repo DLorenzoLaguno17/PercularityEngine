@@ -4,21 +4,22 @@
 #include "GameObject.h"
 
 CreateGameObject::CreateGameObject(GameObject* gameObject) :
-	gameObject(gameObject), parent(gameObject->parent)
+	uuid(gameObject->GetUUID()), parent(gameObject->parent)
 {
 	backup = new GameObject(gameObject);
 };
 
 void CreateGameObject::Undo()
 {
-	App->scene->RemoveGameObject(gameObject);
+	GameObject* toDelete = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	App->scene->RemoveGameObject(toDelete);
 }
 
 void CreateGameObject::Redo()
 {
-	gameObject = new GameObject(backup);
-	gameObject->MakeChild(parent);
-	App->scene->selected = gameObject;
+	GameObject* newGo = new GameObject(backup);
+	newGo->MakeChild(parent);
+	App->scene->selected = newGo;
 }
 
 void CreateGameObject::CleanUp()
@@ -26,16 +27,21 @@ void CreateGameObject::CleanUp()
 	App->scene->RecursiveCleanUp(backup);
 }
 
+// -------------------------------------------------------------------------
+DeleteGameObject::DeleteGameObject(GameObject* gameObject, GameObject* parent) :
+	uuid(gameObject->GetUUID()), backup(gameObject), parent(parent) {};
+
 void DeleteGameObject::Undo()
 {
-	gameObject = new GameObject(backup);
-	gameObject->MakeChild(parent);
-	App->scene->selected = gameObject;
+	GameObject* newGo = new GameObject(backup);
+	newGo->MakeChild(parent);
+	App->scene->selected = newGo;
 }
 
 void DeleteGameObject::Redo()
 {
-	App->scene->RemoveGameObject(gameObject);
+	GameObject* toDelete = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	App->scene->RemoveGameObject(toDelete);
 }
 
 void DeleteGameObject::CleanUp()

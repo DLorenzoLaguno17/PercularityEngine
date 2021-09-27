@@ -33,6 +33,7 @@ bool ModuleUndo::CleanUp()
 	}
 
 	actions.clear();
+	cursor = 0;
 	return true;
 }
 
@@ -58,7 +59,7 @@ void ModuleUndo::StoreNewAction(Action* newAction)
 {
 	if (Time::running) 
 	{
-
+		//temporalActions.push_back(newAction);
 	}
 	else
 	{
@@ -67,6 +68,7 @@ void ModuleUndo::StoreNewAction(Action* newAction)
 			for (uint i = actions.size(); i > cursor; --i)
 			{
 				actions.back()->CleanUp();
+				RELEASE(actions.back());
 				actions.pop_back();
 			}
 		}

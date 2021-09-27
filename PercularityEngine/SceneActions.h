@@ -15,24 +15,23 @@ public:
 	void CleanUp() override;
 
 private:
+	uint uuid = 0;
 	GameObject* parent = nullptr;
-	GameObject* gameObject = nullptr;
 	GameObject* backup = nullptr;
 };
 
 class DeleteGameObject : public Action
 {
 public:
-	DeleteGameObject(GameObject* gameObject, GameObject* parent) :
-		backup(gameObject), parent(parent) {};
+	DeleteGameObject(GameObject* gameObject, GameObject* parent);
 
 	void Undo() override;
 	void Redo() override;
 	void CleanUp() override;
 
 private:
+	uint uuid = 0;
 	GameObject* parent = nullptr;
-	GameObject* gameObject = nullptr;
 	GameObject* backup = nullptr;
 };
 

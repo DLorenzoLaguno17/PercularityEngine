@@ -31,6 +31,7 @@ public:
 
 private:
 	std::vector<Action*> actions;
+	std::vector<Action*> temporalActions;
 	uint cursor = 0;
 };
 

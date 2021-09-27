@@ -1,7 +1,7 @@
 #ifndef __ModuleResourceLoader_H__
 #define __ModuleResourceLoader_H__
 
-#include "Module.h"
+#include "ModuleTaskManager.h"
 
 #define CHECKERS_WIDTH 150
 #define CHECKERS_HEIGHT 150
@@ -13,6 +13,14 @@ class ResourceModel;
 class ResourceScene;
 struct aiScene;
 struct aiNode;
+
+
+class LoadModelTask : public Task
+{
+public:
+	const char* modelAddress;
+	void Execute() override;
+};
 
 // ---------------------------------------------------
 class ModuleResourceLoader : public Module
@@ -65,6 +73,7 @@ public:
 	uint default_tex = 0;
 
 	const char* modelAddress;
+
 private:
 
 	uint defaultMat_UUID = 0;

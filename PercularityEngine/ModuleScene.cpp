@@ -34,12 +34,6 @@
 #include "Brofiler/Lib/Brofiler.h"
 #include "mmgr/mmgr.h"
 
-void LoadSceneTask::Execute() 
-{ 
-	App->scene->LoadScene("Scene", sceneAddress); 
-};
-
-// ---------------------------------------------------
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	loadingTime.Start();
@@ -108,10 +102,6 @@ update_status ModuleScene::Update(float dt)
 		{ 
 			ImGui::CloseCurrentPopup(); 
 			LoadScene("Scene", sceneAddress); 
-			/*LoadSceneTask* task = new LoadSceneTask;
-			task->owner = this;
-			task->sceneAddress = sceneAddress;
-			App->task_manager->ScheduleTask(task, this);*/
 		}
 
 		ImGui::SetItemDefaultFocus();
@@ -269,11 +259,6 @@ void ModuleScene::ExitGame()
 	}
 }
 
-void ModuleScene::OnTaskFinished(Task* task)
-{
-	delete task;
-}
-
 // -----------------------------------------------------------------------------------------------
 // SAVE & LOAD METHODS
 // -----------------------------------------------------------------------------------------------
@@ -286,6 +271,7 @@ void ModuleScene::LoadScene(const std::string scene_name, const char* address, b
 	// First we delete the current scene unless we are loading a model and not a scene
 	if (!loadingModel) 
 	{
+		App->undo->CleanUp();
 		CleanUp();
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80, -80, -80 }, { 80, 80, 80 }), 5);
 	}

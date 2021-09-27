@@ -1,19 +1,11 @@
 #ifndef _MODULE_SCENE_H__
 #define _MODULE_SCENE_H__
 
-#include "ModuleTaskManager.h"
 #include "Timer.h"
 
 class GameObject;
 class SceneWindow;
 class Tree;
-
-class LoadSceneTask : public Task
-{
-public:
-	const char* sceneAddress;
-	void Execute() override;
-};
 
 class ModuleScene : public Module
 {
@@ -33,8 +25,6 @@ public:
 	void Play();
 	void Pause();
 	void ExitGame();
-
-	void OnTaskFinished(Task* task);
 
 	// Save & Load
 	void Load(const nlohmann::json &config);
@@ -66,7 +56,6 @@ private:
 	void DrawSimplePlane()const;	//Draw a plane with some lines
 
 public:
-
 	std::vector<GameObject*> nonStaticObjects;
 	bool mustLoad = false;
 
