@@ -20,7 +20,6 @@ ComponentMaterial::ComponentMaterial(GameObject* parent, bool active, ComponentM
 
 void ComponentMaterial::OnEditor() 
 {
-
 	if (ImGui::CollapsingHeader("Material")) 
 	{
 		ImGui::Checkbox(resource_tex->name.c_str(), &active);
@@ -28,6 +27,25 @@ void ComponentMaterial::OnEditor()
 		ImGui::NewLine();
 
 		ImGui::Image((void*)resource_tex->texture, ImVec2(300, 300), ImVec2(0, 1), ImVec2(1, 0));
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureUUID"))
+			{
+				std::string test = *(std::string*)payload->Data;
+				ResourceTexture* droppedTexture = (ResourceTexture*)App->res_manager->GetResourceByName(test.c_str());
+				
+				// Update texture resource references
+				if (droppedTexture)
+				{
+					droppedTexture->IncreaseReferenceCount();
+					resource_tex->DecreaseReferenceCount();
+					resource_tex = droppedTexture;
+				}
+			}
+
+			ImGui::EndDragDropTarget();
+		}
+
 		ImGui::NewLine();
 	}
 }

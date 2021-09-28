@@ -111,8 +111,8 @@ void ComponentMesh::RenderNormals() {
 	}
 }
 
-void ComponentMesh::Render() const  {
-	
+void ComponentMesh::Render() const  
+{	
 	glPushMatrix();
 	glMultMatrixf(gameObject->transform->GetGlobalGLTransform().M);
 

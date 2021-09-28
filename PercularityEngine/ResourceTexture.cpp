@@ -11,7 +11,9 @@ bool ResourceTexture::LoadInMemory()
 }
 
 void ResourceTexture::ReleaseFromMemory()
-{}
+{
+
+}
 
 // Save and Load
 void ResourceTexture::OnSave(const char* resourceNum, json &config) const

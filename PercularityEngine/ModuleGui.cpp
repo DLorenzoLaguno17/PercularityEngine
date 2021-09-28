@@ -124,9 +124,9 @@ bool ModuleGui::CleanUp()
 	ImGui::DestroyContext();
 
 	RELEASE(debugWindow);
-	RELEASE(project);
 	RELEASE(hierarchy);
 	RELEASE(inspector);
+	RELEASE(project);
 	RELEASE(console);
 	RELEASE(scene_window);
 	RELEASE(settings);
@@ -157,10 +157,11 @@ void ModuleGui::Load(const json &config)
 	settings = new ConfigWindow("Configuration", true);
 	scene_window = new SceneWindow("Scene", true);
 	console = new ConsoleWindow("Console", true);
+	project = new ProjectWindow("Project", true);
 	inspector = new InspectorWindow("Inspector", true);
 	hierarchy = new HierarchyWindow("Hierarchy", true);
-	project = new ProjectWindow("Project", true);
 	debugWindow = new DebugWindow("Debug", true);
+
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
 	ui_elements_list.push_back(console);

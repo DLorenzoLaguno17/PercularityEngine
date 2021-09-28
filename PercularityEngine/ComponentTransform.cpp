@@ -70,7 +70,7 @@ void ComponentTransform::Update()
 
 void ComponentTransform::OnEditor() 
 {
-	if (ImGui::CollapsingHeader("Transform")) 
+	if (ImGui::CollapsingHeader("Transform"), ImGuiTreeNodeFlags_DefaultOpen)
 	{
 		float4x4 model = gameObject->transform->GetLocalTransform();
 		model.Transpose();

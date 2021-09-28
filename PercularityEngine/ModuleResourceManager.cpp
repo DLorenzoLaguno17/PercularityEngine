@@ -38,20 +38,20 @@ bool ModuleResourceManager::Start()
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
 	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);*/
 
-	/*for (int i = 0; i < tex_files.size(); ++i) {
-	
+	/*for (int i = 0; i < tex_files.size(); ++i)
+	{	
 		std::string file = ASSETS_TEXTURE_FOLDER + tex_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
 	}*/
 
-	/*for (int i = 0; i < mod_files.size(); ++i) {
-
+	/*for (int i = 0; i < mod_files.size(); ++i) 
+	{
 		std::string file = ASSETS_MODEL_FOLDER + mod_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::MODEL);		
 	}
 
-	for (int i = 0; i < sce_files.size(); ++i) {
-		
+	for (int i = 0; i < sce_files.size(); ++i) 
+	{		
 		std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::SCENE);		
 	}*/
@@ -157,6 +157,8 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 		res->name = App->res_loader->getNameFromPath(res->file);
 		ret = res->GetUUID();		
 	}
+
+	return ret;
 }
 
 // Load & Save
@@ -311,6 +313,7 @@ void ModuleResourceManager::DrawProjectExplorer()
 	// Show textures in the folder
 	for (int i = 0; i < tex_files.size(); ++i)
 	{
+		ImGui::PushID(i);
 		ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50));
 		//{
 			/*ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
@@ -328,27 +331,22 @@ void ModuleResourceManager::DrawProjectExplorer()
 		
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
-			ImGui::SetDragDropPayload("TextureUUID", &i, sizeof(int));    
+			std::string uuid = App->res_loader->getNameFromPath(tex_files[i]);
+			ImGui::SetDragDropPayload("TextureUUID", &uuid, sizeof(std::string));    
 			ImGui::Image((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50));
 			ImGui::EndDragDropSource();
 		}
 
 		ImGui::Text(tex_files[i].c_str());
 		ImGui::NextColumn();
+		ImGui::PopID();
 	}
 
 	// Show models in the folder
 	for (int i = 0; i < mod_files.size(); ++i)
 	{
+		ImGui::PushID(i);
 		ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
-		/*{
-			std::string::size_type const p(mod_files[i].find_last_of('.'));
-			std::string name = mod_files[i].substr(0, p);
-
-			Resource* res = GetResourceByName(name.c_str());
-			res->IncreaseReferenceCount();
-			if (res->usedAsReference > 1) res->LoadInMemory();
-		}*/
 
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
@@ -359,27 +357,25 @@ void ModuleResourceManager::DrawProjectExplorer()
 
 		ImGui::Text(mod_files[i].c_str());
 		ImGui::NextColumn();
+		ImGui::PopID();
 	}
 
 	// Show scenes in the folder
 	for (int i = 0; i < sce_files.size(); ++i)
 	{
+		ImGui::PushID(i);
 		ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50));
-		/*{
-			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
-			Resource* res = GetResourceByName(App->res_loader->getNameFromPath(sce_files[i]).c_str());
-			res->IncreaseReferenceCount();
-		}*/
-
-		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
-			ImGui::SetDragDropPayload("SceneUUID", &i, sizeof(int));
-			ImGui::Image((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50));
-			ImGui::EndDragDropSource();
+			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
+			ResourceScene* newScene = (ResourceScene*)GetResourceByName(App->res_loader->getNameFromPath(sce_files[i]).c_str());
+			
+			if (newScene)
+				newScene->IncreaseReferenceCount();
 		}
 
 		ImGui::Text(sce_files[i].c_str());
 		ImGui::NextColumn();
+		ImGui::PopID();
 	}
 
 	ImGui::Columns(1);
