@@ -16,9 +16,7 @@ class ModuleUndo : public Module
 {
 public:
 	ModuleUndo(Application* app, bool start_enabled = true) : Module(app, start_enabled) {}
-
-	// Destructor
-	virtual ~ModuleUndo() {}
+	~ModuleUndo() {}
 
 	bool Start();
 	update_status Update(float dt);

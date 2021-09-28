@@ -134,12 +134,13 @@ bool ModuleGui::CleanUp()
 	return true;
 }
 
-void ModuleGui::DrawImGui(float dt) {
+void ModuleGui::DrawImGui(float dt) 
+{
 	main_menu_bar->Update(ui_elements_list);
 
 	// 1. Show the big demo window
-	//if (show_demo_window)
-		//ImGui::ShowDemoWindow(&show_demo_window);
+	if (show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);
 
 	// Show windows if they are active
 	for(int i = 0; i < ui_elements_list.size(); ++i)
@@ -162,8 +163,8 @@ void ModuleGui::Load(const json &config)
 	debugWindow = new DebugWindow("Debug", true);
 	ui_elements_list.push_back(settings);
 	ui_elements_list.push_back(scene_window);
-	ui_elements_list.push_back(project);
 	ui_elements_list.push_back(console);
+	ui_elements_list.push_back(project);
 	ui_elements_list.push_back(inspector);
 	ui_elements_list.push_back(hierarchy);
 	ui_elements_list.push_back(debugWindow);

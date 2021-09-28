@@ -14,8 +14,8 @@
 #include "GameObject.h"
 #include "OpenGL.h"
 
-#include <fstream>
-#include <iomanip>
+//#include <fstream>
+//#include <iomanip>
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -102,8 +102,8 @@ bool ModuleResourceLoader::CleanUp()
 	return true;
 }
 
-bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file) {
-	
+bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file) 
+{	
 	BROFILER_CATEGORY("ResourceLoaderLoadModel", Profiler::Color::MediumVioletRed)
 
 	bool ret = false;
@@ -340,7 +340,8 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		mesh->ReleaseFromMemory();
 	}
 
-	if (node->mNumChildren > 0) {
+	if (node->mNumChildren > 0) 
+	{
 		for (int i = 0; i < node->mNumChildren; ++i)
 			LoadNode(path, scene, node->mChildren[i], newGo);
 	}
@@ -501,11 +502,13 @@ bool ModuleResourceLoader::LoadTexture(const char* path, std::string& output_fil
 	// We adapt the  path for DevIL
 	const char* adapted_path = strstr(path, "Assets");
 
-	if (!ilLoadImage(adapted_path)) {
+	if (!ilLoadImage(adapted_path)) 
+	{
 		ilDeleteImages(1, &image);
 		LOG("The texture image could not be loaded");		
 	}
-	else {
+	else 
+	{
 		ProcessTexture(tex);
 
 		// We import the texture to our library
@@ -620,12 +623,12 @@ std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExt
 	App->file_system->NormalizePath(path);
 	full_name = path.substr(path.find_last_of("//") + 1);
 
-	if (withExtension)
+	if (withExtension) 
 		return full_name;
-	else {
+	else 
+	{
 		std::string::size_type const p(full_name.find_last_of('.'));
 		std::string file_name = full_name.substr(0, p);
-
 		return file_name;
 	}
 }
@@ -668,8 +671,10 @@ void ModuleResourceLoader::CreateDefaultTexture()
 {
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
-	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
-		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) 
+	{
+		for (int j = 0; j < CHECKERS_WIDTH; j++) 
+		{
 			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
 			checkImage[i][j][0] = (GLubyte)c;
 			checkImage[i][j][1] = (GLubyte)c;

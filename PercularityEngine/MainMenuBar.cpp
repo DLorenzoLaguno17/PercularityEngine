@@ -23,6 +23,7 @@ void MainMenuBar::Update(std::vector<UIElement*> list)
 			ImGui::MenuItem("New");
 			if (ImGui::MenuItem("Load...", "Ctrl+L"))
 				App->scene->mustLoad = true;
+			
 			ImGui::Separator();
 			ImGui::MenuItem("Save", " Ctrl+S");
 			ImGui::MenuItem("Save as...", " Ctrl+Shift+S");

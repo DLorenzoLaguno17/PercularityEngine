@@ -1,8 +1,20 @@
 #ifndef __MODULE_RESOURCEMANAGER_H__
 #define __MODULE_RESOURCEMANAGER_H__
 
-#include "Module.h"
+#include "ModuleTaskManager.h"
 #include "PercularityResource.h"
+
+class ImportFileTask : public Task
+{
+public:
+	ImportFileTask(const char* filePath, RESOURCE_TYPE type, bool force) : 
+		filePath(filePath), type(type), force(force) {}
+
+	RESOURCE_TYPE type = RESOURCE_TYPE::UNKNOWN;
+	bool force = false;
+	const char* filePath;
+	void Execute() override;
+};
 
 // ---------------------------------------------------
 class ModuleResourceManager : public Module
@@ -13,6 +25,7 @@ public:
 
 	bool Start();
 	bool CleanUp();
+	void OnTaskFinished(Task* task);
 
 	// Save & Load
 	void Load(const nlohmann::json &config) {}
@@ -21,8 +34,8 @@ public:
 	void SaveResources(json &scene_file);
 
 	uint ReceiveExternalFile(const char* new_file);
-	Resource* CreateNewResource(RESOURCE_TYPE type, uint specific_uuid = 0);
 	uint ImportFile(const char* new_file, RESOURCE_TYPE type, bool force = false);
+	Resource* CreateNewResource(RESOURCE_TYPE type, uint specific_uuid = 0);
 
 	// Getters
 	const Resource* GetResourceFromMap(uint uuid) const;

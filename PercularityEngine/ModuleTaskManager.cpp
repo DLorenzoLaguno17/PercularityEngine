@@ -5,14 +5,10 @@ ModuleTaskManager::ModuleTaskManager(Application* app, bool start_enabled) :
 
 void ModuleTaskManager::ThreadMain()
 {
+	// Wait for new tasks to arrive
 	while (true)
 	{
-		// TODO 3:
-		// - Wait for new tasks to arrive
-		// - Retrieve a task from scheduledTasks
-		// - Execute it
-		// - Insert it into finishedTasks
-
+		// Retrieve a task from scheduledTasks
 		Task* task = nullptr;
 		{
 			std::unique_lock<std::mutex> lock(mtx);
@@ -27,6 +23,7 @@ void ModuleTaskManager::ThreadMain()
 			}
 		}
 
+		// Insert executed task into finishedTasks
 		task->Execute();
 		std::unique_lock<std::mutex> lock(mtx);
 		finishedTasks.push(task);
@@ -35,7 +32,7 @@ void ModuleTaskManager::ThreadMain()
 
 bool ModuleTaskManager::Init()
 {
-	// Create threads (they have to execute threadMain())
+	// Create threads, that will execute ThreadMain()
 	for (int i = 0; i < MAX_THREADS; ++i)
 		threads[i] = std::thread(&ModuleTaskManager::ThreadMain, this);
 

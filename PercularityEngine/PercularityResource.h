@@ -3,7 +3,8 @@
 
 #include "Globals.h"
 
-enum class RESOURCE_TYPE {
+enum class RESOURCE_TYPE 
+{
 	TEXTURE,
 	MESH,
 	MODEL,
@@ -22,7 +23,7 @@ public:
 
 	// Getters
 	uint GetUUID() const { return UUID; }
-	void SetUUID( uint uuid) { UUID = uuid; }
+	void SetUUID(uint uuid) { UUID = uuid; }
 	const char* GetFile() const { return file.c_str(); }
 	const char* GetExportedFile() const { return exported_file.c_str(); }
 
@@ -41,7 +42,8 @@ public:
 			usedAsReference = 0;
 	}
 
-	void DecreaseReferenceCount() {
+	void DecreaseReferenceCount() 
+	{
 		if (usedAsReference > 1)
 			usedAsReference--;
 		else 

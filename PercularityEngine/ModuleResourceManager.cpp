@@ -12,11 +12,15 @@
 #include "ResourceScene.h"
 #include "GameObject.h"
 #include "OpenGL.h"
-#include <string>
 
 #include "Brofiler/Lib/Brofiler.h"
 #include "ImGui/imgui.h"
 #include "mmgr/mmgr.h"
+
+void ImportFileTask::Execute()
+{
+	App->res_manager->ImportFile(filePath, type, force);
+}
 
 // Called before the first frame
 bool ModuleResourceManager::Start()
@@ -63,7 +67,8 @@ Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint spec
 	if (specific_uuid != 0 && GetResourceFromMap(specific_uuid) == nullptr) uuid = specific_uuid;
 	else uuid = (uint)App->GetRandomGenerator().Int();
 
-	switch (type) {
+	switch (type) 
+	{
 		case RESOURCE_TYPE::TEXTURE: 
 			ret = (Resource*) new ResourceTexture(uuid); 
 			break;
@@ -92,7 +97,7 @@ uint ModuleResourceManager::ReceiveExternalFile(const char* new_file)
 	std::string final_path;
 	std::string extension;
 
-	// If we don't have iot already, we add the file to our Assets folder
+	// If we don't have it already, we add the file to our Assets folder
 	App->file_system->SplitFilePath(new_file, nullptr, &final_path, &extension);
 
 	if (HasTextureExtension(extension.c_str()))
@@ -106,6 +111,8 @@ uint ModuleResourceManager::ReceiveExternalFile(const char* new_file)
 	{
 		RESOURCE_TYPE type = GetTypeFromExtension(extension.c_str());
 		ret = ImportFile(final_path.c_str(), type, true);
+		//ImportFileTask* task = new ImportFileTask(final_path.c_str(), type, true);
+		//App->task_manager->ScheduleTask(task, this);
 	}
 
 	return ret;
@@ -125,20 +132,24 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 	bool success = false;
 	std::string written_file;
 
-	switch (type) {
+	switch (type) 
+	{
 	case RESOURCE_TYPE::TEXTURE:
 		success = App->res_loader->LoadTexture(new_file, written_file);
 		break;
+
 	case RESOURCE_TYPE::MODEL:
 		success = App->res_loader->LoadModel(new_file, written_file);
 		break;
+
 	case RESOURCE_TYPE::SCENE: 
 		success = true; 
 		break;
 	}
 
 	// If the import was successful, we create a new resource
-	if (success) {
+	if (success) 
+	{
 		Resource* res = CreateNewResource(type);
 		res->file = new_file;
 		App->file_system->NormalizePath(res->file);
@@ -154,7 +165,8 @@ void ModuleResourceManager::LoadResources(const json &scene_file)
 	//if (!loadingModel) CleanUp();
 
 	uint cnt = scene_file["Resources"]["Count"];
-	for (int i = 1; i <= cnt; ++i) {
+	for (int i = 1; i <= cnt; ++i) 
+	{
 		char name[50];
 		sprintf_s(name, 50, "Resource %d", i);
 		uint UUID = scene_file["Resources"][name]["UUID"];
@@ -163,12 +175,14 @@ void ModuleResourceManager::LoadResources(const json &scene_file)
 			json js = scene_file["Resources"][name]["Type"];
 			std::string type = js.get<std::string>();
 			
-			if (strcmp(type.c_str(), "Mesh") == 0) {
+			if (strcmp(type.c_str(), "Mesh") == 0) 
+			{
 				ResourceMesh* res = (ResourceMesh*)CreateNewResource(RESOURCE_TYPE::MESH, UUID);
 				res->OnLoad(name, scene_file);
 				res->IncreaseReferenceCount();
 			}
-			if (strcmp(type.c_str(), "Texture") == 0) {
+			if (strcmp(type.c_str(), "Texture") == 0) 
+			{
 				ResourceTexture* res = (ResourceTexture*)CreateNewResource(RESOURCE_TYPE::TEXTURE, UUID);
 				res->OnLoad(name, scene_file);
 				res->IncreaseReferenceCount();
@@ -182,7 +196,8 @@ void ModuleResourceManager::SaveResources(json &scene_file)
 {
 	for (std::map<uint, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
-		if (it->second->file.compare("None")) {
+		if (it->second->file.compare("None")) 
+		{
 			saved_res++;
 			char name[50];
 			sprintf_s(name, 50, "Resource %d", saved_res);
@@ -196,7 +211,8 @@ void ModuleResourceManager::SaveResources(json &scene_file)
 }
 
 // Checks if a file already exists in Assets folder, and returns the UUID of the resource if it does
-uint ModuleResourceManager::FindFileInAssets(const char* existing_file) const {
+uint ModuleResourceManager::FindFileInAssets(const char* existing_file) const 
+{
 	std::string file = existing_file;
 	App->file_system->NormalizePath(file);
 
@@ -205,10 +221,12 @@ uint ModuleResourceManager::FindFileInAssets(const char* existing_file) const {
 		if (it->second->file.compare(file) == 0)
 			return it->first;
 	}
+
 	return 0;
 }
 
-uint ModuleResourceManager::FindFileInLibrary(const char* exported_file) const {
+uint ModuleResourceManager::FindFileInLibrary(const char* exported_file) const 
+{
 	std::string file = exported_file;
 	App->file_system->NormalizePath(file);
 
@@ -217,6 +235,7 @@ uint ModuleResourceManager::FindFileInLibrary(const char* exported_file) const {
 		if (it->second->file.compare(file) == 0)
 			return it->first;
 	}
+
 	return 0;
 }
 
@@ -241,7 +260,8 @@ Resource* ModuleResourceManager::GetResourceFromMap(uint uuid)
 // Returns a resource with certain name from the map
 Resource* ModuleResourceManager::GetResourceByName(const char* name) 
 {
-	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item) {
+	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item) 
+	{
 		if (item->second->name.compare(name) == 0)
 			return item->second;
 	}
@@ -255,7 +275,8 @@ bool ModuleResourceManager::CleanUp()
 	LOG("Freeing resource manager");
 	for (std::map<uint, Resource*>::iterator item = resources.begin(); item != resources.end(); ++item) {
 		
-		if (strcmp(item._Ptr->_Myval.second->file.c_str(), "None") != 0) {
+		if (strcmp(item._Ptr->_Myval.second->file.c_str(), "None") != 0) 
+		{
 			item._Ptr->_Myval.second->ReleaseFromMemory();
 			RELEASE(item._Ptr->_Myval.second);
 		}
@@ -264,6 +285,11 @@ bool ModuleResourceManager::CleanUp()
 	resources.clear();
 
 	return true;
+}
+
+void ModuleResourceManager::OnTaskFinished(Task* task)
+{
+	RELEASE(task);
 }
 
 void ModuleResourceManager::DrawProjectExplorer() 
@@ -280,48 +306,83 @@ void ModuleResourceManager::DrawProjectExplorer()
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
 	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
-	/*for (int i = 0; i < tex_files.size(); ++i) {
-		if (ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50))) {
-			
-			ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
+	ImGui::Columns(5, "project_columns", false);
 
-			if (mat) {
+	// Show textures in the folder
+	for (int i = 0; i < tex_files.size(); ++i)
+	{
+		ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50));
+		//{
+			/*ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
+
+			if (mat)
+			{
 				std::string::size_type const p(mod_files[i].find_last_of('.'));
 				std::string name = mod_files[i].substr(0, p);
 
 				Resource* res = GetResourceByName(name.c_str());
 				res->IncreaseReferenceCount();
 				mat->resource_tex = (ResourceTexture*)res;
-			}
-
+			}*/
+		//}
+		
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("TextureUUID", &i, sizeof(int));    
+			ImGui::Image((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50));
+			ImGui::EndDragDropSource();
 		}
-		ImGui::Text(tex_files[i].c_str());
-	}*/
 
-	for (int i = 0; i < mod_files.size(); ++i) 
+		ImGui::Text(tex_files[i].c_str());
+		ImGui::NextColumn();
+	}
+
+	// Show models in the folder
+	for (int i = 0; i < mod_files.size(); ++i)
 	{
-		if (ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50))) {
-			
+		ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
+		/*{
 			std::string::size_type const p(mod_files[i].find_last_of('.'));
 			std::string name = mod_files[i].substr(0, p);
 
 			Resource* res = GetResourceByName(name.c_str());
 			res->IncreaseReferenceCount();
 			if (res->usedAsReference > 1) res->LoadInMemory();
+		}*/
+
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("ModelUUID", &i, sizeof(int));
+			ImGui::Image((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
+			ImGui::EndDragDropSource();
 		}
+
 		ImGui::Text(mod_files[i].c_str());
+		ImGui::NextColumn();
 	}
 
-	for (int i = 0; i < sce_files.size(); ++i) 
+	// Show scenes in the folder
+	for (int i = 0; i < sce_files.size(); ++i)
 	{
-		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50))) {
-			
+		ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50));
+		/*{
 			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
 			Resource* res = GetResourceByName(App->res_loader->getNameFromPath(sce_files[i]).c_str());
 			res->IncreaseReferenceCount();
+		}*/
+
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("SceneUUID", &i, sizeof(int));
+			ImGui::Image((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50));
+			ImGui::EndDragDropSource();
 		}
+
 		ImGui::Text(sce_files[i].c_str());
+		ImGui::NextColumn();
 	}
+
+	ImGui::Columns(1);
 }
 
 // Methods to check the extension of a file

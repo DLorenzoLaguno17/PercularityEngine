@@ -1,7 +1,7 @@
-#ifndef __ModuleResourceLoader_H__
-#define __ModuleResourceLoader_H__
+#ifndef __MODULE_RESOURCELOADER_H__
+#define __MODULE_RESOURCELOADER_H__
 
-#include "ModuleTaskManager.h"
+#include "Module.h"
 
 #define CHECKERS_WIDTH 150
 #define CHECKERS_HEIGHT 150
@@ -11,18 +11,10 @@ class ResourceMesh;
 class ResourceTexture;
 class ResourceModel;
 class ResourceScene;
+
 struct aiScene;
 struct aiNode;
 
-
-class LoadModelTask : public Task
-{
-public:
-	const char* modelAddress;
-	void Execute() override;
-};
-
-// ---------------------------------------------------
 class ModuleResourceLoader : public Module
 {
 public:
@@ -75,7 +67,6 @@ public:
 	const char* modelAddress;
 
 private:
-
 	uint defaultMat_UUID = 0;
 	uint engineIcon_UUID = 0;
 	uint modelIcon_UUID = 0;
@@ -85,4 +76,4 @@ private:
 	uint loaded_node = 0;
 };
 
-#endif // __ModuleResourceLoader_H__
+#endif // __MODULE_RESOURCELOADER_H__
