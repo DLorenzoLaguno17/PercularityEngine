@@ -103,7 +103,7 @@ update_status ModuleScene::Update(float dt)
 		if (ImGui::Button("Yes", ImVec2(140, 0))) 
 		{ 
 			ImGui::CloseCurrentPopup(); 
-			LoadScene("Scene.json"); 
+			LoadScene(sceneToLoad); 
 		}
 
 		ImGui::SetItemDefaultFocus();

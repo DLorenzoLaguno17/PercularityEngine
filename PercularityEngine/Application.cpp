@@ -92,7 +92,7 @@ bool Application::Init()
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOG("-------------- Application Start --------------");
+	LOG("\n-------------- Application Start --------------");
 	item = modules.begin();
 
 	while(item != modules.end() && ret == true)
@@ -102,7 +102,6 @@ bool Application::Init()
 	} 
 	
 	ms_timer.Start();
-
 
 	return ret;
 }
@@ -237,13 +236,15 @@ void Application::SaveSettings()
 	stream.close();
 }
 
-void Application::DisableVsync(bool mustDisable) {
+void Application::DisableVsync(bool mustDisable) 
+{
 	if (mustDisable)
 		SDL_GL_SetSwapInterval(1);
 	else 
 		SDL_GL_SetSwapInterval(0);
 }
 
-LCG& Application::GetRandomGenerator() {
+LCG& Application::GetRandomGenerator() 
+{
 	return *rand;
 }

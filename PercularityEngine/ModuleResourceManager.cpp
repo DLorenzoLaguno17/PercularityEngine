@@ -29,12 +29,9 @@ bool ModuleResourceManager::Start()
 	std::vector<std::string> tex_directories;
 	std::vector<std::string> mod_files;
 	std::vector<std::string> mod_directories;
-	std::vector<std::string> sce_files;
-	std::vector<std::string> sce_directories;
 
 	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
-	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
 	// We create resources from every asset
 	/*for (int i = 0; i < tex_files.size(); ++i)
@@ -338,8 +335,8 @@ void ModuleResourceManager::DrawProjectExplorer()
 		ImGui::PushID(i);
 		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50)))
 		{
-			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
-			App->scene->LoadScene(sce_files[i]);
+			App->scene->mustLoad = true;
+			App->scene->sceneToLoad = sce_files[i];
 		}
 
 		ImGui::Text(sce_files[i].c_str());

@@ -26,7 +26,7 @@ void ComponentMaterial::OnEditor()
 		ImGui::Text("Size: %dx%d", resource_tex->height, resource_tex->width);
 		ImGui::NewLine();
 
-		ImGui::Image((void*)resource_tex->texture, ImVec2(300, 300), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((void*)resource_tex->texture, ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureUUID"))

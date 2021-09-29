@@ -52,31 +52,31 @@ private:
 	void RecursiveReset(GameObject* root);
 	void UpdateGameObjects(GameObject* root);
 
-	void DrawAxis() const;			//Draw XYZ axis of coordinates
-	void DrawSimplePlane()const;	//Draw a plane with some lines
+	void DrawAxis() const;			// Draw XYZ axis of coordinates
+	void DrawSimplePlane()const;	// Draw a plane with some lines
 
 public:
-	std::vector<GameObject*> nonStaticObjects;
+	bool playMode = false;
 	bool mustLoad = false;
+	std::string sceneToLoad = "Scene.json";
 
-	// FRUSTUM TESTER
+	// Frustum
 	GameObject* frustumTest = nullptr;
-
-	// FRUSTUM TEST
 	Tree* sceneTree = nullptr;
 
 	GameObject* selected = nullptr;
 	const char* sceneAddress = nullptr;
 	const char* modelAddress = nullptr;
 
-	bool playMode = false;
+	std::vector<GameObject*> nonStaticObjects;
 
 private:
 	GameObject* root = nullptr;
-
 	Timer loadingTime;
+
 	uint saved_go = 0;
 	uint loaded_go = 0;
+	uint go_counter = 0;
 
 	uint sphereCount = 0;
 	uint donutCount = 0;
@@ -88,8 +88,6 @@ private:
 	uint cubeMesh_UUID = 0;
 	uint planeMesh_UUID = 0;
 	uint donutMesh_UUID = 0;
-
-	uint go_counter = 0;
 };
 
 #endif

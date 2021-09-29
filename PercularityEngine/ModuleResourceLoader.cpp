@@ -222,7 +222,8 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 			// We make sure the texture has not been already loaded
 			uint a = App->res_manager->FindFileInAssets(texPath.c_str());
 			ResourceTexture* tex = (ResourceTexture*)App->res_manager->GetResourceFromMap(App->res_manager->FindFileInAssets(texPath.c_str()));
-			if (tex == nullptr) {
+			if (tex == nullptr) 
+			{
 				tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE);
 				LoadTexture(texPath.c_str(), exportedPath);
 			}
@@ -529,7 +530,8 @@ bool ModuleResourceLoader::ImportTextureToLibrary(const char* path, std::string&
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
 	size = ilSaveL(IL_DDS, NULL, 0);
 
-	if (size > 0) {
+	if (size > 0) 
+{
 		// We allocate data buffer
 		data = new ILubyte[size];
 		// Save to buffer
