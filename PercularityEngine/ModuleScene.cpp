@@ -43,7 +43,9 @@ bool ModuleScene::Init()
 {
 	root = new GameObject("World");
 	selected = root;
-	sceneAddress = "Assets/Scenes/";
+
+	sceneAddress = "Assets/Scenes/"; 
+	modelAddress = "Assets/Models/";
 
 	//frustumTest = new GameObject("Camera", root);
 	//frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
@@ -72,7 +74,7 @@ update_status ModuleScene::Update(float dt)
 	if (Debug::drawScenePlane)
 		DrawSimplePlane();
 
-	if(Debug::drawSceneAxis)
+	if (Debug::drawSceneAxis)
 		DrawAxis();
 
 	//if (sphereCount == 0) App->res_manager->GetResourceFromMap(sphereMesh_UUID)->ReleaseFromMemory();	
@@ -81,7 +83,7 @@ update_status ModuleScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN
 		&& ((App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
 		|| (App->input->GetKey(SDL_SCANCODE_RCTRL) == KEY_REPEAT)))
-		SaveScene(root, "Scene", sceneAddress);
+		SaveScene(root, "Scene.json");
 
 	// If the user wants to load another scene
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN
@@ -101,7 +103,7 @@ update_status ModuleScene::Update(float dt)
 		if (ImGui::Button("Yes", ImVec2(140, 0))) 
 		{ 
 			ImGui::CloseCurrentPopup(); 
-			LoadScene("Scene", sceneAddress); 
+			LoadScene("Scene.json"); 
 		}
 
 		ImGui::SetItemDefaultFocus();
@@ -186,7 +188,7 @@ bool ModuleScene::CleanUp()
 
 		root->components.clear();
 		RELEASE(root);
-		std::string name = "Temporal Scene.json";
+		std::string name = "TemporalScene.json";
 		std::string path = ASSETS_SCENE_FOLDER + name;
 		App->file_system->Remove(path.c_str());
 	}
@@ -229,7 +231,7 @@ void ModuleScene::Play()
 			Time::Start();
 
 			// Saves the current scene
-			SaveScene(root, "Temporal Scene", sceneAddress, false, true);
+			SaveScene(root, "TemporalScene.json", false, true);
 			playMode = true;
 		}
 	}
@@ -252,8 +254,8 @@ void ModuleScene::ExitGame()
 		App->physics->ClearBalls();
 
 		// Loads the former scene and then deletes the file
-		LoadScene("Temporal Scene", sceneAddress, false, true);
-		std::string name = "Temporal Scene.json";
+		std::string name = "TemporalScene.json";
+		LoadScene(name, false, true);
 		std::string path = ASSETS_SCENE_FOLDER + name;
 		App->file_system->Remove(path.c_str());
 	}
@@ -263,8 +265,8 @@ void ModuleScene::ExitGame()
 // SAVE & LOAD METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleScene::LoadScene(const std::string scene_name, const char* address, bool loadingModel, bool tempScene, uint usedAsReference) {
-
+void ModuleScene::LoadScene(const std::string scene_name, bool loadingModel, bool tempScene, uint usedAsReference) 
+{
 	LOG("\nLoading scene: %s", scene_name.c_str());
 	uint startTime = loadingTime.Read();
 
@@ -277,7 +279,7 @@ void ModuleScene::LoadScene(const std::string scene_name, const char* address, b
 	}
 
 	json scene_file;
-	std::string full_path = address + scene_name + ".json";
+	std::string full_path = sceneAddress + scene_name;
 
 	// If the adress of the settings file is null, create  an exception
 	assert(full_path.c_str() != nullptr);
@@ -361,15 +363,22 @@ void ModuleScene::RecursiveReset(GameObject* root)
 		RecursiveReset(root->children[i]);
 }
 
-void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char* address, bool savingModel, bool tempScene) {
-
-	LOG("");
-	if (savingModel) LOG("Importing model...")
-	else LOG("Saving scene...");
-
+void ModuleScene::SaveScene(GameObject* root, std::string scene_name, bool savingModel, bool tempScene) 
+{
 	// Create auxiliar file
 	json scene_file;
-	std::string full_path = address + scene_name + ".json";
+	std::string full_path;
+
+	if (savingModel)
+	{
+		LOG("\nImporting model...");
+		full_path = modelAddress + scene_name + ".json";
+	}
+	else
+	{
+		LOG("\nSaving scene..."); 
+		full_path = sceneAddress + scene_name;
+	}			
 
 	// First we save the resources
 	if (!tempScene) App->res_manager->SaveResources(scene_file);
@@ -384,8 +393,8 @@ void ModuleScene::SaveScene(GameObject* root, std::string scene_name, const char
 	stream << std::setw(4) << scene_file << std::endl;
 	stream.close();
 	
-	if (savingModel) LOG("Model imported.")
-	else LOG("Scene saved.");
+	if (savingModel)	LOG("Model imported.")
+	else				LOG("Scene saved.");
 }
 
 void ModuleScene::RecursiveSave(GameObject* root, nlohmann::json &scene_file) 

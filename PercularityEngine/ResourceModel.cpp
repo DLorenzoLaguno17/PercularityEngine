@@ -5,7 +5,7 @@
 
 bool ResourceModel::LoadInMemory()
 {	
-	App->scene->LoadScene(name, App->res_loader->modelAddress, true, false, usedAsReference);
+	App->scene->LoadScene(name, true, false, usedAsReference);
 	return true;
 }
 

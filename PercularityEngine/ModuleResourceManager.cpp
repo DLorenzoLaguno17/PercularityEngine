@@ -9,7 +9,6 @@
 #include "ResourceMesh.h"
 #include "ResourceModel.h"
 #include "ResourceTexture.h"
-#include "ResourceScene.h"
 #include "GameObject.h"
 #include "OpenGL.h"
 
@@ -25,35 +24,29 @@ void ImportFileTask::Execute()
 // Called before the first frame
 bool ModuleResourceManager::Start()
 {
-	// Data from the assets
-	/*std::vector<std::string> tex_files;
+	// Track files from the assets folder
+	std::vector<std::string> tex_files;
 	std::vector<std::string> tex_directories;
 	std::vector<std::string> mod_files;
 	std::vector<std::string> mod_directories;
 	std::vector<std::string> sce_files;
 	std::vector<std::string> sce_directories;
 
-	// We create resources from every asset we have
 	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
-	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);*/
+	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
+	// We create resources from every asset
 	/*for (int i = 0; i < tex_files.size(); ++i)
 	{	
 		std::string file = ASSETS_TEXTURE_FOLDER + tex_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
-	}*/
+	}
 
-	/*for (int i = 0; i < mod_files.size(); ++i) 
+	for (int i = 0; i < mod_files.size(); ++i) 
 	{
 		std::string file = ASSETS_MODEL_FOLDER + mod_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::MODEL);		
-	}
-
-	for (int i = 0; i < sce_files.size(); ++i) 
-	{		
-		std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
-		ImportFile(file.c_str(), RESOURCE_TYPE::SCENE);		
 	}*/
 
 	return true;
@@ -72,14 +65,13 @@ Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint spec
 		case RESOURCE_TYPE::TEXTURE: 
 			ret = (Resource*) new ResourceTexture(uuid); 
 			break;
+
 		case RESOURCE_TYPE::MODEL:
 			ret = (Resource*) new ResourceModel(uuid);
 			break;
+
 		case RESOURCE_TYPE::MESH: 
 			ret = (Resource*) new ResourceMesh(uuid); 
-			break;
-		case RESOURCE_TYPE::SCENE: 
-			ret = (Resource*) new ResourceScene(uuid); 
 			break;
 	}
 
@@ -89,10 +81,8 @@ Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint spec
 	return ret;
 }
 
-uint ModuleResourceManager::ReceiveExternalFile(const char* new_file)
+void ModuleResourceManager::ReceiveExternalFile(const char* new_file)
 {
-	uint ret = 0;
-
 	// We create the correct path
 	std::string final_path;
 	std::string extension;
@@ -110,12 +100,10 @@ uint ModuleResourceManager::ReceiveExternalFile(const char* new_file)
 	if (App->file_system->CopyFromOutsideFS(new_file, final_path.c_str())) 
 	{
 		RESOURCE_TYPE type = GetTypeFromExtension(extension.c_str());
-		ret = ImportFile(final_path.c_str(), type, true);
+		ImportFile(final_path.c_str(), type, true);
 		//ImportFileTask* task = new ImportFileTask(final_path.c_str(), type, true);
 		//App->task_manager->ScheduleTask(task, this);
 	}
-
-	return ret;
 }
 
 uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type, bool force)
@@ -140,10 +128,6 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 
 	case RESOURCE_TYPE::MODEL:
 		success = App->res_loader->LoadModel(new_file, written_file);
-		break;
-
-	case RESOURCE_TYPE::SCENE: 
-		success = true; 
 		break;
 	}
 
@@ -173,7 +157,8 @@ void ModuleResourceManager::LoadResources(const json &scene_file)
 		sprintf_s(name, 50, "Resource %d", i);
 		uint UUID = scene_file["Resources"][name]["UUID"];
 
-		if (GetResourceFromMap(UUID) == nullptr) {
+		if (GetResourceFromMap(UUID) == nullptr) 
+		{
 			json js = scene_file["Resources"][name]["Type"];
 			std::string type = js.get<std::string>();
 			
@@ -315,19 +300,6 @@ void ModuleResourceManager::DrawProjectExplorer()
 	{
 		ImGui::PushID(i);
 		ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50));
-		//{
-			/*ComponentMaterial* mat = (ComponentMaterial*)App->scene->selected->GetComponent(COMPONENT_TYPE::MATERIAL);
-
-			if (mat)
-			{
-				std::string::size_type const p(mod_files[i].find_last_of('.'));
-				std::string name = mod_files[i].substr(0, p);
-
-				Resource* res = GetResourceByName(name.c_str());
-				res->IncreaseReferenceCount();
-				mat->resource_tex = (ResourceTexture*)res;
-			}*/
-		//}
 		
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
@@ -364,13 +336,10 @@ void ModuleResourceManager::DrawProjectExplorer()
 	for (int i = 0; i < sce_files.size(); ++i)
 	{
 		ImGui::PushID(i);
-		ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50));
+		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50)))
 		{
 			std::string file = ASSETS_SCENE_FOLDER + sce_files[i];
-			ResourceScene* newScene = (ResourceScene*)GetResourceByName(App->res_loader->getNameFromPath(sce_files[i]).c_str());
-			
-			if (newScene)
-				newScene->IncreaseReferenceCount();
+			App->scene->LoadScene(sce_files[i]);
 		}
 
 		ImGui::Text(sce_files[i].c_str());
@@ -386,7 +355,6 @@ RESOURCE_TYPE ModuleResourceManager::GetTypeFromExtension(const char* extension)
 {	
 	if (HasModelExtension(extension)) return RESOURCE_TYPE::MODEL;
 	else if (HasTextureExtension(extension)) return RESOURCE_TYPE::TEXTURE;
-	else if (strcmp(extension, "json") == 0) return RESOURCE_TYPE::SCENE;
 	else return RESOURCE_TYPE::UNKNOWN;
 }
 

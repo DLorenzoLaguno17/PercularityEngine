@@ -9,13 +9,9 @@
 #include "ComponentTransform.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
-#include "ResourceScene.h"
 #include "ResourceModel.h"
 #include "GameObject.h"
 #include "OpenGL.h"
-
-//#include <fstream>
-//#include <iomanip>
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -130,7 +126,7 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 		}
 
 		// We save the model as a scene file and then delete it from the engine scene
-		App->scene->SaveScene(tempRoot, tempRoot->name, modelAddress, true);
+		App->scene->SaveScene(tempRoot, tempRoot->name, true);
 		App->scene->RecursiveCleanUp(world); 
 
 		loaded_node = 0;

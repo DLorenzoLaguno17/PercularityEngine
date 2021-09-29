@@ -216,9 +216,6 @@
     <ClInclude Include="ResourceMesh.h">
       <Filter>Sources\Scene elements\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceScene.h">
-      <Filter>Sources\Scene elements\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceTexture.h">
       <Filter>Sources\Scene elements\Resources</Filter>
     </ClInclude>
@@ -1266,9 +1263,6 @@
       <Filter>Sources\Scene elements\Resources</Filter>
     </ClCompile>
     <ClCompile Include="ResourceTexture.cpp">
-      <Filter>Sources\Scene elements\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceScene.cpp">
       <Filter>Sources\Scene elements\Resources</Filter>
     </ClCompile>
     <ClCompile Include="ResourceModel.cpp">

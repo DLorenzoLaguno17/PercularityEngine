@@ -8,7 +8,6 @@ enum class RESOURCE_TYPE
 	TEXTURE,
 	MESH,
 	MODEL,
-	SCENE,
 	UNKNOWN
 };
 
@@ -60,6 +59,7 @@ protected:
 public:
 	// Number of times this resurce is used
 	uint usedAsReference = 0;
+
 	RESOURCE_TYPE type = RESOURCE_TYPE::UNKNOWN;
 	std::string file = "";
 	std::string exported_file = "";

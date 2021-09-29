@@ -25,9 +25,6 @@ public:
 	// Called when before render is available
 	bool Init();
 
-	// Call before first frame
-	bool Start();
-
 	// Called before all Updates
 	update_status PreUpdate(float dt);
 
@@ -45,7 +42,6 @@ public:
 	void DrawImGui(float dt);
 
 public:
-	bool show_demo_window = true;
 	ImGuiIO* io = nullptr;
 	SceneWindow* scene_window = nullptr;
 	ConfigWindow* settings = nullptr;

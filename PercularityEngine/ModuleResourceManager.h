@@ -33,7 +33,7 @@ public:
 	void LoadResources(const json &scene_file);
 	void SaveResources(json &scene_file);
 
-	uint ReceiveExternalFile(const char* new_file);
+	void ReceiveExternalFile(const char* new_file);
 	uint ImportFile(const char* new_file, RESOURCE_TYPE type, bool force = false);
 	Resource* CreateNewResource(RESOURCE_TYPE type, uint specific_uuid = 0);
 

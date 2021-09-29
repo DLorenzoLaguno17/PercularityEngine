@@ -10,7 +10,6 @@ class GameObject;
 class ResourceMesh;
 class ResourceTexture;
 class ResourceModel;
-class ResourceScene;
 
 struct aiScene;
 struct aiNode;
