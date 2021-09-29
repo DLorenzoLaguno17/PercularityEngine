@@ -31,8 +31,8 @@ void ComponentMaterial::OnEditor()
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TextureUUID"))
 			{
-				std::string test = *(std::string*)payload->Data;
-				ResourceTexture* droppedTexture = (ResourceTexture*)App->res_manager->GetResourceByName(test.c_str());
+				std::string tex_name = *(std::string*)payload->Data;
+				ResourceTexture* droppedTexture = (ResourceTexture*)App->res_manager->GetResourceByName(tex_name.c_str());
 				
 				// Update texture resource references
 				if (droppedTexture)

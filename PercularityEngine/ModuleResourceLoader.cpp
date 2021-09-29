@@ -573,7 +573,7 @@ bool ModuleResourceLoader::LoadTextureFromLibrary(ResourceTexture* tex)
 
 		tex->width = w;
 		tex->height = h;
-		tex->name = getNameFromPath(tex->exported_file.c_str(), true);
+		tex->name = getNameFromPath(tex->exported_file.c_str());
 
 		ilBindImage(0);
 		ilDeleteImage(image);

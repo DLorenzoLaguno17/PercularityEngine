@@ -34,7 +34,7 @@ bool ModuleWindow::Init()
 	}
 	else
 	{
-		//Create window
+		// Create window
 		int width = winWidth * winSize;
 		int height = winHeight * winSize;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
@@ -47,22 +47,22 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-		if(winFullscreen)
+		if (winFullscreen)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(winResizable)
+		if (winResizable)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(winBorderless)
+		if (winBorderless)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(winFullscreenDesktop)
+		if (winFullscreenDesktop)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}

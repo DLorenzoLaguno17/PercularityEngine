@@ -21,6 +21,11 @@ void ImportFileTask::Execute()
 	App->res_manager->ImportFile(filePath, type, force);
 }
 
+void ModuleResourceManager::OnTaskFinished(Task* task)
+{
+	RELEASE(task);
+}
+
 // Called before the first frame
 bool ModuleResourceManager::Start()
 {
@@ -34,48 +39,19 @@ bool ModuleResourceManager::Start()
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
 
 	// We create resources from every asset
-	/*for (int i = 0; i < tex_files.size(); ++i)
+	for (int i = 0; i < tex_files.size(); ++i)
 	{	
 		std::string file = ASSETS_TEXTURE_FOLDER + tex_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
 	}
 
-	for (int i = 0; i < mod_files.size(); ++i) 
+	/*for (int i = 0; i < mod_files.size(); ++i)
 	{
 		std::string file = ASSETS_MODEL_FOLDER + mod_files[i];
 		ImportFile(file.c_str(), RESOURCE_TYPE::MODEL);		
 	}*/
 
 	return true;
-}
-
-Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint specific_uuid) 
-{	
-	Resource* ret = nullptr;
-	uint uuid;
-	
-	if (specific_uuid != 0 && GetResourceFromMap(specific_uuid) == nullptr) uuid = specific_uuid;
-	else uuid = (uint)App->GetRandomGenerator().Int();
-
-	switch (type) 
-	{
-		case RESOURCE_TYPE::TEXTURE: 
-			ret = (Resource*) new ResourceTexture(uuid); 
-			break;
-
-		case RESOURCE_TYPE::MODEL:
-			ret = (Resource*) new ResourceModel(uuid);
-			break;
-
-		case RESOURCE_TYPE::MESH: 
-			ret = (Resource*) new ResourceMesh(uuid); 
-			break;
-	}
-
-	if (ret != nullptr)
-		resources[uuid] = ret;
-
-	return ret;
 }
 
 void ModuleResourceManager::ReceiveExternalFile(const char* new_file)
@@ -140,6 +116,113 @@ uint ModuleResourceManager::ImportFile(const char* new_file, RESOURCE_TYPE type,
 	}
 
 	return ret;
+}
+
+Resource* ModuleResourceManager::CreateNewResource(RESOURCE_TYPE type, uint specific_uuid)
+{
+	Resource* ret = nullptr;
+	uint uuid;
+
+	if (specific_uuid != 0 && GetResourceFromMap(specific_uuid) == nullptr) uuid = specific_uuid;
+	else uuid = (uint)App->GetRandomGenerator().Int();
+
+	switch (type)
+	{
+	case RESOURCE_TYPE::TEXTURE:
+		ret = (Resource*) new ResourceTexture(uuid);
+		break;
+
+	case RESOURCE_TYPE::MODEL:
+		ret = (Resource*) new ResourceModel(uuid);
+		break;
+
+	case RESOURCE_TYPE::MESH:
+		ret = (Resource*) new ResourceMesh(uuid);
+		break;
+	}
+
+	if (ret != nullptr)
+		resources[uuid] = ret;
+
+	return ret;
+}
+
+void ModuleResourceManager::DrawProjectExplorer()
+{
+	// Data from the assets
+	std::vector<std::string> tex_files, tex_directories;
+	std::vector<std::string> mod_files, mod_directories;
+	std::vector<std::string> sce_files, sce_directories;
+
+	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
+	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
+	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
+
+	static int columns = 5;
+	//ImGui::SliderInt("Columns", &columns, 5, 10);
+	ImGui::Columns(columns, "project_columns", false);
+
+	// Show textures in the folder
+	for (int i = 0; i < tex_files.size(); ++i)
+	{
+		ImGui::PushID(i);
+
+		// Show each texture as a thumbnail
+		std::string name = App->res_loader->getNameFromPath(tex_files[i]);
+		ResourceTexture* image = (ResourceTexture*)GetResourceByName(name.c_str());
+		image->IncreaseReferenceCount();
+		ImGui::ImageButton((void*)image->texture, ImVec2(50, 50));
+
+		// Prepare drag and drop to carry texture's name
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("TextureUUID", &image->name, sizeof(std::string));
+			ImGui::Image((void*)image->texture, ImVec2(50, 50));
+			ImGui::EndDragDropSource();
+		}
+
+		ImGui::Text(name.c_str());
+		ImGui::NextColumn();
+		ImGui::PopID();
+	}
+
+	// Show models in the folder
+	for (int i = 0; i < mod_files.size(); ++i)
+	{
+		ImGui::PushID(i);
+		ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
+		
+		// Dragging a model to the screen window generates an instance
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("ModelUUID", &mod_files[i], sizeof(std::string));
+			ImGui::Image((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
+			ImGui::EndDragDropSource();
+		}
+
+		ImGui::Text(mod_files[i].c_str());
+		ImGui::NextColumn();
+		ImGui::PopID();
+	}
+
+	// Show scenes in the folder
+	for (int i = 0; i < sce_files.size(); ++i)
+	{
+		ImGui::PushID(i);
+
+		// Clicking a scene resource loads it
+		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50)))
+		{
+			App->scene->mustLoad = true;
+			App->scene->sceneToLoad = sce_files[i];
+		}
+
+		ImGui::Text(sce_files[i].c_str());
+		ImGui::NextColumn();
+		ImGui::PopID();
+	}
+
+	ImGui::Columns(1);
 }
 
 // Load & Save
@@ -269,82 +352,6 @@ bool ModuleResourceManager::CleanUp()
 	resources.clear();
 
 	return true;
-}
-
-void ModuleResourceManager::OnTaskFinished(Task* task)
-{
-	RELEASE(task);
-}
-
-void ModuleResourceManager::DrawProjectExplorer() 
-{
-	// Data from the assets
-	std::vector<std::string> tex_files;
-	std::vector<std::string> tex_directories;
-	std::vector<std::string> mod_files;
-	std::vector<std::string> mod_directories;
-	std::vector<std::string> sce_files;
-	std::vector<std::string> sce_directories;
-
-	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
-	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
-	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
-
-	ImGui::Columns(5, "project_columns", false);
-
-	// Show textures in the folder
-	for (int i = 0; i < tex_files.size(); ++i)
-	{
-		ImGui::PushID(i);
-		ImGui::ImageButton((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50));
-		
-		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-		{
-			std::string uuid = App->res_loader->getNameFromPath(tex_files[i]);
-			ImGui::SetDragDropPayload("TextureUUID", &uuid, sizeof(std::string));    
-			ImGui::Image((void*)App->res_loader->tex_icon_tex->texture, ImVec2(50, 50));
-			ImGui::EndDragDropSource();
-		}
-
-		ImGui::Text(tex_files[i].c_str());
-		ImGui::NextColumn();
-		ImGui::PopID();
-	}
-
-	// Show models in the folder
-	for (int i = 0; i < mod_files.size(); ++i)
-	{
-		ImGui::PushID(i);
-		ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
-
-		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-		{
-			ImGui::SetDragDropPayload("ModelUUID", &i, sizeof(int));
-			ImGui::Image((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
-			ImGui::EndDragDropSource();
-		}
-
-		ImGui::Text(mod_files[i].c_str());
-		ImGui::NextColumn();
-		ImGui::PopID();
-	}
-
-	// Show scenes in the folder
-	for (int i = 0; i < sce_files.size(); ++i)
-	{
-		ImGui::PushID(i);
-		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50)))
-		{
-			App->scene->mustLoad = true;
-			App->scene->sceneToLoad = sce_files[i];
-		}
-
-		ImGui::Text(sce_files[i].c_str());
-		ImGui::NextColumn();
-		ImGui::PopID();
-	}
-
-	ImGui::Columns(1);
 }
 
 // Methods to check the extension of a file

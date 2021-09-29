@@ -3,6 +3,7 @@
 #include "ModuleScene.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "ModuleResourceManager.h"
 #include "ModuleCamera3D.h"
 
 #include "SceneWindow.h"
@@ -17,9 +18,9 @@
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
 
 // Show scene window
-void SceneWindow::Update() {
-
-	//Imgui
+void SceneWindow::Update() 
+{
+	// Imgui
 	ImGui::Begin("Scene", &active, ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_NoScrollWithMouse);
 
 	windowPosition.x = ImGui::GetWindowPos().x;
@@ -44,6 +45,18 @@ void SceneWindow::Update() {
 		last_windowSize = windowSize;
 
 	ImGui::Image((void*)App->renderer3D->GetTexColorBuffer(), ImVec2(windowSize.x, windowSize.x/App->renderer3D->GetCamera()->GetAspectRatio()), ImVec2(0, 1), ImVec2(1, 0));
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* test = ImGui::AcceptDragDropPayload("ModelUUID"))
+		{
+			std::string model = *(std::string*)test->Data;
+			std::string file = ASSETS_MODEL_FOLDER + model;
+			uint UUID = App->res_manager->ImportFile(file.c_str(), RESOURCE_TYPE::MODEL);
+			App->res_manager->GetResourceFromMap(UUID)->IncreaseReferenceCount();
+		}
+		ImGui::EndDragDropTarget();
+	}
 
 	ImGui::End();
 

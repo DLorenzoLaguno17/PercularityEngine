@@ -63,12 +63,14 @@ enum update_status
 // Configuration -----------
 #define TITLE "Percularity v0.4"
 #define ORG "UPC - Tech Talent Center"
-#define ASSETS_FOLDER "/Assets/"
-#define ASSETS_MODEL_FOLDER "/Assets/FBX/"
-#define ASSETS_TEXTURE_FOLDER "/Assets/Textures/"
-#define ASSETS_SCENE_FOLDER "/Assets/Scenes/"
-#define LIBRARY_FOLDER "/Library/"
-#define LIBRARY_TEXTURE_FOLDER "/Library/Textures/"
-#define LIBRARY_MESH_FOLDER "/Library/Meshes/"
-#define LIBRARY_MODEL_FOLDER "/Library/Models/"
-#define LIBRARY_MATERIAL_FOLDER "/Library/Materials/"
+
+#define ASSETS_FOLDER			"/Assets/"
+#define ASSETS_MODEL_FOLDER		"/Assets/Models/"
+#define ASSETS_TEXTURE_FOLDER	"/Assets/Textures/"
+#define ASSETS_SCENE_FOLDER		"/Assets/Scenes/"
+
+#define LIBRARY_FOLDER			"/Library/"
+#define LIBRARY_MODEL_FOLDER	"/Library/Models/"
+#define LIBRARY_TEXTURE_FOLDER	"/Library/Textures/"
+#define LIBRARY_MESH_FOLDER		"/Library/Meshes/"
+#define LIBRARY_MATERIAL_FOLDER	"/Library/Materials/"

@@ -78,19 +78,19 @@ update_status ModuleCamera3D::Update(float dt)
 	camera->Update();
 	cameraCollider->Update();
 
-
 	if (Debug::drawMouseLine)
 	{
 		glBegin(GL_LINES);
 
 		glColor3f(1, 1, 1); //Light green color
 
-		//Frustum lines
+		// Frustum lines
 		glVertex3f(lastRay.a.x, lastRay.a.y, lastRay.a.z);
 		glVertex3f(lastRay.b.x, lastRay.b.y, lastRay.b.z);
 
 		glEnd();
 	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -149,20 +149,24 @@ void ModuleCamera3D::HandleUserInput(float dt)
 	}
 
 	// Mouse motion ----------------
-	if (App->input->IsMouseInsideWindow(App->gui->scene_window)) {
-
-		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) {
+	if (App->input->IsMouseInsideWindow(App->gui->scene_window)) 
+	{
+		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT) 
+		{
 			newPos -= camera->frustum.WorldRight() * App->input->GetMouseXMotion() * speed;
 			newPos += camera->frustum.up * App->input->GetMouseYMotion() * speed;
 
 			camera->frustum.pos += newPos;
 			reference += newPos;
 		}
+
 		// Scroll to zoom in and out
-		if (App->input->GetMouseZ() > 0) {
+		if (App->input->GetMouseZ() > 0) 
+		{
 			camera->frustum.pos += camera->frustum.front * speed * 12;
 		}
-		else if (App->input->GetMouseZ() < 0) {
+		else if (App->input->GetMouseZ() < 0) 
+		{
 			camera->frustum.pos -= camera->frustum.front * speed * 12;
 		}
 	}
@@ -194,4 +198,5 @@ void ModuleCamera3D::OnClick(const vec2& normMousePos)
 
 void ModuleCamera3D::OnCollision(ComponentRigidBody* c1, ComponentRigidBody* c2)
 {
+
 }

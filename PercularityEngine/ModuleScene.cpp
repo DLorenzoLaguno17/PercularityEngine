@@ -45,7 +45,7 @@ bool ModuleScene::Init()
 	selected = root;
 
 	sceneAddress = "Assets/Scenes/"; 
-	modelAddress = "Assets/Models/";
+	modelAddress = "Library/Models/";
 
 	//frustumTest = new GameObject("Camera", root);
 	//frustumTest->CreateComponent(COMPONENT_TYPE::CAMERA);
@@ -270,16 +270,19 @@ void ModuleScene::LoadScene(const std::string scene_name, bool loadingModel, boo
 	LOG("\nLoading scene: %s", scene_name.c_str());
 	uint startTime = loadingTime.Read();
 
+	json scene_file;
+	std::string full_path;
+
 	// First we delete the current scene unless we are loading a model and not a scene
 	if (!loadingModel) 
 	{
 		App->undo->CleanUp();
 		CleanUp();
 		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80, -80, -80 }, { 80, 80, 80 }), 5);
+		full_path = sceneAddress + scene_name;
 	}
-
-	json scene_file;
-	std::string full_path = sceneAddress + scene_name;
+	else
+		full_path = modelAddress + scene_name + ".json";
 
 	// If the adress of the settings file is null, create  an exception
 	assert(full_path.c_str() != nullptr);
@@ -325,8 +328,8 @@ void ModuleScene::LoadScene(const std::string scene_name, bool loadingModel, boo
 	LOG("Scene loaded. Time spent: %d ms", fullTime);
 }
 
-void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) {
-	
+void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) 
+{	
 	// We load each GameObject excepte the world
 	if (root != GetRoot()) 
 	{

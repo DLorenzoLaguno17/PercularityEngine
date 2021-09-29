@@ -1,10 +1,9 @@
+#include "Application.h"
 #include "InspectorWindow.h"
 #include "GameObject.h"
-#include "Application.h"
 #include "ModuleScene.h"
 #include "ModulePhysics.h"
 
-#include <string>
 #include "mmgr/mmgr.h"
 
 InspectorWindow::InspectorWindow(char* name, bool active) : UIElement(name, active) {}
