@@ -13,6 +13,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ResourceMesh.h"
+#include "ResourceModel.h"
 #include "Tree.h"
 
 SceneWindow::SceneWindow(char* name, bool active) : UIElement(name, active) {}
@@ -52,8 +53,10 @@ void SceneWindow::Update()
 		{
 			std::string model = *(std::string*)test->Data;
 			std::string file = ASSETS_MODEL_FOLDER + model;
-			uint UUID = App->res_manager->ImportFile(file.c_str(), RESOURCE_TYPE::MODEL);
-			App->res_manager->GetResourceFromMap(UUID)->IncreaseReferenceCount();
+			uint UUID = App->res_manager->ImportFile(file.c_str(), RESOURCE_TYPE::MODEL, true);
+
+			ResourceModel* resource = (ResourceModel*)App->res_manager->GetResourceFromMap(UUID);
+			if (resource) resource->GenerateModelInstance();
 		}
 		ImGui::EndDragDropTarget();
 	}

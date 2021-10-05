@@ -5,11 +5,16 @@
 
 bool ResourceModel::LoadInMemory()
 {	
-	App->scene->LoadScene(name, true, false, usedAsReference);
 	return true;
 }
 
 void ResourceModel::ReleaseFromMemory() {}
+
+void ResourceModel::GenerateModelInstance()
+{
+	IncreaseReferenceCount();
+	App->scene->LoadScene(name, true, false, usedAsReference);
+}
 
 // Save and Load
 void ResourceModel::OnSave(const char* resourceNum, json &config) const

@@ -317,7 +317,6 @@ void ModuleScene::LoadScene(const std::string scene_name, bool loadingModel, boo
 			// We reset the UUIDS of all the GameObjects of the model in case it is duplicated
 			RecursiveReset(root);
 		}		
-
 	}
 	else RecursiveLoad(root, scene_file);	
 

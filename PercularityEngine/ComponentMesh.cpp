@@ -33,7 +33,8 @@ void ComponentMesh::Update()
 	RenderNormals();
 }
 
-void ComponentMesh::OnEditor() {
+void ComponentMesh::OnEditor() 
+{
 
 	if (ImGui::CollapsingHeader("Mesh")) 
 	{
@@ -65,11 +66,12 @@ void ComponentMesh::CleanUp()
 }
 
 // Method to render vertex normals
-void ComponentMesh::RenderNormals() {
-
-	if (resource_mesh->normals != nullptr && showVertexNormals) {
-
-		for (uint i = 0; i < resource_mesh->num_vertices; ++i) {
+void ComponentMesh::RenderNormals() 
+{
+	if (resource_mesh->normals != nullptr && showVertexNormals) 
+	{
+		for (uint i = 0; i < resource_mesh->num_vertices; ++i) 
+		{
 			float3 point = resource_mesh->vertices[i];
 			float3 vec = resource_mesh->normals[i];
 
@@ -86,7 +88,8 @@ void ComponentMesh::RenderNormals() {
 		}
 	}
 
-	if (showFaceNormals) {
+	if (showFaceNormals) 
+	{
 		for (uint i = 0; i < resource_mesh->num_vertices; i += 3)
 		{
 			float3 a = resource_mesh->vertices[resource_mesh->indices[i]];

@@ -15,6 +15,8 @@ public:
 	bool LoadInMemory();
 	void ReleaseFromMemory();
 
+	void GenerateModelInstance();
+
 	void OnSave(const char* resourceNum, json &config) const;
 	void OnLoad(const char* resourceNum, const json &config);
 
