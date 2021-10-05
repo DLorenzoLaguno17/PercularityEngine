@@ -72,10 +72,6 @@ bool ModuleResourceLoader::Start()
 	CreateDefaultMaterial();
 	LoadEngineUI();
 
-	// Load scene
-	std::string output;
-	//App->scene->LoadScene(App->scene->GetRoot(), "Scene", App->scene->sceneAddress);
-
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
 
@@ -637,21 +633,25 @@ std::string ModuleResourceLoader::getNameFromPath(std::string path, bool withExt
 
 void ModuleResourceLoader::LoadEngineUI() 
 {
+	folder_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, folderIcon_UUID);
 	icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, engineIcon_UUID);
 	model_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, modelIcon_UUID);
 	scene_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, sceneIcon_UUID);
 	tex_icon_tex = (ResourceTexture*)App->res_manager->CreateNewResource(RESOURCE_TYPE::TEXTURE, texIcon_UUID);
 
+	folder_tex->file = "None";
 	icon_tex->file = "None";
 	model_icon_tex->file = "None";
 	scene_icon_tex->file = "None";
 	tex_icon_tex->file = "None";
 
+	folder_tex->exported_file = "library/textures/folder.dds";
 	icon_tex->exported_file = "library/textures/icon.dds";
 	model_icon_tex->exported_file = "library/textures/model_icon.dds";
 	scene_icon_tex->exported_file = "library/textures/scene_icon.dds";
 	tex_icon_tex->exported_file = "library/textures/texture_icon.dds";
 
+	LoadTextureFromLibrary(folder_tex);
 	LoadTextureFromLibrary(icon_tex);
 	LoadTextureFromLibrary(model_icon_tex);
 	LoadTextureFromLibrary(scene_icon_tex);

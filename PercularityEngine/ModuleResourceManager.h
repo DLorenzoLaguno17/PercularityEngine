@@ -4,6 +4,8 @@
 #include "ModuleTaskManager.h"
 #include "PercularityResource.h"
 
+struct ImVec4;
+
 class ImportFileTask : public Task
 {
 public:
@@ -54,9 +56,9 @@ private:
 
 private:
 	std::map<uint, Resource*> resources;
-	//uint resourcesCount = 0;
 	uint saved_res = 0;
-
+	std::string selected = "";
+	std::string currentFolder = "";
 };
 
 #endif // __MODULE_RESOURCEMANAGER_H__

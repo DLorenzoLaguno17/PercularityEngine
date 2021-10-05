@@ -57,6 +57,7 @@ public:
 
 public:
 	ResourceTexture* icon_tex = nullptr;
+	ResourceTexture* folder_tex = nullptr;
 	ResourceTexture* model_icon_tex = nullptr;
 	ResourceTexture* scene_icon_tex = nullptr;
 	ResourceTexture* tex_icon_tex = nullptr;
@@ -68,6 +69,7 @@ public:
 private:
 	uint defaultMat_UUID = 0;
 	uint engineIcon_UUID = 0;
+	uint folderIcon_UUID = 0;
 	uint modelIcon_UUID = 0;
 	uint texIcon_UUID = 0;
 	uint sceneIcon_UUID = 0;

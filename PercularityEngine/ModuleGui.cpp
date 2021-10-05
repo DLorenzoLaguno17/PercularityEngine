@@ -132,6 +132,7 @@ void ModuleGui::DrawImGui(float dt)
 {
 	main_menu_bar->Update(ui_elements_list);
 
+	//bool show_demo_window = true;
 	//ImGui::ShowDemoWindow(&show_demo_window);
 
 	// Show windows if they are active

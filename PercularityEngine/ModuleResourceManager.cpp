@@ -42,6 +42,7 @@ bool ModuleResourceManager::Start()
 		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
 	}
 
+	currentFolder = ASSETS_FOLDER;
 	return true;
 }
 
@@ -149,9 +150,98 @@ void ModuleResourceManager::DrawProjectExplorer()
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
 	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
+	std::vector<std::string> files, directories;
+	App->file_system->DiscoverFiles(currentFolder.c_str(), files, directories);
+
 	static int columns = 5;
 	//ImGui::SliderInt("Columns", &columns, 5, 10);
 	ImGui::Columns(columns, "project_columns", false);
+
+	ImVec4 baseColor = ImVec4(255, 255, 255, 255);
+	ImVec4 selectedColor = ImVec4(0, 125, 255, 255);
+
+	/*// Show folders
+	for (int i = 0; i < directories.size(); ++i)
+	{
+		ImGui::PushID(i);
+
+		if (selected == directories[i])
+			ImGui::Image((void*)App->res_loader->folder_tex->texture, ImVec2(50, 50), ImVec2(0, 1), ImVec2(1, 0), selectedColor);
+		else
+			ImGui::Image((void*)App->res_loader->folder_tex->texture, ImVec2(50, 50), ImVec2(0, 1), ImVec2(1, 0), baseColor);
+
+		if (ImGui::IsItemClicked())
+			selected = directories[i];
+
+		if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+		{
+			currentFolder += directories[i];
+			selected = "";
+		}
+
+		ImGui::Text(directories[i].c_str());
+		ImGui::NextColumn();
+
+		ImGui::PopID();
+	}
+
+	// Show files
+	for (int i = 0; i < files.size(); ++i)
+	{
+		ImGui::PushID(i);
+
+		if (selected == files[i])
+			ImGui::Image((void*)App->res_loader->folder_tex->texture, ImVec2(50, 50), ImVec2(0, 1), ImVec2(1, 0), selectedColor);
+		else
+			ImGui::Image((void*)App->res_loader->folder_tex->texture, ImVec2(50, 50), ImVec2(0, 1), ImVec2(1, 0), baseColor);
+
+		if (ImGui::IsItemClicked())
+			selected = files[i];
+
+		//if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+			//ShellExecuteA(NULL, "open", "https://github.com/DLorenzoLaguno17/PercularityEngine", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::Text(files[i].c_str());
+		ImGui::NextColumn();
+
+		ImGui::PopID();
+	}*/
+
+	// Show scenes in the folder
+	for (int i = 0; i < sce_files.size(); ++i)
+	{
+		ImGui::PushID(i);
+
+		// Clicking a scene resource loads it
+		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50)))
+		{
+			App->scene->mustLoad = true;
+			App->scene->sceneToLoad = sce_files[i];
+		}
+
+		ImGui::Text(sce_files[i].c_str());
+		ImGui::NextColumn();
+		ImGui::PopID();
+	}
+
+	// Show models in the folder
+	for (int i = 0; i < mod_files.size(); ++i)
+	{
+		ImGui::PushID(i);
+		ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
+
+		// Dragging a model to the screen window generates an instance
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("ModelUUID", &mod_files[i], sizeof(std::string));
+			ImGui::Image((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
+			ImGui::EndDragDropSource();
+		}
+
+		ImGui::Text(mod_files[i].c_str());
+		ImGui::NextColumn();
+		ImGui::PopID();
+	}
 
 	// Show textures in the folder
 	for (int i = 0; i < tex_files.size(); ++i)
@@ -173,42 +263,6 @@ void ModuleResourceManager::DrawProjectExplorer()
 		}
 
 		ImGui::Text(name.c_str());
-		ImGui::NextColumn();
-		ImGui::PopID();
-	}
-
-	// Show models in the folder
-	for (int i = 0; i < mod_files.size(); ++i)
-	{
-		ImGui::PushID(i);
-		ImGui::ImageButton((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
-		
-		// Dragging a model to the screen window generates an instance
-		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-		{
-			ImGui::SetDragDropPayload("ModelUUID", &mod_files[i], sizeof(std::string));
-			ImGui::Image((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
-			ImGui::EndDragDropSource();
-		}
-
-		ImGui::Text(mod_files[i].c_str());
-		ImGui::NextColumn();
-		ImGui::PopID();
-	}
-
-	// Show scenes in the folder
-	for (int i = 0; i < sce_files.size(); ++i)
-	{
-		ImGui::PushID(i);
-
-		// Clicking a scene resource loads it
-		if (ImGui::ImageButton((void*)App->res_loader->scene_icon_tex->texture, ImVec2(50, 50)))
-		{
-			App->scene->mustLoad = true;
-			App->scene->sceneToLoad = sce_files[i];
-		}
-
-		ImGui::Text(sce_files[i].c_str());
 		ImGui::NextColumn();
 		ImGui::PopID();
 	}
