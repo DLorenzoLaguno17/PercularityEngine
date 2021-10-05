@@ -234,7 +234,11 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 			tex->exported_file = exportedPath;
 
 			App->res_loader->LoadTextureFromLibrary(tex);
-			mat->resource_tex = tex;
+
+			if (tex->texture != 0)	
+				mat->resource_tex = tex;
+			else					
+				mat->resource_tex = default_material;
 		}
 
 		ComponentMesh* mesh_comp = (ComponentMesh*)child->CreateComponent(COMPONENT_TYPE::MESH);

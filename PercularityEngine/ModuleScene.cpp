@@ -255,7 +255,7 @@ void ModuleScene::ExitGame()
 
 		// Loads the former scene and then deletes the file
 		std::string name = "TemporalScene.json";
-		LoadScene(name, false, true);
+		LoadScene(name, true);
 		std::string path = ASSETS_SCENE_FOLDER + name;
 		App->file_system->Remove(path.c_str());
 	}
@@ -265,7 +265,7 @@ void ModuleScene::ExitGame()
 // SAVE & LOAD METHODS
 // -----------------------------------------------------------------------------------------------
 
-void ModuleScene::LoadScene(const std::string scene_name, bool loadingModel, bool tempScene, uint usedAsReference) 
+void ModuleScene::LoadScene(const std::string scene_name, bool tempScene) 
 {
 	LOG("\nLoading scene: %s", scene_name.c_str());
 	uint startTime = loadingTime.Read();
@@ -273,16 +273,11 @@ void ModuleScene::LoadScene(const std::string scene_name, bool loadingModel, boo
 	json scene_file;
 	std::string full_path;
 
-	// First we delete the current scene unless we are loading a model and not a scene
-	if (!loadingModel) 
-	{
-		App->undo->CleanUp();
-		CleanUp();
-		sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80, -80, -80 }, { 80, 80, 80 }), 5);
-		full_path = sceneAddress + scene_name;
-	}
-	else
-		full_path = modelAddress + scene_name + ".json";
+	// First we delete the current scene
+	App->undo->CleanUp();
+	CleanUp();
+	sceneTree = new Tree(TREE_TYPE::OCTREE, AABB({ -80, -80, -80 }, { 80, 80, 80 }), 5);
+	full_path = sceneAddress + scene_name;
 
 	// If the adress of the settings file is null, create  an exception
 	assert(full_path.c_str() != nullptr);
@@ -295,36 +290,68 @@ void ModuleScene::LoadScene(const std::string scene_name, bool loadingModel, boo
 	// Close the file
 	stream.close();
 
-	// First we load the resources
+	// We load the resources
 	if (!tempScene) App->res_manager->LoadResources(scene_file);
 
 	// Then we load all the GameObjects
 	go_counter = scene_file["Game Objects"]["Count"];
-
-	if (loadingModel) 
-	{
-		GameObject* model = new GameObject("Model", nullptr, true);
-		RecursiveLoad(model, scene_file);
-		model->MakeChild(root);
-
-		if (usedAsReference > 0) 
-		{
-			char num[10];
-			sprintf_s(num, 10, " (%d)", usedAsReference);
-			std::string full_name = model->name + num;
-			model->name = full_name;
-
-			// We reset the UUIDS of all the GameObjects of the model in case it is duplicated
-			RecursiveReset(root);
-		}		
-	}
-	else RecursiveLoad(root, scene_file);	
+	RecursiveLoad(root, scene_file);	
 
 	selected = root;
 	loaded_go = 0;
 
 	uint fullTime = loadingTime.Read() - startTime;
 	LOG("Scene loaded. Time spent: %d ms", fullTime);
+}
+
+GameObject* ModuleScene::LoadModel(const std::string model_name, uint usedAsReference)
+{
+	LOG("\nLoading model: %s", model_name.c_str());
+	uint startTime = loadingTime.Read();
+
+	json scene_file;
+	std::string full_path;
+	full_path = modelAddress + model_name + ".json";
+
+	// If the adress of the settings file is null, create  an exception
+	assert(full_path.c_str() != nullptr);
+
+	// Create a stream and open the file
+	std::ifstream stream;
+	stream.open(full_path);
+	scene_file = json::parse(stream);
+
+	// Close the file
+	stream.close();
+
+	// We load the resources
+	App->res_manager->LoadResources(scene_file);
+
+	// Then we load all the GameObjects
+	go_counter = scene_file["Game Objects"]["Count"];
+
+	GameObject* model = new GameObject("Model", nullptr, true);
+	RecursiveLoad(model, scene_file);
+	model->MakeChild(root);
+
+	if (usedAsReference > 1)
+	{
+		char num[10];
+		sprintf_s(num, 10, " (%d)", usedAsReference - 1);
+		std::string full_name = model->name + num;
+		model->name = full_name;
+
+		// We reset the UUIDS of all the GameObjects of the model in case it is duplicated
+		RecursiveReset(model);
+	}
+
+	selected = model;
+	loaded_go = 0;
+
+	uint fullTime = loadingTime.Read() - startTime;
+	LOG("Scene loaded. Time spent: %d ms", fullTime);
+
+	return model;
 }
 
 void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_file) 
@@ -355,10 +382,13 @@ void ModuleScene::RecursiveLoad(GameObject* root, const nlohmann::json &scene_fi
 
 void ModuleScene::RecursiveReset(GameObject* root) 
 {
-	if (root != GetRoot()) 
+	if (root != GetRoot())
 	{
 		root->NewUUID();
 		root->parent_UUID = root->parent->GetUUID();
+
+		for (int i = 0; i < root->components.size(); ++i)
+			root->components[i]->SetNewParentUUID(root->GetUUID());
 	}
 
 	for (int i = 0; i < root->children.size(); ++i)

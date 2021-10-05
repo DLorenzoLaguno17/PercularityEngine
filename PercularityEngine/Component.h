@@ -41,6 +41,7 @@ public:
 	virtual void Update(float dt) {}
 
 	uint GetUUID() const { return UUID; }
+	void SetNewParentUUID(uint new_UUID) { parent_UUID = new_UUID; }
 	bool IsActive() { return active; }
 
 public:

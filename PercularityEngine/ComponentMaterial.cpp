@@ -47,10 +47,8 @@ void ComponentMaterial::OnEditor()
 					resource_tex = droppedTexture;
 				}
 			}
-
 			ImGui::EndDragDropTarget();
-		}
-
+		}		
 		ImGui::NewLine();
 	}
 }
@@ -94,7 +92,6 @@ void ChangeTexture::Redo()
 {
 	ResourceTexture* newTexture = (ResourceTexture*)App->res_manager->GetResourceFromMap(newTexture_uuid);
 	GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
-	ResourceTexture* currentTexture = parent->GetComponent<ComponentMaterial>()->resource_tex;
 
 	newTexture->IncreaseReferenceCount();
 	parent->GetComponent<ComponentMaterial>()->resource_tex->DecreaseReferenceCount();

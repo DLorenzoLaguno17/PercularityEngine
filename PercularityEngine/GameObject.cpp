@@ -77,7 +77,8 @@ void GameObject::Update()
 }
 
 // Load & Save 
-void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) {
+void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file) 
+{
 	UUID = scene_file["Game Objects"][gameObjectNum]["UUID"];
 	parent_UUID = scene_file["Game Objects"][gameObjectNum]["Parent UUID"];
 	json js = scene_file["Game Objects"][gameObjectNum]["Name"];
@@ -97,7 +98,8 @@ void GameObject::OnLoad(const char* gameObjectNum, const nlohmann::json &scene_f
 		components[i]->OnLoad(gameObjectNum, scene_file);
 }
 
-void GameObject::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
+void GameObject::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 
+{
 	scene_file["Game Objects"][gameObjectNum]["Name"] = name;
 	scene_file["Game Objects"][gameObjectNum]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Parent UUID"] = parent_UUID;

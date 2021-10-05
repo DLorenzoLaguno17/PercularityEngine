@@ -1,6 +1,7 @@
 #include "ResourceModel.h"
 #include "Application.h"
 #include "ModuleScene.h"
+#include "SceneActions.h"
 #include "ModuleResourceManager.h"
 
 bool ResourceModel::LoadInMemory()
@@ -13,7 +14,10 @@ void ResourceModel::ReleaseFromMemory() {}
 void ResourceModel::GenerateModelInstance()
 {
 	IncreaseReferenceCount();
-	App->scene->LoadScene(name, true, false, usedAsReference);
+	GameObject* newGo = App->scene->LoadModel(name, usedAsReference);
+
+	CreateGameObject* creationAction = new CreateGameObject(newGo);
+	App->undo->StoreNewAction(creationAction);
 }
 
 // Save and Load
