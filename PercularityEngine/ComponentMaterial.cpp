@@ -1,5 +1,6 @@
 #include "ComponentMaterial.h"
 #include "Application.h"
+#include "ModuleScene.h"
 #include "ModuleResourceLoader.h"
 #include "ModuleResourceManager.h"
 #include "ResourceTexture.h"
@@ -34,10 +35,14 @@ void ComponentMaterial::OnEditor()
 				std::string tex_name = *(std::string*)payload->Data;
 				ResourceTexture* droppedTexture = (ResourceTexture*)App->res_manager->GetResourceByName(tex_name.c_str());
 				
-				// Update texture resource references
 				if (droppedTexture)
 				{
+					// Store new action
 					droppedTexture->IncreaseReferenceCount();
+					ChangeTexture* changeTextureAction = new ChangeTexture(resource_tex->GetUUID(), droppedTexture->GetUUID(), parent_UUID);
+					App->undo->StoreNewAction(changeTextureAction);
+
+					// Update texture resource references
 					resource_tex->DecreaseReferenceCount();
 					resource_tex = droppedTexture;
 				}
@@ -71,4 +76,26 @@ void ComponentMaterial::OnSave(const char* gameObjectNum, nlohmann::json &scene_
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Active"] = active;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Resource UUID"] = resource_tex->GetUUID();
+}
+
+// --------------------------------------------------
+void ChangeTexture::Undo()
+{
+	ResourceTexture* lastTexture = (ResourceTexture*)App->res_manager->GetResourceFromMap(lastTexture_uuid);
+	GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+
+	lastTexture->IncreaseReferenceCount();
+	parent->GetComponent<ComponentMaterial>()->resource_tex->DecreaseReferenceCount();
+	parent->GetComponent<ComponentMaterial>()->resource_tex = lastTexture;
+}
+
+void ChangeTexture::Redo()
+{
+	ResourceTexture* newTexture = (ResourceTexture*)App->res_manager->GetResourceFromMap(newTexture_uuid);
+	GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+	ResourceTexture* currentTexture = parent->GetComponent<ComponentMaterial>()->resource_tex;
+
+	newTexture->IncreaseReferenceCount();
+	parent->GetComponent<ComponentMaterial>()->resource_tex->DecreaseReferenceCount();
+	parent->GetComponent<ComponentMaterial>()->resource_tex = newTexture;
 }

@@ -2,8 +2,7 @@
 #define _ComponentMaterial_H_
 
 #include "Component.h"
-#include <string>
-#include "ImGui/imgui.h"
+#include "ModuleUndo.h"
 
 class ResourceTexture;
 
@@ -28,6 +27,21 @@ public:
 
 public:
 	ResourceTexture* resource_tex = nullptr;
+};
+
+// ---------------------------------------------------
+class ChangeTexture : public Action
+{
+public:
+	ChangeTexture(uint lastTexture, uint newTexture, uint gameObject_uuid) :
+		lastTexture_uuid(lastTexture), newTexture_uuid(newTexture), uuid(gameObject_uuid) {}
+
+	void Undo() override;
+	void Redo() override;
+
+	uint lastTexture_uuid;
+	uint newTexture_uuid;
+	uint uuid;
 };
 
 #endif // _ComponentMaterial_H_

@@ -5,7 +5,7 @@
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 222048423,
+                    "Parent UUID": 960075538,
                     "Rotation": [
                         0.0,
                         0.0,
@@ -22,18 +22,18 @@
                         0.0,
                         0.0
                     ],
-                    "UUID": 1645966577
+                    "UUID": 990518223
                 }
             },
             "Name": "warrior",
             "Parent UUID": 0,
-            "UUID": 222048423
+            "UUID": 960075538
         },
         "GameObject 10": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 413894502,
+                    "Parent UUID": 817341317,
                     "Rotation": [
                         2.6244920903195634e-08,
                         -2.985951397249664e-08,
@@ -50,18 +50,18 @@
                         -3.814697265625e-06,
                         1.52587890625e-05
                     ],
-                    "UUID": 813548296
+                    "UUID": 98152651
                 }
             },
             "Name": "B_L_Forearm",
-            "Parent UUID": 485849753,
-            "UUID": 413894502
+            "Parent UUID": 590840279,
+            "UUID": 817341317
         },
         "GameObject 11": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 164726191,
+                    "Parent UUID": 192750517,
                     "Rotation": [
                         -0.7202751636505127,
                         0.030072743073105812,
@@ -78,18 +78,18 @@
                         -6.198883056640625e-06,
                         -1.52587890625e-05
                     ],
-                    "UUID": 839468631
+                    "UUID": 2005917601
                 }
             },
             "Name": "B_L_Hand",
-            "Parent UUID": 413894502,
-            "UUID": 164726191
+            "Parent UUID": 817341317,
+            "UUID": 192750517
         },
         "GameObject 12": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 878105746,
+                    "Parent UUID": 980251164,
                     "Rotation": [
                         0.4485418498516083,
                         0.13317716121673584,
@@ -106,18 +106,18 @@
                         -0.5208816528320313,
                         -9.563871383666992
                     ],
-                    "UUID": 35679470
+                    "UUID": 1183470831
                 }
             },
             "Name": "B_L_Finger0",
-            "Parent UUID": 164726191,
-            "UUID": 878105746
+            "Parent UUID": 192750517,
+            "UUID": 980251164
         },
         "GameObject 13": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1549284938,
+                    "Parent UUID": 1917640602,
                     "Rotation": [
                         3.902678624712053e-09,
                         -3.329969189280746e-08,
@@ -134,18 +134,18 @@
                         -1.52587890625e-05,
                         -3.0517578125e-05
                     ],
-                    "UUID": 1105530629
+                    "UUID": 1145501499
                 }
             },
             "Name": "B_L_Finger01",
-            "Parent UUID": 878105746,
-            "UUID": 1549284938
+            "Parent UUID": 980251164,
+            "UUID": 1917640602
         },
         "GameObject 14": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 186529482,
+                    "Parent UUID": 2007146887,
                     "Rotation": [
                         -6.891186643542824e-08,
                         -8.076385782374018e-09,
@@ -162,18 +162,18 @@
                         7.62939453125e-06,
                         3.0517578125e-05
                     ],
-                    "UUID": 535452913
+                    "UUID": 665025890
                 }
             },
             "Name": "B_L_Finger02",
-            "Parent UUID": 1549284938,
-            "UUID": 186529482
+            "Parent UUID": 1917640602,
+            "UUID": 2007146887
         },
         "GameObject 15": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 598627700,
+                    "Parent UUID": 20058370,
                     "Rotation": [
                         -0.00039816179196350276,
                         1.1866143484473568e-11,
@@ -190,18 +190,18 @@
                         -2.6357345581054688,
                         -4.906815528869629
                     ],
-                    "UUID": 843964371
+                    "UUID": 619407220
                 }
             },
             "Name": "B_L_Finger1",
-            "Parent UUID": 164726191,
-            "UUID": 598627700
+            "Parent UUID": 192750517,
+            "UUID": 20058370
         },
         "GameObject 16": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 343407824,
+                    "Parent UUID": 130948213,
                     "Rotation": [
                         2.4425018452234326e-08,
                         5.1622834007503116e-08,
@@ -218,18 +218,18 @@
                         0.0,
                         1.621246337890625e-05
                     ],
-                    "UUID": 460672653
+                    "UUID": 677455758
                 }
             },
             "Name": "B_L_Finger11",
-            "Parent UUID": 598627700,
-            "UUID": 343407824
+            "Parent UUID": 20058370,
+            "UUID": 130948213
         },
         "GameObject 17": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1969990215,
+                    "Parent UUID": 2111472304,
                     "Rotation": [
                         1.7979523647682072e-07,
                         2.1071764777502722e-08,
@@ -246,18 +246,18 @@
                         -2.288818359375e-05,
                         -2.384185791015625e-05
                     ],
-                    "UUID": 1498159213
+                    "UUID": 1115188693
                 }
             },
             "Name": "B_L_Finger12",
-            "Parent UUID": 343407824,
-            "UUID": 1969990215
+            "Parent UUID": 130948213,
+            "UUID": 2111472304
         },
         "GameObject 18": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 61833483,
+                    "Parent UUID": 428221715,
                     "Rotation": [
                         -0.00039814869523979723,
                         -1.927303543425296e-07,
@@ -274,18 +274,18 @@
                         -2.6325759887695313,
                         -0.8993535041809082
                     ],
-                    "UUID": 1351691355
+                    "UUID": 1856032361
                 }
             },
             "Name": "B_L_Finger2",
-            "Parent UUID": 164726191,
-            "UUID": 61833483
+            "Parent UUID": 192750517,
+            "UUID": 428221715
         },
         "GameObject 19": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1222931268,
+                    "Parent UUID": 442997897,
                     "Rotation": [
                         6.585968748140658e-08,
                         2.4214276095335663e-07,
@@ -302,32 +302,32 @@
                         -1.52587890625e-05,
                         1.0728836059570313e-05
                     ],
-                    "UUID": 413656819
+                    "UUID": 1943932470
                 }
             },
             "Name": "B_L_Finger21",
-            "Parent UUID": 61833483,
-            "UUID": 1222931268
+            "Parent UUID": 428221715,
+            "UUID": 442997897
         },
         "GameObject 2": {
             "Components": {
                 "Material": {
                     "Active": true,
-                    "Parent UUID": 1964169750,
-                    "Resource UUID": 1911134622,
-                    "UUID": 174457867
+                    "Parent UUID": 874331019,
+                    "Resource UUID": 1546174630,
+                    "UUID": 849379582
                 },
                 "Mesh": {
                     "Active": true,
                     "F_Normals on": false,
-                    "Parent UUID": 1964169750,
-                    "Resource UUID": 1337523081,
-                    "UUID": 1311717436,
+                    "Parent UUID": 874331019,
+                    "Resource UUID": 773717332,
+                    "UUID": 1458625708,
                     "V_Normals on": false
                 },
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1964169750,
+                    "Parent UUID": 874331019,
                     "Rotation": [
                         -0.7071067690849304,
                         0.0,
@@ -344,18 +344,18 @@
                         0.0,
                         -0.0798943042755127
                     ],
-                    "UUID": 2145974731
+                    "UUID": 1375899584
                 }
             },
             "Name": "RPG-Character-Mesh",
-            "Parent UUID": 222048423,
-            "UUID": 1964169750
+            "Parent UUID": 960075538,
+            "UUID": 874331019
         },
         "GameObject 20": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1445689329,
+                    "Parent UUID": 1955576283,
                     "Rotation": [
                         -4.356116178882985e-08,
                         -2.0108469556134878e-08,
@@ -372,18 +372,18 @@
                         2.288818359375e-05,
                         -5.9604644775390625e-06
                     ],
-                    "UUID": 2073206713
+                    "UUID": 860662590
                 }
             },
             "Name": "B_L_Finger22",
-            "Parent UUID": 1222931268,
-            "UUID": 1445689329
+            "Parent UUID": 442997897,
+            "UUID": 1955576283
         },
         "GameObject 21": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2053683609,
+                    "Parent UUID": 1101459796,
                     "Rotation": [
                         -0.00039873088826425374,
                         -2.0674765721651056e-07,
@@ -400,18 +400,18 @@
                         -2.6293411254882813,
                         3.1446051597595215
                     ],
-                    "UUID": 45324929
+                    "UUID": 238906593
                 }
             },
             "Name": "B_L_Finger3",
-            "Parent UUID": 164726191,
-            "UUID": 2053683609
+            "Parent UUID": 192750517,
+            "UUID": 1101459796
         },
         "GameObject 22": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 913404466,
+                    "Parent UUID": 655065238,
                     "Rotation": [
                         -1.0137452477465558e-07,
                         9.689186697414698e-08,
@@ -428,18 +428,18 @@
                         0.0,
                         2.384185791015625e-07
                     ],
-                    "UUID": 846572422
+                    "UUID": 186723459
                 }
             },
             "Name": "B_L_Finger31",
-            "Parent UUID": 2053683609,
-            "UUID": 913404466
+            "Parent UUID": 1101459796,
+            "UUID": 655065238
         },
         "GameObject 23": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1529900147,
+                    "Parent UUID": 1155423748,
                     "Rotation": [
                         -2.2949699030050397e-07,
                         -2.275639445770139e-07,
@@ -456,18 +456,18 @@
                         1.52587890625e-05,
                         4.76837158203125e-06
                     ],
-                    "UUID": 136726734
+                    "UUID": 1314310182
                 }
             },
             "Name": "B_L_Finger32",
-            "Parent UUID": 913404466,
-            "UUID": 1529900147
+            "Parent UUID": 655065238,
+            "UUID": 1155423748
         },
         "GameObject 24": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1404424310,
+                    "Parent UUID": 1458465999,
                     "Rotation": [
                         -0.00039956712862476707,
                         -2.1698623697830044e-07,
@@ -484,18 +484,18 @@
                         -2.6262893676757813,
                         6.989296913146973
                     ],
-                    "UUID": 346954953
+                    "UUID": 392035278
                 }
             },
             "Name": "B_L_Finger4",
-            "Parent UUID": 164726191,
-            "UUID": 1404424310
+            "Parent UUID": 192750517,
+            "UUID": 1458465999
         },
         "GameObject 25": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 454721357,
+                    "Parent UUID": 1518419915,
                     "Rotation": [
                         9.376050513765222e-08,
                         -3.359592142260226e-07,
@@ -512,18 +512,18 @@
                         2.288818359375e-05,
                         1.621246337890625e-05
                     ],
-                    "UUID": 2099155270
+                    "UUID": 1882894993
                 }
             },
             "Name": "B_L_Finger41",
-            "Parent UUID": 1404424310,
-            "UUID": 454721357
+            "Parent UUID": 1458465999,
+            "UUID": 1518419915
         },
         "GameObject 26": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 436939732,
+                    "Parent UUID": 188043832,
                     "Rotation": [
                         1.0438479414176527e-08,
                         -3.138429178761726e-07,
@@ -540,18 +540,18 @@
                         -3.0517578125e-05,
                         -2.09808349609375e-05
                     ],
-                    "UUID": 1075221817
+                    "UUID": 739315560
                 }
             },
             "Name": "B_L_Finger42",
-            "Parent UUID": 454721357,
-            "UUID": 436939732
+            "Parent UUID": 1518419915,
+            "UUID": 188043832
         },
         "GameObject 27": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1033154231,
+                    "Parent UUID": 1000551464,
                     "Rotation": [
                         -0.6753342747688293,
                         0.020245255902409554,
@@ -568,18 +568,18 @@
                         -1.4548254013061523,
                         -5.302804946899414
                     ],
-                    "UUID": 1413443833
+                    "UUID": 1466417405
                 }
             },
             "Name": "B_R_Clavicle",
-            "Parent UUID": 1644177685,
-            "UUID": 1033154231
+            "Parent UUID": 384846841,
+            "UUID": 1000551464
         },
         "GameObject 28": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1229940812,
+                    "Parent UUID": 2073575125,
                     "Rotation": [
                         -0.06598425656557083,
                         -0.44083184003829956,
@@ -596,18 +596,18 @@
                         1.33514404296875e-05,
                         0.0
                     ],
-                    "UUID": 946331774
+                    "UUID": 1933091697
                 }
             },
             "Name": "B_R_UpperArm",
-            "Parent UUID": 1033154231,
-            "UUID": 1229940812
+            "Parent UUID": 1000551464,
+            "UUID": 2073575125
         },
         "GameObject 29": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1913631341,
+                    "Parent UUID": 976879347,
                     "Rotation": [
                         1.1331009375226131e-07,
                         -8.965380260406164e-08,
@@ -624,18 +624,18 @@
                         2.384185791015625e-06,
                         0.0
                     ],
-                    "UUID": 1189615528
+                    "UUID": 509916997
                 }
             },
             "Name": "B_R_Forearm",
-            "Parent UUID": 1229940812,
-            "UUID": 1913631341
+            "Parent UUID": 2073575125,
+            "UUID": 976879347
         },
         "GameObject 3": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 508521087,
+                    "Parent UUID": 1642053471,
                     "Rotation": [
                         -0.5000003576278687,
                         -0.49999961256980896,
@@ -652,18 +652,18 @@
                         0.0,
                         -0.25318408012390137
                     ],
-                    "UUID": 331193585
+                    "UUID": 112756446
                 }
             },
             "Name": "Motion",
-            "Parent UUID": 222048423,
-            "UUID": 508521087
+            "Parent UUID": 960075538,
+            "UUID": 1642053471
         },
         "GameObject 30": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 220861039,
+                    "Parent UUID": 879079580,
                     "Rotation": [
                         0.7202749848365784,
                         -0.030072825029492378,
@@ -680,18 +680,18 @@
                         -8.58306884765625e-06,
                         -3.0517578125e-05
                     ],
-                    "UUID": 583483699
+                    "UUID": 1262983327
                 }
             },
             "Name": "B_R_Hand",
-            "Parent UUID": 1913631341,
-            "UUID": 220861039
+            "Parent UUID": 976879347,
+            "UUID": 879079580
         },
         "GameObject 31": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 917941427,
+                    "Parent UUID": 1444282652,
                     "Rotation": [
                         -0.4485418200492859,
                         -0.13317708671092987,
@@ -708,18 +708,18 @@
                         -0.5208740234375,
                         9.563882827758789
                     ],
-                    "UUID": 1034238094
+                    "UUID": 775711411
                 }
             },
             "Name": "B_R_Finger0",
-            "Parent UUID": 220861039,
-            "UUID": 917941427
+            "Parent UUID": 879079580,
+            "UUID": 1444282652
         },
         "GameObject 32": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1711142111,
+                    "Parent UUID": 885390475,
                     "Rotation": [
                         4.298490807741473e-08,
                         -1.4874451892410434e-07,
@@ -736,18 +736,18 @@
                         -1.52587890625e-05,
                         7.62939453125e-06
                     ],
-                    "UUID": 1917076253
+                    "UUID": 399656487
                 }
             },
             "Name": "B_R_Finger01",
-            "Parent UUID": 917941427,
-            "UUID": 1711142111
+            "Parent UUID": 1444282652,
+            "UUID": 885390475
         },
         "GameObject 33": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 509665416,
+                    "Parent UUID": 1686150895,
                     "Rotation": [
                         6.258058249386522e-08,
                         8.610088286786777e-08,
@@ -764,18 +764,18 @@
                         7.62939453125e-06,
                         1.52587890625e-05
                     ],
-                    "UUID": 543627955
+                    "UUID": 1465381187
                 }
             },
             "Name": "B_R_Finger02",
-            "Parent UUID": 1711142111,
-            "UUID": 509665416
+            "Parent UUID": 885390475,
+            "UUID": 1686150895
         },
         "GameObject 34": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 670060327,
+                    "Parent UUID": 798002098,
                     "Rotation": [
                         0.00039813845069147646,
                         7.731758699947022e-08,
@@ -792,18 +792,18 @@
                         -2.6357269287109375,
                         4.906815528869629
                     ],
-                    "UUID": 482762286
+                    "UUID": 154633321
                 }
             },
             "Name": "B_R_Finger1",
-            "Parent UUID": 220861039,
-            "UUID": 670060327
+            "Parent UUID": 879079580,
+            "UUID": 798002098
         },
         "GameObject 35": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 126554409,
+                    "Parent UUID": 390918930,
                     "Rotation": [
                         7.819843106382507e-10,
                         -1.3868746862044645e-07,
@@ -820,18 +820,18 @@
                         -1.52587890625e-05,
                         7.152557373046875e-06
                     ],
-                    "UUID": 1866588995
+                    "UUID": 1106567099
                 }
             },
             "Name": "B_R_Finger11",
-            "Parent UUID": 670060327,
-            "UUID": 126554409
+            "Parent UUID": 798002098,
+            "UUID": 390918930
         },
         "GameObject 36": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 967006337,
+                    "Parent UUID": 1479647001,
                     "Rotation": [
                         1.6865250529463083e-08,
                         1.2762799883603293e-07,
@@ -848,18 +848,18 @@
                         -7.62939453125e-06,
                         -1.239776611328125e-05
                     ],
-                    "UUID": 335854827
+                    "UUID": 1860793678
                 }
             },
             "Name": "B_R_Finger12",
-            "Parent UUID": 126554409,
-            "UUID": 967006337
+            "Parent UUID": 390918930,
+            "UUID": 1479647001
         },
         "GameObject 37": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 746962031,
+                    "Parent UUID": 1218167116,
                     "Rotation": [
                         0.000398107833461836,
                         5.495396848687051e-08,
@@ -876,18 +876,18 @@
                         -2.632537841796875,
                         0.8993589878082275
                     ],
-                    "UUID": 779564499
+                    "UUID": 1588595712
                 }
             },
             "Name": "B_R_Finger2",
-            "Parent UUID": 220861039,
-            "UUID": 746962031
+            "Parent UUID": 879079580,
+            "UUID": 1218167116
         },
         "GameObject 38": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 705774248,
+                    "Parent UUID": 2066761005,
                     "Rotation": [
                         8.889442959514327e-09,
                         -7.584930017401348e-08,
@@ -904,18 +904,18 @@
                         -1.52587890625e-05,
                         -3.123283386230469e-05
                     ],
-                    "UUID": 135593001
+                    "UUID": 2121129164
                 }
             },
             "Name": "B_R_Finger21",
-            "Parent UUID": 746962031,
-            "UUID": 705774248
+            "Parent UUID": 1218167116,
+            "UUID": 2066761005
         },
         "GameObject 39": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1929694056,
+                    "Parent UUID": 1273057242,
                     "Rotation": [
                         -1.995969434176459e-08,
                         7.037718852132002e-09,
@@ -932,18 +932,18 @@
                         0.0,
                         2.7179718017578125e-05
                     ],
-                    "UUID": 652916456
+                    "UUID": 573166298
                 }
             },
             "Name": "B_R_Finger22",
-            "Parent UUID": 705774248,
-            "UUID": 1929694056
+            "Parent UUID": 2066761005,
+            "UUID": 1273057242
         },
         "GameObject 4": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 496663446,
+                    "Parent UUID": 1163797181,
                     "Rotation": [
                         -0.49999961256980896,
                         -0.5000004172325134,
@@ -960,18 +960,18 @@
                         -1.0728836059570313e-06,
                         132.9930877685547
                     ],
-                    "UUID": 1571573619
+                    "UUID": 165537091
                 }
             },
             "Name": "B_Pelvis",
-            "Parent UUID": 508521087,
-            "UUID": 496663446
+            "Parent UUID": 1642053471,
+            "UUID": 1163797181
         },
         "GameObject 40": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 910227127,
+                    "Parent UUID": 2017188151,
                     "Rotation": [
                         0.00039812916656956077,
                         -1.1181804815407759e-08,
@@ -988,18 +988,18 @@
                         -2.6293182373046875,
                         -3.1446166038513184
                     ],
-                    "UUID": 827869544
+                    "UUID": 1815681559
                 }
             },
             "Name": "B_R_Finger3",
-            "Parent UUID": 220861039,
-            "UUID": 910227127
+            "Parent UUID": 879079580,
+            "UUID": 2017188151
         },
         "GameObject 41": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 791920991,
+                    "Parent UUID": 88422131,
                     "Rotation": [
                         9.539887990683837e-09,
                         -8.139924290162526e-08,
@@ -1016,18 +1016,18 @@
                         -3.0517578125e-05,
                         -2.384185791015625e-07
                     ],
-                    "UUID": 1983644980
+                    "UUID": 1349050049
                 }
             },
             "Name": "B_R_Finger31",
-            "Parent UUID": 910227127,
-            "UUID": 791920991
+            "Parent UUID": 2017188151,
+            "UUID": 88422131
         },
         "GameObject 42": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 821297657,
+                    "Parent UUID": 2016159884,
                     "Rotation": [
                         2.6194607016805094e-07,
                         3.069973786296032e-08,
@@ -1044,18 +1044,18 @@
                         -1.52587890625e-05,
                         -1.71661376953125e-05
                     ],
-                    "UUID": 664592975
+                    "UUID": 1093665103
                 }
             },
             "Name": "B_R_Finger32",
-            "Parent UUID": 791920991,
-            "UUID": 821297657
+            "Parent UUID": 88422131,
+            "UUID": 2016159884
         },
         "GameObject 43": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 2092337860,
+                    "Parent UUID": 877947931,
                     "Rotation": [
                         0.00039836359792388976,
                         4.189169899859735e-08,
@@ -1072,18 +1072,18 @@
                         -2.626312255859375,
                         -6.989320755004883
                     ],
-                    "UUID": 395924109
+                    "UUID": 1933343237
                 }
             },
             "Name": "B_R_Finger4",
-            "Parent UUID": 220861039,
-            "UUID": 2092337860
+            "Parent UUID": 879079580,
+            "UUID": 877947931
         },
         "GameObject 44": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1679783444,
+                    "Parent UUID": 1309476511,
                     "Rotation": [
                         -4.201594805408604e-08,
                         9.447161630760093e-08,
@@ -1100,18 +1100,18 @@
                         0.0,
                         2.86102294921875e-05
                     ],
-                    "UUID": 538706398
+                    "UUID": 2088389887
                 }
             },
             "Name": "B_R_Finger41",
-            "Parent UUID": 2092337860,
-            "UUID": 1679783444
+            "Parent UUID": 877947931,
+            "UUID": 1309476511
         },
         "GameObject 45": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1623723950,
+                    "Parent UUID": 412002692,
                     "Rotation": [
                         6.445243894148689e-09,
                         7.202035590125888e-08,
@@ -1128,18 +1128,18 @@
                         2.288818359375e-05,
                         -6.67572021484375e-06
                     ],
-                    "UUID": 1745944870
+                    "UUID": 100346753
                 }
             },
             "Name": "B_R_Finger42",
-            "Parent UUID": 1679783444,
-            "UUID": 1623723950
+            "Parent UUID": 1309476511,
+            "UUID": 412002692
         },
         "GameObject 46": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 410923129,
+                    "Parent UUID": 476986922,
                     "Rotation": [
                         2.364002398280718e-07,
                         -3.931441199256369e-07,
@@ -1156,18 +1156,18 @@
                         -3.045567512512207,
                         1.043081283569336e-07
                     ],
-                    "UUID": 102018775
+                    "UUID": 1766863001
                 }
             },
             "Name": "B_Neck",
-            "Parent UUID": 1644177685,
-            "UUID": 410923129
+            "Parent UUID": 384846841,
+            "UUID": 476986922
         },
         "GameObject 47": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 920713646,
+                    "Parent UUID": 758208814,
                     "Rotation": [
                         2.9754978925211617e-08,
                         1.1466413951666254e-07,
@@ -1184,18 +1184,18 @@
                         -0.26627349853515625,
                         2.682209014892578e-07
                     ],
-                    "UUID": 765368863
+                    "UUID": 2107796234
                 }
             },
             "Name": "B_Head",
-            "Parent UUID": 410923129,
-            "UUID": 920713646
+            "Parent UUID": 476986922,
+            "UUID": 758208814
         },
         "GameObject 48": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 233877912,
+                    "Parent UUID": 734073216,
                     "Rotation": [
                         -0.005688403267413378,
                         0.9995439648628235,
@@ -1212,18 +1212,18 @@
                         2.1979212760925293e-05,
                         11.652329444885254
                     ],
-                    "UUID": 593099798
+                    "UUID": 1095539830
                 }
             },
             "Name": "B_L_Thigh",
-            "Parent UUID": 496663446,
-            "UUID": 233877912
+            "Parent UUID": 1163797181,
+            "UUID": 734073216
         },
         "GameObject 49": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 385472042,
+                    "Parent UUID": 401813931,
                     "Rotation": [
                         -4.019740572402952e-06,
                         -1.5626582694494573e-07,
@@ -1240,18 +1240,18 @@
                         4.76837158203125e-07,
                         5.7220458984375e-06
                     ],
-                    "UUID": 1993383170
+                    "UUID": 1565704329
                 }
             },
             "Name": "B_L_Calf",
-            "Parent UUID": 233877912,
-            "UUID": 385472042
+            "Parent UUID": 734073216,
+            "UUID": 401813931
         },
         "GameObject 5": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 235113749,
+                    "Parent UUID": 1460562709,
                     "Rotation": [
                         -1.6034628060879186e-06,
                         2.3096818679846365e-08,
@@ -1268,18 +1268,18 @@
                         3.3955929279327393,
                         -5.111098289489746e-06
                     ],
-                    "UUID": 733961695
+                    "UUID": 338194192
                 }
             },
             "Name": "B_Spine",
-            "Parent UUID": 496663446,
-            "UUID": 235113749
+            "Parent UUID": 1163797181,
+            "UUID": 1460562709
         },
         "GameObject 50": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 198991195,
+                    "Parent UUID": 1778651236,
                     "Rotation": [
                         -0.00804174318909645,
                         -0.030146723613142967,
@@ -1296,18 +1296,18 @@
                         -1.9073486328125e-06,
                         -5.7220458984375e-06
                     ],
-                    "UUID": 548980298
+                    "UUID": 1128164595
                 }
             },
             "Name": "B_L_Foot",
-            "Parent UUID": 385472042,
-            "UUID": 198991195
+            "Parent UUID": 401813931,
+            "UUID": 1778651236
         },
         "GameObject 51": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1790861399,
+                    "Parent UUID": 1880363117,
                     "Rotation": [
                         -1.9833741760066914e-08,
                         -2.0180412008130588e-08,
@@ -1324,18 +1324,18 @@
                         24.276676177978516,
                         -0.2178955078125
                     ],
-                    "UUID": 808398606
+                    "UUID": 9963890
                 }
             },
             "Name": "B_L_Toe0",
-            "Parent UUID": 198991195,
-            "UUID": 1790861399
+            "Parent UUID": 1778651236,
+            "UUID": 1880363117
         },
         "GameObject 52": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 267927750,
+                    "Parent UUID": 58767709,
                     "Rotation": [
                         -0.005688329692929983,
                         0.9995439648628235,
@@ -1352,18 +1352,18 @@
                         -1.0222196578979492e-05,
                         -11.652327537536621
                     ],
-                    "UUID": 354924908
+                    "UUID": 510320754
                 }
             },
             "Name": "B_R_Thigh",
-            "Parent UUID": 496663446,
-            "UUID": 267927750
+            "Parent UUID": 1163797181,
+            "UUID": 58767709
         },
         "GameObject 53": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1280177486,
+                    "Parent UUID": 1071758266,
                     "Rotation": [
                         2.3839361347199883e-06,
                         7.164932469549967e-08,
@@ -1380,18 +1380,18 @@
                         -2.384185791015625e-07,
                         0.0
                     ],
-                    "UUID": 222951365
+                    "UUID": 415438524
                 }
             },
             "Name": "B_R_Calf",
-            "Parent UUID": 267927750,
-            "UUID": 1280177486
+            "Parent UUID": 58767709,
+            "UUID": 1071758266
         },
         "GameObject 54": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 85182149,
+                    "Parent UUID": 935721608,
                     "Rotation": [
                         0.00804224144667387,
                         0.03014681674540043,
@@ -1408,18 +1408,18 @@
                         -9.5367431640625e-07,
                         5.7220458984375e-06
                     ],
-                    "UUID": 1264046162
+                    "UUID": 1957638823
                 }
             },
             "Name": "B_R_Foot",
-            "Parent UUID": 1280177486,
-            "UUID": 85182149
+            "Parent UUID": 1071758266,
+            "UUID": 935721608
         },
         "GameObject 55": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 277990542,
+                    "Parent UUID": 575355581,
                     "Rotation": [
                         1.7014698983075505e-08,
                         5.857349449911453e-08,
@@ -1436,18 +1436,18 @@
                         24.27667999267578,
                         0.21788787841796875
                     ],
-                    "UUID": 856897818
+                    "UUID": 1965920957
                 }
             },
             "Name": "B_R_Toe0",
-            "Parent UUID": 85182149,
-            "UUID": 277990542
+            "Parent UUID": 935721608,
+            "UUID": 575355581
         },
         "GameObject 6": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1921270877,
+                    "Parent UUID": 407135524,
                     "Rotation": [
                         -2.0614735504569104e-13,
                         1.3091496953165915e-07,
@@ -1464,18 +1464,18 @@
                         -0.01991128921508789,
                         -2.9802322387695313e-08
                     ],
-                    "UUID": 485806928
+                    "UUID": 545659651
                 }
             },
             "Name": "B_Spine1",
-            "Parent UUID": 235113749,
-            "UUID": 1921270877
+            "Parent UUID": 1460562709,
+            "UUID": 407135524
         },
         "GameObject 7": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 1644177685,
+                    "Parent UUID": 384846841,
                     "Rotation": [
                         -7.148834697545681e-07,
                         -8.177073596016271e-08,
@@ -1492,18 +1492,18 @@
                         -0.016050338745117188,
                         -2.9802322387695313e-08
                     ],
-                    "UUID": 1973771344
+                    "UUID": 1415937289
                 }
             },
             "Name": "B_Spine2",
-            "Parent UUID": 1921270877,
-            "UUID": 1644177685
+            "Parent UUID": 407135524,
+            "UUID": 384846841
         },
         "GameObject 8": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 603652741,
+                    "Parent UUID": 880665581,
                     "Rotation": [
                         0.6753342151641846,
                         -0.02024754509329796,
@@ -1520,18 +1520,18 @@
                         -1.454859733581543,
                         5.30279541015625
                     ],
-                    "UUID": 652509371
+                    "UUID": 12809304
                 }
             },
             "Name": "B_L_Clavicle",
-            "Parent UUID": 1644177685,
-            "UUID": 603652741
+            "Parent UUID": 384846841,
+            "UUID": 880665581
         },
         "GameObject 9": {
             "Components": {
                 "Transform": {
                     "Active": true,
-                    "Parent UUID": 485849753,
+                    "Parent UUID": 590840279,
                     "Rotation": [
                         0.06598406285047531,
                         0.44083189964294434,
@@ -1548,22 +1548,25 @@
                         3.814697265625e-06,
                         -1.52587890625e-05
                     ],
-                    "UUID": 330729716
+                    "UUID": 1989289621
                 }
             },
             "Name": "B_L_UpperArm",
-            "Parent UUID": 603652741,
-            "UUID": 485849753
+            "Parent UUID": 880665581,
+            "UUID": 590840279
         }
     },
     "Resources": {
-        "Count": 13,
+        "Count": 12,
         "Resource 1": {
-            "Exported file": "/library/meshes/cube.mesh",
-            "File": "Primitive",
-            "Name": "Cube",
-            "Type": "Mesh",
-            "UUID": 2
+            "Exported file": "/library/textures/building_016_c.dds",
+            "File": "/assets/textures/building_016_c.tga",
+            "Height": 256,
+            "Name": "building_016_c",
+            "Texture": 49,
+            "Type": "Texture",
+            "UUID": 124881282,
+            "Width": 256
         },
         "Resource 10": {
             "Exported file": "/library/textures/building 01_c.dds",
@@ -1572,115 +1575,105 @@
             "Name": "building 01_c",
             "Texture": 39,
             "Type": "Texture",
-            "UUID": 1527131273,
+            "UUID": 1646060902,
             "Width": 1024
         },
         "Resource 11": {
-            "Exported file": "/library/textures/building03_c.dds",
-            "File": "/assets/textures/building03_c.tga",
-            "Height": 1024,
-            "Name": "building03_c",
-            "Texture": 45,
-            "Type": "Texture",
-            "UUID": 1630912296,
-            "Width": 1024
-        },
-        "Resource 12": {
-            "Exported file": "/library/textures/building05 _c.dds",
-            "File": "/assets/textures/building05 _c.tga",
-            "Height": 1024,
-            "Name": "building05 _c",
-            "Texture": 47,
-            "Type": "Texture",
-            "UUID": 1842091985,
-            "Width": 1024
-        },
-        "Resource 13": {
-            "Exported file": "",
-            "File": "/Assets/Textures/rpg-character.psd",
-            "Height": 0,
-            "Name": "rpg-character",
-            "Texture": 0,
-            "Type": "Texture",
-            "UUID": 1911134622,
-            "Width": 0
-        },
-        "Resource 2": {
-            "Exported file": "/library/textures/building_016_c.dds",
-            "File": "/assets/textures/building_016_c.tga",
-            "Height": 256,
-            "Name": "building_016_c",
-            "Texture": 49,
-            "Type": "Texture",
-            "UUID": 562688845,
-            "Width": 256
-        },
-        "Resource 3": {
-            "Exported file": "/library/textures/building_025_c.dds",
-            "File": "/assets/textures/building_025_c.tga",
-            "Height": 256,
-            "Name": "building_025_c",
-            "Texture": 51,
-            "Type": "Texture",
-            "UUID": 563389171,
-            "Width": 256
-        },
-        "Resource 4": {
-            "Exported file": "/library/textures/building 06_ c .dds",
-            "File": "/assets/textures/building 06_ c .tga",
-            "Height": 1024,
-            "Name": "building 06_ c ",
-            "Texture": 41,
-            "Type": "Texture",
-            "UUID": 638478210,
-            "Width": 1024
-        },
-        "Resource 5": {
             "Exported file": "/library/textures/building 06_ c.dds",
             "File": "/assets/textures/building 06_ c.tga",
             "Height": 1024,
             "Name": "building 06_ c",
             "Texture": 43,
             "Type": "Texture",
-            "UUID": 727449157,
+            "UUID": 1894482109,
             "Width": 1024
         },
-        "Resource 6": {
+        "Resource 12": {
+            "Exported file": "/library/textures/building 06_ c .dds",
+            "File": "/assets/textures/building 06_ c .tga",
+            "Height": 1024,
+            "Name": "building 06_ c ",
+            "Texture": 41,
+            "Type": "Texture",
+            "UUID": 2088719634,
+            "Width": 1024
+        },
+        "Resource 2": {
             "Exported file": "/library/textures/building_v02_c.dds",
             "File": "/assets/textures/building_v02_c.png",
             "Height": 512,
             "Name": "building_v02_c",
             "Texture": 37,
             "Type": "Texture",
-            "UUID": 1111595572,
+            "UUID": 609250019,
             "Width": 512
         },
-        "Resource 7": {
+        "Resource 3": {
+            "Exported file": "/library/meshes/warrior 0.mesh",
+            "File": "/Assets/Models/warrior.FBX",
+            "Name": "RPG-Character-Mesh",
+            "Type": "Mesh",
+            "UUID": 773717332
+        },
+        "Resource 4": {
             "Exported file": "/library/textures/baker_house.dds",
             "File": "/assets/textures/baker_house.png",
             "Height": 1024,
             "Name": "baker_house",
             "Texture": 33,
             "Type": "Texture",
-            "UUID": 1163014747,
+            "UUID": 1184297402,
             "Width": 1024
         },
-        "Resource 8": {
-            "Exported file": "/library/meshes/warrior 0.mesh",
-            "File": "/Assets/Models/warrior.FBX",
-            "Name": "RPG-Character-Mesh",
-            "Type": "Mesh",
-            "UUID": 1337523081
+        "Resource 5": {
+            "Exported file": "/library/textures/building_025_c.dds",
+            "File": "/assets/textures/building_025_c.tga",
+            "Height": 256,
+            "Name": "building_025_c",
+            "Texture": 51,
+            "Type": "Texture",
+            "UUID": 1345931066,
+            "Width": 256
         },
-        "Resource 9": {
+        "Resource 6": {
             "Exported file": "/library/textures/building_v01_c.dds",
             "File": "/assets/textures/building_v01_c.png",
             "Height": 512,
             "Name": "building_v01_c",
             "Texture": 35,
             "Type": "Texture",
-            "UUID": 1526274399,
+            "UUID": 1482281724,
             "Width": 512
+        },
+        "Resource 7": {
+            "Exported file": "/library/textures/building05 _c.dds",
+            "File": "/assets/textures/building05 _c.tga",
+            "Height": 1024,
+            "Name": "building05 _c",
+            "Texture": 47,
+            "Type": "Texture",
+            "UUID": 1508709226,
+            "Width": 1024
+        },
+        "Resource 8": {
+            "Exported file": "",
+            "File": "/Assets/Textures/rpg-character.psd",
+            "Height": 0,
+            "Name": "rpg-character",
+            "Texture": 0,
+            "Type": "Texture",
+            "UUID": 1546174630,
+            "Width": 0
+        },
+        "Resource 9": {
+            "Exported file": "/library/textures/building03_c.dds",
+            "File": "/assets/textures/building03_c.tga",
+            "Height": 1024,
+            "Name": "building03_c",
+            "Texture": 45,
+            "Type": "Texture",
+            "UUID": 1588279243,
+            "Width": 1024
         }
     }
 }

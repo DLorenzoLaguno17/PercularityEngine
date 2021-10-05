@@ -57,6 +57,7 @@ void SceneWindow::Update()
 
 			ResourceModel* resource = (ResourceModel*)App->res_manager->GetResourceFromMap(UUID);
 			if (resource) resource->GenerateModelInstance();
+			else LOG("ERROR: Could not find model resource");
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -93,7 +94,7 @@ GameObject* SceneWindow::SelectObject() const
 	std::map<float,const GameObject*> objects;
 	App->scene->sceneTree->CollectChilldren(ray, objects);
 
-	float nearHit,farHit;
+	float nearHit, farHit;
 	for (int i = 0; i < App->scene->nonStaticObjects.size(); ++i)
 		if (App->scene->nonStaticObjects[i]->aabb.Intersects(ray, nearHit, farHit))
 			objects[nearHit] = App->scene->nonStaticObjects[i];
