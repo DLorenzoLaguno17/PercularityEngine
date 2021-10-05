@@ -98,11 +98,16 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 {	
 	BROFILER_CATEGORY("ResourceLoaderLoadModel", Profiler::Color::MediumVioletRed)
 
-	bool ret = false;
-	
+	bool ret = false;	
+		
+	// Check if model is already loaded
+	std::string name = getNameFromPath(path);
+	std::string exported_file = "Library/Models/" + name + ".json";
+	if (App->file_system->Exists(exported_file.c_str()))
+		return true;
+
 	// We adapt the  path for Assimp
 	const char* adapted_path = strstr(path, "Assets");
-		
 	const aiScene* scene = aiImportFile(adapted_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
