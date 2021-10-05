@@ -71,7 +71,8 @@ void ComponentMaterial::OnLoad(const char* gameObjectNum, const nlohmann::json &
 	resource_tex = (ResourceTexture*)App->res_manager->GetResourceFromMap(uuid);
 }
 
-void ComponentMaterial::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) {
+void ComponentMaterial::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 
+{
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["UUID"] = UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Parent UUID"] = parent_UUID;
 	scene_file["Game Objects"][gameObjectNum]["Components"]["Material"]["Active"] = active;

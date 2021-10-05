@@ -48,7 +48,7 @@ void ComponentTransform::Update()
 			firstTime = true;
 		}
 
-		if (!lastRotation.Equals(rotation))
+		else if (!lastRotation.Equals(rotation))
 		{
 			RotateGameObject* rotationAction = new RotateGameObject(lastRotation, rotation, parent_UUID);
 			App->undo->StoreNewAction(rotationAction);
@@ -136,7 +136,6 @@ const mat4x4 ComponentTransform::GetGlobalGLTransform() const
 
 	return ret;
 }
-
 
 void ComponentTransform::Move(float3 positionIncrease)
 {

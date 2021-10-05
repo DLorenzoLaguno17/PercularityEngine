@@ -1,7 +1,7 @@
 #include "ResourceModel.h"
 #include "Application.h"
 #include "ModuleScene.h"
-#include "ModuleResourceLoader.h"
+#include "ModuleResourceManager.h"
 
 bool ResourceModel::LoadInMemory()
 {	

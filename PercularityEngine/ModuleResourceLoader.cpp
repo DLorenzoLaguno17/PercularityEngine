@@ -142,8 +142,8 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 // MESH-RELATED METHODS
 // -----------------------------------------------------------------------------------------------
 
-bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNode* node, GameObject* parent) {
-
+bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNode* node, GameObject* parent) 
+{
 	bool ret = true;
 
 	aiVector3D translation;

@@ -57,7 +57,7 @@ void SceneWindow::Update()
 
 			ResourceModel* resource = (ResourceModel*)App->res_manager->GetResourceFromMap(UUID);
 			if (resource) resource->GenerateModelInstance();
-			else LOG("ERROR: Could not find model resource");
+			else LOG("ERROR: Could not find model resource %s", model);
 		}
 		ImGui::EndDragDropTarget();
 	}
