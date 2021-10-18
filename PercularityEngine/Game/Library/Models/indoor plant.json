@@ -1,0 +1,297 @@
+{
+    "Game Objects": {
+        "Count": 7,
+        "GameObject 1": {
+            "Components": {
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 436736307,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 1944955421
+                }
+            },
+            "Name": "indoor plant",
+            "Parent UUID": 0,
+            "UUID": 436736307
+        },
+        "GameObject 2": {
+            "Components": {
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 160003856,
+                    "Rotation": [
+                        -0.3206915557384491,
+                        0.09485060721635818,
+                        0.019631020724773407,
+                        0.9422181248664856
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        -133.24754333496094,
+                        1380.451904296875,
+                        -709.2947998046875
+                    ],
+                    "UUID": 630781587
+                }
+            },
+            "Name": "Spot",
+            "Parent UUID": 436736307,
+            "UUID": 160003856
+        },
+        "GameObject 3": {
+            "Components": {
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 1751771024,
+                    "Rotation": [
+                        -0.23336835205554962,
+                        0.006741768214851618,
+                        0.21233618259429932,
+                        0.9488978385925293
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        -133.24754333496094,
+                        1351.27978515625,
+                        -813.0181274414063
+                    ],
+                    "UUID": 159181480
+                }
+            },
+            "Name": "Hemi",
+            "Parent UUID": 436736307,
+            "UUID": 1751771024
+        },
+        "GameObject 4": {
+            "Components": {
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 1358200560,
+                    "Rotation": [
+                        -0.7071068286895752,
+                        0.0,
+                        0.0,
+                        0.7071067094802856
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 1281243056
+                }
+            },
+            "Name": "indoor plant_02",
+            "Parent UUID": 436736307,
+            "UUID": 1358200560
+        },
+        "GameObject 5": {
+            "Components": {
+                "Material": {
+                    "Active": true,
+                    "Parent UUID": 1394556337,
+                    "Resource UUID": 1187609567,
+                    "UUID": 341320782
+                },
+                "Mesh": {
+                    "Active": true,
+                    "F_Normals on": false,
+                    "Parent UUID": 1394556337,
+                    "Resource UUID": 612690189,
+                    "UUID": 150287313,
+                    "V_Normals on": false
+                },
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 1394556337,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 523573760
+                }
+            },
+            "Name": "indoor plant_02_Parent",
+            "Parent UUID": 1358200560,
+            "UUID": 1394556337
+        },
+        "GameObject 6": {
+            "Components": {
+                "Material": {
+                    "Active": true,
+                    "Parent UUID": 635968008,
+                    "Resource UUID": 2109481563,
+                    "UUID": 1741188239
+                },
+                "Mesh": {
+                    "Active": true,
+                    "F_Normals on": false,
+                    "Parent UUID": 635968008,
+                    "Resource UUID": 564718834,
+                    "UUID": 2104246587,
+                    "V_Normals on": false
+                },
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 635968008,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 2058334769
+                }
+            },
+            "Name": "indoor plant_02_SubMesh",
+            "Parent UUID": 1358200560,
+            "UUID": 635968008
+        },
+        "GameObject 7": {
+            "Components": {
+                "Material": {
+                    "Active": true,
+                    "Parent UUID": 159332638,
+                    "Resource UUID": 1851092473,
+                    "UUID": 427049521
+                },
+                "Mesh": {
+                    "Active": true,
+                    "F_Normals on": false,
+                    "Parent UUID": 159332638,
+                    "Resource UUID": 1305302861,
+                    "UUID": 120438969,
+                    "V_Normals on": false
+                },
+                "Transform": {
+                    "Active": true,
+                    "Parent UUID": 159332638,
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Translation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "UUID": 1144553443
+                }
+            },
+            "Name": "indoor plant_02_SubMesh",
+            "Parent UUID": 1358200560,
+            "UUID": 159332638
+        }
+    },
+    "Resources": {
+        "Count": 6,
+        "Resource 1": {
+            "Exported file": "/library/meshes/indoor plant 1.mesh",
+            "File": "/Assets/Models/indoor plant.fbx",
+            "Name": "indoor plant_02_SubMesh",
+            "Type": "Mesh",
+            "UUID": 564718834
+        },
+        "Resource 2": {
+            "Exported file": "/library/meshes/indoor plant 0.mesh",
+            "File": "/Assets/Models/indoor plant.fbx",
+            "Name": "indoor plant_02_Parent",
+            "Type": "Mesh",
+            "UUID": 612690189
+        },
+        "Resource 3": {
+            "Exported file": "/library/textures/indoor plant_2_col.dds",
+            "File": "/Assets/Textures/indoor plant_2_col.jpg",
+            "Height": 2048,
+            "Name": "indoor plant_2_col",
+            "Texture": 17,
+            "Type": "Texture",
+            "UUID": 1187609567,
+            "Width": 2048
+        },
+        "Resource 4": {
+            "Exported file": "/library/meshes/indoor plant 2.mesh",
+            "File": "/Assets/Models/indoor plant.fbx",
+            "Name": "indoor plant_02_SubMesh",
+            "Type": "Mesh",
+            "UUID": 1305302861
+        },
+        "Resource 5": {
+            "Exported file": "/library/textures/indoor plant_2_col.dds",
+            "File": "/Assets/Textures/indoor plant_2_col.jpg",
+            "Height": 2048,
+            "Name": "indoor plant_2_col",
+            "Texture": 25,
+            "Type": "Texture",
+            "UUID": 1851092473,
+            "Width": 2048
+        },
+        "Resource 6": {
+            "Exported file": "/library/textures/indoor plant_2_col.dds",
+            "File": "/Assets/Textures/indoor plant_2_col.jpg",
+            "Height": 2048,
+            "Name": "indoor plant_2_col",
+            "Texture": 21,
+            "Type": "Texture",
+            "UUID": 2109481563,
+            "Width": 2048
+        }
+    }
+}
