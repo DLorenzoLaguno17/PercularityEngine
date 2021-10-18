@@ -39,7 +39,7 @@ bool ModuleResourceManager::Start()
 	for (int i = 0; i < tex_files.size(); ++i)
 	{	
 		std::string file = ASSETS_TEXTURE_FOLDER + tex_files[i];
-		ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
+		//ImportFile(file.c_str(), RESOURCE_TYPE::TEXTURE);
 	}
 
 	currentFolder = ASSETS_FOLDER;
@@ -146,7 +146,7 @@ void ModuleResourceManager::DrawProjectExplorer()
 	std::vector<std::string> mod_files, mod_directories;
 	std::vector<std::string> sce_files, sce_directories;
 
-	App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
+	//App->file_system->DiscoverFiles(ASSETS_TEXTURE_FOLDER, tex_files, tex_directories);
 	App->file_system->DiscoverFiles(ASSETS_MODEL_FOLDER, mod_files, mod_directories);
 	App->file_system->DiscoverFiles(ASSETS_SCENE_FOLDER, sce_files, sce_directories);
 
@@ -233,7 +233,8 @@ void ModuleResourceManager::DrawProjectExplorer()
 		// Dragging a model to the screen window generates an instance
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 		{
-			ImGui::SetDragDropPayload("ModelUUID", &mod_files[i], sizeof(std::string));
+			draggedModel = mod_files[i];
+			ImGui::SetDragDropPayload("ModelUUID", &draggedModel, sizeof(std::string));
 			ImGui::Image((void*)App->res_loader->model_icon_tex->texture, ImVec2(50, 50));
 			ImGui::EndDragDropSource();
 		}
@@ -280,10 +281,16 @@ void ModuleResourceManager::LoadResources(const json &scene_file)
 	{
 		char name[50];
 		sprintf_s(name, 50, "Resource %d", i);
-		uint UUID = scene_file["Resources"][name]["UUID"];
 
-		if (GetResourceFromMap(UUID) == nullptr) 
+		json js = scene_file["Resources"][name]["Name"];
+		std::string resource = js.get<std::string>();
+		Resource* newResource = GetResourceByName(resource.c_str());
+
+		//if (newResource && newResource->name != "")
+		//	newResource->IncreaseReferenceCount();
+		//else
 		{
+			uint UUID = scene_file["Resources"][name]["UUID"];
 			json js = scene_file["Resources"][name]["Type"];
 			std::string type = js.get<std::string>();
 			
@@ -300,7 +307,6 @@ void ModuleResourceManager::LoadResources(const json &scene_file)
 				res->IncreaseReferenceCount();
 			}
 		}
-		else GetResourceFromMap(UUID)->IncreaseReferenceCount();
 	}
 }
 

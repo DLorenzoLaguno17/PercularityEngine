@@ -100,7 +100,7 @@ bool ModuleResourceLoader::LoadModel(const char* path, std::string& output_file)
 
 	bool ret = false;	
 		
-	// Check if model is already loaded
+	// Check if model is already loaded in the engine
 	std::string name = getNameFromPath(path);
 	std::string exported_file = "Library/Models/" + name + ".json";
 	if (App->file_system->Exists(exported_file.c_str()))
@@ -214,7 +214,7 @@ bool ModuleResourceLoader::LoadNode(const char* path, const aiScene* scene, aiNo
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &p);
 
 		// Check for assigned textures
-		if (p.C_Str() != nullptr)
+		if (p.C_Str() != "")
 		{
 			ComponentMaterial* mat = (ComponentMaterial*)child->CreateComponent(COMPONENT_TYPE::MATERIAL, true);			
 			std::string texPath = ASSETS_TEXTURE_FOLDER + getNameFromPath(p.C_Str(), true);

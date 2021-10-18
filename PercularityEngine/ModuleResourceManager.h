@@ -59,6 +59,7 @@ private:
 	uint saved_res = 0;
 	std::string selected = "";
 	std::string currentFolder = "";
+	std::string draggedModel = "";
 };
 
 #endif // __MODULE_RESOURCEMANAGER_H__
