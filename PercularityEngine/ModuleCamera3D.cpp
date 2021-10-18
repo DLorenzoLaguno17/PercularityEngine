@@ -131,7 +131,8 @@ void ModuleCamera3D::HandleUserInput(float dt)
 		if (App->scene->selected != nullptr && App->scene->selected != App->scene->GetRoot())
 			FocusCameraOn(App->scene->selected);
 
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT) {
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	{
 		if (App->input->GetKey(SDL_SCANCODE_T) == KEY_REPEAT) newPos.y += speed;
 		if (App->input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT) newPos.y -= speed;
 

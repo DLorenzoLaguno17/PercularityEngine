@@ -36,6 +36,9 @@ public:
 
 private:
 	void DrawHierarchy(GameObject* root);
+
+private:
+	std::vector<GameObject*> selectedNodes;
 };
 
 #endif // __HierarchyWindow_H__

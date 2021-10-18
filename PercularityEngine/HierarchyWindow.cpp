@@ -1,6 +1,7 @@
 #include "HierarchyWindow.h"
 #include "Application.h"
 #include "ModuleScene.h"
+#include "ModuleInput.h"
 #include "GameObject.h"
 
 #include "mmgr/mmgr.h"
@@ -13,13 +14,30 @@ void HierarchyWindow::Update()
 {
 	ImGui::Begin("Hierarchy", &active);	
 	DrawHierarchy(App->scene->GetRoot());
+
 	ImGui::End();
+
+	if (!App->scene->selected)
+		selectedNodes.clear();
 }
 
 void HierarchyWindow::DrawHierarchy(GameObject* root) 
 {
-	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | (root->extended ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None)
-		| ImGuiTreeNodeFlags_OpenOnDoubleClick | (App->scene->selected == root ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None);
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick
+		| (root->extended ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+
+	if (root == App->scene->selected)
+		node_flags |= ImGuiTreeNodeFlags_Selected;
+	else
+	{
+		for (uint i = 0; i < selectedNodes.size(); ++i)
+		{
+			if (root == selectedNodes[i])
+				node_flags |= ImGuiTreeNodeFlags_Selected;
+			else
+				node_flags |= ImGuiTreeNodeFlags_None;
+		}
+	}
 
 	ImGui::PushID(root);
 	int a = root->children.size();
@@ -53,7 +71,15 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 	}
 
 	if (ImGui::IsItemClicked())
-		App->scene->selected = root;
+	{
+		if (App->input->GetKey(SDL_SCANCODE_LCTRL) != KEY_REPEAT)
+		{
+			selectedNodes.clear();
+			App->scene->selected = root;
+		}
+
+		selectedNodes.push_back(root);
+	}
 
 	if (root->extended) 
 	{
