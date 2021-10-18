@@ -153,12 +153,23 @@ void GameObject::OnEditor()
 
 void GameObject::MakeChild(GameObject* parent) 
 {
+	MakeOrphan();
+
 	this->parent = parent;
 	parent->children.push_back(this);
 	parent_UUID = parent->GetUUID();
 
 	//TEST
 	parent->aabb.Enclose(this->aabb);
+}
+
+void GameObject::MakeOrphan()
+{
+	if (parent != nullptr)
+	{
+		parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
+		parent = nullptr;
+	}
 }
 
 // Cleans the memory of the GameObject

@@ -49,9 +49,9 @@ void SceneWindow::Update()
 
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* test = ImGui::AcceptDragDropPayload("ModelUUID"))
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ModelUUID"))
 		{
-			std::string model = *(std::string*)test->Data;
+			std::string model = *(std::string*)payload->Data;
 			std::string file = ASSETS_MODEL_FOLDER + model;
 			uint UUID = App->res_manager->ImportFile(file.c_str(), RESOURCE_TYPE::MODEL, true);
 

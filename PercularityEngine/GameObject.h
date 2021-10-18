@@ -27,6 +27,7 @@ public:
 
 	// Makes it a child of another GameObject
 	void MakeChild(GameObject* parent);
+	void MakeOrphan();
 	void UpdateAABB();
 	void DrawAABB();
 
