@@ -287,7 +287,10 @@ void TranslateGameObject::Undo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetPosition(lastPosition);
 	gameObject->transform->lastTranslation = gameObject->transform->GetTranslation();
+
 	App->scene->selected = gameObject;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 }
 
 void TranslateGameObject::Redo()
@@ -295,7 +298,10 @@ void TranslateGameObject::Redo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetPosition(newPosition);
 	gameObject->transform->lastTranslation = gameObject->transform->GetTranslation();
+
 	App->scene->selected = gameObject;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 }
 
 void RotateGameObject::Undo()
@@ -303,7 +309,10 @@ void RotateGameObject::Undo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetRotation(lastRotation);
 	gameObject->transform->lastRotation = gameObject->transform->GetRotation();
+
 	App->scene->selected = gameObject;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 }										  
 
 void RotateGameObject::Redo()
@@ -311,7 +320,10 @@ void RotateGameObject::Redo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetRotation(newRotation);
 	gameObject->transform->lastRotation = gameObject->transform->GetRotation();
+
 	App->scene->selected = gameObject;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 }
 
 void ScaleGameObject::Undo()
@@ -319,7 +331,10 @@ void ScaleGameObject::Undo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetScale(lastScale);
 	gameObject->transform->lastScale = gameObject->transform->GetScale();
+
 	App->scene->selected = gameObject;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 }
 
 void ScaleGameObject::Redo()
@@ -327,5 +342,8 @@ void ScaleGameObject::Redo()
 	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
 	gameObject->transform->SetScale(newScale);
 	gameObject->transform->lastScale = gameObject->transform->GetScale();
+
 	App->scene->selected = gameObject;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 }

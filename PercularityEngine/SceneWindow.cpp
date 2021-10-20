@@ -81,7 +81,15 @@ void SceneWindow::OnClick()
 	mousePos.y = 1.0 - 2.0f*(mousePos.y / (windowSize.x / App->renderer3D->GetCamera()->GetAspectRatio()));
 
 	App->camera->OnClick(mousePos);
-	App->scene->selected = SelectObject();
+	GameObject* clickedObject = SelectObject();
+
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) != KEY_REPEAT)
+	{
+		App->scene->selectedNodes.clear();
+		App->scene->selected = clickedObject;
+	}
+
+	App->scene->selectedNodes.push_back(clickedObject);
 }
 
 GameObject* SceneWindow::SelectObject() const

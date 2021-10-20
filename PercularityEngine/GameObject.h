@@ -57,6 +57,7 @@ public:
 	GameObject* parent = nullptr;
 
 	bool extended = true;
+	bool clicked = false;
 	bool showBondingBox =false;
 
 	AABB aabb;

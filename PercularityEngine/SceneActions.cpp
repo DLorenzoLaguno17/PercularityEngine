@@ -20,6 +20,9 @@ void CreateGameObject::Redo()
 	GameObject* newGo = new GameObject(backup);
 	newGo->MakeChild(parent);
 	App->scene->selected = newGo;
+
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 }
 
 void CreateGameObject::CleanUp()
@@ -36,6 +39,9 @@ void DeleteGameObject::Undo()
 	GameObject* newGo = new GameObject(backup);
 	newGo->MakeChild(parent);
 	App->scene->selected = newGo;
+
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 }
 
 void DeleteGameObject::Redo()

@@ -16,9 +16,6 @@ void HierarchyWindow::Update()
 	DrawHierarchy(App->scene->GetRoot());
 
 	ImGui::End();
-
-	if (!App->scene->selected)
-		selectedNodes.clear();
 }
 
 void HierarchyWindow::DrawHierarchy(GameObject* root) 
@@ -30,9 +27,9 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 		node_flags |= ImGuiTreeNodeFlags_Selected;
 	else
 	{
-		for (uint i = 0; i < selectedNodes.size(); ++i)
+		for (uint i = 0; i < App->scene->selectedNodes.size(); ++i)
 		{
-			if (root == selectedNodes[i])
+			if (root == App->scene->selectedNodes[i])
 				node_flags |= ImGuiTreeNodeFlags_Selected;
 			else
 				node_flags |= ImGuiTreeNodeFlags_None;
@@ -40,7 +37,6 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 	}
 
 	ImGui::PushID(root);
-	int a = root->children.size();
 
 	if (root->children.empty())
 	{
@@ -53,7 +49,10 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 	{
 		uint uuid = root->GetUUID();
 		ImGui::SetDragDropPayload("ChildUUID", &uuid, sizeof(uint));
-		ImGui::Text(root->name.c_str());
+
+		for (int i = 0; i < App->scene->selectedNodes.size(); ++i)
+			ImGui::Text(App->scene->selectedNodes[i]->name.c_str());
+
 		ImGui::EndDragDropSource();
 	}
 
@@ -61,24 +60,61 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ChildUUID"))
 		{
-			GameObject* dragged = App->scene->GetGameObject(App->scene->GetRoot(), *(uint*)payload->Data);
-			ReparentGameObject* reparentAction = new ReparentGameObject(dragged->GetUUID(), dragged->parent_UUID, root->GetUUID());
-			App->undo->StoreNewAction(reparentAction);
-			dragged->MakeChild(root);
+			uint uuid = *(uint*)payload->Data;
+			GameObject* dragged = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
+
+			// If we drag an unselected item, it becomes the selected one and we deselect the rest
+			bool found = false;
+			for (int i = 0; i < App->scene->selectedNodes.size(); ++i)
+			{
+				if (App->scene->selectedNodes[i] == dragged)
+					found = true;
+			}
+
+			if (!found)
+			{
+				App->scene->selectedNodes.clear();
+				App->scene->selected = dragged;
+				App->scene->selectedNodes.push_back(dragged);
+			}
+
+			std::vector<uint> uuids, lastParents, newParents;
+			for (int i = 0; i < App->scene->selectedNodes.size(); ++i)
+			{
+				GameObject* dragged = App->scene->selectedNodes[i];
+
+				// Ensure we not reparent the game object with one of its children
+				if (dragged != App->scene->GetRoot() && App->scene->GetGameObject(dragged, root->GetUUID()) == nullptr)
+				{
+					uuids.push_back(dragged->GetUUID());
+					lastParents.push_back(dragged->parent_UUID);
+					newParents.push_back(root->GetUUID());
+					dragged->MakeChild(root);
+				}
+			}
+			
+			if (uuids.size() > 0)
+			{
+				ReparentGameObject* reparentAction = new ReparentGameObject(uuids, lastParents, newParents);
+				App->undo->StoreNewAction(reparentAction);
+			}
 		}
 
 		ImGui::EndDragDropTarget();
 	}
 
 	if (ImGui::IsItemClicked())
+		root->clicked = true;
+
+	if (ImGui::IsItemHovered() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && root->clicked == true)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_LCTRL) != KEY_REPEAT)
 		{
-			selectedNodes.clear();
+			App->scene->selectedNodes.clear();
 			App->scene->selected = root;
 		}
 
-		selectedNodes.push_back(root);
+		App->scene->selectedNodes.push_back(root);
 	}
 
 	if (root->extended) 
@@ -96,16 +132,27 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 // --------------------------------------------------
 void ReparentGameObject::Undo()
 {
-	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
-	GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), lastParent_uuid);
-	gameObject->MakeChild(parent);
+	for (int i = 0; i < uuids.size(); ++i)
+	{
+		GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuids[i]);
+		GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), lastParent_uuids[i]);
+		gameObject->MakeChild(parent);
+	}
 }
 
 void ReparentGameObject::Redo()
 {
-	GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuid);
-	GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), newParent_uuid);
-	gameObject->MakeChild(parent);
+	for (int i = 0; i < uuids.size(); ++i)
+	{
+		GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuids[i]);
+		GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), newParent_uuids[i]);
+		gameObject->MakeChild(parent);
+	}
 }
 
-void ReparentGameObject::CleanUp() {}
+void ReparentGameObject::CleanUp() 
+{
+	uuids.clear();
+	lastParent_uuids.clear();
+	newParent_uuids.clear();
+}

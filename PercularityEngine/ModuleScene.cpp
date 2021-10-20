@@ -175,6 +175,7 @@ bool ModuleScene::CleanUp()
 	LOG("Releasing all the GameObjects");
 	sceneTree->Clear();
 	RELEASE(sceneTree);
+	selectedNodes.clear();
 	RecursiveCleanUp(root);
 	root->children.clear();
 
@@ -588,6 +589,8 @@ GameObject* ModuleScene::CreateSphere(int slices, int stacks, float diameter)
 	App->undo->StoreNewAction(creationAction);
 
 	App->scene->selected = item;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 	return item;
 }
 
@@ -674,6 +677,8 @@ GameObject* ModuleScene::CreateCube(float sizeX, float sizeY, float sizeZ)
 	App->undo->StoreNewAction(creationAction);
 
 	App->scene->selected = item;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 	return item;
 }
 
@@ -732,6 +737,8 @@ GameObject* ModuleScene::CreatePlane(float length, float depth)
 	App->undo->StoreNewAction(creationAction);
 
 	App->scene->selected = item;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 	return item;
 }
 
@@ -790,5 +797,7 @@ GameObject* ModuleScene::CreateDonut(int slices, int stacks, float radius)
 	App->undo->StoreNewAction(creationAction);
 
 	App->scene->selected = item;
+	App->scene->selectedNodes.clear();
+	App->scene->selectedNodes.push_back(App->scene->selected);
 	return item;
 }

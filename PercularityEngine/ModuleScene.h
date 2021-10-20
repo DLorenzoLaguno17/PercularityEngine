@@ -66,10 +66,11 @@ public:
 	GameObject* frustumTest = nullptr;
 	Tree* sceneTree = nullptr;
 
-	GameObject* selected = nullptr;
 	const char* sceneAddress = nullptr;
 	const char* modelAddress = nullptr;
 
+	GameObject* selected = nullptr;
+	std::vector<GameObject*> selectedNodes;
 	std::vector<GameObject*> nonStaticObjects;
 
 private:

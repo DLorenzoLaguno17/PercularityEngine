@@ -9,17 +9,17 @@ class GameObject;
 class ReparentGameObject : public Action
 {
 public:
-	ReparentGameObject(uint uuid, uint lastParent, uint newParent)
-		: uuid(uuid), lastParent_uuid(lastParent), newParent_uuid(newParent) {}
+	ReparentGameObject(std::vector<uint> uuids, std::vector<uint> lastParents, std::vector<uint> newParents)
+		: uuids(uuids), lastParent_uuids(lastParents), newParent_uuids(newParents) {}
 
 	void Undo() override;
 	void Redo() override;
 	void CleanUp() override;
 
 private:
-	uint uuid = 0;
-	uint lastParent_uuid = 0;
-	uint newParent_uuid = 0;
+	std::vector<uint> uuids;
+	std::vector<uint> lastParent_uuids;
+	std::vector<uint> newParent_uuids;
 };
 
 // ---------------------------------------------------
@@ -36,9 +36,6 @@ public:
 
 private:
 	void DrawHierarchy(GameObject* root);
-
-private:
-	std::vector<GameObject*> selectedNodes;
 };
 
 #endif // __HierarchyWindow_H__
