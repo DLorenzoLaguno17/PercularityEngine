@@ -37,7 +37,7 @@ void ComponentTransform::Update()
 	UpdateTransform();
 
 	// Check if the transform has changed, and record the action if it has
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && gameObject == App->scene->selected && !reparenting)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && gameObject == App->scene->selected)
 	{
 		if (!lastTranslation.Equals(translation))
 		{
@@ -105,6 +105,10 @@ void ComponentTransform::RecalculateTransform(ComponentTransform* parent)
 	translation = float3((translation.x - parent->translation.x) / parent->scale.x, (translation.y - parent->translation.y) / parent->scale.y, (translation.z - parent->translation.z) / parent->scale.z);
 	SetEulerRotation(float3(eulerRotation.x - parent->eulerRotation.x, eulerRotation.y - parent->eulerRotation.y, eulerRotation.z - parent->eulerRotation.z));
 	scale = scale / parent->scale;
+
+	lastTranslation = translation;
+	lastRotation = rotation;
+	lastScale = scale;
 };
 
 void ComponentTransform::UpdateTransform()
