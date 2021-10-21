@@ -3,6 +3,7 @@
 #include "ModuleScene.h"
 #include "ModuleInput.h"
 #include "GameObject.h"
+#include "ComponentTransform.h"
 
 #include "mmgr/mmgr.h"
 
@@ -79,6 +80,9 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 			}
 
 			std::vector<uint> uuids, lastParents, newParents;
+			std::vector<float3> lastPositions, newPositions, lastScales, newScales;
+			std::vector<Quat> lastRotations, newRotations;
+
 			for (int i = 0; i < App->scene->selectedNodes.size(); ++i)
 			{
 				GameObject* dragged = App->scene->selectedNodes[i];
@@ -89,13 +93,23 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 					uuids.push_back(dragged->GetUUID());
 					lastParents.push_back(dragged->parent_UUID);
 					newParents.push_back(root->GetUUID());
+
+					lastPositions.push_back(dragged->transform->GetTranslation());
+					lastScales.push_back(dragged->transform->GetScale());
+					lastRotations.push_back(dragged->transform->GetRotation());
+
 					dragged->MakeChild(root);
+					dragged->transform->RecalculateTransform(root->transform);
+
+					newPositions.push_back(dragged->transform->GetTranslation());
+					newScales.push_back(dragged->transform->GetScale());
+					newRotations.push_back(dragged->transform->GetRotation());
 				}
 			}
 			
 			if (uuids.size() > 0)
 			{
-				ReparentGameObject* reparentAction = new ReparentGameObject(uuids, lastParents, newParents);
+				ReparentGameObject* reparentAction = new ReparentGameObject(uuids, lastParents, newParents, lastPositions, newPositions, lastScales, newScales, lastRotations, newRotations);
 				App->undo->StoreNewAction(reparentAction);
 			}
 		}
@@ -129,7 +143,6 @@ void HierarchyWindow::DrawHierarchy(GameObject* root)
 	ImGui::PopID();
 }
 
-// --------------------------------------------------
 void ReparentGameObject::Undo()
 {
 	for (int i = 0; i < uuids.size(); ++i)
@@ -137,6 +150,10 @@ void ReparentGameObject::Undo()
 		GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuids[i]);
 		GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), lastParent_uuids[i]);
 		gameObject->MakeChild(parent);
+
+		gameObject->transform->SetPosition(lastPositions[i]);
+		gameObject->transform->SetScale(lastScales[i]);
+		gameObject->transform->SetRotation(lastRotations[i]);
 	}
 }
 
@@ -147,6 +164,10 @@ void ReparentGameObject::Redo()
 		GameObject* gameObject = App->scene->GetGameObject(App->scene->GetRoot(), uuids[i]);
 		GameObject* parent = App->scene->GetGameObject(App->scene->GetRoot(), newParent_uuids[i]);
 		gameObject->MakeChild(parent);
+
+		gameObject->transform->SetPosition(newPositions[i]);
+		gameObject->transform->SetScale(newScales[i]);
+		gameObject->transform->SetRotation(newRotations[i]);
 	}
 }
 

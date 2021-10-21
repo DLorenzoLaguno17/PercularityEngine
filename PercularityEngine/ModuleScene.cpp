@@ -347,6 +347,8 @@ GameObject* ModuleScene::LoadModel(const std::string model_name, uint usedAsRefe
 	}
 
 	selected = model;
+	selectedNodes.clear();
+	selectedNodes.push_back(selected);
 	loaded_go = 0;
 
 	uint fullTime = loadingTime.Read() - startTime;

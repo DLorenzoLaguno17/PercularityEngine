@@ -37,7 +37,7 @@ void ComponentTransform::Update()
 	UpdateTransform();
 
 	// Check if the transform has changed, and record the action if it has
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && gameObject == App->scene->selected)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && gameObject == App->scene->selected && !reparenting)
 	{
 		if (!lastTranslation.Equals(translation))
 		{
@@ -66,6 +66,8 @@ void ComponentTransform::Update()
 			firstTime = true;
 		}
 	}
+
+	reparenting = false;
 }
 
 void ComponentTransform::OnEditor() 
@@ -95,13 +97,23 @@ void ComponentTransform::OnEditor()
 	}
 }
 
+void ComponentTransform::RecalculateTransform(ComponentTransform* parent)
+{ 
+	mustUpdate = true;
+	reparenting = true;
+
+	translation = float3((translation.x - parent->translation.x) / parent->scale.x, (translation.y - parent->translation.y) / parent->scale.y, (translation.z - parent->translation.z) / parent->scale.z);
+	SetEulerRotation(float3(eulerRotation.x - parent->eulerRotation.x, eulerRotation.y - parent->eulerRotation.y, eulerRotation.z - parent->eulerRotation.z));
+	scale = scale / parent->scale;
+};
+
 void ComponentTransform::UpdateTransform()
 {
 	if (mustUpdate)
 	{
 		localTransform = float4x4::FromTRS(translation, rotation, scale);
 
-		if (strcmp("World", gameObject->name.c_str()) != 0 && gameObject->parent != nullptr)
+		if (gameObject->parent)
 			globalTransform = gameObject->parent->transform->GetGlobalTransform() * localTransform;
 		else
 			globalTransform = localTransform;
@@ -109,7 +121,10 @@ void ComponentTransform::UpdateTransform()
 		gameObject->UpdateAABB();
 
 		for (int i = 0; i < gameObject->children.size(); ++i)
+		{
+			gameObject->children[i]->transform->mustUpdate = true;
 			gameObject->children[i]->transform->UpdateTransform();
+		}
 
 		for (int i = 0; i < gameObject->components.size(); ++i)
 			gameObject->components[i]->OnUpdateTransform();
@@ -122,8 +137,8 @@ void ComponentTransform::UpdateTransform()
 
 		mustUpdate = false;
 	
-		for (int i = 0; i < gameObject->children.size(); ++i)
-			gameObject->children[i]->transform->mustUpdate = true;
+		//for (int i = 0; i < gameObject->children.size(); ++i)
+			//gameObject->children[i]->transform->mustUpdate = false;
 	}
 }
 

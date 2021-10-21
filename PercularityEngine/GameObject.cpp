@@ -160,7 +160,7 @@ void GameObject::MakeChild(GameObject* parent)
 	parent_UUID = parent->GetUUID();
 
 	//TEST
-	parent->aabb.Enclose(this->aabb);
+	//parent->aabb.Enclose(this->aabb);
 }
 
 void GameObject::MakeOrphan()

@@ -37,6 +37,7 @@ public:
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
 	// Update transform
+	void RecalculateTransform(ComponentTransform* parent);
 	void UpdateTransform();
 	void Move(float3 positionIncrease);
 	void Scale(float3 scale_);
@@ -56,6 +57,7 @@ public:
 
 private:
 	bool mustUpdate = true;
+	bool reparenting = false;
 
 	float4x4 globalTransform = float4x4::identity;
 	float4x4 localTransform = float4x4::identity;

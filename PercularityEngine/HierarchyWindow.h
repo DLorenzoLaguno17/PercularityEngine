@@ -9,8 +9,8 @@ class GameObject;
 class ReparentGameObject : public Action
 {
 public:
-	ReparentGameObject(std::vector<uint> uuids, std::vector<uint> lastParents, std::vector<uint> newParents)
-		: uuids(uuids), lastParent_uuids(lastParents), newParent_uuids(newParents) {}
+	ReparentGameObject(std::vector<uint> uuids, std::vector<uint> lastParents, std::vector<uint> newParents, std::vector<float3> lastPositions, std::vector<float3> newPositions, std::vector<float3> lastScales, std::vector<float3> newScales, std::vector<Quat> lastRotations, std::vector<Quat> newRotations)
+		: uuids(uuids), lastParent_uuids(lastParents), newParent_uuids(newParents), lastPositions(lastPositions), newPositions(newPositions), lastScales(lastScales), newScales(newScales), lastRotations(lastRotations), newRotations(newRotations) {}
 
 	void Undo() override;
 	void Redo() override;
@@ -20,6 +20,15 @@ private:
 	std::vector<uint> uuids;
 	std::vector<uint> lastParent_uuids;
 	std::vector<uint> newParent_uuids;
+
+	std::vector<float3> lastPositions;
+	std::vector<float3> newPositions;
+
+	std::vector<float3> lastScales;
+	std::vector<float3> newScales;
+
+	std::vector<Quat> lastRotations;
+	std::vector<Quat> newRotations;
 };
 
 // ---------------------------------------------------
