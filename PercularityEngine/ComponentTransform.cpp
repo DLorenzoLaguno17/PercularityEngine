@@ -106,6 +106,11 @@ void ComponentTransform::RecalculateTransform(ComponentTransform* parent)
 	SetEulerRotation(float3(eulerRotation.x - parent->eulerRotation.x, eulerRotation.y - parent->eulerRotation.y, eulerRotation.z - parent->eulerRotation.z));
 	scale = scale / parent->scale;
 
+	RefreshLastTransformValues();
+};
+
+void ComponentTransform::RefreshLastTransformValues()
+{
 	lastTranslation = translation;
 	lastRotation = rotation;
 	lastScale = scale;
@@ -117,9 +122,9 @@ void ComponentTransform::UpdateTransform()
 	{
 		localTransform = float4x4::FromTRS(translation, rotation, scale);
 
-		if (gameObject->parent)
+		if (gameObject->parent) 
 			globalTransform = gameObject->parent->transform->GetGlobalTransform() * localTransform;
-		else
+		else					
 			globalTransform = localTransform;
 
 		gameObject->UpdateAABB();
@@ -140,9 +145,6 @@ void ComponentTransform::UpdateTransform()
 		}
 
 		mustUpdate = false;
-	
-		//for (int i = 0; i < gameObject->children.size(); ++i)
-			//gameObject->children[i]->transform->mustUpdate = false;
 	}
 }
 
@@ -273,21 +275,20 @@ void ComponentTransform::OnLoad(const char* gameObjectNum, const nlohmann::json 
 	rot.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(2);
 	rot.w = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Rotation"].at(3);
 	SetRotation(rot);
-	lastRotation = rot;
 
 	float3 tra;
 	tra.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(0);
 	tra.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(1);
 	tra.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Translation"].at(2);
 	SetPosition(tra);
-	lastTranslation = tra;
 
 	float3 sca;
 	sca.x = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(0);
 	sca.y = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(1);
 	sca.z = scene_file["Game Objects"][gameObjectNum]["Components"]["Transform"]["Scale"].at(2);
 	SetScale(sca);
-	lastScale = sca;
+
+	gameObject->transform->RefreshLastTransformValues();
 }
 
 void ComponentTransform::OnSave(const char* gameObjectNum, nlohmann::json &scene_file) 

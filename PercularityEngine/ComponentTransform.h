@@ -36,8 +36,10 @@ public:
 	void OnLoad(const char* gameObjectNum, const nlohmann::json &scene_file);
 	void OnSave(const char* gameObjectNum, nlohmann::json &scene_file);
 
-	// Update transform
 	void RecalculateTransform(ComponentTransform* parent);
+	void RefreshLastTransformValues();
+
+	// Update transform
 	void UpdateTransform();
 	void Move(float3 positionIncrease);
 	void Scale(float3 scale_);

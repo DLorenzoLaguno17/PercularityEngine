@@ -155,9 +155,7 @@ void ReparentGameObject::Undo()
 		gameObject->transform->SetScale(lastScales[i]);
 		gameObject->transform->SetRotation(lastRotations[i]);
 
-		gameObject->transform->lastTranslation = gameObject->transform->GetTranslation();
-		gameObject->transform->lastRotation = gameObject->transform->GetRotation();
-		gameObject->transform->lastScale = gameObject->transform->GetScale();
+		gameObject->transform->RefreshLastTransformValues();
 	}
 }
 
@@ -173,15 +171,23 @@ void ReparentGameObject::Redo()
 		gameObject->transform->SetScale(newScales[i]);
 		gameObject->transform->SetRotation(newRotations[i]);
 
-		gameObject->transform->lastTranslation = gameObject->transform->GetTranslation();
-		gameObject->transform->lastRotation = gameObject->transform->GetRotation();
-		gameObject->transform->lastScale = gameObject->transform->GetScale();
+		gameObject->transform->RefreshLastTransformValues();
 	}
 }
 
 void ReparentGameObject::CleanUp() 
 {
 	uuids.clear();
+
 	lastParent_uuids.clear();
 	newParent_uuids.clear();
+
+	lastPositions.clear();
+	newPositions.clear();
+
+	lastScales.clear();
+	newScales.clear();
+
+	lastRotations.clear();
+	newRotations.clear();
 }
