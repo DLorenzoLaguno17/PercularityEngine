@@ -74,6 +74,7 @@ Since we wanted the engine to be used for creating the game, each pair of studen
 * Serialization of the scene.
 * Resource manager.
 * Mesh, material and rigidbody components.
+* Ctrl Z & Ctrl Y.
 * Car and spheres to test the collisions of the scene.
 
 # License
